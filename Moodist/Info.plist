@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Sparkle Update Configuration -->
+	<!-- 
+		SUFeedURL: URL del appcast donde Sparkle buscará actualizaciones.
+		Ejemplo: https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/appcast.xml
+		
+		SUPublicEDKey: Clave pública EdDSA para verificar firmas de actualizaciones.
+		Esta clave se obtiene ejecutando ./bin/generate_keys desde la distribución de Sparkle.
+		IMPORTANTE: Reemplaza "TU_CLAVE_PUBLICA_AQUI" con la clave pública real después de generar las claves.
+	-->
+	<key>SUFeedURL</key>
+	<string>https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>uWFTUvgQZYpxlcQ1RVMFbK3m2t5cR2Cc7LbW4DFK1Xc=</string>
+</dict>
+</plist>

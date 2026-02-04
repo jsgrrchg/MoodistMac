@@ -29,16 +29,6 @@ private enum SidebarStyle {
     static let bottomFadeHeight: CGFloat = 18
 }
 
-/// Diccionario estático para búsquedas O(1) de sonidos por ID.
-private let allSoundsDict: [String: Sound] = {
-    Dictionary(uniqueKeysWithValues: SoundsData.categories.flatMap(\.sounds).map { ($0.id, $0) })
-}()
-
-/// Diccionario estático para búsquedas O(1) de mixes por ID.
-private let allMixesDict: [String: Mix] = {
-    Dictionary(uniqueKeysWithValues: MixesData.categories.flatMap(\.mixes).map { ($0.id, $0) })
-}()
-
 private let sidebarSectionIds = (favorites: "favorites", recentSounds: "recentSounds", favoriteMixes: "favoriteMixes", recentMixes: "recentMixes")
 
 private let sidebarDragTypes: [UTType] = [.plainText, .utf8PlainText, .text]
@@ -61,7 +51,7 @@ struct SidebarView: View {
 
     /// Sonidos favoritos en el orden elegido por el usuario (permite drag and drop).
     private var orderedFavoriteSounds: [Sound] {
-        store.orderedFavoriteSoundIds.compactMap { allSoundsDict[$0] }
+        store.orderedFavoriteSoundIds.compactMap { SoundsData.allSoundsById[$0] }
     }
 
     private func isSectionCollapsed(_ id: String) -> Bool {
@@ -77,17 +67,17 @@ struct SidebarView: View {
 
     private var recentMixes: [Mix] {
         store.recentMixIds.compactMap { id in
-            allMixesDict[id] ?? store.presets.first(where: { $0.id == id }).map { $0.toMix() }
+            MixesData.allMixesById[id] ?? store.presets.first(where: { $0.id == id }).map { $0.toMix() }
         }
     }
 
     private var recentSounds: [Sound] {
-        store.recentSoundIds.compactMap { allSoundsDict[$0] }
+        store.recentSoundIds.compactMap { SoundsData.allSoundsById[$0] }
     }
 
     private var favoriteMixes: [Mix] {
         store.favoriteMixIds.compactMap { id in
-            allMixesDict[id] ?? store.presets.first(where: { $0.id == id }).map { $0.toMix() }
+            MixesData.allMixesById[id] ?? store.presets.first(where: { $0.id == id }).map { $0.toMix() }
         }
     }
 

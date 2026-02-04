@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>MoodistMac Updates</title>
+        <description>MoodistMac ambient sound app updates.</description>
+        <language>en</language>
+        <!-- When you publish a new version:
+             1. Build and archive the app (Product → Archive), export as .zip or .dmg
+             2. Upload the archive to GitHub Releases (e.g. tag 1.1)
+             3. Run from Sparkle folder: ./bin/generate_appcast /path/to/folder/with/archives
+             4. Replace this file with the generated appcast.xml and commit -->
+    </channel>
+</rss>

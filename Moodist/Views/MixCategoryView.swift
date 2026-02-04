@@ -69,13 +69,12 @@ struct MixCategoryView: View {
                     Text(L10n.customMixesEmpty)
                         .font(MoodistTheme.Typography.subheadline)
                         .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.vertical, MoodistTheme.Spacing.small)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(.vertical, MoodistTheme.Spacing.medium)
                 } else {
                     LazyVStack(alignment: .leading, spacing: isNarrow ? MoodistTheme.Spacing.xSmall : MoodistTheme.Spacing.small) {
                         ForEach(displayedMixes, id: \.id) { mix in
                             MixRowView(mix: mix, store: store)
-                                .id("mix-row-\(mix.id)")
                         }
                     }
                 }
@@ -86,20 +85,16 @@ struct MixCategoryView: View {
     }
 }
 
-// Diccionario estático para búsquedas O(1) de sonidos por ID.
-private let mixSoundsDict: [String: Sound] = {
-    Dictionary(uniqueKeysWithValues: SoundsData.categories.flatMap(\.sounds).map { ($0.id, $0) })
-}()
-
 struct MixRowView: View {
     let mix: Mix
     @ObservedObject var store: SoundStore
     @Environment(\.contentAreaWidth) private var contentAreaWidth
+    @Environment(\.isUserScrolling) private var isUserScrolling
     @State private var isHovered = false
     
-    // Cache estático para evitar recalcular soundsInMix en cada render
+    // Cache estático para evitar recalcular soundsInMix en cada render (solo en main thread).
     private static var soundsCache: [String: [Sound]] = [:]
-    
+
     private var isCurrentMix: Bool {
         store.currentMixId == mix.id
     }
@@ -119,10 +114,10 @@ struct MixRowView: View {
         if let cached = Self.soundsCache[mix.id] {
             return cached
         }
-        if Self.soundsCache.count >= Self.soundsCacheMaxEntries {
-            Self.soundsCache.removeAll()
+        if Self.soundsCache.count >= Self.soundsCacheMaxEntries, let keyToEvict = Self.soundsCache.keys.first {
+            Self.soundsCache.removeValue(forKey: keyToEvict)
         }
-        let sounds = mix.soundIds.compactMap { mixSoundsDict[$0] }
+        let sounds = mix.soundIds.compactMap { SoundsData.allSoundsById[$0] }
         Self.soundsCache[mix.id] = sounds
         return sounds
     }
@@ -183,6 +178,8 @@ struct MixRowView: View {
             }
             .buttonStyle(ModernMixRowButtonStyle(isSelected: isCurrentMix, isHovered: isHovered))
             .onHover { hovering in
+                guard !isUserScrolling else { return }
+                guard isHovered != hovering else { return }
                 withAnimation(.easeInOut(duration: 0.15)) {
                     isHovered = hovering
                 }
@@ -215,7 +212,6 @@ struct MixRowView: View {
                 LazyVStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
                     ForEach(soundsInMix, id: \.id) { sound in
                         SoundRow(sound: sound, store: store)
-                            .id("mix-sound-\(sound.id)")
                     }
                 }
                 .padding(.leading, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)

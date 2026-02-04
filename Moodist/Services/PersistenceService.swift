@@ -24,6 +24,7 @@ enum PersistenceService {
     private static let appKitMainWindowFrameKey = "NSWindow Frame MoodistMainWindow"
     private static let sidebarSectionsCollapsedKey = "MoodistMac.sidebarSectionsCollapsed"
     private static let timerUsageCountsKey = "MoodistMac.timerUsageCounts"
+    private static let scrollAnchorIdsKey = "MoodistMac.scrollAnchorIds"
 
     static func loadSounds() -> [String: SoundStateItem]? {
         guard let data = UserDefaults.standard.data(forKey: soundsKey) else { return nil }
@@ -158,6 +159,18 @@ enum PersistenceService {
         UserDefaults.standard.set(dict, forKey: timerUsageCountsKey)
     }
 
+    /// Anchors de scroll por panel (sounds, mixes, soundsSearch, mixesSearch) para restaurar posición al cambiar de pestaña o reabrir la app.
+    static func loadScrollAnchorIds() -> [String: String] {
+        guard let data = UserDefaults.standard.data(forKey: scrollAnchorIdsKey),
+              let dict = try? JSONDecoder().decode([String: String].self, from: data) else { return [:] }
+        return dict
+    }
+
+    static func saveScrollAnchorIds(_ value: [String: String]) {
+        guard let data = try? JSONEncoder().encode(value) else { return }
+        UserDefaults.standard.set(data, forKey: scrollAnchorIdsKey)
+    }
+
     /// Borra todas las claves usadas por la app (sounds, globalVolume, presets, apariencia).
     static func resetAll() {
         UserDefaults.standard.removeObject(forKey: soundsKey)
@@ -174,6 +187,7 @@ enum PersistenceService {
         UserDefaults.standard.removeObject(forKey: textSizeKey)
         UserDefaults.standard.removeObject(forKey: transparencyEnabledKey)
         UserDefaults.standard.removeObject(forKey: mediaKeyNextMixKey)
+        UserDefaults.standard.removeObject(forKey: scrollAnchorIdsKey)
         UserDefaults.standard.removeObject(forKey: appKitMainWindowFrameKey)
         UserDefaults.standard.removeObject(forKey: sidebarSectionsCollapsedKey)
         UserDefaults.standard.removeObject(forKey: timerUsageCountsKey)

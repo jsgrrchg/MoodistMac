@@ -8,16 +8,22 @@
 import SwiftUI
 import AppKit
 import Combine
+import Sparkle
 
 @main
 struct MoodistApp: App {
     @StateObject private var soundStore: SoundStore
     @NSApplicationDelegateAdaptor(MacOSAppDelegate.self) var appDelegate
     @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.system.rawValue
+    
+    private let updaterController: SPUStandardUpdaterController
 
     init() {
         let audio = AudioService()
         _soundStore = StateObject(wrappedValue: SoundStore(audioService: audio))
+        
+        // Inicializar Sparkle updater con comprobación automática activada
+        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
     }
 
     private var accentChoice: AccentColorChoice {
@@ -40,6 +46,7 @@ struct MoodistApp: App {
         Window(L10n.optionsTitle, id: "options") {
             OptionsView()
                 .environmentObject(soundStore)
+                .environment(\.sparkleUpdater, updaterController.updater)
                 .applyAppAccent(accentChoice.accentColor)
         }
         .windowStyle(.automatic)
@@ -177,6 +184,9 @@ struct MoodistApp: App {
                     }
                 }
             }
+            CommandGroup(after: .appInfo) {
+                CheckForUpdatesView(updater: updaterController.updater)
+            }
         }
 }
 
@@ -188,6 +198,50 @@ private extension View {
         } else {
             self
         }
+    }
+}
+
+// MARK: - Sparkle Update Checker
+
+/// View model que publica cuando se pueden comprobar actualizaciones
+final class CheckForUpdatesViewModel: ObservableObject {
+    @Published var canCheckForUpdates = false
+    
+    init(updater: SPUUpdater) {
+        updater.publisher(for: \.canCheckForUpdates)
+            .assign(to: &$canCheckForUpdates)
+    }
+}
+
+/// Vista para el ítem de menú "Buscar actualizaciones..."
+struct CheckForUpdatesView: View {
+    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
+    private let updater: SPUUpdater
+    
+    init(updater: SPUUpdater) {
+        self.updater = updater
+        // Crear el view model para CheckForUpdatesView
+        self.checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
+    }
+    
+    var body: some View {
+        Button(L10n.checkForUpdates) {
+            updater.checkForUpdates()
+        }
+        .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
+    }
+}
+
+// MARK: - Environment: Sparkle updater para OptionsView
+
+private struct SparkleUpdaterKey: EnvironmentKey {
+    static let defaultValue: SPUUpdater? = nil
+}
+
+extension EnvironmentValues {
+    var sparkleUpdater: SPUUpdater? {
+        get { self[SparkleUpdaterKey.self] }
+        set { self[SparkleUpdaterKey.self] = newValue }
     }
 }
 
@@ -310,6 +364,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     @MainActor deinit {
         if let o = menuBarObserver { NotificationCenter.default.removeObserver(o) }
         if let o = appearanceObserver { NotificationCenter.default.removeObserver(o) }
+        if let o = transparencyObserver { NotificationCenter.default.removeObserver(o) }
         if let o = timerStateObserver { NotificationCenter.default.removeObserver(o) }
         if let o = windowDidBecomeKeyObserver { NotificationCenter.default.removeObserver(o) }
         stopObservingMainWindow()
@@ -463,6 +518,8 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
         window.titlebarSeparatorStyle = .none
+        // Los espacios vacíos de la barra de título deben arrastrar la ventana, no interactuar con controles ocultos.
+        window.isMovableByWindowBackground = true
         // Vincular al nombre de frame para que setFrameUsingName/saveFrame usen la misma clave.
         window.setFrameAutosaveName(Self.mainWindowFrameName)
         // Reasignar delegate cada vez para que windowShouldClose nos llegue (SwiftUI puede sobrescribirlo).

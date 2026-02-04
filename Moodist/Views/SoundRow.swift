@@ -11,6 +11,7 @@ struct SoundRow: View {
     let sound: Sound
     @ObservedObject var store: SoundStore
     @Environment(\.contentAreaWidth) private var contentAreaWidth
+    @Environment(\.isUserScrolling) private var isUserScrolling
     @State private var isHovered = false
 
     private var state: SoundStateItem {
@@ -44,6 +45,8 @@ struct SoundRow: View {
         }
         .buttonStyle(ModernSoundRowButtonStyle(isSelected: state.isSelected, isHovered: isHovered))
         .onHover { hovering in
+            guard !isUserScrolling else { return }
+            guard isHovered != hovering else { return }
             withAnimation(.easeInOut(duration: 0.15)) {
                 isHovered = hovering
             }
@@ -55,7 +58,7 @@ struct SoundRow: View {
                 Button(L10n.select) { store.select(sound.id) }
             }
             Divider()
-            Button(state.isFavorite ? L10n.removeFromFavoritesLabel(L10n.soundLabel(sound.id)) : L10n.addToFavoritesLabel(L10n.soundLabel(sound.id))) {
+            Button(state.isFavorite ? L10n.removeFromFavoritesLabel(soundLabel) : L10n.addToFavoritesLabel(soundLabel)) {
                 store.toggleFavorite(sound.id)
             }
             Divider()
@@ -73,7 +76,7 @@ struct SoundRow: View {
                 }
             }
         }
-        .accessibilityLabel(state.isSelected ? "\(L10n.deselect) \(L10n.soundLabel(sound.id))" : "\(L10n.select) \(L10n.soundLabel(sound.id))")
+        .accessibilityLabel(state.isSelected ? "\(L10n.deselect) \(soundLabel)" : "\(L10n.select) \(soundLabel)")
         .accessibilityAddTraits(state.isSelected ? [.isSelected] : [])
     }
 
@@ -87,6 +90,10 @@ struct SoundRow: View {
         }
     }
 
+    private var soundLabel: String {
+        L10n.soundLabel(sound.id)
+    }
+
     private var soundIcon: some View {
         Image(systemName: sound.iconName)
             .font(.system(size: isNarrow ? 14 : 15, weight: state.isSelected ? .medium : .regular))
@@ -96,7 +103,7 @@ struct SoundRow: View {
     }
 
     private var soundTitle: some View {
-        Text(L10n.soundLabel(sound.id))
+        Text(soundLabel)
             .font(MoodistTheme.Typography.body)
             .fontWeight(state.isSelected ? .medium : .regular)
             .foregroundStyle(state.isSelected ? Color.primary : Color.primary.opacity(0.9))
@@ -125,8 +132,8 @@ struct SoundRow: View {
         .buttonStyle(.plain)
         .accessibilityLabel(
             state.isFavorite
-                ? L10n.removeFromFavoritesLabel(L10n.soundLabel(sound.id))
-                : L10n.addToFavoritesLabel(L10n.soundLabel(sound.id))
+                ? L10n.removeFromFavoritesLabel(soundLabel)
+                : L10n.addToFavoritesLabel(soundLabel)
         )
         .accessibilityAddTraits(state.isFavorite ? [.isSelected] : [])
     }
@@ -150,7 +157,7 @@ struct SoundRow: View {
             .opacity(isHovered ? 1.0 : 0.9)
             .frame(height: 22)
             .frame(maxWidth: sliderHorizontalMaxWidth)
-            .accessibilityLabel(L10n.volumeForLabel(L10n.soundLabel(sound.id)))
+            .accessibilityLabel(L10n.volumeForLabel(soundLabel))
             .accessibilityValue("\(Int(state.volume * 100)) percent")
         }
         // Debe comprimirse antes que empujar el botón de favorito fuera de la pantalla.
@@ -174,7 +181,7 @@ struct SoundRow: View {
             .tint(MoodistTheme.Colors.accent)
             .frame(height: 20)
             .frame(maxWidth: .infinity)
-            .accessibilityLabel(L10n.volumeForLabel(L10n.soundLabel(sound.id)))
+            .accessibilityLabel(L10n.volumeForLabel(soundLabel))
             .accessibilityValue("\(Int(state.volume * 100)) percent")
         }
         // En ultra-estrecho no indentamos para maximizar ancho útil del slider.
@@ -232,7 +239,7 @@ struct SoundRow: View {
                 .controlSize(.mini)
                 .tint(MoodistTheme.Colors.accent)
                 .frame(height: 20)
-                .accessibilityLabel(L10n.volumeForLabel(L10n.soundLabel(sound.id)))
+                .accessibilityLabel(L10n.volumeForLabel(soundLabel))
                 .accessibilityValue("\(Int(state.volume * 100)) percent")
             }
         }

@@ -42,6 +42,7 @@
 		B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000023 /* ExportedPreferences.swift */; };
 		B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000024 /* PreferencesExportService.swift */; };
 		B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000025 /* PreferencesImportService.swift */; };
+		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -80,6 +81,7 @@
 		A20000000000000100000023 /* ExportedPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportedPreferences.swift; sourceTree = "<group>"; };
 		A20000000000000100000024 /* PreferencesExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesExportService.swift; sourceTree = "<group>"; };
 		A20000000000000100000025 /* PreferencesImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesImportService.swift; sourceTree = "<group>"; };
+		A20000000000000100000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -88,6 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B20000000000000100000003 /* Sparkle in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -113,6 +116,7 @@
 				A50000000000000100000008 /* Store */,
 				A50000000000000100000009 /* Helpers */,
 				A2000000000000010000000D /* Assets.xcassets */,
+				A20000000000000100000026 /* Info.plist */,
 				A2000000000000010000000E /* sounds */,
 			);
 			path = Moodist;
@@ -216,6 +220,9 @@
 			dependencies = (
 			);
 			name = MoodistMac;
+			packageProductDependencies = (
+				B20000000000000100000002 /* Sparkle */,
+			);
 			productName = MoodistMac;
 			productReference = B175D22B2F310AB600907398 /* MoodistMac.app */;
 			productType = "com.apple.product-type.application";
@@ -240,6 +247,9 @@
 				es,
 			);
 			mainGroup = A50000000000000100000001;
+			packageReferences = (
+				B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */,
+			);
 			productRefGroup = A50000000000000100000003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -433,27 +443,28 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				NSPrincipalClass = NSApplication;
-				PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
-				PRODUCT_NAME = MoodistMac;
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
+			ENABLE_HARDENED_RUNTIME = YES;
+			ENABLE_PREVIEWS = YES;
+			GENERATE_INFOPLIST_FILE = YES;
+			INFOPLIST_FILE = Moodist/Info.plist;
+			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+			LD_RUNPATH_SEARCH_PATHS = (
+				"$(inherited)",
+				"@executable_path/../Frameworks",
+			);
+			MACOSX_DEPLOYMENT_TARGET = 15.0;
+			MARKETING_VERSION = "1.0 Beta 2";
+			NSPrincipalClass = NSApplication;
+			PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
+			PRODUCT_NAME = MoodistMac;
+			SDKROOT = macosx;
+			SWIFT_EMIT_LOC_STRINGS = YES;
+			SWIFT_VERSION = 5.0;
+		};
+		name = Debug;
 		};
 		AA0000000000000100000006 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -463,27 +474,28 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "";
-				ENABLE_HARDENED_RUNTIME = YES;
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-				);
-				MACOSX_DEPLOYMENT_TARGET = 15.0;
-				MARKETING_VERSION = 1.0;
-				NSPrincipalClass = NSApplication;
-				PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
-				PRODUCT_NAME = MoodistMac;
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
+			ENABLE_HARDENED_RUNTIME = YES;
+			ENABLE_PREVIEWS = YES;
+			GENERATE_INFOPLIST_FILE = YES;
+			INFOPLIST_FILE = Moodist/Info.plist;
+			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+			LD_RUNPATH_SEARCH_PATHS = (
+				"$(inherited)",
+				"@executable_path/../Frameworks",
+			);
+			MACOSX_DEPLOYMENT_TARGET = 15.0;
+			MARKETING_VERSION = "1.0 Beta 2";
+			NSPrincipalClass = NSApplication;
+			PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
+			PRODUCT_NAME = MoodistMac;
+			SDKROOT = macosx;
+			SWIFT_EMIT_LOC_STRINGS = YES;
+			SWIFT_VERSION = 5.0;
+		};
+		name = Release;
 		};
 /* End XCBuildConfiguration section */
 
@@ -507,6 +519,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sparkle-project/Sparkle";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B20000000000000100000002 /* Sparkle */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */;
+			productName = Sparkle;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = A90000000000000100000001 /* Project object */;
 }

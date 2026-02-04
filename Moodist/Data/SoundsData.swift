@@ -20,6 +20,9 @@ enum SoundsData {
         binaural
     ]
 
+    /// Diccionario estático para búsquedas O(1) de sonidos por ID (evita duplicar en vistas).
+    static let allSoundsById: [String: Sound] = Dictionary(uniqueKeysWithValues: categories.flatMap(\.sounds).map { ($0.id, $0) })
+
     // MARK: - Nature
     static let nature = SoundCategory(
         id: "nature",

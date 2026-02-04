@@ -11,6 +11,8 @@ import AppKit
 private let sidebarWidthMin: CGFloat = 180
 private let sidebarWidthMax: CGFloat = 320
 private let sidebarWidthDefault: CGFloat = 220
+/// Paso de actualización durante resize para reducir recomputes y lag.
+private let sidebarResizeStep: CGFloat = 6
 /// Por debajo de este ancho de ventana se usa el menú compacto (un solo icono).
 /// Nota: el buscador en la toolbar ocupa espacio; en ventanas estrechas el sistema puede mover controles
 /// al overflow ("»"), donde algunos pickers pueden volverse poco fiables. Preferimos consolidar en un menú.
@@ -42,27 +44,6 @@ private struct WindowWidthKey: PreferenceKey {
     }
 }
 
-private struct ScrollAnchorOffsetsKey: PreferenceKey {
-    static var defaultValue: [String: CGFloat] = [:]
-    static func reduce(value: inout [String: CGFloat], nextValue: () -> [String: CGFloat]) {
-        value.merge(nextValue(), uniquingKeysWith: { $1 })
-    }
-}
-
-private struct ScrollAnchorReporter: View {
-    let id: String
-    let coordinateSpace: String
-
-    var body: some View {
-        GeometryReader { proxy in
-            Color.clear.preference(
-                key: ScrollAnchorOffsetsKey.self,
-                value: [id: proxy.frame(in: .named(coordinateSpace)).minY]
-            )
-        }
-    }
-}
-
 /// Barra de búsqueda nativa de macOS (NSSearchField con estilo estándar de Apple).
 private struct ToolbarSearchField: NSViewRepresentable {
     @Binding var text: String
@@ -71,18 +52,28 @@ private struct ToolbarSearchField: NSViewRepresentable {
 
     func makeNSView(context: Context) -> NSSearchField {
         let field = NSSearchField(string: "")
-        field.placeholderString = placeholder
         field.delegate = context.coordinator
         field.controlSize = .small
-        (field.cell as? NSSearchFieldCell)?.controlSize = .small
         field.font = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
         field.sendsSearchStringImmediately = true
         field.translatesAutoresizingMaskIntoConstraints = false
         field.heightAnchor.constraint(equalToConstant: 28).isActive = true
         // Sin anillo de foco azul: el campo sigue siendo focusable pero no muestra el contorno.
         field.focusRingType = .none
-        // Estilo nativo: bisel redondeado estándar de macOS (Human Interface Guidelines).
-        (field.cell as? NSSearchFieldCell)?.bezelStyle = .roundedBezel
+
+        // Estilo nativo: bisel redondeado estándar de macOS (Human Interface Guidelines),
+        // pero sin icono de lupa (solo cuadro de búsqueda).
+        if let cell = field.cell as? NSSearchFieldCell {
+            cell.controlSize = .small
+            cell.bezelStyle = .roundedBezel
+            cell.searchButtonCell?.image = nil
+            cell.searchButtonCell?.alternateImage = nil
+            cell.searchButtonCell?.title = ""
+            cell.searchButtonCell?.isTransparent = true
+            cell.searchButtonCell?.isBordered = false
+            cell.searchButtonCell?.imagePosition = .noImage
+        }
+        field.placeholderString = placeholder
         return field
     }
 
@@ -127,6 +118,17 @@ extension EnvironmentValues {
     }
 }
 
+/// Indica si el usuario está desplazando activamente el ScrollView principal.
+struct IsUserScrollingEnvironmentKey: EnvironmentKey {
+    static let defaultValue: Bool = false
+}
+extension EnvironmentValues {
+    var isUserScrolling: Bool {
+        get { self[IsUserScrollingEnvironmentKey.self] }
+        set { self[IsUserScrollingEnvironmentKey.self] = newValue }
+    }
+}
+
 /// Sección principal del área de contenido: librería de sonidos o mezclas.
 private enum MainSection: String, CaseIterable {
     case sounds
@@ -143,12 +145,25 @@ private func dynamicTypeSizeFromRaw(_ raw: String) -> DynamicTypeSize {
     }
 }
 
-/// Diccionario estático para búsquedas O(1) de sonidos por ID.
-private let allSoundsDict: [String: Sound] = {
-    Dictionary(uniqueKeysWithValues: SoundsData.categories.flatMap(\.sounds).map { ($0.id, $0) })
-}()
-
 struct ContentView: View {
+    private final class ScrollCoordinator {
+        var soundsScrollAnchorId: String = ContentView.scrollTopAnchorId
+        var mixesScrollAnchorId: String = ContentView.scrollTopAnchorId
+        var soundsSearchScrollAnchorId: String = ContentView.scrollTopAnchorId
+        var mixesSearchScrollAnchorId: String = ContentView.scrollTopAnchorId
+        var suppressSoundsScrollMemoryUpdates = false
+        var suppressMixesScrollMemoryUpdates = false
+        var persistScrollTask: Task<Void, Never>?
+        var soundsRestoreTask: Task<Void, Never>?
+        var mixesRestoreTask: Task<Void, Never>?
+        var soundsRestoreGeneration = 0
+        var mixesRestoreGeneration = 0
+        var didRestoreSounds = false
+        var didRestoreMixes = false
+        var forceInitialSoundsTop = false
+        var forceInitialMixesTop = false
+    }
+
     @EnvironmentObject var store: SoundStore
     @Environment(\.openWindow) private var openWindow
     @AppStorage(PersistenceService.textSizeKey) private var textSizeRaw = "medium"
@@ -168,24 +183,23 @@ struct ContentView: View {
     @State private var categoryExpandedStates: [String: Bool] = [:]
     /// Estado expandido de cada categoría de mixes (por ID). Por defecto todas expandidas.
     @State private var mixCategoryExpandedStates: [String: Bool] = [:]
-    /// Estado para el gesto de deslizamiento horizontal
-    @State private var swipeOffset: CGFloat = 0
-    @State private var isSwiping: Bool = false
-
-    @State private var soundsScrollAnchorId: String = Self.scrollTopAnchorId
-    @State private var mixesScrollAnchorId: String = Self.scrollTopAnchorId
-    @State private var soundsSearchScrollAnchorId: String = Self.scrollTopAnchorId
-    @State private var mixesSearchScrollAnchorId: String = Self.scrollTopAnchorId
-    @State private var suppressScrollMemoryUpdates = false
+    @State private var scrollCoordinator = ScrollCoordinator()
+    @State private var soundsScrollPosition: String? = Self.scrollTopAnchorId
+    @State private var mixesScrollPosition: String? = Self.scrollTopAnchorId
+    @State private var isUserScrolling = false
 
     private var isSidebarVisible: Bool {
         sidebarUserVisible
     }
 
+    private var contentSidebarWidth: CGFloat {
+        sidebarResizeStartWidth == 0 ? sidebarWidth : sidebarResizeStartWidth
+    }
+
     var body: some View {
         ZStack(alignment: .leading) {
             GeometryReader { proxy in
-                let contentWidth = max(0, proxy.size.width - (isSidebarVisible ? sidebarWidth : 0))
+                let contentWidth = max(0, proxy.size.width - (isSidebarVisible ? contentSidebarWidth : 0))
                 mainContent
                     .frame(width: contentWidth, height: proxy.size.height, alignment: .leading)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
@@ -223,9 +237,9 @@ struct ContentView: View {
             guard let requested else { return }
             switch requested {
             case SoundStore.mainSectionSounds:
-                selectedSection = .sounds
+                requestSectionChange(to: .sounds)
             case SoundStore.mainSectionMixes:
-                selectedSection = .mixes
+                requestSectionChange(to: .mixes)
             default:
                 break
             }
@@ -271,7 +285,10 @@ struct ContentView: View {
                         .frame(maxHeight: .infinity, alignment: .bottom)
                 }
             }
-            .onPreferenceChange(ContentWidthKey.self) { contentAreaWidth = $0 }
+            .onPreferenceChange(ContentWidthKey.self) { newWidth in
+                guard sidebarResizeStartWidth == 0 else { return }
+                contentAreaWidth = newWidth
+            }
         } else {
             mainContentFallback
         }
@@ -301,11 +318,13 @@ struct ContentView: View {
             PlatformColor.windowBackground
                 .ignoresSafeArea(.container, edges: .top)
         )
-        .onPreferenceChange(ContentWidthKey.self) { contentAreaWidth = $0 }
+        .onPreferenceChange(ContentWidthKey.self) { newWidth in
+            guard sidebarResizeStartWidth == 0 else { return }
+            contentAreaWidth = newWidth
+        }
     }
 
     private static let scrollTopAnchorId = "mainScrollTop"
-    private static let scrollCoordinateSpaceName = "mainScrollCoordinateSpace"
 
     private enum ScrollContext {
         case sounds
@@ -315,8 +334,12 @@ struct ContentView: View {
     }
 
     private var scrollContext: ScrollContext {
-        let isSearching = !store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        if selectedSection == .mixes {
+        scrollContext(for: selectedSection, searchQuery: store.searchQuery)
+    }
+
+    private func scrollContext(for section: MainSection, searchQuery: String) -> ScrollContext {
+        let isSearching = !searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        if section == .mixes {
             return isSearching ? .mixesSearch : .mixes
         }
         return isSearching ? .soundsSearch : .sounds
@@ -325,27 +348,56 @@ struct ContentView: View {
     private func storedScrollAnchorId(for context: ScrollContext) -> String {
         switch context {
         case .sounds:
-            return soundsScrollAnchorId
+            return scrollCoordinator.soundsScrollAnchorId
         case .mixes:
-            return mixesScrollAnchorId
+            return scrollCoordinator.mixesScrollAnchorId
         case .soundsSearch:
-            return soundsSearchScrollAnchorId
+            return scrollCoordinator.soundsSearchScrollAnchorId
         case .mixesSearch:
-            return mixesSearchScrollAnchorId
+            return scrollCoordinator.mixesSearchScrollAnchorId
         }
     }
 
     private func setStoredScrollAnchorId(_ id: String, for context: ScrollContext) {
         switch context {
         case .sounds:
-            soundsScrollAnchorId = id
+            scrollCoordinator.soundsScrollAnchorId = id
         case .mixes:
-            mixesScrollAnchorId = id
+            scrollCoordinator.mixesScrollAnchorId = id
         case .soundsSearch:
-            soundsSearchScrollAnchorId = id
+            scrollCoordinator.soundsSearchScrollAnchorId = id
         case .mixesSearch:
-            mixesSearchScrollAnchorId = id
+            scrollCoordinator.mixesSearchScrollAnchorId = id
         }
+    }
+
+    private static let scrollAnchorPersistenceKeySounds = "sounds"
+    private static let scrollAnchorPersistenceKeyMixes = "mixes"
+    private static let scrollAnchorPersistenceKeySoundsSearch = "soundsSearch"
+    private static let scrollAnchorPersistenceKeyMixesSearch = "mixesSearch"
+
+    private func persistScrollAnchors() {
+        var dict: [String: String] = [:]
+        if !scrollCoordinator.soundsScrollAnchorId.isEmpty { dict[Self.scrollAnchorPersistenceKeySounds] = scrollCoordinator.soundsScrollAnchorId }
+        if !scrollCoordinator.mixesScrollAnchorId.isEmpty { dict[Self.scrollAnchorPersistenceKeyMixes] = scrollCoordinator.mixesScrollAnchorId }
+        if !scrollCoordinator.soundsSearchScrollAnchorId.isEmpty { dict[Self.scrollAnchorPersistenceKeySoundsSearch] = scrollCoordinator.soundsSearchScrollAnchorId }
+        if !scrollCoordinator.mixesSearchScrollAnchorId.isEmpty { dict[Self.scrollAnchorPersistenceKeyMixesSearch] = scrollCoordinator.mixesSearchScrollAnchorId }
+        if !dict.isEmpty { PersistenceService.saveScrollAnchorIds(dict) }
+    }
+
+    private func schedulePersistScrollAnchors() {
+        scrollCoordinator.persistScrollTask?.cancel()
+        scrollCoordinator.persistScrollTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 350_000_000)
+            guard !Task.isCancelled else { return }
+            persistScrollAnchors()
+        }
+    }
+
+    private func persistScrollAnchorsNow() {
+        scrollCoordinator.persistScrollTask?.cancel()
+        scrollCoordinator.persistScrollTask = nil
+        persistScrollAnchors()
     }
 
     private func isRelevantScrollAnchorId(_ id: String, for context: ScrollContext) -> Bool {
@@ -362,65 +414,73 @@ struct ContentView: View {
         }
     }
 
-    private func bestScrollAnchorId(from offsets: [String: CGFloat]) -> String? {
-        guard !offsets.isEmpty else { return nil }
-        if let best = offsets.filter({ $0.value <= 0 }).max(by: { $0.value < $1.value }) {
-            return best.key
+    private func scheduleSoundsScrollRestore(for context: ScrollContext, scrollToTopFirst: Bool) {
+        let rawTargetId = storedScrollAnchorId(for: context)
+        let targetId = isRelevantScrollAnchorId(rawTargetId, for: context) ? rawTargetId : Self.scrollTopAnchorId
+        scrollCoordinator.soundsRestoreTask?.cancel()
+        scrollCoordinator.soundsRestoreGeneration += 1
+        let generation = scrollCoordinator.soundsRestoreGeneration
+        scrollCoordinator.soundsRestoreTask = Task { @MainActor in
+            scrollCoordinator.suppressSoundsScrollMemoryUpdates = true
+            defer {
+                if scrollCoordinator.soundsRestoreGeneration == generation {
+                    scrollCoordinator.suppressSoundsScrollMemoryUpdates = false
+                }
+            }
+            if scrollToTopFirst {
+                soundsScrollPosition = Self.scrollTopAnchorId
+                try? await Task.sleep(nanoseconds: 70_000_000)
+                guard !Task.isCancelled, scrollCoordinator.soundsRestoreGeneration == generation else { return }
+            }
+            soundsScrollPosition = targetId
+            try? await Task.sleep(nanoseconds: 120_000_000)
+            guard !Task.isCancelled, scrollCoordinator.soundsRestoreGeneration == generation else { return }
+            soundsScrollPosition = targetId
         }
-        return offsets.min(by: { $0.value < $1.value })?.key
     }
 
-    private func updateScrollMemory(with offsets: [String: CGFloat]) {
-        guard !suppressScrollMemoryUpdates else { return }
-        let context = scrollContext
-        let relevant = offsets.filter { isRelevantScrollAnchorId($0.key, for: context) }
-        guard let bestId = bestScrollAnchorId(from: relevant) else { return }
-        setStoredScrollAnchorId(bestId, for: context)
+    private func scheduleMixesScrollRestore(for context: ScrollContext, scrollToTopFirst: Bool) {
+        let rawTargetId = storedScrollAnchorId(for: context)
+        let targetId = isRelevantScrollAnchorId(rawTargetId, for: context) ? rawTargetId : Self.scrollTopAnchorId
+        scrollCoordinator.mixesRestoreTask?.cancel()
+        scrollCoordinator.mixesRestoreGeneration += 1
+        let generation = scrollCoordinator.mixesRestoreGeneration
+        scrollCoordinator.mixesRestoreTask = Task { @MainActor in
+            scrollCoordinator.suppressMixesScrollMemoryUpdates = true
+            defer {
+                if scrollCoordinator.mixesRestoreGeneration == generation {
+                    scrollCoordinator.suppressMixesScrollMemoryUpdates = false
+                }
+            }
+            if scrollToTopFirst {
+                mixesScrollPosition = Self.scrollTopAnchorId
+                try? await Task.sleep(nanoseconds: 70_000_000)
+                guard !Task.isCancelled, scrollCoordinator.mixesRestoreGeneration == generation else { return }
+            }
+            mixesScrollPosition = targetId
+            try? await Task.sleep(nanoseconds: 120_000_000)
+            guard !Task.isCancelled, scrollCoordinator.mixesRestoreGeneration == generation else { return }
+            mixesScrollPosition = targetId
+        }
     }
 
-    private func restoreScrollPosition(using proxy: ScrollViewProxy) {
-        let context = scrollContext
-        let target = storedScrollAnchorId(for: context)
-        proxy.scrollTo(target, anchor: .top)
+    private func requestSectionChange(to newSection: MainSection) {
+        guard selectedSection != newSection else { return }
+        selectedSection = newSection
     }
 
     private var mainScrollContent: some View {
-        ScrollViewReader { proxy in
-            ScrollView {
-                LazyVStack(alignment: .leading, spacing: contentAreaWidth < 400 ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge) {
-                    Color.clear
-                        .frame(height: 0)
-                        .id(Self.scrollTopAnchorId)
-                        .background(ScrollAnchorReporter(id: Self.scrollTopAnchorId, coordinateSpace: Self.scrollCoordinateSpaceName))
-                    mainSections
-                }
-                .id(selectedSection)
-                .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
-                .padding(.top, selectedSection == .mixes
-                         ? (MoodistTheme.Spacing.xSmall + titlebarContentInset)
-                         : (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + titlebarContentInset)
-                .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
-            }
-            .coordinateSpace(name: Self.scrollCoordinateSpaceName)
-            .onPreferenceChange(ScrollAnchorOffsetsKey.self) { offsets in
-                updateScrollMemory(with: offsets)
-            }
-            .onChange(of: store.searchQuery) { _, _ in
-                proxy.scrollTo(Self.scrollTopAnchorId, anchor: .top)
-            }
-            .onChange(of: selectedSection) { _, _ in
-                // Recordar y restaurar scroll por sección (Sounds/Mixes). Pequeño delay para que el nuevo contenido esté layoutado.
-                suppressScrollMemoryUpdates = true
-                DispatchQueue.main.async {
-                    restoreScrollPosition(using: proxy)
-                    // Evita que el estado del nuevo tab se "contamine" con el offset del tab anterior
-                    // mientras se aplica el scroll programático.
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
-                        suppressScrollMemoryUpdates = false
-                    }
-                }
-            }
+        ZStack {
+            soundsScrollContent
+                .opacity(selectedSection == .sounds ? 1 : 0)
+                .allowsHitTesting(selectedSection == .sounds)
+                .accessibilityHidden(selectedSection != .sounds)
+            mixesScrollContent
+                .opacity(selectedSection == .mixes ? 1 : 0)
+                .allowsHitTesting(selectedSection == .mixes)
+                .accessibilityHidden(selectedSection != .mixes)
         }
+        .environment(\.isUserScrolling, isUserScrolling)
         .background(GeometryReader { g in
             Color.clear.preference(key: ContentWidthKey.self, value: g.size.width)
         })
@@ -453,12 +513,10 @@ struct ContentView: View {
                     let verticalMovement = abs(value.translation.height)
                     
                     if horizontalMovement > verticalMovement * 2.0 {
-                        isSwiping = true
-                        swipeOffset = value.translation.width
+                        // Solo registramos el gesto para determinar cambio de pestaña.
                     }
                 }
                 .onEnded { value in
-                    isSwiping = false
                     let threshold: CGFloat = 60
                     
                     // Solo cambiar si el movimiento fue principalmente horizontal
@@ -466,7 +524,6 @@ struct ContentView: View {
                     let verticalMovement = abs(value.translation.height)
                     
                     guard horizontalMovement > verticalMovement * 2.0 else {
-                        swipeOffset = 0
                         return
                     }
                     
@@ -476,38 +533,154 @@ struct ContentView: View {
                         // Cambiar a Mixes si estamos en Sounds
                         if selectedSection == .sounds {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                selectedSection = .mixes
+                                requestSectionChange(to: .mixes)
                             }
                         }
                     } else if value.translation.width > threshold {
                         // Cambiar a Sounds si estamos en Mixes
                         if selectedSection == .mixes {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                selectedSection = .sounds
+                                requestSectionChange(to: .sounds)
                             }
                         }
                     }
-                    
-                    swipeOffset = 0
                 }
         )
     }
 
-    private var mainSections: some View {
+    private var soundsScrollContent: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: contentAreaWidth < 400 ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge) {
+                Color.clear
+                    .frame(height: 1)
+                    .id(Self.scrollTopAnchorId)
+                soundsSections
+            }
+            .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
+            .padding(.top, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + titlebarContentInset)
+            .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
+        }
+        .scrollPosition(id: $soundsScrollPosition, anchor: .top)
+        .onScrollPhaseChange { _, phase in
+            guard selectedSection == .sounds else { return }
+            isUserScrolling = phase != .idle
+        }
+        .onChange(of: soundsScrollPosition) { _, newValue in
+            guard !scrollCoordinator.suppressSoundsScrollMemoryUpdates else { return }
+            guard let newValue else { return }
+            let context = scrollContext(for: .sounds, searchQuery: store.searchQuery)
+            guard isRelevantScrollAnchorId(newValue, for: context) else { return }
+            guard newValue != storedScrollAnchorId(for: context) else { return }
+            setStoredScrollAnchorId(newValue, for: context)
+            schedulePersistScrollAnchors()
+        }
+        .onChange(of: store.searchQuery) { oldValue, newValue in
+            let oldContext = scrollContext(for: .sounds, searchQuery: oldValue)
+            if let current = soundsScrollPosition, isRelevantScrollAnchorId(current, for: oldContext) {
+                setStoredScrollAnchorId(current, for: oldContext)
+                schedulePersistScrollAnchors()
+            }
+            let newContext = scrollContext(for: .sounds, searchQuery: newValue)
+            if oldContext != newContext {
+                scheduleSoundsScrollRestore(for: newContext, scrollToTopFirst: true)
+            } else if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: newContext)
+                scheduleSoundsScrollRestore(for: newContext, scrollToTopFirst: true)
+            }
+        }
+        .onAppear {
+            guard !scrollCoordinator.didRestoreSounds else { return }
+            scrollCoordinator.didRestoreSounds = true
+            let context = scrollContext(for: .sounds, searchQuery: store.searchQuery)
+            if scrollCoordinator.forceInitialSoundsTop && store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                // En el primer arranque mostramos "Currently playing" en la parte superior.
+                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
+                scheduleSoundsScrollRestore(for: context, scrollToTopFirst: true)
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 350_000_000)
+                    scheduleSoundsScrollRestore(for: context, scrollToTopFirst: true)
+                }
+                scrollCoordinator.forceInitialSoundsTop = false
+            }
+            scheduleSoundsScrollRestore(for: context, scrollToTopFirst: false)
+        }
+    }
+
+    private var mixesScrollContent: some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: contentAreaWidth < 400 ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge) {
+                Color.clear
+                    .frame(height: 1)
+                    .id(Self.scrollTopAnchorId)
+                mixesSections
+            }
+            .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
+            .padding(.top, MoodistTheme.Spacing.xSmall + titlebarContentInset)
+            .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
+        }
+        .scrollPosition(id: $mixesScrollPosition, anchor: .top)
+        .onScrollPhaseChange { _, phase in
+            guard selectedSection == .mixes else { return }
+            isUserScrolling = phase != .idle
+        }
+        .onChange(of: mixesScrollPosition) { _, newValue in
+            guard !scrollCoordinator.suppressMixesScrollMemoryUpdates else { return }
+            guard let newValue else { return }
+            let context = scrollContext(for: .mixes, searchQuery: store.searchQuery)
+            guard isRelevantScrollAnchorId(newValue, for: context) else { return }
+            guard newValue != storedScrollAnchorId(for: context) else { return }
+            setStoredScrollAnchorId(newValue, for: context)
+            schedulePersistScrollAnchors()
+        }
+        .onChange(of: store.searchQuery) { oldValue, newValue in
+            let oldContext = scrollContext(for: .mixes, searchQuery: oldValue)
+            if let current = mixesScrollPosition, isRelevantScrollAnchorId(current, for: oldContext) {
+                setStoredScrollAnchorId(current, for: oldContext)
+                schedulePersistScrollAnchors()
+            }
+            let newContext = scrollContext(for: .mixes, searchQuery: newValue)
+            if oldContext != newContext {
+                scheduleMixesScrollRestore(for: newContext, scrollToTopFirst: true)
+            } else if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: newContext)
+                scheduleMixesScrollRestore(for: newContext, scrollToTopFirst: true)
+            }
+        }
+        .onAppear {
+            guard !scrollCoordinator.didRestoreMixes else { return }
+            scrollCoordinator.didRestoreMixes = true
+            let context = scrollContext(for: .mixes, searchQuery: store.searchQuery)
+            if scrollCoordinator.forceInitialMixesTop && store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                // En el primer arranque mostramos el inicio de la lista en Mixes.
+                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
+                scheduleMixesScrollRestore(for: context, scrollToTopFirst: true)
+                Task { @MainActor in
+                    try? await Task.sleep(nanoseconds: 350_000_000)
+                    scheduleMixesScrollRestore(for: context, scrollToTopFirst: true)
+                }
+                scrollCoordinator.forceInitialMixesTop = false
+            }
+            scheduleMixesScrollRestore(for: context, scrollToTopFirst: false)
+        }
+    }
+
+    private var soundsSections: some View {
         Group {
-            if selectedSection == .mixes {
-                if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    mixesPlaceholderSection
-                } else {
-                    mixesSearchResultsSection
-                }
+            if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                currentlyPlayingSection
+                categoriesSection
             } else {
-                if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    currentlyPlayingSection
-                    categoriesSection
-                } else {
-                    searchResultsSection
-                }
+                searchResultsSection
+            }
+        }
+    }
+
+    private var mixesSections: some View {
+        Group {
+            if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                mixesPlaceholderSection
+            } else {
+                mixesSearchResultsSection
             }
         }
     }
@@ -543,24 +716,6 @@ struct ContentView: View {
                 compactToolbarMenu
             }
         }
-        if selectedSection == .sounds {
-            ToolbarItem(placement: .automatic) {
-                Button(action: toggleAllCategories) {
-                    Image(systemName: allCategoriesExpanded ? "chevron.down.circle" : "chevron.right.circle")
-                }
-                .buttonStyle(.plain)
-                .help(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
-            }
-        }
-        if selectedSection == .mixes {
-            ToolbarItem(placement: .automatic) {
-                Button(action: toggleAllMixCategories) {
-                    Image(systemName: allMixCategoriesExpanded ? "chevron.down.circle" : "chevron.right.circle")
-                }
-                .buttonStyle(.plain)
-                .help(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
-            }
-        }
         ToolbarItem(placement: .automatic) {
             ToolbarSearchField(
                 text: $store.searchQuery,
@@ -584,8 +739,8 @@ struct ContentView: View {
                 Text(sidebarUserVisible ? L10n.sidebarHide : L10n.sidebarShow)
             }
             Divider()
-            Button(L10n.sounds) { selectedSection = .sounds }
-            Button(L10n.mixes) { selectedSection = .mixes }
+            Button(L10n.sounds) { requestSectionChange(to: .sounds) }
+            Button(L10n.mixes) { requestSectionChange(to: .mixes) }
             Divider()
             Button(L10n.search + "...") {
                 requestToolbarSearchFocus = true
@@ -610,6 +765,13 @@ struct ContentView: View {
         let w = CGFloat(persistedSidebarWidth)
         sidebarWidth = min(sidebarWidthMax, max(sidebarWidthMin, w))
         updateSidebarForWindowWidth(windowWidth)
+        let anchors = PersistenceService.loadScrollAnchorIds()
+        if let v = anchors[Self.scrollAnchorPersistenceKeySounds], !v.isEmpty { scrollCoordinator.soundsScrollAnchorId = v }
+        if let v = anchors[Self.scrollAnchorPersistenceKeyMixes], !v.isEmpty { scrollCoordinator.mixesScrollAnchorId = v }
+        if let v = anchors[Self.scrollAnchorPersistenceKeySoundsSearch], !v.isEmpty { scrollCoordinator.soundsSearchScrollAnchorId = v }
+        if let v = anchors[Self.scrollAnchorPersistenceKeyMixesSearch], !v.isEmpty { scrollCoordinator.mixesSearchScrollAnchorId = v }
+        scrollCoordinator.forceInitialSoundsTop = true
+        scrollCoordinator.forceInitialMixesTop = true
         MediaKeyHandler.shared.setup()
         MediaKeyHandler.shared.setToggleHandler { store.togglePlay() }
         MediaKeyHandler.shared.setNextTrackHandler { store.playNextRandomMix() }
@@ -639,30 +801,51 @@ struct ContentView: View {
     }
 
     private var principalToolbarContent: some View {
-        Picker(L10n.section, selection: $selectedSection) {
-            Text(L10n.sounds).tag(MainSection.sounds)
-            Text(L10n.mixes).tag(MainSection.mixes)
-        }
-        .pickerStyle(.segmented)
-        .labelsHidden()
-        .controlSize(.large)
-        .frame(width: 210, height: 28)
-        .padding(.vertical, 6)
-        .padding(.horizontal, 8)
-        .background {
-            RoundedRectangle(cornerRadius: 8)
-                .fill(PlatformColor.windowBackground.opacity(0.9))
+        Group {
+            if #available(macOS 26.0, *) {
+                // En Tahoe el segmented se ve "inflado" en toolbars; reducimos padding y quitamos el pill extra.
+                segmentedPicker
+                    .controlSize(.regular)
+                    .frame(width: 210, height: 26)
+                    .padding(.vertical, 2)
+                    .padding(.horizontal, 2)
+            } else {
+                segmentedPicker
+                    .controlSize(.large)
+                    .frame(width: 210, height: 28)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 8)
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(PlatformColor.windowBackground.opacity(0.9))
+                    }
+            }
         }
         .offset(x: toolbarContentOffset)
         .accessibilityLabel(L10n.section)
         .accessibilityValue(selectedSection == .sounds ? L10n.sounds : L10n.mixes)
     }
 
+    private var segmentedPicker: some View {
+        Picker(
+            L10n.section,
+            selection: Binding(
+                get: { selectedSection },
+                set: { requestSectionChange(to: $0) }
+            )
+        ) {
+            Text(L10n.sounds).tag(MainSection.sounds)
+            Text(L10n.mixes).tag(MainSection.mixes)
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+    }
+
     /// Selector Sounds/Mixes como menú desplegable cuando hay poco espacio horizontal.
     private var sectionPickerMenu: some View {
         Menu {
-            Button(L10n.sounds) { selectedSection = .sounds }
-            Button(L10n.mixes) { selectedSection = .mixes }
+            Button(L10n.sounds) { requestSectionChange(to: .sounds) }
+            Button(L10n.mixes) { requestSectionChange(to: .mixes) }
         } label: {
             HStack(spacing: 4) {
                 Text(selectedSection == .sounds ? L10n.sounds : L10n.mixes)
@@ -694,10 +877,7 @@ struct ContentView: View {
 
     private var topControlsBackdrop: some View {
         let height = toolbarBackdropHeight + toolbarBackdropFadeHeight
-        return ZStack {
-            // Solo la barra lateral tiene frosting; la barra superior es opaca para buena legibilidad.
-            PlatformColor.windowBackground
-        }
+        return PlatformColor.windowBackground
         .frame(height: height)
         .frame(maxWidth: .infinity)
         // Fade out hacia el contenido para evitar una "barra" dura.
@@ -736,7 +916,11 @@ struct ContentView: View {
                         }
                         let newWidth = sidebarResizeStartWidth + value.translation.width
                         let maxAllowed = maxSidebarWidth()
-                        sidebarWidth = min(maxAllowed, max(sidebarWidthMin, newWidth))
+                        let clamped = min(maxAllowed, max(sidebarWidthMin, newWidth))
+                        let snapped = (clamped / sidebarResizeStep).rounded() * sidebarResizeStep
+                        if abs(snapped - sidebarWidth) >= sidebarResizeStep / 2 {
+                            sidebarWidth = snapped
+                        }
                     }
                     .onEnded { _ in
                         persistedSidebarWidth = Double(sidebarWidth)
@@ -761,7 +945,6 @@ struct ContentView: View {
                     )
                 )
                 .id("mix-category-\(category.id)")
-                .background(ScrollAnchorReporter(id: "mix-category-\(category.id)", coordinateSpace: Self.scrollCoordinateSpaceName))
             }
         }
         .onAppear {
@@ -806,7 +989,6 @@ struct ContentView: View {
                     ForEach(filtered, id: \.0.id) { category, mixes in
                         MixCategoryView(category: category, store: store, mixesToShow: mixes)
                             .id("mix-search-\(category.id)")
-                            .background(ScrollAnchorReporter(id: "mix-search-\(category.id)", coordinateSpace: Self.scrollCoordinateSpaceName))
                     }
                 }
             }
@@ -816,22 +998,28 @@ struct ContentView: View {
     private var currentlyPlayingSection: some View {
         let title: String = {
             guard let mixName = store.displayedMixName else { return L10n.currentlyPlaying }
-            // En ventanas angostas evitamos prefijos largos para no romper el layout.
             if contentAreaWidth < 420 { return mixName }
             return "\(L10n.currentlyPlaying) / \(mixName)"
         }()
+        let isNarrow = contentAreaWidth < 420
+        let isVeryNarrow = contentAreaWidth < 340
+        let isUltraNarrow = contentAreaWidth < 260
+        let headerHorizontalPadding: CGFloat = isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
+        let headerIconFrame: CGFloat = isNarrow ? 18 : 20
+        let headerRowSpacing: CGFloat = isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
 
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
-            HStack(spacing: MoodistTheme.Spacing.xSmall) {
+            HStack(spacing: headerRowSpacing) {
+                Image(systemName: store.isPlaying ? "waveform" : "waveform.slash")
+                    .font(.system(size: isNarrow ? 14 : 15, weight: .medium))
+                    .frame(width: headerIconFrame, height: headerIconFrame)
+                    .foregroundStyle(store.isPlaying ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
                 Text(title)
                     .font(MoodistTheme.Typography.headline)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .minimumScaleFactor(0.9)
                     .layoutPriority(1)
-                Image(systemName: store.isPlaying ? "waveform" : "waveform.slash")
-                    .font(.system(size: 14))
-                    .foregroundStyle(store.isPlaying ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
                 if store.hasActiveTimer {
                     TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
                         if let timer = store.activeTimer {
@@ -858,14 +1046,15 @@ struct ContentView: View {
                 }
                 .fixedSize(horizontal: true, vertical: false)
             }
+            .padding(.horizontal, headerHorizontalPadding)
+            .padding(.vertical, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.small + 2)
             if store.hasSelection {
                 let playingSounds = store.selectedIds
-                    .compactMap { allSoundsDict[$0] }
+                    .compactMap { SoundsData.allSoundsById[$0] }
                     .sorted { L10n.soundLabel($0.id).localizedStandardCompare(L10n.soundLabel($1.id)) == .orderedAscending }
                 LazyVStack(spacing: MoodistTheme.Spacing.small) {
                     ForEach(playingSounds, id: \.id) { sound in
                         SoundRow(sound: sound, store: store)
-                            .id("playing-sound-\(sound.id)")
                     }
                 }
             } else {
@@ -920,7 +1109,6 @@ struct ContentView: View {
                     )
                 )
                 .id("category-\(category.id)")
-                .background(ScrollAnchorReporter(id: "category-\(category.id)", coordinateSpace: Self.scrollCoordinateSpaceName))
             }
         }
         .onAppear {
@@ -1002,14 +1190,12 @@ struct ContentView: View {
                             LazyVStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
                                 ForEach(sounds, id: \.id) { sound in
                                     SoundRow(sound: sound, store: store)
-                                        .id("search-sound-\(sound.id)")
                                 }
                             }
                         }
                         .padding(.vertical, MoodistTheme.Spacing.small)
                         .padding(.horizontal, contentAreaWidth < 420 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
                         .id("search-category-\(category.id)")
-                        .background(ScrollAnchorReporter(id: "search-category-\(category.id)", coordinateSpace: Self.scrollCoordinateSpaceName))
                     }
                 }
             }
@@ -1017,74 +1203,173 @@ struct ContentView: View {
     }
 }
 
-// MARK: - Save preset sheet (SwiftUI; evita NSAlert y bloqueos)
+// MARK: - Save Mix sheet (SwiftUI; evita NSAlert y bloqueos)
 
-private let presetIconOptions: [String] = [
-    "sparkles", "leaf.fill", "moon.zzz.fill", "cloud.rain.fill",
-    "wind", "wave.3.forward", "flame.fill", "music.note"
+private struct SaveMixIconOption: Identifiable {
+    let id: String
+    let sfSymbolName: String
+    let displayName: String
+}
+
+private let saveMixIconOptions: [SaveMixIconOption] = [
+    SaveMixIconOption(id: "sparkles", sfSymbolName: "sparkles", displayName: "Sparkles"),
+    SaveMixIconOption(id: "leaf", sfSymbolName: "leaf.fill", displayName: "Leaf"),
+    SaveMixIconOption(id: "moon", sfSymbolName: "moon.zzz.fill", displayName: "Moon / Sleep"),
+    SaveMixIconOption(id: "rain", sfSymbolName: "cloud.rain.fill", displayName: "Rain"),
+    SaveMixIconOption(id: "wind", sfSymbolName: "wind", displayName: "Wind"),
+    SaveMixIconOption(id: "waves", sfSymbolName: "wave.3.forward", displayName: "Waves"),
+    SaveMixIconOption(id: "flame", sfSymbolName: "flame.fill", displayName: "Flame"),
+    SaveMixIconOption(id: "music", sfSymbolName: "music.note", displayName: "Music note"),
+    SaveMixIconOption(id: "drop", sfSymbolName: "drop.fill", displayName: "Drop"),
+    SaveMixIconOption(id: "snow", sfSymbolName: "snowflake", displayName: "Snowflake"),
+    SaveMixIconOption(id: "sun", sfSymbolName: "sun.max.fill", displayName: "Sun"),
+    SaveMixIconOption(id: "moon2", sfSymbolName: "moon.stars.fill", displayName: "Night"),
+    SaveMixIconOption(id: "tree", sfSymbolName: "leaf.circle.fill", displayName: "Tree / Nature"),
+    SaveMixIconOption(id: "bird", sfSymbolName: "bird.fill", displayName: "Bird"),
+    SaveMixIconOption(id: "fish", sfSymbolName: "fish.fill", displayName: "Fish"),
+    SaveMixIconOption(id: "paw", sfSymbolName: "pawprint.fill", displayName: "Paw"),
+    SaveMixIconOption(id: "heart", sfSymbolName: "heart.fill", displayName: "Heart"),
+    SaveMixIconOption(id: "star", sfSymbolName: "star.fill", displayName: "Star"),
+    SaveMixIconOption(id: "book", sfSymbolName: "book.fill", displayName: "Book"),
+    SaveMixIconOption(id: "cup", sfSymbolName: "cup.and.saucer.fill", displayName: "Coffee"),
+    SaveMixIconOption(id: "house", sfSymbolName: "house.fill", displayName: "Home"),
+    SaveMixIconOption(id: "beach", sfSymbolName: "beach.umbrella.fill", displayName: "Beach"),
+    SaveMixIconOption(id: "water", sfSymbolName: "water.waves", displayName: "Water"),
+    SaveMixIconOption(id: "bolt", sfSymbolName: "bolt.fill", displayName: "Lightning"),
+    SaveMixIconOption(id: "globe", sfSymbolName: "globe", displayName: "Globe"),
+    SaveMixIconOption(id: "airplane", sfSymbolName: "airplane", displayName: "Airplane"),
+    SaveMixIconOption(id: "car", sfSymbolName: "car.fill", displayName: "Car"),
+    SaveMixIconOption(id: "headphones", sfSymbolName: "headphones", displayName: "Headphones"),
+    SaveMixIconOption(id: "speaker", sfSymbolName: "speaker.wave.2.fill", displayName: "Speaker"),
 ]
 
 private struct SavePresetSheet: View {
     @ObservedObject var store: SoundStore
     var onDismiss: () -> Void
 
-    @State private var presetName = ""
+    @State private var mixName = ""
     @State private var selectedIconIndex = 0
     @FocusState private var isNameFocused: Bool
 
+    private var canSave: Bool {
+        !mixName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+
+    private var currentIconOption: SaveMixIconOption {
+        saveMixIconOptions.indices.contains(selectedIconIndex)
+            ? saveMixIconOptions[selectedIconIndex]
+            : saveMixIconOptions[0]
+    }
+
     var body: some View {
-        VStack(spacing: MoodistTheme.Spacing.large) {
-            Text(L10n.presetSaveDialogTitle)
-                .font(MoodistTheme.Typography.headline)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-            TextField(L10n.presetNamePlaceholder, text: $presetName)
-                .textFieldStyle(.roundedBorder)
-                .focused($isNameFocused)
-
+        VStack(spacing: 0) {
+            // Cabecera
             VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xSmall) {
-                Text(L10n.iconLabel)
+                HStack(spacing: MoodistTheme.Spacing.small) {
+                    Image(systemName: "square.and.pencil")
+                        .font(.title2)
+                        .foregroundStyle(MoodistTheme.Colors.accent)
+                    Text(L10n.presetSaveDialogTitle)
+                        .font(.title2.weight(.semibold))
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                Text(L10n.saveMixSubtitle)
                     .font(MoodistTheme.Typography.subheadline)
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                HStack(spacing: MoodistTheme.Spacing.small) {
-                    ForEach(Array(presetIconOptions.enumerated()), id: \.offset) { index, iconName in
+            }
+            .padding(.bottom, MoodistTheme.Spacing.xLarge)
+
+            // Campo nombre (Enter guarda si hay nombre)
+            TextField(L10n.presetNamePlaceholder, text: $mixName)
+                .textFieldStyle(.plain)
+                .focused($isNameFocused)
+                .font(.body)
+                .padding(.horizontal, MoodistTheme.Spacing.medium)
+                .padding(.vertical, MoodistTheme.Spacing.small + 2)
+                .background(
+                    RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
+                        .fill(MoodistTheme.Colors.cardBackground)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
+                                .strokeBorder(Color.primary.opacity(0.12), lineWidth: 1)
+                        )
+                )
+                .onSubmit { if canSave { saveAndDismiss() } }
+                .padding(.bottom, MoodistTheme.Spacing.xLarge)
+
+            // Icono (menú desplegable con muchos iconos)
+            VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
+                Text(L10n.iconLabel)
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                Menu {
+                    ForEach(Array(saveMixIconOptions.enumerated()), id: \.element.id) { index, option in
                         Button {
                             selectedIconIndex = index
                         } label: {
-                            Image(systemName: iconName)
-                                .font(.system(size: 18))
-                                .frame(width: 32, height: 32)
-                                .background(
-                                    RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                                        .fill(selectedIconIndex == index ? MoodistTheme.Colors.selectedBackground : Color.clear)
-                                )
-                                .foregroundStyle(selectedIconIndex == index ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
+                            Label(option.displayName, systemImage: option.sfSymbolName)
                         }
-                        .buttonStyle(.plain)
                     }
+                } label: {
+                    HStack(spacing: MoodistTheme.Spacing.medium) {
+                        Image(systemName: currentIconOption.sfSymbolName)
+                            .font(.system(size: 22, weight: .medium))
+                            .foregroundStyle(MoodistTheme.Colors.accent)
+                            .frame(width: 44, height: 44)
+                            .background(
+                                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
+                                    .fill(MoodistTheme.Colors.selectedBackground.opacity(0.6))
+                            )
+                        Text(currentIconOption.displayName)
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                        Spacer()
+                        Image(systemName: "chevron.down")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                    }
+                    .padding(.horizontal, MoodistTheme.Spacing.medium)
+                    .padding(.vertical, MoodistTheme.Spacing.small)
+                    .background(
+                        RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
+                            .fill(MoodistTheme.Colors.cardBackground)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
+                                    .strokeBorder(Color.primary.opacity(0.12), lineWidth: 1)
+                            )
+                    )
                 }
+                .menuStyle(.borderlessButton)
+                .fixedSize(horizontal: false, vertical: true)
+                .accessibilityLabel(L10n.iconLabel)
+                .accessibilityHint(L10n.saveMixIconMenuHint)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.bottom, MoodistTheme.Spacing.xLarge)
 
-            HStack(spacing: MoodistTheme.Spacing.small) {
+            // Botones
+            HStack(spacing: MoodistTheme.Spacing.medium) {
                 Spacer()
                 Button(L10n.cancel) { onDismiss() }
                     .keyboardShortcut(.cancelAction)
+                    .buttonStyle(.bordered)
                 Button(L10n.save) { saveAndDismiss() }
                     .keyboardShortcut(.defaultAction)
-                    .disabled(presetName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .buttonStyle(.borderedProminent)
+                    .tint(MoodistTheme.Colors.accent)
+                    .disabled(!canSave)
             }
         }
-        .padding(MoodistTheme.Spacing.large)
-        .frame(width: 320)
+        .padding(MoodistTheme.Spacing.xLarge)
+        .frame(width: 360)
+        .background(PlatformColor.windowBackground)
         .onAppear { isNameFocused = true }
     }
 
     private func saveAndDismiss() {
-        let name = presetName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = mixName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty else { return }
-        let iconName = presetIconOptions.indices.contains(selectedIconIndex) ? presetIconOptions[selectedIconIndex] : "sparkles"
-        store.saveCurrentAsPreset(name: name, iconName: iconName)
+        store.saveCurrentAsPreset(name: name, iconName: currentIconOption.sfSymbolName)
         onDismiss()
     }
 }

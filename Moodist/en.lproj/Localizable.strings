@@ -2,6 +2,8 @@
 "app_name" = "Moodist";
 "options" = "Options";
 "close" = "Close";
+"check_for_updates" = "Check for Updates…";
+"updates_section" = "Updates";
 
 /* Playback */
 "play" = "Play";
@@ -11,7 +13,7 @@
 "unselect_all" = "Unselect all";
 "show_in_sounds" = "Show in Sounds";
 "show_in_mixes" = "Show in Mixes";
-"select" = "Select";
+"select" = "Play";
 "deselect" = "Deselect";
 "mute" = "Mute";
 "unmute" = "Unmute";
@@ -102,12 +104,15 @@
 "sidebar_recent_mixes_empty" = "No recent mixes";
 "sidebar_favorites_empty" = "No favorites yet";
 "sidebar_presets_empty" = "No presets yet";
-"preset_save_current" = "Save as preset";
-"preset_apply" = "Apply mix";
+"preset_save_current" = "Save as mix";
+"preset_apply" = "Play Mix";
 "preset_delete" = "Delete mix";
-"preset_save_dialog_title" = "Save preset";
-"preset_name_placeholder" = "Preset name";
-"preset_saved" = "Preset saved";
+"preset_save_dialog_title" = "Save Mix";
+"preset_name_placeholder" = "Mix name";
+"preset_saved" = "Mix saved";
+"save_mix_subtitle" = "Give your mix a name and pick an icon.";
+"save_mix_icon_label_format" = "Icon: %@";
+"save_mix_icon_menu_hint" = "Opens menu to choose an icon for the mix";
 "icon_label" = "Icon";
 "add_to_mix" = "Add to mix";
 "create_new_mix" = "Create new mix…";
@@ -337,11 +342,11 @@
 "section" = "Section";
 "resize_sidebar" = "Resize sidebar";
 "resize_sidebar_hint" = "Drag to resize sidebar width";
-"collapse_all_categories" = "Collapse all categories";
-"expand_all_categories" = "Expand all categories";
+"collapse_all_categories" = "Collapse all";
+"expand_all_categories" = "Expand all";
 "category_collapse_hint" = "Double tap to collapse category";
 "category_expand_hint" = "Double tap to expand category";
 "click_toggle_selection" = "Click to toggle selection";
-"click_apply_mix" = "Click to apply mix";
+"click_apply_mix" = "Click to play mix";
 "click_apply_preset" = "Click to apply preset";
 "double_tap_play_mix" = "Double tap to play this mix";

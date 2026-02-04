@@ -2,6 +2,8 @@
 "app_name" = "Moodist";
 "options" = "Opciones";
 "close" = "Cerrar";
+"check_for_updates" = "Buscar actualizaciones…";
+"updates_section" = "Actualizaciones";
 
 /* Playback */
 "play" = "Reproducir";
@@ -11,7 +13,7 @@
 "unselect_all" = "Quitar todos";
 "show_in_sounds" = "Mostrar en Sounds";
 "show_in_mixes" = "Mostrar en Mixes";
-"select" = "Seleccionar";
+"select" = "Reproducir";
 "deselect" = "Deseleccionar";
 "mute" = "Silenciar";
 "unmute" = "Activar sonido";
@@ -105,12 +107,15 @@
 "sidebar_recent_mixes_empty" = "No hay mixes recientes";
 "sidebar_favorites_empty" = "Aún no hay favoritos";
 "sidebar_presets_empty" = "Aún no hay presets";
-"preset_save_current" = "Guardar como preset";
-"preset_apply" = "Aplicar mix";
+"preset_save_current" = "Guardar como mix";
+"preset_apply" = "Reproducir mix";
 "preset_delete" = "Eliminar mix";
-"preset_save_dialog_title" = "Guardar preset";
-"preset_name_placeholder" = "Nombre del preset";
-"preset_saved" = "Preset guardado";
+"preset_save_dialog_title" = "Guardar Mix";
+"preset_name_placeholder" = "Nombre del mix";
+"preset_saved" = "Mix guardado";
+"save_mix_subtitle" = "Ponle nombre a tu mix y elige un icono.";
+"save_mix_icon_label_format" = "Icono: %@";
+"save_mix_icon_menu_hint" = "Abre el menú para elegir un icono del mix";
 "icon_label" = "Icono";
 "add_to_mix" = "Agregar a mix";
 "create_new_mix" = "Crear nuevo mix…";
@@ -345,6 +350,6 @@
 "category_collapse_hint" = "Toca dos veces para colapsar la categoría";
 "category_expand_hint" = "Toca dos veces para expandir la categoría";
 "click_toggle_selection" = "Haz clic para alternar la selección";
-"click_apply_mix" = "Haz clic para aplicar el mix";
+"click_apply_mix" = "Haz clic para reproducir el mix";
 "click_apply_preset" = "Haz clic para aplicar el preset";
 "double_tap_play_mix" = "Toca dos veces para reproducir este mix";

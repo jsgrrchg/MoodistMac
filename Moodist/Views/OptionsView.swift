@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Sparkle
 
 private enum AppearanceMode: String, CaseIterable {
     case system
@@ -16,6 +17,7 @@ private enum AppearanceMode: String, CaseIterable {
 struct OptionsView: View {
     @EnvironmentObject var store: SoundStore
     @Environment(\.dismissWindow) private var dismissWindow
+    @Environment(\.sparkleUpdater) private var sparkleUpdater
     @AppStorage(PersistenceService.menuBarEnabledKey) private var menuBarEnabled = false
     @AppStorage(PersistenceService.appearanceModeKey) private var appearanceModeRaw = AppearanceMode.system.rawValue
     @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.system.rawValue
@@ -76,6 +78,7 @@ struct OptionsView: View {
             appearanceSection
             generalSection
             dataSection
+            updatesSection
             aboutSection
         }
     }
@@ -312,6 +315,24 @@ struct OptionsView: View {
         }
     }
 
+    @ViewBuilder
+    private var updatesSection: some View {
+        if sparkleUpdater != nil {
+            Section {
+                Button {
+                    sparkleUpdater?.checkForUpdates()
+                } label: {
+                    Label(L10n.checkForUpdates, systemImage: "arrow.down.circle")
+                }
+                .foregroundStyle(.primary)
+                .disabled(!(sparkleUpdater?.canCheckForUpdates ?? false))
+                .accessibilityLabel(L10n.checkForUpdates)
+            } header: {
+                Text(L10n.updatesSection)
+            }
+        }
+    }
+
     private var aboutSection: some View {
         Section {
             HStack {
@@ -328,7 +349,7 @@ struct OptionsView: View {
                     Label(L10n.visitWeb, systemImage: "globe")
                 }
             }
-            if let url = URL(string: "https://github.com/remvze/moodist") {
+            if let url = URL(string: "https://github.com/jsgrrchg/MoodistMac") {
                 Link(destination: url) {
                     Label(L10n.sourceCode, systemImage: "chevron.left.forwardslash.chevron.right")
                 }

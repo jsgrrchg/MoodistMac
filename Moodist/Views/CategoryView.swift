@@ -53,7 +53,6 @@ struct CategoryView: View {
                 LazyVStack(alignment: .leading, spacing: isNarrow ? MoodistTheme.Spacing.xSmall : MoodistTheme.Spacing.small) {
                     ForEach(category.sounds, id: \.id) { sound in
                         SoundRow(sound: sound, store: store)
-                            .id("category-sound-\(sound.id)")
                     }
                 }
             }

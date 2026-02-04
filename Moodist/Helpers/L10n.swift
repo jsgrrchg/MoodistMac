@@ -2,16 +2,55 @@
 //  L10n.swift
 //  MoodistMac
 //
-//  Cadenas de UI (sin localización dinámica).
+//  Cadenas de UI (localizadas vía Localizable.strings).
 //
 
 import Foundation
 
-private func tr(_ _: String, _ value: String) -> String {
-    value
+private func tr(_ key: String, _ value: String) -> String {
+    NSLocalizedString(key, tableName: nil, bundle: .main, value: value, comment: "")
 }
 
 enum L10n {
+    private static let soundLabelById: [String: String] = {
+        var dict: [String: String] = [:]
+        for sound in SoundsData.categories.flatMap(\.sounds) {
+            if dict[sound.id] == nil {
+                dict[sound.id] = sound.label
+            }
+        }
+        return dict
+    }()
+
+    private static let categoryTitleById: [String: String] = {
+        var dict: [String: String] = [:]
+        for category in SoundsData.categories {
+            if dict[category.id] == nil {
+                dict[category.id] = category.title
+            }
+        }
+        return dict
+    }()
+
+    private static let mixNameById: [String: String] = {
+        var dict: [String: String] = [:]
+        for mix in MixesData.categories.flatMap(\.mixes) {
+            if dict[mix.id] == nil {
+                dict[mix.id] = mix.name
+            }
+        }
+        return dict
+    }()
+
+    private static let mixCategoryTitleById: [String: String] = {
+        var dict: [String: String] = [:]
+        for category in MixesData.categories {
+            if dict[category.id] == nil {
+                dict[category.id] = category.title
+            }
+        }
+        return dict
+    }()
     // MARK: - General
     static var appName: String { tr("app_name", "Moodist") }
     static var options: String { tr("options", "Options") }
@@ -27,7 +66,7 @@ enum L10n {
     static var unselectAll: String { tr("unselect_all", "Unselect all") }
     static var showInSounds: String { tr("show_in_sounds", "Show in Sounds") }
     static var showInMixes: String { tr("show_in_mixes", "Show in Mixes") }
-    static var select: String { tr("select", "Select") }
+    static var select: String { tr("select", "Play") }
     static var deselect: String { tr("deselect", "Deselect") }
     static var mute: String { tr("mute", "Mute") }
     static var unmute: String { tr("unmute", "Unmute") }
@@ -67,6 +106,10 @@ enum L10n {
     static func addToFavoritesLabel(_ name: String) -> String { String(format: tr("add_to_favorites_label", "Add %@ to favorites"), name) }
     static func removeFromFavoritesLabel(_ name: String) -> String { String(format: tr("remove_from_favorites_label", "Remove %@ from favorites"), name) }
 
+    // MARK: - Updates
+    static var checkForUpdates: String { tr("check_for_updates", "Check for Updates…") }
+    static var updatesSection: String { tr("updates_section", "Updates") }
+    
     // MARK: - Options
     static var optionsTitle: String { tr("options_title", "Options") }
     static var playbackSection: String { tr("playback_section", "Playback") }
@@ -137,12 +180,17 @@ enum L10n {
     static var sidebarRecentMixesEmpty: String { tr("sidebar_recent_mixes_empty", "No recent mixes") }
     static var sidebarFavoritesEmpty: String { tr("sidebar_favorites_empty", "No favorites yet") }
     static var sidebarPresetsEmpty: String { tr("sidebar_presets_empty", "No presets yet") }
-    static var presetSaveCurrent: String { tr("preset_save_current", "Save as preset") }
-    static var presetApply: String { tr("preset_apply", "Apply mix") }
+    static var presetSaveCurrent: String { tr("preset_save_current", "Save as mix") }
+    static var presetApply: String { tr("preset_apply", "Play Mix") }
     static var presetDelete: String { tr("preset_delete", "Delete mix") }
-    static var presetSaveDialogTitle: String { tr("preset_save_dialog_title", "Save preset") }
-    static var presetNamePlaceholder: String { tr("preset_name_placeholder", "Preset name") }
-    static var presetSaved: String { tr("preset_saved", "Preset saved") }
+    static var presetSaveDialogTitle: String { tr("preset_save_dialog_title", "Save Mix") }
+    static var presetNamePlaceholder: String { tr("preset_name_placeholder", "Mix name") }
+    static var presetSaved: String { tr("preset_saved", "Mix saved") }
+    static var saveMixSubtitle: String { tr("save_mix_subtitle", "Give your mix a name and pick an icon.") }
+    static func saveMixIconLabel(_ iconName: String) -> String {
+        String(format: tr("save_mix_icon_label_format", "Icon: %@"), iconName)
+    }
+    static var saveMixIconMenuHint: String { tr("save_mix_icon_menu_hint", "Opens menu to choose an icon for the mix") }
     static var iconLabel: String { tr("icon_label", "Icon") }
     static var addToMix: String { tr("add_to_mix", "Add to mix") }
     static var createNewMix: String { tr("create_new_mix", "Create new mix…") }
@@ -162,25 +210,25 @@ enum L10n {
     // MARK: - Dynamic content by id
     static func soundLabel(_ soundId: String) -> String {
         let key = "sound_\(soundId)"
-        let fallback = SoundsData.categories.flatMap(\.sounds).first(where: { $0.id == soundId })?.label ?? soundId
+        let fallback = soundLabelById[soundId] ?? soundId
         return tr(key, fallback)
     }
     
     static func categoryTitle(_ categoryId: String) -> String {
         let key = "category_\(categoryId)"
-        let fallback = SoundsData.categories.first(where: { $0.id == categoryId })?.title ?? categoryId
+        let fallback = categoryTitleById[categoryId] ?? categoryId
         return tr(key, fallback)
     }
     
     static func mixName(_ mixId: String) -> String {
         let key = "mix_\(mixId)"
-        let fallback = MixesData.categories.flatMap(\.mixes).first(where: { $0.id == mixId })?.name ?? mixId
+        let fallback = mixNameById[mixId] ?? mixId
         return tr(key, fallback)
     }
     
     static func mixCategoryTitle(_ mixCategoryId: String) -> String {
         let key = "mixcat_\(mixCategoryId)"
-        let fallback = MixesData.categories.first(where: { $0.id == mixCategoryId })?.title ?? mixCategoryId
+        let fallback = mixCategoryTitleById[mixCategoryId] ?? mixCategoryId
         return tr(key, fallback)
     }
     
@@ -204,13 +252,13 @@ enum L10n {
     static var resizeSidebarHint: String { tr("resize_sidebar_hint", "Drag to resize sidebar width") }
     static var expandSection: String { tr("expand_section", "Expand section") }
     static var collapseSection: String { tr("collapse_section", "Collapse section") }
-    static var collapseAllCategories: String { tr("collapse_all_categories", "Collapse all categories") }
-    static var expandAllCategories: String { tr("expand_all_categories", "Expand all categories") }
+    static var collapseAllCategories: String { tr("collapse_all_categories", "Collapse all") }
+    static var expandAllCategories: String { tr("expand_all_categories", "Expand all") }
     static func categoryExpandHint(_ isExpanded: Bool) -> String {
         isExpanded ? tr("category_collapse_hint", "Double tap to collapse category") : tr("category_expand_hint", "Double tap to expand category")
     }
     static var clickToggleSelection: String { tr("click_toggle_selection", "Click to toggle selection") }
-    static var clickApplyMix: String { tr("click_apply_mix", "Click to apply mix") }
+    static var clickApplyMix: String { tr("click_apply_mix", "Click to play mix") }
     static var clickApplyPreset: String { tr("click_apply_preset", "Click to apply preset") }
     static var doubleTapPlayMix: String { tr("double_tap_play_mix", "Double tap to play this mix") }
 }
