@@ -50,8 +50,7 @@ struct MoodistApp: App {
                 .applyAppAccent(accentChoice.accentColor)
         }
         .windowStyle(.automatic)
-        .defaultSize(width: 420, height: 520)
-        .windowResizability(.contentSize)
+        .defaultSize(width: 510, height: 650)
     }
 
     @CommandsBuilder private var commandsContent: some Commands {
@@ -102,9 +101,18 @@ struct MoodistApp: App {
                     Text(remaining).disabled(true)
                     Divider()
                 }
-                ForEach(soundStore.topTimerPresets(limit: 8), id: \.self) { seconds in
-                    Button(soundStore.timerLabel(forSeconds: seconds)) {
-                        soundStore.startSleepTimer(durationSeconds: seconds)
+                Menu(L10n.timerMinutes) {
+                    ForEach(SoundStore.timerMenuMinutesPresets, id: \.self) { seconds in
+                        Button(soundStore.timerLabel(forSeconds: seconds)) {
+                            soundStore.startSleepTimer(durationSeconds: seconds)
+                        }
+                    }
+                }
+                Menu(L10n.timerHours) {
+                    ForEach(SoundStore.timerMenuHoursPresets, id: \.self) { seconds in
+                        Button(soundStore.timerLabel(forSeconds: seconds)) {
+                            soundStore.startSleepTimer(durationSeconds: seconds)
+                        }
                     }
                 }
                 Divider()
@@ -260,7 +268,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     private static let mainWindowMinSize = CGSize(width: 850, height: 600)
     private static let defaultMainWindowSize = CGSize(width: 900, height: 700)
     private static let maxMainWindowWidth: CGFloat = 1000
-    private static let optionsWindowSize = CGSize(width: 420, height: 520)
+    private static let optionsWindowSize = CGSize(width: 510, height: 650)
     private static let menuBarKey = PersistenceService.menuBarEnabledKey
     private static let frameSaveDebounce: DispatchTimeInterval = .milliseconds(250)
     private static let frameRestoreDelay: DispatchTimeInterval = .milliseconds(300)
@@ -284,6 +292,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     private var pendingFrameRestore: DispatchWorkItem?
     private var timerMenuUpdate: Timer?
     private weak var timerRemainingMenuItem: NSMenuItem?
+    private var spaceKeyMonitor: Any?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         applyAppearanceMode()
@@ -354,14 +363,38 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
                 }
             }
         }
+        installSpaceKeyMonitor()
+    }
+
+    private func installSpaceKeyMonitor() {
+        spaceKeyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard event.keyCode == 49 else { return event }
+            if let window = NSApp.keyWindow, let first = window.firstResponder {
+                let isTextInput = first is NSTextView || first is NSTextField
+                if isTextInput { return event }
+                if let view = first as? NSView {
+                    var current: NSView? = view
+                    while let v = current {
+                        if v is NSSearchField { return event }
+                        current = v.superview
+                    }
+                }
+            }
+            Task { @MainActor in
+                self?.soundStore?.togglePlay()
+            }
+            return nil
+        }
     }
 
     func applicationWillTerminate(_ notification: Notification) {
-        // Guardar frame al salir (p. ej. Cmd+Q)
+        if let monitor = spaceKeyMonitor { NSEvent.removeMonitor(monitor) }
+        spaceKeyMonitor = nil
         persistMainWindowFrameNow()
     }
 
     @MainActor deinit {
+        if let monitor = spaceKeyMonitor { NSEvent.removeMonitor(monitor) }
         if let o = menuBarObserver { NotificationCenter.default.removeObserver(o) }
         if let o = appearanceObserver { NotificationCenter.default.removeObserver(o) }
         if let o = transparencyObserver { NotificationCenter.default.removeObserver(o) }
@@ -441,7 +474,8 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         window.styleMask.remove(.resizable)
         window.minSize = Self.optionsWindowSize
         window.maxSize = Self.optionsWindowSize
-        if window.frame.size != Self.optionsWindowSize {
+        let contentSize = window.contentRect(forFrameRect: window.frame).size
+        if contentSize.width != Self.optionsWindowSize.width || contentSize.height != Self.optionsWindowSize.height {
             window.setContentSize(Self.optionsWindowSize)
         }
     }
@@ -558,6 +592,8 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         shuffleItem.target = self
         menu.addItem(shuffleItem)
 
+        menu.addItem(.separator())
+        appendTimerSection(to: menu)
         menu.addItem(.separator())
 
         let searchItem = NSMenuItem(
@@ -910,7 +946,8 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         menu.delegate = self
 
         let playTitle = (soundStore?.isPlaying == true) ? L10n.pause : L10n.play
-        let playItem = NSMenuItem(title: playTitle, action: #selector(menuPlayPause), keyEquivalent: " ")
+        let playItem = NSMenuItem(title: playTitle, action: #selector(menuPlayPause), keyEquivalent: "r")
+        playItem.keyEquivalentModifierMask = .command
         playItem.target = self
         menu.addItem(playItem)
 
@@ -967,77 +1004,34 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         stopTimerMenuUpdates()
     }
 
-    // MARK: - Menú del Dock (clic derecho en el icono)
-
-    @MainActor private func buildDockMenu() -> NSMenu {
-        let menu = NSMenu()
-
-        let playTitle = (soundStore?.isPlaying == true) ? L10n.pause : L10n.play
-        let playItem = NSMenuItem(title: playTitle, action: #selector(menuPlayPause), keyEquivalent: " ")
-        playItem.target = self
-        menu.addItem(playItem)
-
-        let mixName = soundStore?.displayedMixName ?? L10n.customMix
-        let nowPlayingItem = NSMenuItem(title: mixName, action: nil, keyEquivalent: "")
-        nowPlayingItem.isEnabled = false
-        menu.addItem(nowPlayingItem)
-
-        let nextMixItem = NSMenuItem(title: L10n.nextMix, action: #selector(menuNextMix), keyEquivalent: "")
-        nextMixItem.target = self
-        menu.addItem(nextMixItem)
-
-        menu.addItem(NSMenuItem.separator())
-        appendTimerSection(to: menu)
-        menu.addItem(NSMenuItem.separator())
-
-        let openItem = NSMenuItem(title: L10n.openWindow, action: #selector(menuOpenWindow), keyEquivalent: "o")
-        openItem.keyEquivalentModifierMask = .command
-        openItem.target = self
-        menu.addItem(openItem)
-
-        let optionsSubmenu = NSMenu()
-        let prefsItem = NSMenuItem(title: L10n.options + "...", action: #selector(menuShowOptions), keyEquivalent: ",")
-        prefsItem.keyEquivalentModifierMask = .command
-        prefsItem.target = self
-        optionsSubmenu.addItem(prefsItem)
-        let exportItem = NSMenuItem(title: L10n.exportPreferences, action: #selector(menuExportPreferences), keyEquivalent: "")
-        exportItem.target = self
-        optionsSubmenu.addItem(exportItem)
-        let importItem = NSMenuItem(title: L10n.importPreferences, action: #selector(menuImportPreferences), keyEquivalent: "")
-        importItem.target = self
-        optionsSubmenu.addItem(importItem)
-        optionsSubmenu.addItem(NSMenuItem.separator())
-        let menuBarItem = NSMenuItem(title: L10n.menuBarShow, action: #selector(menuToggleMenuBar), keyEquivalent: "")
-        menuBarItem.target = self
-        menuBarItem.state = UserDefaults.standard.bool(forKey: Self.menuBarKey) ? .on : .off
-        optionsSubmenu.addItem(menuBarItem)
-        let optionsItem = NSMenuItem(title: L10n.options, action: nil, keyEquivalent: "")
-        optionsItem.submenu = optionsSubmenu
-        menu.addItem(optionsItem)
-
-        menu.addItem(NSMenuItem.separator())
-
-        let quitItem = NSMenuItem(title: L10n.quit, action: #selector(menuQuit), keyEquivalent: "q")
-        quitItem.keyEquivalentModifierMask = .command
-        quitItem.target = self
-        menu.addItem(quitItem)
-
-        return menu
-    }
-
     @MainActor private func appendTimerSection(to menu: NSMenu) {
         let header = NSMenuItem(title: L10n.timer, action: nil, keyEquivalent: "")
         header.isEnabled = false
         menu.addItem(header)
 
-        let presets = soundStore?.topTimerPresets(limit: 8) ?? [300, 600, 900, 1200, 1800, 3600, 7200, 28800]
-        for seconds in presets {
+        let minutesSubmenu = NSMenu()
+        for seconds in SoundStore.timerMenuMinutesPresets {
             let title = soundStore?.timerLabel(forSeconds: seconds) ?? timerLabelFallback(seconds: seconds)
             let item = NSMenuItem(title: title, action: #selector(menuStartTimer(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = seconds
-            menu.addItem(item)
+            minutesSubmenu.addItem(item)
         }
+        let minutesItem = NSMenuItem(title: L10n.timerMinutes, action: nil, keyEquivalent: "")
+        minutesItem.submenu = minutesSubmenu
+        menu.addItem(minutesItem)
+
+        let hoursSubmenu = NSMenu()
+        for seconds in SoundStore.timerMenuHoursPresets {
+            let title = soundStore?.timerLabel(forSeconds: seconds) ?? timerLabelFallback(seconds: seconds)
+            let item = NSMenuItem(title: title, action: #selector(menuStartTimer(_:)), keyEquivalent: "")
+            item.target = self
+            item.representedObject = seconds
+            hoursSubmenu.addItem(item)
+        }
+        let hoursItem = NSMenuItem(title: L10n.timerHours, action: nil, keyEquivalent: "")
+        hoursItem.submenu = hoursSubmenu
+        menu.addItem(hoursItem)
 
         let customItem = NSMenuItem(title: L10n.timerCustom, action: #selector(menuCustomTimer), keyEquivalent: "")
         customItem.target = self
@@ -1117,10 +1111,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         Task { @MainActor in
             soundStore?.cancelSleepTimer()
         }
-    }
-
-    @objc private func menuToggleMute() {
-        Task { @MainActor in soundStore?.toggleMute() }
     }
 
     @objc private func menuOpenWindow() {

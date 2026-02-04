@@ -14,6 +14,7 @@ enum PersistenceService {
     private static let favoriteMixIdsKey = "moodist.favoriteMixIds"
     private static let favoriteSoundIdsKey = "moodist.favoriteSoundIds"
     static let maxRecentMixesCountKey = "MoodistMac.maxRecentMixesCount"
+    static let maxRecentSoundsCountKey = "MoodistMac.maxRecentSoundsCount"
     static let menuBarEnabledKey = "MoodistMac.menuBarEnabled"
     static let accentColorHexKey = "MoodistMac.accentColorHex"
     static let appearanceModeKey = "MoodistMac.appearanceMode"
@@ -109,6 +110,16 @@ enum PersistenceService {
         UserDefaults.standard.set(min(15, max(10, count)), forKey: maxRecentMixesCountKey)
     }
 
+    /// Máximo de sonidos recientes en la barra lateral (10...15). Por defecto 12.
+    static func loadMaxRecentSoundsCount() -> Int {
+        let v = UserDefaults.standard.object(forKey: maxRecentSoundsCountKey) as? Int ?? 12
+        return min(15, max(10, v))
+    }
+
+    static func saveMaxRecentSoundsCount(_ count: Int) {
+        UserDefaults.standard.set(min(15, max(10, count)), forKey: maxRecentSoundsCountKey)
+    }
+
     static func loadTransparencyEnabled() -> Bool {
         guard UserDefaults.standard.object(forKey: transparencyEnabledKey) != nil else { return true }
         return UserDefaults.standard.bool(forKey: transparencyEnabledKey)
@@ -181,6 +192,7 @@ enum PersistenceService {
         UserDefaults.standard.removeObject(forKey: favoriteMixIdsKey)
         UserDefaults.standard.removeObject(forKey: favoriteSoundIdsKey)
         UserDefaults.standard.removeObject(forKey: maxRecentMixesCountKey)
+        UserDefaults.standard.removeObject(forKey: maxRecentSoundsCountKey)
         UserDefaults.standard.removeObject(forKey: menuBarEnabledKey)
         UserDefaults.standard.removeObject(forKey: accentColorHexKey)
         UserDefaults.standard.removeObject(forKey: appearanceModeKey)

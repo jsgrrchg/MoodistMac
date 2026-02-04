@@ -72,7 +72,9 @@ enum L10n {
     static var unmute: String { tr("unmute", "Unmute") }
     static var stop: String { tr("stop", "Stop") }
     static var timer: String { tr("timer", "Timer") }
-    static var timerStop: String { tr("timer_stop", "Stop timer") }
+    static var timerMinutes: String { tr("timer_minutes", "Minutes") }
+    static var timerHours: String { tr("timer_hours", "Hours") }
+    static var timerStop: String { tr("timer_stop", "Stop") }
     static var timerCustom: String { tr("timer_custom", "Custom timer...") }
     static func timerRemaining(_ remaining: String) -> String {
         String(format: tr("timer_remaining", "Timer: %@ remaining"), remaining)
@@ -137,6 +139,8 @@ enum L10n {
     static var disableTransparenciesFooter: String { tr("disable_transparencies_footer", "Turn this on to make the interface solid and reduce frosted effects.") }
     static var maxRecentMixes: String { tr("max_recent_mixes", "Recent mixes in sidebar") }
     static var maxRecentMixesFooter: String { tr("max_recent_mixes_footer", "Maximum number of recent mixes shown in the sidebar (10–15).") }
+    static var maxRecentSounds: String { tr("max_recent_sounds", "Recent sounds in sidebar") }
+    static var maxRecentSoundsFooter: String { tr("max_recent_sounds_footer", "Maximum number of recent sounds shown in the sidebar (10–15).") }
     static var dataSection: String { tr("data_section", "Data") }
     static var exportPreferences: String { tr("export_preferences", "Export preferences…") }
     static var exportPreferencesHint: String { tr("export_preferences_hint", "Save custom mixes, favorite mixes, and favorite sounds to a file") }
@@ -168,8 +172,6 @@ enum L10n {
     static var quit: String { tr("quit", "Quit Moodist") }
 
     // MARK: - Sidebar
-    static var sidebarHide: String { tr("sidebar_hide", "Hide sidebar") }
-    static var sidebarShow: String { tr("sidebar_show", "Show sidebar") }
     static var sidebarFavorites: String { tr("sidebar_favorites", "Favorite Sounds") }
     static var sidebarPresets: String { tr("sidebar_presets", "Presets") }
     static var sidebarFavoriteMixes: String { tr("sidebar_favorite_mixes", "Favorite Mixes") }

@@ -53,6 +53,11 @@ final class SoundStore: ObservableObject {
     private var timerUsageCounts: [Int: Int] = PersistenceService.loadTimerUsageCounts()
     private let defaultTimerPresetsSeconds: [Int] = [5, 10, 15, 20, 30, 60, 120, 480].map { $0 * 60 }
 
+    /// Presets de minutos para el menú Timer (5 opciones): 5m, 10m, 15m, 30m, 45m.
+    static let timerMenuMinutesPresets: [Int] = [5, 10, 15, 30, 45].map { $0 * 60 }
+    /// Presets de horas para el menú Timer (5 opciones): 1h, 2h, 3h, 4h, 8h.
+    static let timerMenuHoursPresets: [Int] = [1, 2, 3, 4, 8].map { $0 * 3600 }
+
     var isMuted: Bool { globalVolume == 0 }
     var hasActiveTimer: Bool { activeTimer != nil }
     private var cancellables = Set<AnyCancellable>()
@@ -136,6 +141,10 @@ final class SoundStore: ObservableObject {
         presets = PersistenceService.loadPresets()
         recentMixIds = PersistenceService.loadRecentMixIds()
         recentSoundIds = PersistenceService.loadRecentSoundIds()
+        let soundLimit = PersistenceService.loadMaxRecentSoundsCount()
+        if recentSoundIds.count > soundLimit {
+            recentSoundIds = Array(recentSoundIds.prefix(soundLimit))
+        }
         favoriteMixIds = PersistenceService.loadFavoriteMixIds()
         favoriteSoundIds = PersistenceService.loadFavoriteSoundIds()
         if favoriteSoundIds.isEmpty, !favoriteIds.isEmpty {
@@ -205,17 +214,14 @@ final class SoundStore: ObservableObject {
         currentMixId = nil
         currentMixIconName = nil
         guard hasSelection else { return }
-        let ids = Array(sounds.keys)
-        // Pausar reproducción primero (rápido).
-        for id in ids {
-            audioService.pause(soundId: id)
-        }
+        isPlaying = false
+        audioService.pauseAll(ids: selectedIds)
         // Una sola actualización del estado para evitar muchos re-renders y bloqueos de la UI.
         var next = sounds
+        let ids = Array(next.keys)
         for id in ids {
             if var item = next[id] {
                 item.isSelected = false
-                item.volume = 0.5
                 next[id] = item
             }
         }
@@ -499,7 +505,7 @@ final class SoundStore: ObservableObject {
         var ids = recentSoundIds
         ids.removeAll { $0 == soundId }
         ids.insert(soundId, at: 0)
-        let limit = 12
+        let limit = PersistenceService.loadMaxRecentSoundsCount()
         recentSoundIds = Array(ids.prefix(limit))
     }
 
@@ -508,6 +514,14 @@ final class SoundStore: ObservableObject {
         let limit = PersistenceService.loadMaxRecentMixesCount()
         if recentMixIds.count > limit {
             recentMixIds = Array(recentMixIds.prefix(limit))
+        }
+    }
+
+    /// Recorta la lista de sonidos recientes al límite configurado en Opciones.
+    func trimRecentSoundIdsToLimit() {
+        let limit = PersistenceService.loadMaxRecentSoundsCount()
+        if recentSoundIds.count > limit {
+            recentSoundIds = Array(recentSoundIds.prefix(limit))
         }
     }
 

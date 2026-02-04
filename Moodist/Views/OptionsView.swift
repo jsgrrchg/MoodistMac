@@ -24,10 +24,11 @@ struct OptionsView: View {
     @AppStorage(PersistenceService.textSizeKey) private var textSizeRaw = "medium"
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
     @AppStorage(PersistenceService.maxRecentMixesCountKey) private var maxRecentMixesCount: Int = 10
+    @AppStorage(PersistenceService.maxRecentSoundsCountKey) private var maxRecentSoundsCount: Int = 12
     @AppStorage(PersistenceService.mediaKeyNextMixKey) private var mediaKeyNextMix = true
     @State private var showResetConfirmation = false
     @State private var showRestoreConfirmation = false
-    private let optionsWindowSize = CGSize(width: 420, height: 520)
+    private let optionsWindowSize = CGSize(width: 510, height: 650)
 
     private var appearanceMode: AppearanceMode {
         get { AppearanceMode(rawValue: appearanceModeRaw) ?? .system }
@@ -69,6 +70,7 @@ struct OptionsView: View {
             .onChange(of: menuBarEnabled) { _, _ in handleMenuBarChange() }
             .onChange(of: appearanceModeRaw) { _, _ in handleAppearanceChange() }
             .onChange(of: maxRecentMixesCount) { _, _ in handleMaxRecentMixesChange() }
+            .onChange(of: maxRecentSoundsCount) { _, _ in handleMaxRecentSoundsChange() }
             .onChange(of: transparencyEnabled) { _, _ in handleTransparencyToggle() }
     }
     
@@ -115,6 +117,9 @@ struct OptionsView: View {
         if maxRecentMixesCount < 10 || maxRecentMixesCount > 15 {
             maxRecentMixesCount = 10
         }
+        if maxRecentSoundsCount < 10 || maxRecentSoundsCount > 15 {
+            maxRecentSoundsCount = 12
+        }
         let validSizes = ["small", "medium", "large", "xLarge"]
         if !validSizes.contains(textSizeRaw) {
             textSizeRaw = "medium"
@@ -137,6 +142,10 @@ struct OptionsView: View {
     
     private func handleMaxRecentMixesChange() {
         store.trimRecentMixIdsToLimit()
+    }
+
+    private func handleMaxRecentSoundsChange() {
+        store.trimRecentSoundIdsToLimit()
     }
     
     private func handleTransparencyToggle() {
@@ -250,6 +259,19 @@ struct OptionsView: View {
             .accessibilityLabel(L10n.maxRecentMixes)
             .accessibilityValue("\(maxRecentMixesCount)")
             Text(L10n.maxRecentMixesFooter)
+                .font(.footnote)
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+            HStack {
+                Text(L10n.maxRecentSounds)
+                Spacer()
+                Text("\(maxRecentSoundsCount)")
+                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                    .frame(minWidth: 24, alignment: .trailing)
+                Stepper(value: $maxRecentSoundsCount, in: 10...15, step: 1) {}
+            }
+            .accessibilityLabel(L10n.maxRecentSounds)
+            .accessibilityValue("\(maxRecentSoundsCount)")
+            Text(L10n.maxRecentSoundsFooter)
                 .font(.footnote)
                 .foregroundStyle(MoodistTheme.Colors.secondaryText)
             Toggle(isOn: $mediaKeyNextMix) {
@@ -388,18 +410,26 @@ private struct OptionsWindowConfigurator: NSViewRepresentable {
 
     func updateNSView(_ nsView: NSView, context: Context) {
         guard let window = nsView.window else { return }
-        if context.coordinator.window !== window || !context.coordinator.didConfigure {
+        if context.coordinator.window !== window {
             context.coordinator.window = window
-            context.coordinator.didConfigure = true
+        }
+        if window.styleMask.contains(.resizable) {
             window.styleMask.remove(.resizable)
+        }
+        if window.minSize != size {
             window.minSize = size
+        }
+        if window.maxSize != size {
             window.maxSize = size
+        }
+        let contentSize = window.contentRect(forFrameRect: window.frame).size
+        if contentSize.width != size.width || contentSize.height != size.height {
+            window.setContentSize(size)
         }
     }
 
     final class Coordinator {
         weak var window: NSWindow?
-        var didConfigure = false
     }
 }
 

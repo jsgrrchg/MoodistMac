@@ -127,56 +127,58 @@ struct MixRowView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xSmall) {
-            Button(action: { 
+            HStack(spacing: isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium) {
+                Image(systemName: mix.iconName)
+                    .font(.system(size: isNarrow ? 14 : 15, weight: isCurrentMix ? .medium : .regular))
+                    .frame(width: isNarrow ? 18 : 20, height: isNarrow ? 18 : 20)
+                    .foregroundStyle(isCurrentMix ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
+                Text(mixDisplayName)
+                    .font(MoodistTheme.Typography.body)
+                    .fontWeight(isCurrentMix ? .medium : .regular)
+                    .foregroundStyle(isCurrentMix ? Color.primary : Color.primary.opacity(0.9))
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+                    .minimumScaleFactor(0.85)
+                    .layoutPriority(1)
+                Spacer(minLength: 0)
+                Button(action: {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
+                        store.toggleFavoriteMix(id: mix.id)
+                    }
+                }) {
+                    Image(systemName: isFavoriteMix ? "star.fill" : "star")
+                        .font(.system(size: isNarrow ? 12 : 14, weight: isFavoriteMix ? .medium : .regular))
+                        .foregroundStyle(isFavoriteMix ? MoodistTheme.Colors.favorite : (isHovered ? MoodistTheme.Colors.secondaryText.opacity(0.8) : MoodistTheme.Colors.secondaryText.opacity(0.5)))
+                        .frame(width: isNarrow ? 18 : 20, height: isNarrow ? 18 : 20)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(isFavoriteMix ? L10n.removeFromFavoritesLabel(mixDisplayName) : L10n.addToFavoritesLabel(mixDisplayName))
+                if isCurrentMix {
+                    Image(systemName: "chevron.down")
+                        .font(.caption)
+                        .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                }
+                if !isVeryNarrow {
+                    Text(L10n.countSounds(mix.soundIds.count))
+                        .font(MoodistTheme.Typography.subheadline)
+                        .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+            }
+            .padding(.vertical, isNarrow ? MoodistTheme.Spacing.small : (MoodistTheme.Spacing.small + 2))
+            .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
+            .contentShape(Rectangle())
+            .background(
+                RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
+                    .fill(rowBackgroundColor)
+            )
+            .onTapGesture {
                 withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                     store.applyMix(mix)
                 }
-            }) {
-                HStack(spacing: isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium) {
-                    Image(systemName: mix.iconName)
-                        .font(.system(size: isNarrow ? 14 : 15, weight: isCurrentMix ? .medium : .regular))
-                        .frame(width: isNarrow ? 18 : 20, height: isNarrow ? 18 : 20)
-                        .foregroundStyle(isCurrentMix ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
-                    Text(mixDisplayName)
-                        .font(MoodistTheme.Typography.body)
-                        .fontWeight(isCurrentMix ? .medium : .regular)
-                        .foregroundStyle(isCurrentMix ? Color.primary : Color.primary.opacity(0.9))
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .minimumScaleFactor(0.85)
-                        .layoutPriority(1)
-                    Spacer(minLength: 0)
-                    Button(action: { 
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
-                            store.toggleFavoriteMix(id: mix.id)
-                        }
-                    }) {
-                        Image(systemName: isFavoriteMix ? "star.fill" : "star")
-                            .font(.system(size: isNarrow ? 12 : 14, weight: isFavoriteMix ? .medium : .regular))
-                            .foregroundStyle(isFavoriteMix ? MoodistTheme.Colors.favorite : (isHovered ? MoodistTheme.Colors.secondaryText.opacity(0.8) : MoodistTheme.Colors.secondaryText.opacity(0.5)))
-                            .frame(width: isNarrow ? 18 : 20, height: isNarrow ? 18 : 20)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(isFavoriteMix ? L10n.removeFromFavoritesLabel(mixDisplayName) : L10n.addToFavoritesLabel(mixDisplayName))
-                    if isCurrentMix {
-                        Image(systemName: "chevron.down")
-                            .font(.caption)
-                            .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                    }
-                    if !isVeryNarrow {
-                        Text(L10n.countSounds(mix.soundIds.count))
-                            .font(MoodistTheme.Typography.subheadline)
-                            .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                    }
-                }
-                .padding(.vertical, isNarrow ? MoodistTheme.Spacing.small : (MoodistTheme.Spacing.small + 2))
-                .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
-                .contentShape(Rectangle())
             }
-            .buttonStyle(ModernMixRowButtonStyle(isSelected: isCurrentMix, isHovered: isHovered))
             .onHover { hovering in
                 guard !isUserScrolling else { return }
                 guard isHovered != hovering else { return }
@@ -207,6 +209,8 @@ struct MixRowView: View {
             }
             .accessibilityLabel("\(mixDisplayName), \(L10n.countSounds(mix.soundIds.count))")
             .accessibilityHint(L10n.doubleTapPlayMix)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityAction { store.applyMix(mix) }
 
             if isCurrentMix {
                 LazyVStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
@@ -220,35 +224,15 @@ struct MixRowView: View {
             }
         }
     }
-}
 
-// MARK: - Estilo integrado para botones de mix (sin fondo azul por defecto)
-
-struct ModernMixRowButtonStyle: ButtonStyle {
-    let isSelected: Bool
-    let isHovered: Bool
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background(
-                RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                    .fill(backgroundColor)
-            )
-            .scaleEffect(configuration.isPressed ? 0.99 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
-    }
-    
-    private var backgroundColor: Color {
-        if isSelected {
-            // Fondo sutil cuando está seleccionado, integrado con el gris
+    private var rowBackgroundColor: Color {
+        if isCurrentMix {
             return MoodistTheme.Colors.selectedBackground.opacity(0.25)
-        } else if isHovered {
-            // Hover muy sutil, apenas perceptible
-            return Color.primary.opacity(0.05)
-        } else {
-            // Sin fondo, completamente transparente
-            return Color.clear
         }
+        if isHovered {
+            return Color.primary.opacity(0.05)
+        }
+        return Color.clear
     }
 }
 

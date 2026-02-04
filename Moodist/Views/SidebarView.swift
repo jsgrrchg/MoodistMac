@@ -42,6 +42,8 @@ private func sidebarDragItemProvider(id: String) -> NSItemProvider {
 
 struct SidebarView: View {
     @EnvironmentObject var store: SoundStore
+    @Binding var isHoveringWindowDragArea: Bool
+    @Binding var isHoveringSidebar: Bool
     @State private var sectionsCollapsed: [String: Bool] = PersistenceService.loadSidebarSectionsCollapsed()
     @State private var draggedFavoriteSoundId: String?
     @State private var draggedFavoriteMixId: String?
@@ -52,6 +54,14 @@ struct SidebarView: View {
     /// Sonidos favoritos en el orden elegido por el usuario (permite drag and drop).
     private var orderedFavoriteSounds: [Sound] {
         store.orderedFavoriteSoundIds.compactMap { SoundsData.allSoundsById[$0] }
+    }
+
+    private var presetsById: [String: Preset] {
+        var dict: [String: Preset] = [:]
+        for preset in store.presets {
+            dict[preset.id] = preset
+        }
+        return dict
     }
 
     private func isSectionCollapsed(_ id: String) -> Bool {
@@ -66,8 +76,9 @@ struct SidebarView: View {
     }
 
     private var recentMixes: [Mix] {
-        store.recentMixIds.compactMap { id in
-            MixesData.allMixesById[id] ?? store.presets.first(where: { $0.id == id }).map { $0.toMix() }
+        let presetsById = presetsById
+        return store.recentMixIds.compactMap { id in
+            MixesData.allMixesById[id] ?? presetsById[id]?.toMix()
         }
     }
 
@@ -76,8 +87,9 @@ struct SidebarView: View {
     }
 
     private var favoriteMixes: [Mix] {
-        store.favoriteMixIds.compactMap { id in
-            MixesData.allMixesById[id] ?? store.presets.first(where: { $0.id == id }).map { $0.toMix() }
+        let presetsById = presetsById
+        return store.favoriteMixIds.compactMap { id in
+            MixesData.allMixesById[id] ?? presetsById[id]?.toMix()
         }
     }
 
@@ -226,6 +238,12 @@ struct SidebarView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onHover { inside in
+            isHoveringSidebar = inside
+            if !inside {
+                isHoveringWindowDragArea = false
+            }
+        }
     }
 
     private var sectionDivider: some View {
@@ -236,8 +254,7 @@ struct SidebarView: View {
     }
 
     private var sidebarBackground: some View {
-        ZStack(alignment: .trailing) {
-            // Frosting estilo Finder: blur del escritorio detrás de la ventana (behindWindow).
+        ZStack {
             if transparencyEnabled {
                 VisualEffectBackground(material: .sidebar, blendingMode: .behindWindow)
                     .ignoresSafeArea(.container)
@@ -246,18 +263,13 @@ struct SidebarView: View {
                 PlatformColor.windowBackground
                     .ignoresSafeArea(.container)
             }
-
-            // Divider between sidebar and main content (single line; resize handle is invisible).
-            Rectangle()
-                .fill(Color.primary.opacity(0.10))
-                .frame(width: 1)
-                .ignoresSafeArea(.container)
         }
     }
 
     /// Encabezado de sección con chevron para colapsar/expandir.
     private func sidebarSectionHeader(_ title: String, sectionId: String) -> some View {
-        Button(action: { toggleSection(sectionId) }) {
+        let isWindowDragTarget = sectionId == sidebarSectionIds.favorites
+        return Button(action: { toggleSection(sectionId) }) {
             HStack(spacing: 6) {
                 Image(systemName: isSectionCollapsed(sectionId) ? "chevron.right" : "chevron.down")
                     .font(.system(size: 9, weight: .medium))
@@ -275,6 +287,10 @@ struct SidebarView: View {
         }
         .buttonStyle(.plain)
         .help(isSectionCollapsed(sectionId) ? L10n.expandSection : L10n.collapseSection)
+        .onHover { inside in
+            guard isWindowDragTarget else { return }
+            isHoveringWindowDragArea = inside
+        }
     }
 
     private func sidebarPlaceholder(_ text: String) -> some View {
@@ -365,18 +381,6 @@ private struct SidebarSoundRow: View {
         } else {
             store.select(sound.id)
         }
-    }
-}
-
-// MARK: - Estilo de botón: hover con fondo redondeado sutil
-
-private struct SidebarRowButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background(
-                RoundedRectangle(cornerRadius: SidebarStyle.selectionRadius)
-                    .fill(Color.primary.opacity(configuration.isPressed ? SidebarStyle.selectionOpacity * 0.7 : 0))
-            )
     }
 }
 
@@ -522,7 +526,7 @@ private struct FavoriteMixDropDelegate: DropDelegate {
 }
 
 #Preview {
-    SidebarView()
+    SidebarView(isHoveringWindowDragArea: .constant(false), isHoveringSidebar: .constant(false))
         .environmentObject(SoundStore(audioService: AudioService()))
         .frame(width: 220, height: 400)
 }

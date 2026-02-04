@@ -4,6 +4,21 @@
         <title>MoodistMac Updates</title>
         <description>MoodistMac ambient sound app updates.</description>
         <language>en</language>
+        <!-- 1.0 Beta 3 (build 3). Nomenclature matches Xcode: MARKETING_VERSION "1.0 Beta 3", CURRENT_PROJECT_VERSION 3. -->
+        <!-- Signed with Sparkle sign_update. Upload MoodistMac.zip to GitHub Release tag Beta-3. -->
+        <item>
+            <title>Version 1.0 Beta 3</title>
+            <link>https://github.com/jsgrrchg/MoodistMac/releases</link>
+            <sparkle:version>3</sparkle:version>
+            <sparkle:shortVersionString>1.0 Beta 3</sparkle:shortVersionString>
+            <sparkle:releaseNotesLink>https://github.com/jsgrrchg/MoodistMac/releases</sparkle:releaseNotesLink>
+            <pubDate>Wed, 04 Feb 2026 12:00:00 +0000</pubDate>
+            <enclosure
+                url="https://github.com/jsgrrchg/MoodistMac/releases/download/Beta-3/MoodistMac.zip"
+                sparkle:edSignature="PENDIENTE"
+                length="0"
+                type="application/octet-stream"/>
+        </item>
         <!-- 1.0 Beta 2 (build 2). Nomenclature matches Xcode: MARKETING_VERSION "1.0 Beta 2", CURRENT_PROJECT_VERSION 2. -->
         <!-- Signed with Sparkle sign_update. Upload MoodistMac.zip to GitHub Release tag Beta-2. -->
         <item>

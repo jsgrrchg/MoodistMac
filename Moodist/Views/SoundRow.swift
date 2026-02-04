@@ -34,16 +34,19 @@ struct SoundRow: View {
     }
 
     var body: some View {
-        Button(action: toggleSound) {
-            ViewThatFits(in: .horizontal) {
-                if !(state.isSelected && isVeryNarrow) {
-                    horizontalRowContent
-                }
-                compactRowContent
-                ultraCompactRowContent
+        ViewThatFits(in: .horizontal) {
+            if !(state.isSelected && isVeryNarrow) {
+                horizontalRowContent
             }
+            compactRowContent
+            ultraCompactRowContent
         }
-        .buttonStyle(ModernSoundRowButtonStyle(isSelected: state.isSelected, isHovered: isHovered))
+        .contentShape(Rectangle())
+        .background(
+            RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
+                .fill(rowBackgroundColor)
+        )
+        .onTapGesture { toggleSound() }
         .onHover { hovering in
             guard !isUserScrolling else { return }
             guard isHovered != hovering else { return }
@@ -77,7 +80,18 @@ struct SoundRow: View {
             }
         }
         .accessibilityLabel(state.isSelected ? "\(L10n.deselect) \(soundLabel)" : "\(L10n.select) \(soundLabel)")
-        .accessibilityAddTraits(state.isSelected ? [.isSelected] : [])
+        .accessibilityAddTraits(state.isSelected ? [.isButton, .isSelected] : [.isButton])
+        .accessibilityAction { toggleSound() }
+    }
+
+    private var rowBackgroundColor: Color {
+        if state.isSelected {
+            return MoodistTheme.Colors.selectedBackground.opacity(0.25)
+        }
+        if isHovered {
+            return Color.primary.opacity(0.05)
+        }
+        return Color.clear
     }
 
     private func toggleSound() {
@@ -252,36 +266,6 @@ struct SoundRow: View {
         let step = 0.05
         let snapped = (value / step).rounded() * step
         return min(1, max(0, snapped))
-    }
-}
-
-// MARK: - Estilo integrado con fondo gris (sin cuadros blancos)
-
-struct ModernSoundRowButtonStyle: ButtonStyle {
-    let isSelected: Bool
-    let isHovered: Bool
-    
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .background(
-                RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                    .fill(backgroundColor)
-            )
-            .scaleEffect(configuration.isPressed ? 0.99 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
-    }
-    
-    private var backgroundColor: Color {
-        if isSelected {
-            // Fondo sutil cuando está seleccionado, integrado con el gris
-            return MoodistTheme.Colors.selectedBackground.opacity(0.25)
-        } else if isHovered {
-            // Hover muy sutil, apenas perceptible
-            return Color.primary.opacity(0.05)
-        } else {
-            // Sin fondo, completamente transparente
-            return Color.clear
-        }
     }
 }
 

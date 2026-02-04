@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AppKit
 
 /// Forma redondeada sutil para el reproductor (estilo Liquid Glass / Apple Music)
 private let floatingBarShape = RoundedRectangle(
@@ -37,8 +38,124 @@ private let minimalLayoutThreshold: CGFloat = 300
 private let sliderMinWidth: CGFloat = 32
 /// Espaciado entre zonas (icono+controles | título | volumen) para una disposición clara
 private let barZoneSpacing: CGFloat = 20
-/// Radio del botón tipo “portada” del icono
-private let barIconCornerRadius: CGFloat = 8
+
+/// Velocidad del marquesina (puntos por segundo)
+private let marqueeSpeed: CGFloat = 25
+/// Intervalo de refresco para marquesina SwiftUI (fallback)
+#if !os(macOS)
+private let marqueeTickInterval: TimeInterval = 0.06
+#endif
+
+private struct TextWidthKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = nextValue()
+    }
+}
+
+/// Título que se desplaza en horizontal cuando no cabe (estilo reproductor clásico).
+private struct MarqueeLabel: View {
+    let text: String
+    let fontSize: CGFloat
+    let fontWeight: Font.Weight
+    let color: Color
+    @State private var measuredTextWidth: CGFloat = 0
+
+    var body: some View {
+        let swiftUIFont = Font.system(size: fontSize, weight: fontWeight)
+        GeometryReader { geo in
+            let containerWidth = geo.size.width
+            let spacing: CGFloat = 48
+            let shouldScroll = measuredTextWidth > 0 && measuredTextWidth > containerWidth
+
+            ZStack(alignment: .leading) {
+                if shouldScroll {
+                    #if os(macOS)
+                    MarqueeTextView(
+                        text: text,
+                        font: NSFont.systemFont(ofSize: fontSize, weight: fontWeight.toNSFontWeight()),
+                        color: NSColor(color),
+                        speed: marqueeSpeed,
+                        spacing: spacing,
+                        containerWidth: containerWidth,
+                        isEnabled: shouldScroll
+                    )
+                    #else
+                    TimelineView(.periodic(from: .now, by: marqueeTickInterval)) { context in
+                        let cycleWidth = measuredTextWidth + spacing
+                        let elapsed = context.date.timeIntervalSinceReferenceDate
+                        let offset = (-CGFloat(elapsed) * marqueeSpeed).truncatingRemainder(dividingBy: cycleWidth)
+                        HStack(spacing: spacing) {
+                            Text(text)
+                                .font(swiftUIFont)
+                                .foregroundStyle(color)
+                                .lineLimit(1)
+                                .fixedSize()
+                            Text(text)
+                                .font(swiftUIFont)
+                                .foregroundStyle(color)
+                                .lineLimit(1)
+                                .fixedSize()
+                        }
+                        .offset(x: offset)
+                    }
+                    #endif
+                } else {
+                    #if os(macOS)
+                    MarqueeTextView(
+                        text: text,
+                        font: NSFont.systemFont(ofSize: fontSize, weight: fontWeight.toNSFontWeight()),
+                        color: NSColor(color),
+                        speed: marqueeSpeed,
+                        spacing: spacing,
+                        containerWidth: containerWidth,
+                        isEnabled: false
+                    )
+                    #else
+                    Text(text)
+                        .font(swiftUIFont)
+                        .foregroundStyle(color)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    #endif
+                }
+            }
+            .frame(width: containerWidth, height: geo.size.height, alignment: .leading)
+            .clipped()
+        }
+        .frame(minWidth: 0, maxWidth: .infinity, maxHeight: .infinity)
+        .overlay(alignment: .leading) {
+            Text(text)
+                .font(swiftUIFont)
+                .lineLimit(1)
+                .fixedSize(horizontal: true, vertical: false)
+                .hidden()
+                .background(GeometryReader { g in
+                    Color.clear.preference(key: TextWidthKey.self, value: g.size.width)
+                })
+                .allowsHitTesting(false)
+        }
+        .onPreferenceChange(TextWidthKey.self) { measuredTextWidth = $0 }
+    }
+}
+
+private extension Font.Weight {
+    func toNSFontWeight() -> NSFont.Weight {
+        switch self {
+        case .ultraLight: return .ultraLight
+        case .thin: return .thin
+        case .light: return .light
+        case .regular: return .regular
+        case .medium: return .medium
+        case .semibold: return .semibold
+        case .bold: return .bold
+        case .heavy: return .heavy
+        case .black: return .black
+        default: return .regular
+        }
+    }
+}
 
 struct BottomPlayerBarView: View {
     @EnvironmentObject var store: SoundStore
@@ -83,18 +200,14 @@ struct BottomPlayerBarView: View {
     private func barContent(availableWidth: CGFloat) -> some View {
         let isMinimal = availableWidth < minimalLayoutThreshold
         let isCompact = availableWidth < compactLayoutThreshold
-        let iconSize: CGFloat = isMinimal ? 28 : (isCompact ? 32 : 40)
-        let iconFontSize: CGFloat = isMinimal ? 12 : (isCompact ? 14 : 18)
         let controlSize: CGFloat = isMinimal ? 24 : (isCompact ? 28 : 32)
         let playSize: CGFloat = isMinimal ? 28 : (isCompact ? 32 : 36)
         let paddingH: CGFloat = isMinimal ? 6 : (isCompact ? 10 : 14)
         let sliderWidth: CGFloat = isMinimal ? 44 : (isCompact ? 56 : 92)
         let zoneSpacing: CGFloat = isMinimal ? 8 : (isCompact ? 12 : barZoneSpacing)
-        let iconControlsSpacing: CGFloat = isMinimal ? 6 : 10
-        let controlsInnerSpacing: CGFloat = isMinimal ? 4 : 6
+        let controlsInnerSpacing: CGFloat = isMinimal ? 2 : 4
         let volumeSpacing: CGFloat = isMinimal ? 4 : 8
         let verticalPadding: CGFloat = isMinimal ? 4 : 6
-        let iconRadius: CGFloat = isMinimal ? 5 : barIconCornerRadius
         let titleFontSize: CGFloat = isMinimal ? 12 : (isCompact ? 13 : 14.5)
         let titleFontWeight: Font.Weight = isMinimal ? .regular : .medium
 
@@ -102,19 +215,6 @@ struct BottomPlayerBarView: View {
             Spacer(minLength: 0)
             HStack(alignment: .center, spacing: zoneSpacing) {
                 // Zona izquierda: botón tipo “portada” (icono) + controles de reproducción
-                HStack(alignment: .center, spacing: iconControlsSpacing) {
-                Image(systemName: displayIconName)
-                    .font(.system(size: iconFontSize, weight: .medium))
-                    .foregroundStyle(MoodistTheme.Colors.accent)
-                    .frame(width: iconSize, height: iconSize)
-                    .background(MoodistTheme.Colors.secondaryText.opacity(0.16))
-                    .clipShape(RoundedRectangle(cornerRadius: iconRadius, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: iconRadius, style: .continuous)
-                            .strokeBorder(Color.primary.opacity(0.06), lineWidth: 0.5)
-                    )
-                    .contentShape(RoundedRectangle(cornerRadius: iconRadius, style: .continuous))
-
                 HStack(alignment: .center, spacing: controlsInnerSpacing) {
                     Button(action: { store.shuffle() }) {
                         Image(systemName: "shuffle")
@@ -125,6 +225,17 @@ struct BottomPlayerBarView: View {
                     .buttonStyle(.plain)
                     .help(L10n.shuffle)
                     .accessibilityLabel(L10n.shuffle)
+
+                    Button(action: { store.unselectAll() }) {
+                        Image(systemName: "stop.fill")
+                            .font(.system(size: isMinimal ? 11 : (isCompact ? 12 : 14)))
+                            .frame(width: controlSize, height: controlSize)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                    .disabled(!store.hasSelection)
+                    .help(L10n.unselectAll)
+                    .accessibilityLabel(L10n.clear)
 
                     Button(action: { store.togglePlay() }) {
                         Image(systemName: store.isPlaying ? "pause.fill" : "play.fill")
@@ -145,18 +256,17 @@ struct BottomPlayerBarView: View {
                     .buttonStyle(.plain)
                     .help(L10n.nextMix)
                 }
-            }
 
-            // Zona central: título del mix (gris medio, ocupa el espacio flexible)
-            Text(displayLabel)
-                .font(.system(size: titleFontSize, weight: titleFontWeight))
-                .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
-                .layoutPriority(0)
+            // Zona central: título del mix (marquesina si no cabe)
+            MarqueeLabel(
+                text: displayLabel,
+                fontSize: titleFontSize,
+                fontWeight: titleFontWeight,
+                color: MoodistTheme.Colors.secondaryText
+            )
+            .layoutPriority(0)
 
-            // Zona derecha: volumen (altavoz + slider)
+            // Zona derecha: volumen (altavoz + slider), fondo opaco para que la marquesina no se trasluzca
             HStack(alignment: .center, spacing: volumeSpacing) {
                 Image(systemName: store.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
                     .font(.system(size: isMinimal ? 8 : (isCompact ? 9 : 11)))
@@ -165,6 +275,11 @@ struct BottomPlayerBarView: View {
                 volumeSlider(isMinimal: isMinimal)
                 .frame(minWidth: sliderMinWidth, maxWidth: sliderWidth)
             }
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(PlatformColor.windowBackground)
+            .compositingGroup()
+            .clipped()
             .frame(minWidth: sliderMinWidth + (isMinimal ? 18 : 24), alignment: .trailing)
             .accessibilityLabel(L10n.globalVolume)
             }
@@ -190,6 +305,8 @@ struct BottomPlayerBarView: View {
                     GeometryReader { g in barContent(availableWidth: g.size.width) }
                 }
                 .clipShape(floatingBarShape)
+                .contentShape(floatingBarShape)
+                .allowsHitTesting(true)
                 .overlay(barOverlay)
                 .shadow(color: Color.black.opacity(0.12), radius: 16, x: 0, y: 6)
                 .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
@@ -220,6 +337,8 @@ struct BottomPlayerBarView: View {
             GeometryReader { g in barContent(availableWidth: g.size.width) }
         }
         .clipShape(floatingBarShape)
+        .contentShape(floatingBarShape)
+        .allowsHitTesting(true)
         .overlay(barOverlay)
         .shadow(color: Color.black.opacity(0.12), radius: 16, x: 0, y: 6)
         .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
@@ -232,6 +351,8 @@ struct BottomPlayerBarView: View {
             GeometryReader { g in barContent(availableWidth: g.size.width) }
         }
         .clipShape(floatingBarShape)
+        .contentShape(floatingBarShape)
+        .allowsHitTesting(true)
         .overlay(barOverlay)
         .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 4)
     }
@@ -258,6 +379,7 @@ struct BottomPlayerBarView: View {
                 .controlSize(isMinimal ? .mini : .small)
                 .tint(MoodistTheme.Colors.accent)
                 .frame(height: isMinimal ? 20 : 22)
+                .clipped()
                 .accessibilityValue("\(Int(store.globalVolume * 100))%")
         } else {
             ModernVolumeSlider(value: globalVolumeBinding, isMinimal: isMinimal)
@@ -276,6 +398,7 @@ private struct ModernVolumeSlider: View {
     private var trackHeight: CGFloat { isMinimal ? 5 : 6 }
 
     var body: some View {
+        let height = max(trackHeight, knobSize)
         GeometryReader { geo in
             let width = max(1, geo.size.width)
             let usable = max(1, width - knobSize)
@@ -292,10 +415,10 @@ private struct ModernVolumeSlider: View {
                 Circle()
                     .fill(Color.white.opacity(0.95))
                     .frame(width: knobSize, height: knobSize)
-                    .shadow(color: Color.black.opacity(0.12), radius: 3, x: 0, y: 1)
+                    .shadow(color: Color.black.opacity(0.08), radius: 1.5, x: 0, y: 0.5)
                     .offset(x: knobX)
             }
-            .frame(height: max(trackHeight, knobSize))
+            .frame(height: height)
             .contentShape(Rectangle())
             .gesture(
                 DragGesture(minimumDistance: 0)
@@ -305,7 +428,8 @@ private struct ModernVolumeSlider: View {
                     }
             )
         }
-        .frame(height: max(trackHeight, knobSize))
+        .frame(height: height)
+        .clipped()
         .accessibilityValue("\(Int(value * 100))%")
     }
 }

@@ -11,6 +11,7 @@ import AppKit
 private let sidebarWidthMin: CGFloat = 180
 private let sidebarWidthMax: CGFloat = 320
 private let sidebarWidthDefault: CGFloat = 220
+private let sidebarResizeHandleWidth: CGFloat = 14
 /// Paso de actualización durante resize para reducir recomputes y lag.
 private let sidebarResizeStep: CGFloat = 6
 /// Por debajo de este ancho de ventana se usa el menú compacto (un solo icono).
@@ -44,6 +45,19 @@ private struct WindowWidthKey: PreferenceKey {
     }
 }
 
+private struct WindowDragConfigurator: NSViewRepresentable {
+    let disableWindowDrag: Bool
+
+    func makeNSView(context: Context) -> NSView {
+        NSView()
+    }
+
+    func updateNSView(_ nsView: NSView, context: Context) {
+        guard let window = nsView.window else { return }
+        window.isMovableByWindowBackground = !disableWindowDrag
+    }
+}
+
 /// Barra de búsqueda nativa de macOS (NSSearchField con estilo estándar de Apple).
 private struct ToolbarSearchField: NSViewRepresentable {
     @Binding var text: String
@@ -58,20 +72,14 @@ private struct ToolbarSearchField: NSViewRepresentable {
         field.sendsSearchStringImmediately = true
         field.translatesAutoresizingMaskIntoConstraints = false
         field.heightAnchor.constraint(equalToConstant: 28).isActive = true
-        // Sin anillo de foco azul: el campo sigue siendo focusable pero no muestra el contorno.
-        field.focusRingType = .none
+        // Mantiene el anillo de foco nativo para dar claridad al estado activo.
+        field.focusRingType = .default
 
         // Estilo nativo: bisel redondeado estándar de macOS (Human Interface Guidelines),
-        // pero sin icono de lupa (solo cuadro de búsqueda).
+        // con icono de lupa para mayor affordance.
         if let cell = field.cell as? NSSearchFieldCell {
             cell.controlSize = .small
             cell.bezelStyle = .roundedBezel
-            cell.searchButtonCell?.image = nil
-            cell.searchButtonCell?.alternateImage = nil
-            cell.searchButtonCell?.title = ""
-            cell.searchButtonCell?.isTransparent = true
-            cell.searchButtonCell?.isBordered = false
-            cell.searchButtonCell?.imagePosition = .noImage
         }
         field.placeholderString = placeholder
         return field
@@ -168,8 +176,6 @@ struct ContentView: View {
     @Environment(\.openWindow) private var openWindow
     @AppStorage(PersistenceService.textSizeKey) private var textSizeRaw = "medium"
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
-    /// Preferencia del usuario (toggle en la toolbar). La visibilidad final también depende del auto-hide.
-    @State private var sidebarUserVisible = true
     @State private var windowWidth: CGFloat = 800
     @State private var requestToolbarSearchFocus = false
     @State private var selectedSection: MainSection = .sounds
@@ -187,13 +193,23 @@ struct ContentView: View {
     @State private var soundsScrollPosition: String? = Self.scrollTopAnchorId
     @State private var mixesScrollPosition: String? = Self.scrollTopAnchorId
     @State private var isUserScrolling = false
+    @State private var isHoveringSidebar = false
+    @State private var isHoveringSidebarDragArea = false
+    @State private var isHoveringResizeHandle = false
+    @State private var isDraggingResizeHandle = false
+    @State private var isSaveMixHovered = false
+    @State private var isClearHovered = false
 
-    private var isSidebarVisible: Bool {
-        sidebarUserVisible
-    }
+    /// La sidebar es siempre visible; el toggle fue eliminado para simplificar la navegación.
+    private var isSidebarVisible: Bool { true }
 
     private var contentSidebarWidth: CGFloat {
         sidebarResizeStartWidth == 0 ? sidebarWidth : sidebarResizeStartWidth
+    }
+
+    private var contentTopPadding: CGFloat {
+        let base = contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large
+        return base + titlebarContentInset
     }
 
     var body: some View {
@@ -210,12 +226,16 @@ struct ContentView: View {
                     .ignoresSafeArea(.container)
                     .zIndex(1)
                     .transition(.move(edge: .leading).combined(with: .opacity))
+                sidebarResizeHandle
+                    .offset(x: sidebarWidth - (sidebarResizeHandleWidth / 2))
+                    .zIndex(2)
             }
         }
         .ignoresSafeArea(.container)
         .environment(\.dynamicTypeSize, dynamicTypeSizeFromRaw(textSizeRaw))
         .tint(MoodistTheme.Colors.accent)
         .frame(minWidth: 850, minHeight: 480)
+        .background(WindowDragConfigurator(disableWindowDrag: shouldDisableWindowDrag))
         .background(GeometryReader { geometry in
             Color.clear.preference(key: WindowWidthKey.self, value: geometry.size.width)
         })
@@ -249,13 +269,27 @@ struct ContentView: View {
 
 
     private var sidebarOverlay: some View {
-        SidebarView()
+        SidebarView(
+            isHoveringWindowDragArea: $isHoveringSidebarDragArea,
+            isHoveringSidebar: $isHoveringSidebar
+        )
             .environmentObject(store)
             .frame(width: sidebarWidth)
             .frame(maxHeight: .infinity)
-            .overlay(alignment: .trailing) {
-                sidebarResizeHandle
-            }
+    }
+
+    private var shouldDisableWindowDrag: Bool {
+        if isResizingSidebar {
+            return true
+        }
+        if isHoveringSidebar {
+            return !isHoveringSidebarDragArea
+        }
+        return false
+    }
+
+    private var isResizingSidebar: Bool {
+        isHoveringResizeHandle || isDraggingResizeHandle
     }
 
     @ViewBuilder private var mainContent: some View {
@@ -466,7 +500,9 @@ struct ContentView: View {
 
     private func requestSectionChange(to newSection: MainSection) {
         guard selectedSection != newSection else { return }
-        selectedSection = newSection
+        withAnimation(.easeInOut(duration: 0.2)) {
+            selectedSection = newSection
+        }
     }
 
     private var mainScrollContent: some View {
@@ -504,48 +540,6 @@ struct ContentView: View {
                 store.showSavePresetSheet = false
             }
         }
-        .simultaneousGesture(
-            DragGesture(minimumDistance: 20)
-                .onChanged { value in
-                    // Solo procesar si el movimiento es principalmente horizontal
-                    // Esto permite que el scroll vertical funcione normalmente
-                    let horizontalMovement = abs(value.translation.width)
-                    let verticalMovement = abs(value.translation.height)
-                    
-                    if horizontalMovement > verticalMovement * 2.0 {
-                        // Solo registramos el gesto para determinar cambio de pestaña.
-                    }
-                }
-                .onEnded { value in
-                    let threshold: CGFloat = 60
-                    
-                    // Solo cambiar si el movimiento fue principalmente horizontal
-                    let horizontalMovement = abs(value.translation.width)
-                    let verticalMovement = abs(value.translation.height)
-                    
-                    guard horizontalMovement > verticalMovement * 2.0 else {
-                        return
-                    }
-                    
-                    // Deslizar hacia la izquierda (negativo) = ir a Mixes
-                    // Deslizar hacia la derecha (positivo) = ir a Sounds
-                    if value.translation.width < -threshold {
-                        // Cambiar a Mixes si estamos en Sounds
-                        if selectedSection == .sounds {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                requestSectionChange(to: .mixes)
-                            }
-                        }
-                    } else if value.translation.width > threshold {
-                        // Cambiar a Sounds si estamos en Mixes
-                        if selectedSection == .mixes {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                                requestSectionChange(to: .sounds)
-                            }
-                        }
-                    }
-                }
-        )
     }
 
     private var soundsScrollContent: some View {
@@ -557,7 +551,7 @@ struct ContentView: View {
                 soundsSections
             }
             .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
-            .padding(.top, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + titlebarContentInset)
+            .padding(.top, contentTopPadding)
             .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
         }
         .scrollPosition(id: $soundsScrollPosition, anchor: .top)
@@ -615,7 +609,7 @@ struct ContentView: View {
                 mixesSections
             }
             .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
-            .padding(.top, MoodistTheme.Spacing.xSmall + titlebarContentInset)
+            .padding(.top, contentTopPadding)
             .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
         }
         .scrollPosition(id: $mixesScrollPosition, anchor: .top)
@@ -693,17 +687,6 @@ struct ContentView: View {
     @ToolbarContentBuilder private var toolbarContent: some ToolbarContent {
         let availableToolbarWidth = windowWidth
         if availableToolbarWidth >= toolbarCompactThreshold {
-            ToolbarItem(placement: .navigation) {
-                Button(action: {
-                    withAnimation(.easeInOut(duration: 0.22)) {
-                        sidebarUserVisible.toggle()
-                    }
-                    updateSidebarForWindowWidth(windowWidth)
-                }) {
-                    Image(systemName: sidebarUserVisible ? "sidebar.left" : "sidebar.leading")
-                }
-                .help(sidebarUserVisible ? L10n.sidebarHide : L10n.sidebarShow)
-            }
             ToolbarItem(placement: .principal) {
                 if availableToolbarWidth >= toolbarMediumThreshold {
                     principalToolbarContent
@@ -730,15 +713,6 @@ struct ContentView: View {
     /// Menú único de la barra cuando el ancho es insuficiente; evita el desbordamiento del sistema.
     private var compactToolbarMenu: some View {
         Menu {
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.22)) {
-                    sidebarUserVisible.toggle()
-                }
-                updateSidebarForWindowWidth(windowWidth)
-            }) {
-                Text(sidebarUserVisible ? L10n.sidebarHide : L10n.sidebarShow)
-            }
-            Divider()
             Button(L10n.sounds) { requestSectionChange(to: .sounds) }
             Button(L10n.mixes) { requestSectionChange(to: .mixes) }
             Divider()
@@ -875,6 +849,7 @@ struct ContentView: View {
         min(240, max(140, windowWidth * 0.25))
     }
 
+    /// Backdrop superior: bloquea clics para que no lleguen al contenido (categorías/sonidos).
     private var topControlsBackdrop: some View {
         let height = toolbarBackdropHeight + toolbarBackdropFadeHeight
         return PlatformColor.windowBackground
@@ -893,42 +868,51 @@ struct ContentView: View {
             )
         )
         .ignoresSafeArea(.container, edges: .top)
-        .allowsHitTesting(false)
+        .contentShape(Rectangle())
+        .allowsHitTesting(true)
     }
 
     private var sidebarResizeHandle: some View {
-        Color.clear
-            .frame(width: 10)
-            .frame(maxHeight: .infinity)
-            .contentShape(Rectangle())
-            .onHover { inside in
-                if inside {
-                    NSCursor.resizeLeftRight.push()
-                } else {
-                    NSCursor.pop()
-                }
+        ZStack {
+            // Línea visible para indicar el borde de resize.
+            Rectangle()
+                .fill(Color.primary.opacity(0.12))
+                .frame(width: 1)
+        }
+        .frame(width: sidebarResizeHandleWidth)
+        .frame(maxHeight: .infinity)
+        .contentShape(Rectangle())
+        .onHover { inside in
+            if inside {
+                NSCursor.resizeLeftRight.push()
+            } else {
+                NSCursor.pop()
             }
-            .gesture(
-                DragGesture()
-                    .onChanged { value in
-                        if sidebarResizeStartWidth == 0 {
-                            sidebarResizeStartWidth = sidebarWidth
-                        }
-                        let newWidth = sidebarResizeStartWidth + value.translation.width
-                        let maxAllowed = maxSidebarWidth()
-                        let clamped = min(maxAllowed, max(sidebarWidthMin, newWidth))
-                        let snapped = (clamped / sidebarResizeStep).rounded() * sidebarResizeStep
-                        if abs(snapped - sidebarWidth) >= sidebarResizeStep / 2 {
-                            sidebarWidth = snapped
-                        }
+            isHoveringResizeHandle = inside
+        }
+        .highPriorityGesture(
+            DragGesture()
+                .onChanged { value in
+                    isDraggingResizeHandle = true
+                    if sidebarResizeStartWidth == 0 {
+                        sidebarResizeStartWidth = sidebarWidth
                     }
-                    .onEnded { _ in
-                        persistedSidebarWidth = Double(sidebarWidth)
-                        sidebarResizeStartWidth = 0
+                    let newWidth = sidebarResizeStartWidth + value.translation.width
+                    let maxAllowed = maxSidebarWidth()
+                    let clamped = min(maxAllowed, max(sidebarWidthMin, newWidth))
+                    let snapped = (clamped / sidebarResizeStep).rounded() * sidebarResizeStep
+                    if abs(snapped - sidebarWidth) >= sidebarResizeStep / 2 {
+                        sidebarWidth = snapped
                     }
-            )
-            .accessibilityLabel(L10n.resizeSidebar)
-            .accessibilityHint(L10n.resizeSidebarHint)
+                }
+                .onEnded { _ in
+                    persistedSidebarWidth = Double(sidebarWidth)
+                    sidebarResizeStartWidth = 0
+                    isDraggingResizeHandle = false
+                }
+        )
+        .accessibilityLabel(L10n.resizeSidebar)
+        .accessibilityHint(L10n.resizeSidebarHint)
     }
 
     /// Sección Mixes: categorías temáticas con mixes aplicables (moodist_presets_en).
@@ -1004,9 +988,11 @@ struct ContentView: View {
         let isNarrow = contentAreaWidth < 420
         let isVeryNarrow = contentAreaWidth < 340
         let isUltraNarrow = contentAreaWidth < 260
-        let headerHorizontalPadding: CGFloat = isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
         let headerIconFrame: CGFloat = isNarrow ? 18 : 20
         let headerRowSpacing: CGFloat = isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
+        let headerVerticalPadding: CGFloat = MoodistTheme.Spacing.xSmall
+        // Mismo padding horizontal que CategoryView para alinear con categorías y filas de abajo.
+        let sectionHorizontalPadding: CGFloat = isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium
 
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
             HStack(spacing: headerRowSpacing) {
@@ -1015,39 +1001,62 @@ struct ContentView: View {
                     .frame(width: headerIconFrame, height: headerIconFrame)
                     .foregroundStyle(store.isPlaying ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
                 Text(title)
-                    .font(MoodistTheme.Typography.headline)
+                    .font(isNarrow ? .headline : .title2)
+                    .fontWeight(.semibold)
                     .lineLimit(1)
                     .truncationMode(.tail)
                     .minimumScaleFactor(0.9)
                     .layoutPriority(1)
-                if store.hasActiveTimer {
-                    TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
-                        if let timer = store.activeTimer {
-                            timerRemainingBadge(remainingSeconds: timer.remainingSeconds)
-                        }
-                    }
-                }
                 Spacer(minLength: 0)
                 HStack(spacing: MoodistTheme.Spacing.small) {
                     if store.canSaveCustomMix {
-                        Button(L10n.addCustom) { store.promptSaveCurrentPreset() }
-                            .buttonStyle(.borderedProminent)
-                            .controlSize(.small)
-                            .tint(MoodistTheme.Colors.accent)
-                            .help(L10n.presetSaveCurrent)
-                            .accessibilityLabel(L10n.addCustom)
+                        Button(action: { store.promptSaveCurrentPreset() }) {
+                            if isVeryNarrow {
+                                Label(L10n.addCustom, systemImage: "plus")
+                                    .labelStyle(.iconOnly)
+                            } else {
+                                Label(L10n.addCustom, systemImage: "plus")
+                                    .labelStyle(.titleAndIcon)
+                            }
+                        }
+                        .buttonStyle(HeaderActionButtonStyle(
+                            isHovered: isSaveMixHovered,
+                            isPrimary: true,
+                            isCompact: isNarrow
+                        ))
+                        .onHover { isSaveMixHovered = $0 }
+                        .help(L10n.presetSaveCurrent)
+                        .accessibilityLabel(L10n.addCustom)
                     }
-                    Button(L10n.clear) { store.unselectAll() }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        .disabled(!store.hasSelection)
-                        .help(L10n.unselectAll)
-                        .accessibilityLabel(L10n.clear)
+                    Button(action: { store.unselectAll() }) {
+                        if isVeryNarrow {
+                            Label(L10n.clear, systemImage: "stop.fill")
+                                .labelStyle(.iconOnly)
+                        } else {
+                            Label(L10n.clear, systemImage: "stop.fill")
+                                .labelStyle(.titleAndIcon)
+                        }
+                    }
+                    .buttonStyle(HeaderActionButtonStyle(
+                        isHovered: isClearHovered,
+                        isPrimary: false,
+                        isCompact: isNarrow
+                    ))
+                    .onHover { isClearHovered = $0 }
+                    .disabled(!store.hasSelection)
+                    .help(L10n.unselectAll)
+                    .accessibilityLabel(L10n.clear)
                 }
                 .fixedSize(horizontal: true, vertical: false)
             }
-            .padding(.horizontal, headerHorizontalPadding)
-            .padding(.vertical, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.small + 2)
+            .padding(.vertical, headerVerticalPadding)
+            if store.hasActiveTimer {
+                TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
+                    if let timer = store.activeTimer {
+                        timerInlineRow(remainingSeconds: timer.remainingSeconds)
+                    }
+                }
+            }
             if store.hasSelection {
                 let playingSounds = store.selectedIds
                     .compactMap { SoundsData.allSoundsById[$0] }
@@ -1063,28 +1072,62 @@ struct ContentView: View {
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.vertical, MoodistTheme.Spacing.small)
-                    .padding(.horizontal, MoodistTheme.Spacing.medium)
             }
         }
+        .padding(.horizontal, sectionHorizontalPadding)
+        .padding(.vertical, isNarrow ? MoodistTheme.Spacing.xSmall : MoodistTheme.Spacing.small)
         .accessibilityElement(children: .contain)
         .accessibilityLabel(L10n.currentlyPlaying)
     }
 
-    private func timerRemainingBadge(remainingSeconds: Int) -> some View {
-        HStack(spacing: MoodistTheme.Spacing.xSmall) {
+    private func timerInlineRow(remainingSeconds: Int) -> some View {
+        let isNarrow = contentAreaWidth < 420
+        let isVeryNarrow = contentAreaWidth < 340
+        let isUltraNarrow = contentAreaWidth < 260
+        let rowHorizontalPadding: CGFloat = isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
+        let labelText = isVeryNarrow
+            ? formatTimerRemaining(seconds: remainingSeconds)
+            : "\(L10n.timer) · \(formatTimerRemaining(seconds: remainingSeconds))"
+
+        return HStack(spacing: MoodistTheme.Spacing.small) {
             Image(systemName: "timer")
-                .font(.system(size: 12))
-            Text(formatTimerRemaining(seconds: remainingSeconds))
+                .font(.system(size: isNarrow ? 12 : 13, weight: .medium))
+            Text(labelText)
                 .font(MoodistTheme.Typography.subheadline)
                 .monospacedDigit()
+            Spacer(minLength: 0)
+            Button(action: { store.cancelSleepTimer() }) {
+                if isVeryNarrow {
+                    Image(systemName: "xmark")
+                        .font(.system(size: 11, weight: .semibold))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 3)
+                } else {
+                    Label(L10n.timerStop, systemImage: "xmark")
+                        .labelStyle(.titleAndIcon)
+                        .font(.system(size: 11, weight: .semibold))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                }
+            }
+            .buttonStyle(.plain)
+            .foregroundStyle(MoodistTheme.Colors.secondaryText)
+            .background(
+                Capsule()
+                    .fill(MoodistTheme.Colors.cardBackground.opacity(0.6))
+            )
+            .help(L10n.timerStop)
+            .accessibilityLabel(L10n.timerStop)
         }
         .foregroundStyle(MoodistTheme.Colors.secondaryText)
-        .padding(.horizontal, MoodistTheme.Spacing.small)
-        .padding(.vertical, 2)
+        .padding(.horizontal, rowHorizontalPadding)
+        .padding(.vertical, isNarrow ? 6 : 8)
         .background(
             RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                .fill(MoodistTheme.Colors.selectedBackground.opacity(0.5))
+                .fill(MoodistTheme.Colors.selectedBackground.opacity(0.2))
         )
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
         .accessibilityLabel(L10n.timerRemaining(formatTimerRemaining(seconds: remainingSeconds)))
     }
 
@@ -1371,6 +1414,61 @@ private struct SavePresetSheet: View {
         guard !name.isEmpty else { return }
         store.saveCurrentAsPreset(name: name, iconName: currentIconOption.sfSymbolName)
         onDismiss()
+    }
+}
+
+private struct HeaderActionButtonStyle: ButtonStyle {
+    let isHovered: Bool
+    let isPrimary: Bool
+    let isCompact: Bool
+
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: isCompact ? 12 : 13, weight: .medium))
+            .padding(.horizontal, isCompact ? 8 : 10)
+            .padding(.vertical, isCompact ? 4 : 5)
+            .foregroundStyle(foregroundColor)
+            .background(
+                Capsule().fill(backgroundColor(isPressed: configuration.isPressed))
+            )
+            .overlay(
+                Capsule().strokeBorder(borderColor(isPressed: configuration.isPressed), lineWidth: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
+            .opacity(isEnabled ? 1 : 0.45)
+    }
+
+    private var foregroundColor: Color {
+        if !isEnabled {
+            return MoodistTheme.Colors.secondaryText.opacity(0.8)
+        }
+        return isPrimary ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText
+    }
+
+    private func backgroundColor(isPressed: Bool) -> Color {
+        if !isEnabled {
+            return MoodistTheme.Colors.cardBackground.opacity(0.25)
+        }
+        if isPressed {
+            return MoodistTheme.Colors.cardBackground.opacity(0.9)
+        }
+        if isHovered {
+            return MoodistTheme.Colors.cardBackground.opacity(0.7)
+        }
+        return MoodistTheme.Colors.cardBackground.opacity(0.4)
+    }
+
+    private func borderColor(isPressed: Bool) -> Color {
+        if !isEnabled {
+            return Color.primary.opacity(0.08)
+        }
+        if isPrimary {
+            return MoodistTheme.Colors.accent.opacity(isPressed ? 0.5 : (isHovered ? 0.4 : 0.25))
+        }
+        return Color.primary.opacity(isPressed ? 0.22 : (isHovered ? 0.16 : 0.1))
     }
 }
 

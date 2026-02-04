@@ -64,6 +64,8 @@
 "reduce_transparency_footer" = "Usar fondos opacos para mejor legibilidad y accesibilidad.";
 "max_recent_mixes" = "Mixes recientes en barra lateral";
 "max_recent_mixes_footer" = "Número máximo de mixes recientes mostrados en la barra lateral (10–15).";
+"max_recent_sounds" = "Sonidos recientes en barra lateral";
+"max_recent_sounds_footer" = "Número máximo de sonidos recientes mostrados en la barra lateral (10–15).";
 "data_section" = "Datos";
 "export_preferences" = "Exportar preferencias…";
 "export_preferences_hint" = "Guardar mixes personalizados, mixes favoritos y sonidos favoritos en un archivo";
@@ -94,9 +96,14 @@
 "show_floating_player" = "Mostrar reproductor flotante";
 "quit" = "Salir de Moodist";
 
+/* Timer */
+"timer" = "Temporizador";
+"timer_minutes" = "Minutos";
+"timer_hours" = "Horas";
+"timer_stop" = "Stop";
+"timer_custom" = "Temporizador personalizado…";
+
 /* Sidebar */
-"sidebar_hide" = "Ocultar barra lateral";
-"sidebar_show" = "Mostrar barra lateral";
 "sidebar_favorites" = "Favoritos";
 "sidebar_presets" = "Presets";
 "sidebar_favorite_mixes" = "Mixes favoritos";
