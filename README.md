@@ -1,6 +1,7 @@
 # Moodist
 
-<img width="962" height="1057" alt="Captura de pantalla 2026-02-03 a las 22 24 05" src="https://github.com/user-attachments/assets/b77e0271-b2dc-444e-9f53-95d14639c131" />
+<img width="962" height="1057" alt="Captura de pantalla 2026-02-04 a las 18 05 47" src="https://github.com/user-attachments/assets/7d3996aa-5d22-4154-8d57-e652fb229b2e" />
+
 
 **Ambient sounds for focus and relaxation.**
 
