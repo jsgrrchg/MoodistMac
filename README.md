@@ -1,5 +1,7 @@
 # Moodist
 
+<img width="962" height="1057" alt="Captura de pantalla 2026-02-03 a las 22 24 05" src="https://github.com/user-attachments/assets/871996e2-330e-4b09-a38c-b425f3c6f282" />
+
 **Sonidos ambientales para concentrarte y relajarte.**
 
 Moodist es una app nativa para macOS que te permite mezclar y reproducir sonidos ambientales—lluvia, naturaleza, cafés, ruido blanco, tonos binaurales y más—para concentrarte, relajarte o dormir. Combina sonidos individuales, usa mezclas curadas, guarda presets, exporta e importa preferencias y controla todo desde la barra de menú o el teclado.
