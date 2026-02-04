@@ -1,12 +1,12 @@
 # Moodist
 
-<img width="962" height="1057" alt="Captura de pantalla 2026-02-03 a las 22 24 05" src="https://github.com/user-attachments/assets/871996e2-330e-4b09-a38c-b425f3c6f282" />
+<img width="962" height="1057" alt="Captura de pantalla 2026-02-03 a las 22 24 05" src="https://github.com/user-attachments/assets/b77e0271-b2dc-444e-9f53-95d14639c131" />
 
-**Sonidos ambientales para concentrarte y relajarte.**
+**Ambient sounds for focus and relaxation.**
 
-Moodist es una app nativa para macOS que te permite mezclar y reproducir sonidos ambientales—lluvia, naturaleza, cafés, ruido blanco, tonos binaurales y más—para concentrarte, relajarte o dormir. Combina sonidos individuales, usa mezclas curadas, guarda presets, exporta e importa preferencias y controla todo desde la barra de menú o el teclado.
+Moodist is a native macOS app that lets you mix and play ambient sounds—rain, nature, cafés, white noise, binaural tones, and more—to help you focus, relax, or sleep. Combine individual sounds, use curated mixes, save presets, export and import preferences, and control everything from the menu bar or keyboard.
 
-**Moodist original** (web): [remvze/moodist](https://github.com/remvze/moodist) — *Ambient sounds for focus and calm.*
+**Original Moodist** (web): [remvze/moodist](https://github.com/remvze/moodist) — *Ambient sounds for focus and calm.*
 
 ![macOS](https://img.shields.io/badge/macOS-15.0+-black?style=flat-square&logo=apple)
 ![Swift](https://img.shields.io/badge/Swift-5.0-orange?style=flat-square&logo=swift)
@@ -15,111 +15,111 @@ Moodist es una app nativa para macOS que te permite mezclar y reproducir sonidos
 
 ---
 
-## Características
+## Features
 
-### Sonidos y mezclas
-- **89 sonidos** en 9 categorías: Nature, Rain, Animals, Urban, Places, Transport, Things, Noise y Binaural
-- **81 mezclas curadas** en 10 categorías temáticas: Nature & Relaxation, Walking, Sea & Coast, Forest Fire & Night, Rain & Storm, Focus & Study, Travel & Motion, Sleep & Noise, Places & Ambience y Custom Mixes
-- **Mezclas y presets propios** — crea combinaciones, guárdalas como presets y recupéralas cuando quieras
-- **Favoritos** — marca sonidos y mezclas como favoritos para acceder rápido desde la barra lateral y el menú
-- **Mezclas recientes** — la barra lateral muestra las últimas mezclas usadas (configurable entre 10 y 15)
+### Sounds and mixes
+- **89 sounds** in 9 categories: Nature, Rain, Animals, Urban, Places, Transport, Things, Noise, and Binaural
+- **81 curated mixes** in 10 themed categories: Nature & Relaxation, Walking, Sea & Coast, Forest Fire & Night, Rain & Storm, Focus & Study, Travel & Motion, Sleep & Noise, Places & Ambience, and Custom Mixes
+- **Custom mixes and presets** — create combinations, save them as presets, and recall them anytime
+- **Favorites** — star sounds and mixes for quick access from the sidebar and menu
+- **Recent mixes** — the sidebar shows the last mixes used (configurable between 10 and 15)
 
-### Reproducción y control
-- **Volumen global y por sonido** — volumen maestro y sliders individuales para cada sonido activo
-- **Timer de sueño** — duración con presets o minutos personalizados; al terminar se detiene la reproducción y se muestra una notificación
-- **Tecla de medios opcional** — la tecla «Siguiente» del teclado o auriculares puede cargar una mezcla aleatoria
+### Playback and control
+- **Global and per-sound volume** — master volume plus individual sliders for each active sound
+- **Sleep timer** — duration with presets or custom minutes; playback stops and a notification appears when time is up
+- **Optional media key** — the “Next” key on your keyboard or headphones can load a random mix
 
-### Interfaz y ventanas
-- **Barra de menú** — icono opcional en la barra de menú con acceso rápido a reproducción, timer, sonidos y mezclas
-- **Reproductor flotante** — ventana compacta que permanece encima para usar la app sin distracciones
-- **Búsqueda** — localiza sonidos por nombre (⌘F)
+### Interface and windows
+- **Menu bar** — optional menu bar icon with quick access to playback, timer, sounds, and mixes
+- **Floating player** — compact window that stays on top for minimal distraction
+- **Search** — find sounds by name (⌘F)
 
-### Apariencia
-- **Tema** — claro, oscuro o automático según el sistema
-- **Tamaño de texto** — pequeño, medio, grande o extra grande
-- **Color de acento** — Multicolor (sistema) o 9 colores fijos: azul, púrpura, rosa, rojo, naranja, amarillo, verde, grafito
-- **Transparencias** — opción para desactivar transparencias y efectos de cristal esmerilado
+### Appearance
+- **Theme** — light, dark, or automatic based on system
+- **Text size** — small, medium, large, or extra large
+- **Accent color** — Multicolor (system) or 9 fixed colors: blue, purple, pink, red, orange, yellow, green, graphite
+- **Transparencies** — option to disable transparencies and frosted glass effects
 
-### Datos y preferencias
-- **Exportar preferencias** — guarda en un archivo JSON tus mezclas personalizadas, mezclas favoritas y sonidos favoritos (desde Opciones o menú Moodist)
-- **Importar preferencias** — restaura esas preferencias desde un archivo exportado
-- **Restablecer selección y favoritos** — borra solo la selección actual y la lista de favoritos
-- **Restaurar todo a valores por defecto** — restablece selección, favoritos y volumen global
+### Data and preferences
+- **Export preferences** — save your custom mixes, favorite mixes, and favorite sounds to a JSON file (from Options or Moodist menu)
+- **Import preferences** — restore those preferences from an exported file
+- **Reset selection and favorites** — clear only the current selection and favorites list
+- **Restore all to defaults** — reset selection, favorites, and global volume
 
-### Accesibilidad e idioma
-- **Localización** — inglés y español (además del idioma del sistema)
-- **Atajos de teclado** — Play/Pause (⌘R), Shuffle (⌘S), Siguiente mezcla (⌘N), Deseleccionar todo (⌘U), Buscar (⌘F), Opciones (⌘,)
+### Accessibility and language
+- **Localization** — English and Spanish (plus system language)
+- **Keyboard shortcuts** — Play/Pause (⌘R), Shuffle (⌘S), Next mix (⌘N), Unselect all (⌘U), Search (⌘F), Options (⌘,)
 
 ---
 
-## Requisitos
+## Requirements
 
-- **macOS** 15.0 (Sequoia) o posterior
-- **Xcode** 14.0 o posterior (para compilar desde código fuente)
+- **macOS** 15.0 (Sequoia) or later
+- **Xcode** 14.0 or later (for building from source)
 - **Swift** 5.0
 
 ---
 
-## Compilar desde código fuente
+## Building from source
 
-1. Clona el repositorio:
+1. Clone the repository:
    ```bash
    git clone https://github.com/jsgrrchg/MoodistMac.git
    cd MoodistMac
    ```
-2. Abre el proyecto en Xcode:
+2. Open the project in Xcode:
    ```bash
    open Moodist.xcodeproj
    ```
-3. Selecciona el scheme **MoodistMac** y compila (⌘B).
-4. Ejecuta la app (⌘R) o usa **Product → Archive** para generar una build distribuible.
+3. Select the **MoodistMac** scheme and build (⌘B).
+4. Run the app (⌘R) or use **Product → Archive** to create a distributable build.
 
-No hay dependencias externas; el proyecto usa solo frameworks del sistema (SwiftUI, AppKit, AVFoundation, etc.).
+No external dependencies; the project uses only system frameworks (SwiftUI, AppKit, AVFoundation, etc.).
 
 ---
 
-## Estructura del proyecto
+## Project structure
 
 ```
 MoodistMac/
 ├── Moodist/
-│   ├── MoodistApp.swift          # Entrada, escenas, comandos de menú
-│   ├── Data/                     # Datos de sonidos y mezclas
+│   ├── MoodistApp.swift          # App entry, scenes, menu commands
+│   ├── Data/                     # Sounds and mixes data
 │   ├── Models/                   # Sound, Mix, Preset, TimerItem, ExportedPreferences, etc.
-│   ├── Store/                    # SoundStore (estado de reproducción)
-│   ├── Services/                 # Audio, persistencia, timer, export/import de preferencias
-│   ├── Views/                    # Vistas SwiftUI (barra lateral, contenido, opciones, reproductor)
-│   ├── Helpers/                  # L10n, tema, colores, modificadores
-│   ├── sounds/                   # Assets de audio (MP3/WAV)
-│   ├── Assets.xcassets/          # Icono y color de acento
-│   └── en.lproj / es.lproj/      # Cadenas localizadas
+│   ├── Store/                    # SoundStore (playback state)
+│   ├── Services/                 # Audio, persistence, timer, preference export/import
+│   ├── Views/                    # SwiftUI views (sidebar, content, options, player)
+│   ├── Helpers/                  # L10n, theme, colors, modifiers
+│   ├── sounds/                   # Audio assets (MP3/WAV)
+│   ├── Assets.xcassets/          # App icon and accent color
+│   └── en.lproj / es.lproj/      # Localized strings
 ├── Moodist.xcodeproj/
 └── README.md
 ```
 
 ---
 
-## Uso (referencia rápida)
+## Usage (quick reference)
 
-| Acción              | Atajo   |
-|---------------------|---------|
-| Play / Pause        | ⌘R      |
-| Shuffle             | ⌘S      |
-| Siguiente mezcla    | ⌘N      |
-| Deseleccionar todo  | ⌘U      |
-| Buscar              | ⌘F      |
-| Opciones            | ⌘,      |
+| Action        | Shortcut   |
+|---------------|------------|
+| Play / Pause  | ⌘R         |
+| Shuffle       | ⌘S         |
+| Next mix      | ⌘N         |
+| Unselect all  | ⌘U         |
+| Search        | ⌘F         |
+| Options       | ⌘,         |
 
-Los presets del timer y la duración personalizada están en el menú **Timer** y (si está activado) en la barra de menú. **Exportar preferencias** e **Importar preferencias** están en el menú de la app y en Opciones → Datos.
-
----
-
-## Licencia
-
-Este proyecto es de código abierto. Consulta el archivo [LICENSE](LICENSE) del repositorio para más detalles.
+Timer presets and custom duration are in the **Timer** menu and (if enabled) the menu bar. **Export preferences** and **Import preferences** are in the app menu and under Options → Data.
 
 ---
 
-## Contribuir
+## License
 
-Las contribuciones son bienvenidas. Abre primero un issue para cambios grandes y mantén el estilo y la estructura del código existentes.
+This project is open source. See the [LICENSE](LICENSE) file in the repository for details.
+
+---
+
+## Contributing
+
+Contributions are welcome. Please open an issue first to discuss larger changes, and keep the existing code style and structure.
