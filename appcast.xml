@@ -4,10 +4,20 @@
         <title>MoodistMac Updates</title>
         <description>MoodistMac ambient sound app updates.</description>
         <language>en</language>
-        <!-- When you publish a new version:
-             1. Build and archive the app (Product → Archive), export as .zip or .dmg
-             2. Upload the archive to GitHub Releases (e.g. tag 1.1)
-             3. Run from Sparkle folder: ./bin/generate_appcast /path/to/folder/with/archives
-             4. Replace this file with the generated appcast.xml and commit -->
+        <!-- 1.0 Beta 2 (build 2). Nomenclature matches Xcode: MARKETING_VERSION "1.0 Beta 2", CURRENT_PROJECT_VERSION 2. -->
+        <!-- Signed with Sparkle sign_update. Upload MoodistMac.zip to GitHub Release tag Beta-2. -->
+        <item>
+            <title>Version 1.0 Beta 2</title>
+            <link>https://github.com/jsgrrchg/MoodistMac/releases</link>
+            <sparkle:version>2</sparkle:version>
+            <sparkle:shortVersionString>1.0 Beta 2</sparkle:shortVersionString>
+            <sparkle:releaseNotesLink>https://github.com/jsgrrchg/MoodistMac/releases</sparkle:releaseNotesLink>
+            <pubDate>Tue, 04 Feb 2025 12:00:00 +0000</pubDate>
+            <enclosure
+                url="https://github.com/jsgrrchg/MoodistMac/releases/download/Beta-2/MoodistMac.zip"
+                sparkle:edSignature="KvPe7v/V6Rv7RyqLdJ0CU0QfsyoFXv/Leu7dKdYpWaeC0Or5M70xIXHFAUlawNarv027GDGQQSB8fde5g74oBQ=="
+                length="122058034"
+                type="application/octet-stream"/>
+        </item>
     </channel>
 </rss>
