@@ -15,8 +15,8 @@
             <pubDate>Wed, 04 Feb 2026 12:00:00 +0000</pubDate>
             <enclosure
                 url="https://github.com/jsgrrchg/MoodistMac/releases/download/Beta-3/MoodistMac.zip"
-                sparkle:edSignature="PENDIENTE"
-                length="0"
+                sparkle:edSignature="DJB3OOdI1PD6yw4o8rs6StzDA+EhyeAl7JcA041usc1XcHBREhGR+FfdEJVFz+pU39dy5hV0HqVH8WLkCzg2Ag=="
+                length="122208408"
                 type="application/octet-stream"/>
         </item>
         <!-- 1.0 Beta 2 (build 2). Nomenclature matches Xcode: MARKETING_VERSION "1.0 Beta 2", CURRENT_PROJECT_VERSION 2. -->
