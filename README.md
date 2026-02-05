@@ -53,8 +53,7 @@ Moodist is a native macOS app that lets you mix and play ambient sounds—rain, 
 - **Reset selection and favorites** — clear only the current selection and favorites list
 - **Restore all to defaults** — reset selection, favorites, and global volume
 
-### Accessibility and language
-- **Localization** — English and Spanish (plus system language)
+### Accessibility
 - **Keyboard shortcuts** — Play/Pause (⌘R), Shuffle (⌘S), Next mix (⌘N), Unselect all (⌘U), Search (⌘F), Options (⌘,)
 
 ---
