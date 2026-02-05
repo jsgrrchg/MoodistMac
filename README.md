@@ -123,7 +123,13 @@ Timer presets and custom duration are in the **Timer** menu and (if enabled) the
 
 ## License
 
-This project is open source. See the [LICENSE](LICENSE) file in the repository for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+⚠️ Third-Party Assets
+Some sounds used in this project are sourced from third-party providers and are subject to different licenses:
+
+Sounds licensed under the Pixabay Content License: Pixabay Content License
+Sounds licensed under CC0: Creative Commons Zero License
 
 ---
 
