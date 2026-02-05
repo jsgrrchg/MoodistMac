@@ -1,6 +1,12 @@
 # Moodist
 
+## Sequoia:
+
 <img width="962" height="1057" alt="Captura de pantalla 2026-02-04 a las 18 05 47" src="https://github.com/user-attachments/assets/7d3996aa-5d22-4154-8d57-e652fb229b2e" />
+
+## Tahoe: 
+
+<img width="962" height="969" alt="Captura de pantalla 2026-02-05 a las 11 33 29 a  m" src="https://github.com/user-attachments/assets/f1e8ed4c-55b4-4094-98f8-05d508ae190c" />
 
 
 **Ambient sounds for focus and relaxation.**
