@@ -4,6 +4,31 @@
 "close" = "Close";
 "check_for_updates" = "Check for Updates…";
 "updates_section" = "Updates";
+"update_available_title" = "New version available";
+"update_available_subtitle" = "%@ is now available — you have %@.";
+"update_release_notes" = "What's new";
+"update_download" = "Download Update";
+"update_install_and_relaunch" = "Install and Relaunch";
+"update_later" = "Not Now";
+"update_skip" = "Skip This Version";
+"update_learn_more" = "Learn More";
+"update_checking_title" = "Checking for updates…";
+"update_downloading_title" = "Downloading update…";
+"update_preparing_title" = "Preparing update…";
+"update_ready_title" = "Ready to install";
+"update_installing_title" = "Installing update…";
+"update_current_version" = "Current";
+"update_new_version" = "New";
+"update_size" = "Size";
+"update_critical" = "Critical";
+"update_notes_loading" = "Loading release notes…";
+"update_notes_failed" = "Could not load release notes.";
+"update_preview_toggle" = "Preview update window";
+"update_preview_footer" = "Temporary debug switch to test the new update UI.";
+"update_permission_title" = "Enable Automatic Updates?";
+"update_permission_message" = "Allow %@ to check for updates automatically?";
+"update_permission_enable" = "Enable";
+"update_permission_not_now" = "Not Now";
 
 /* Playback */
 "play" = "Play";
@@ -119,7 +144,7 @@
 "preset_saved" = "Mix saved";
 "save_mix_subtitle" = "Give your mix a name and pick an icon.";
 "save_mix_icon_label_format" = "Icon: %@";
-"save_mix_icon_menu_hint" = "Opens menu to choose an icon for the mix";
+"save_mix_icon_menu_hint" = "Choose an icon for the mix";
 "icon_label" = "Icon";
 "add_to_mix" = "Add to mix";
 "create_new_mix" = "Create new mix…";

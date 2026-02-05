@@ -111,6 +111,35 @@ enum L10n {
     // MARK: - Updates
     static var checkForUpdates: String { tr("check_for_updates", "Check for Updates…") }
     static var updatesSection: String { tr("updates_section", "Updates") }
+    static var updateAvailableTitle: String { tr("update_available_title", "New version available") }
+    static func updateAvailableSubtitle(_ newVersion: String, _ currentVersion: String) -> String {
+        String(format: tr("update_available_subtitle", "%@ is now available — you have %@."), newVersion, currentVersion)
+    }
+    static var updateReleaseNotesTitle: String { tr("update_release_notes", "What's new") }
+    static var updateDownload: String { tr("update_download", "Download Update") }
+    static var updateInstallAndRelaunch: String { tr("update_install_and_relaunch", "Install and Relaunch") }
+    static var updateLater: String { tr("update_later", "Not Now") }
+    static var updateSkip: String { tr("update_skip", "Skip This Version") }
+    static var updateLearnMore: String { tr("update_learn_more", "Learn More") }
+    static var updateCheckingTitle: String { tr("update_checking_title", "Checking for updates…") }
+    static var updateDownloadingTitle: String { tr("update_downloading_title", "Downloading update…") }
+    static var updatePreparingTitle: String { tr("update_preparing_title", "Preparing update…") }
+    static var updateReadyTitle: String { tr("update_ready_title", "Ready to install") }
+    static var updateInstallingTitle: String { tr("update_installing_title", "Installing update…") }
+    static var updateCurrentVersion: String { tr("update_current_version", "Current") }
+    static var updateNewVersion: String { tr("update_new_version", "New") }
+    static var updateSize: String { tr("update_size", "Size") }
+    static var updateCritical: String { tr("update_critical", "Critical") }
+    static var updateNotesLoading: String { tr("update_notes_loading", "Loading release notes…") }
+    static var updateNotesFailed: String { tr("update_notes_failed", "Could not load release notes.") }
+    static var updatePreviewToggle: String { tr("update_preview_toggle", "Preview update window") }
+    static var updatePreviewFooter: String { tr("update_preview_footer", "Temporary debug switch to test the new update UI.") }
+    static var updatePermissionTitle: String { tr("update_permission_title", "Enable Automatic Updates?") }
+    static func updatePermissionMessage(_ appName: String) -> String {
+        String(format: tr("update_permission_message", "Allow %@ to check for updates automatically?"), appName)
+    }
+    static var updatePermissionEnable: String { tr("update_permission_enable", "Enable") }
+    static var updatePermissionNotNow: String { tr("update_permission_not_now", "Not Now") }
     
     // MARK: - Options
     static var optionsTitle: String { tr("options_title", "Options") }

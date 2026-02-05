@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [BETA 4] – 2026-02-05
+
+### Added
+- (Nada aún.)
+
+### Changed
+- **Interface (Tahoe)**: Interface modifications with a specific target for macOS Tahoe.
+- **Favorites**: Favorites are synced on import and fully cleared on reset (SoundStore.swift).
+- **Playback state**: Avoid `isPlaying` true when nothing is selected on unselect and togglePlay (SoundStore.swift).
+- **Mixes**: Sound cache per mix with key dependent on `soundIds` (MixCategoryView.swift).
+- **Dead code removed**:  MoodistApp.swift, ContentView.swift, Color+Hex.swift.
+- **Cleanup**: Removed `volumeBeforeMute` after removing toggleMute (SoundStore.swift).
+- **Updates**: Improved automatic-update experience with a redesign of the update window, you can check it out with a special flag in the Options window. 
+- **Save mix (modal)**: Icon selector replaced the dropdown with a visual grid of icon buttons (`LazyVGrid`): clearer selection state, tooltips per icon, and an "Icon: …" label below to confirm the choice. More scannable and direct; accessibility hint updated so it no longer refers to a "menu".
+- **Main window**: Window dragging is disabled for the background content; the window can only be moved by dragging the top title bar. Implemented by disabling `isMovableByWindowBackground` (MoodistApp), a dedicated `TitlebarDragArea` in the top backdrop (ContentView), and simplified sidebar so it no longer participates in drag.
+
+### Fixed
+- **Floating player**: Mix title and volume icon in the bar now update correctly when switching between light and dark mode (no app restart required).
+- **Floating player (dark mode)**: Mix title and volume icon are displayed in white for proper contrast on the bar.
+- **Sounds / Mixes (hover)**: During scroll, only “hover true” is blocked; “hover false” is still applied so the hover state no longer gets stuck on rows (SoundRow, MixCategoryView).
+
+### Removed
+- **Dock icon**: Red badge on the app icon (mix name) is no longer shown; the dock tile badge is always cleared.
+- **Menu bar icon**: Options entry removed from the status bar icon context menu.
+- **Dock icon**: Options and Search entries removed from the dock icon context menu.
+
+---
+
 ## [Beta 3] – 2026-02-04
 
 ### Added
@@ -109,7 +137,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-3...HEAD
+[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-4...HEAD
+[BETA 4]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-4
 [Beta 3]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-3
 [Beta 2]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-1...Beta-2
 [Beta 1]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-1

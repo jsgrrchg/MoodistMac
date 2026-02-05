@@ -4,6 +4,31 @@
 "close" = "Cerrar";
 "check_for_updates" = "Buscar actualizaciones…";
 "updates_section" = "Actualizaciones";
+"update_available_title" = "Nueva versión disponible";
+"update_available_subtitle" = "%@ ya está disponible — tienes %@.";
+"update_release_notes" = "Novedades";
+"update_download" = "Descargar actualización";
+"update_install_and_relaunch" = "Instalar y reiniciar";
+"update_later" = "Ahora no";
+"update_skip" = "Omitir esta versión";
+"update_learn_more" = "Más información";
+"update_checking_title" = "Buscando actualizaciones…";
+"update_downloading_title" = "Descargando actualización…";
+"update_preparing_title" = "Preparando actualización…";
+"update_ready_title" = "Lista para instalar";
+"update_installing_title" = "Instalando actualización…";
+"update_current_version" = "Actual";
+"update_new_version" = "Nueva";
+"update_size" = "Tamaño";
+"update_critical" = "Crítica";
+"update_notes_loading" = "Cargando notas de versión…";
+"update_notes_failed" = "No se pudieron cargar las notas de versión.";
+"update_preview_toggle" = "Previsualizar ventana de actualización";
+"update_preview_footer" = "Interruptor temporal para probar la nueva UI de actualizaciones.";
+"update_permission_title" = "¿Activar actualizaciones automáticas?";
+"update_permission_message" = "¿Permitir que %@ busque actualizaciones automáticamente?";
+"update_permission_enable" = "Activar";
+"update_permission_not_now" = "Ahora no";
 
 /* Playback */
 "play" = "Reproducir";
@@ -122,7 +147,7 @@
 "preset_saved" = "Mix guardado";
 "save_mix_subtitle" = "Ponle nombre a tu mix y elige un icono.";
 "save_mix_icon_label_format" = "Icono: %@";
-"save_mix_icon_menu_hint" = "Abre el menú para elegir un icono del mix";
+"save_mix_icon_menu_hint" = "Elige un icono para el mix";
 "icon_label" = "Icono";
 "add_to_mix" = "Agregar a mix";
 "create_new_mix" = "Crear nuevo mix…";

@@ -13,21 +13,43 @@ import Sparkle
 @main
 struct MoodistApp: App {
     @StateObject private var soundStore: SoundStore
+    @StateObject private var updatePresenter: UpdateWindowPresenter
     @NSApplicationDelegateAdaptor(MacOSAppDelegate.self) var appDelegate
+    @AppStorage(PersistenceService.appearanceModeKey) private var appearanceModeRaw = "system"
     @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.system.rawValue
-    
-    private let updaterController: SPUStandardUpdaterController
+    private let updateUserDriver: MoodistUpdateUserDriver
+    private let updater: SPUUpdater
 
     init() {
         let audio = AudioService()
         _soundStore = StateObject(wrappedValue: SoundStore(audioService: audio))
-        
-        // Inicializar Sparkle updater con comprobación automática activada
-        updaterController = SPUStandardUpdaterController(startingUpdater: true, updaterDelegate: nil, userDriverDelegate: nil)
+
+        let presenter = UpdateWindowPresenter()
+        _updatePresenter = StateObject(wrappedValue: presenter)
+
+        updateUserDriver = MoodistUpdateUserDriver(presenter: presenter)
+        updater = SPUUpdater(hostBundle: .main, applicationBundle: .main, userDriver: updateUserDriver, delegate: nil)
+
+        do {
+            try updater.start()
+        } catch {
+            NSLog("Sparkle updater failed to start: %@", String(describing: error))
+        }
     }
 
     private var accentChoice: AccentColorChoice {
         AccentColorChoice(rawValue: accentColorRaw) ?? .system
+    }
+
+    private var preferredColorScheme: ColorScheme? {
+        switch appearanceModeRaw {
+        case "light":
+            return .light
+        case "dark":
+            return .dark
+        default:
+            return nil
+        }
     }
 
     var body: some Scene {
@@ -35,6 +57,7 @@ struct MoodistApp: App {
             ContentView()
                 .environmentObject(soundStore)
                 .applyAppAccent(accentChoice.accentColor)
+                .preferredColorScheme(preferredColorScheme)
                 .onAppear {
                     appDelegate.soundStore = soundStore
                 }
@@ -46,8 +69,10 @@ struct MoodistApp: App {
         Window(L10n.optionsTitle, id: "options") {
             OptionsView()
                 .environmentObject(soundStore)
-                .environment(\.sparkleUpdater, updaterController.updater)
+                .environmentObject(updatePresenter)
+                .environment(\.sparkleUpdater, updater)
                 .applyAppAccent(accentChoice.accentColor)
+                .preferredColorScheme(preferredColorScheme)
         }
         .windowStyle(.automatic)
         .defaultSize(width: 510, height: 650)
@@ -193,7 +218,7 @@ struct MoodistApp: App {
                 }
             }
             CommandGroup(after: .appInfo) {
-                CheckForUpdatesView(updater: updaterController.updater)
+                CheckForUpdatesView(updater: updater)
             }
         }
 }
@@ -552,8 +577,8 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         window.titlebarAppearsTransparent = true
         window.titleVisibility = .hidden
         window.titlebarSeparatorStyle = .none
-        // Los espacios vacíos de la barra de título deben arrastrar la ventana, no interactuar con controles ocultos.
-        window.isMovableByWindowBackground = true
+        // Arrastrar solo desde la barra de título (no desde el contenido).
+        window.isMovableByWindowBackground = false
         // Vincular al nombre de frame para que setFrameUsingName/saveFrame usen la misma clave.
         window.setFrameAutosaveName(Self.mainWindowFrameName)
         // Reasignar delegate cada vez para que windowShouldClose nos llegue (SwiftUI puede sobrescribirlo).
@@ -594,23 +619,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
 
         menu.addItem(.separator())
         appendTimerSection(to: menu)
-        menu.addItem(.separator())
-
-        let searchItem = NSMenuItem(
-            title: L10n.search + "...",
-            action: #selector(dockFocusSearch),
-            keyEquivalent: ""
-        )
-        searchItem.target = self
-        menu.addItem(searchItem)
-
-        let optionsItem = NSMenuItem(
-            title: L10n.options + "...",
-            action: #selector(dockShowOptions),
-            keyEquivalent: ""
-        )
-        optionsItem.target = self
-        menu.addItem(optionsItem)
 
         return menu
     }
@@ -625,14 +633,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
 
     @objc private func dockShuffle() {
         soundStore?.shuffle()
-    }
-
-    @objc private func dockFocusSearch() {
-        soundStore?.requestSearchFocus = true
-    }
-
-    @objc private func dockShowOptions() {
-        soundStore?.showOptionsPanel = true
     }
 
     private func configureDockObservers() {
@@ -663,12 +663,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     }
 
     private func updateDockTitle() {
-        guard let store = soundStore else {
-            NSApp.dockTile.badgeLabel = nil
-            return
-        }
-        let title = store.displayedMixName
-        NSApp.dockTile.badgeLabel = title
+        NSApp.dockTile.badgeLabel = nil
     }
     
     /// Clave que usa AppKit en UserDefaults para el frame (véase Saving Window Position en Apple).
@@ -978,11 +973,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         openItem.target = self
         menu.addItem(openItem)
 
-        let optionsItem = NSMenuItem(title: L10n.options, action: #selector(menuShowOptions), keyEquivalent: ",")
-        optionsItem.keyEquivalentModifierMask = .command
-        optionsItem.target = self
-        menu.addItem(optionsItem)
-
         menu.addItem(NSMenuItem.separator())
 
         let quitItem = NSMenuItem(title: L10n.quit, action: #selector(menuQuit), keyEquivalent: "q")
@@ -1120,27 +1110,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         } else if let w = mainWindow ?? bestMainWindowCandidate(in: NSApplication.shared.windows) {
             w.makeKeyAndOrderFront(nil)
         }
-    }
-
-    @objc private func menuShowOptions() {
-        NSApplication.shared.activate(ignoringOtherApps: true)
-        Task { @MainActor in soundStore?.showOptionsPanel = true }
-    }
-
-    @objc private func menuExportPreferences() {
-        NSApplication.shared.activate(ignoringOtherApps: true)
-        Task { @MainActor in _ = soundStore?.exportPreferences() }
-    }
-
-    @objc private func menuImportPreferences() {
-        NSApplication.shared.activate(ignoringOtherApps: true)
-        Task { @MainActor in _ = soundStore?.importPreferences() }
-    }
-
-    @objc private func menuToggleMenuBar() {
-        let current = UserDefaults.standard.bool(forKey: Self.menuBarKey)
-        UserDefaults.standard.set(!current, forKey: Self.menuBarKey)
-        NotificationCenter.default.post(name: .menuBarPreferenceDidChange, object: nil)
     }
 
     @objc private func menuQuit() {

@@ -59,6 +59,7 @@ private struct MarqueeLabel: View {
     let fontSize: CGFloat
     let fontWeight: Font.Weight
     let color: Color
+    @Environment(\.colorScheme) private var colorScheme
     @State private var measuredTextWidth: CGFloat = 0
 
     var body: some View {
@@ -78,7 +79,8 @@ private struct MarqueeLabel: View {
                         speed: marqueeSpeed,
                         spacing: spacing,
                         containerWidth: containerWidth,
-                        isEnabled: shouldScroll
+                        isEnabled: shouldScroll,
+                        colorScheme: colorScheme
                     )
                     #else
                     TimelineView(.periodic(from: .now, by: marqueeTickInterval)) { context in
@@ -109,7 +111,8 @@ private struct MarqueeLabel: View {
                         speed: marqueeSpeed,
                         spacing: spacing,
                         containerWidth: containerWidth,
-                        isEnabled: false
+                        isEnabled: false,
+                        colorScheme: colorScheme
                     )
                     #else
                     Text(text)
@@ -159,7 +162,13 @@ private extension Font.Weight {
 
 struct BottomPlayerBarView: View {
     @EnvironmentObject var store: SoundStore
+    @Environment(\.colorScheme) private var colorScheme
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
+
+    /// En modo oscuro texto en blanco; en claro, texto secundario.
+    private var playerBarTextColor: Color {
+        colorScheme == .dark ? .white : MoodistTheme.Colors.secondaryText
+    }
 
     private var displayLabel: String {
         store.displayedMixName ?? (store.hasSelection ? L10n.customMix : L10n.noSoundsPlaying)
@@ -197,7 +206,7 @@ struct BottomPlayerBarView: View {
         return min(max(proportionalWidth, floatingBarMinWidth), min(usableWidth, floatingBarMaxWidth))
     }
 
-    private func barContent(availableWidth: CGFloat) -> some View {
+    private func barContent(availableWidth: CGFloat, barTextColor: Color) -> some View {
         let isMinimal = availableWidth < minimalLayoutThreshold
         let isCompact = availableWidth < compactLayoutThreshold
         let controlSize: CGFloat = isMinimal ? 24 : (isCompact ? 28 : 32)
@@ -262,7 +271,7 @@ struct BottomPlayerBarView: View {
                 text: displayLabel,
                 fontSize: titleFontSize,
                 fontWeight: titleFontWeight,
-                color: MoodistTheme.Colors.secondaryText
+                color: barTextColor
             )
             .layoutPriority(0)
 
@@ -270,14 +279,13 @@ struct BottomPlayerBarView: View {
             HStack(alignment: .center, spacing: volumeSpacing) {
                 Image(systemName: store.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
                     .font(.system(size: isMinimal ? 8 : (isCompact ? 9 : 11)))
-                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                    .foregroundStyle(barTextColor)
                     .frame(width: isMinimal ? 14 : 18, alignment: .center)
                 volumeSlider(isMinimal: isMinimal)
                 .frame(minWidth: sliderMinWidth, maxWidth: sliderWidth)
             }
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
-            .background(PlatformColor.windowBackground)
             .compositingGroup()
             .clipped()
             .frame(minWidth: sliderMinWidth + (isMinimal ? 18 : 24), alignment: .trailing)
@@ -302,7 +310,7 @@ struct BottomPlayerBarView: View {
                         .fill(Color.clear)
                         .glassEffect(.regular.interactive(), in: floatingBarShape)
                         .opacity(0.85)
-                    GeometryReader { g in barContent(availableWidth: g.size.width) }
+                    GeometryReader { g in barContent(availableWidth: g.size.width, barTextColor: playerBarTextColor) }
                 }
                 .clipShape(floatingBarShape)
                 .contentShape(floatingBarShape)
@@ -334,7 +342,7 @@ struct BottomPlayerBarView: View {
             VisualEffectBackground(material: .hudWindow, blendingMode: .withinWindow)
                 .opacity(0.85)
                 .clipShape(floatingBarShape)
-            GeometryReader { g in barContent(availableWidth: g.size.width) }
+            GeometryReader { g in barContent(availableWidth: g.size.width, barTextColor: playerBarTextColor) }
         }
         .clipShape(floatingBarShape)
         .contentShape(floatingBarShape)
@@ -348,7 +356,7 @@ struct BottomPlayerBarView: View {
         ZStack {
             floatingBarShape
                 .fill(PlatformColor.windowBackground)
-            GeometryReader { g in barContent(availableWidth: g.size.width) }
+            GeometryReader { g in barContent(availableWidth: g.size.width, barTextColor: playerBarTextColor) }
         }
         .clipShape(floatingBarShape)
         .contentShape(floatingBarShape)

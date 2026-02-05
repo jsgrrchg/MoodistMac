@@ -16,6 +16,7 @@ private enum AppearanceMode: String, CaseIterable {
 
 struct OptionsView: View {
     @EnvironmentObject var store: SoundStore
+    @EnvironmentObject private var updatePresenter: UpdateWindowPresenter
     @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.sparkleUpdater) private var sparkleUpdater
     @AppStorage(PersistenceService.menuBarEnabledKey) private var menuBarEnabled = false
@@ -349,8 +350,18 @@ struct OptionsView: View {
                 .foregroundStyle(.primary)
                 .disabled(!(sparkleUpdater?.canCheckForUpdates ?? false))
                 .accessibilityLabel(L10n.checkForUpdates)
+
+                Button {
+                    updatePresenter.showPreview()
+                } label: {
+                    Label(L10n.updatePreviewToggle, systemImage: "sparkles")
+                }
+                .foregroundStyle(.primary)
+                .accessibilityLabel(L10n.updatePreviewToggle)
             } header: {
                 Text(L10n.updatesSection)
+            } footer: {
+                Text(L10n.updatePreviewFooter)
             }
         }
     }

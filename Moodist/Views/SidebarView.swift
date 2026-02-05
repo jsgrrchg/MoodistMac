@@ -42,8 +42,6 @@ private func sidebarDragItemProvider(id: String) -> NSItemProvider {
 
 struct SidebarView: View {
     @EnvironmentObject var store: SoundStore
-    @Binding var isHoveringWindowDragArea: Bool
-    @Binding var isHoveringSidebar: Bool
     @State private var sectionsCollapsed: [String: Bool] = PersistenceService.loadSidebarSectionsCollapsed()
     @State private var draggedFavoriteSoundId: String?
     @State private var draggedFavoriteMixId: String?
@@ -238,12 +236,6 @@ struct SidebarView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .onHover { inside in
-            isHoveringSidebar = inside
-            if !inside {
-                isHoveringWindowDragArea = false
-            }
-        }
     }
 
     private var sectionDivider: some View {
@@ -268,7 +260,6 @@ struct SidebarView: View {
 
     /// Encabezado de sección con chevron para colapsar/expandir.
     private func sidebarSectionHeader(_ title: String, sectionId: String) -> some View {
-        let isWindowDragTarget = sectionId == sidebarSectionIds.favorites
         return Button(action: { toggleSection(sectionId) }) {
             HStack(spacing: 6) {
                 Image(systemName: isSectionCollapsed(sectionId) ? "chevron.right" : "chevron.down")
@@ -287,10 +278,6 @@ struct SidebarView: View {
         }
         .buttonStyle(.plain)
         .help(isSectionCollapsed(sectionId) ? L10n.expandSection : L10n.collapseSection)
-        .onHover { inside in
-            guard isWindowDragTarget else { return }
-            isHoveringWindowDragArea = inside
-        }
     }
 
     private func sidebarPlaceholder(_ text: String) -> some View {
@@ -526,7 +513,7 @@ private struct FavoriteMixDropDelegate: DropDelegate {
 }
 
 #Preview {
-    SidebarView(isHoveringWindowDragArea: .constant(false), isHoveringSidebar: .constant(false))
+    SidebarView()
         .environmentObject(SoundStore(audioService: AudioService()))
         .frame(width: 220, height: 400)
 }

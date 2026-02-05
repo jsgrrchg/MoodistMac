@@ -48,7 +48,9 @@ struct SoundRow: View {
         )
         .onTapGesture { toggleSound() }
         .onHover { hovering in
-            guard !isUserScrolling else { return }
+            if isUserScrolling && hovering {
+                return
+            }
             guard isHovered != hovering else { return }
             withAnimation(.easeInOut(duration: 0.15)) {
                 isHovered = hovering

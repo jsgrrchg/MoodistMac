@@ -110,15 +110,20 @@ struct MixRowView: View {
 
     private static let soundsCacheMaxEntries = 200
 
+    private var soundsCacheKey: String {
+        "\(mix.id)|\(mix.soundIds.joined(separator: ","))"
+    }
+
     private var soundsInMix: [Sound] {
-        if let cached = Self.soundsCache[mix.id] {
+        let key = soundsCacheKey
+        if let cached = Self.soundsCache[key] {
             return cached
         }
         if Self.soundsCache.count >= Self.soundsCacheMaxEntries, let keyToEvict = Self.soundsCache.keys.first {
             Self.soundsCache.removeValue(forKey: keyToEvict)
         }
         let sounds = mix.soundIds.compactMap { SoundsData.allSoundsById[$0] }
-        Self.soundsCache[mix.id] = sounds
+        Self.soundsCache[key] = sounds
         return sounds
     }
 
@@ -180,7 +185,9 @@ struct MixRowView: View {
                 }
             }
             .onHover { hovering in
-                guard !isUserScrolling else { return }
+                if isUserScrolling && hovering {
+                    return
+                }
                 guard isHovered != hovering else { return }
                 withAnimation(.easeInOut(duration: 0.15)) {
                     isHovered = hovering

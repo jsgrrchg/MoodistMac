@@ -43,6 +43,8 @@
 		B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000023 /* ExportedPreferences.swift */; };
 		B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000024 /* PreferencesExportService.swift */; };
 		B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000025 /* PreferencesImportService.swift */; };
+		B175D2412F310AB600907398 /* UpdateWindowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000034 /* UpdateWindowPresenter.swift */; };
+		B175D2422F310AB600907398 /* UpdateWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000035 /* UpdateWindowView.swift */; };
 		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
 /* End PBXBuildFile section */
 
@@ -83,6 +85,8 @@
 		A20000000000000100000023 /* ExportedPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportedPreferences.swift; sourceTree = "<group>"; };
 		A20000000000000100000024 /* PreferencesExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesExportService.swift; sourceTree = "<group>"; };
 		A20000000000000100000025 /* PreferencesImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesImportService.swift; sourceTree = "<group>"; };
+		A20000000000000100000034 /* UpdateWindowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWindowPresenter.swift; sourceTree = "<group>"; };
+		A20000000000000100000035 /* UpdateWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWindowView.swift; sourceTree = "<group>"; };
 		A20000000000000100000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -140,6 +144,7 @@
 				A2000000000000010000001C /* MixCategoryView.swift */,
 				A20000000000000100000004 /* SoundRow.swift */,
 				A2000000000000010000000F /* OptionsView.swift */,
+				A20000000000000100000035 /* UpdateWindowView.swift */,
 				A20000000000000100000017 /* SidebarView.swift */,
 				A20000000000000100000020 /* FloatingPlayerPanelView.swift */,
 				A20000000000000100000033 /* MarqueeTextView.swift */,
@@ -176,6 +181,7 @@
 			children = (
 				A20000000000000100000009 /* AudioService.swift */,
 				A2000000000000010000000A /* PersistenceService.swift */,
+				A20000000000000100000034 /* UpdateWindowPresenter.swift */,
 				A20000000000000100000013 /* MediaKeyHandler.swift */,
 				A2000000000000010000001F /* TimerNotificationManager.swift */,
 				A20000000000000100000024 /* PreferencesExportService.swift */,
@@ -313,6 +319,8 @@
 				B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */,
 				B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */,
 				B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */,
+				B175D2412F310AB600907398 /* UpdateWindowPresenter.swift in Sources */,
+				B175D2422F310AB600907398 /* UpdateWindowView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,7 +455,7 @@
 				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 			COMBINE_HIDPI_IMAGES = YES;
-			CURRENT_PROJECT_VERSION = 3;
+			CURRENT_PROJECT_VERSION = 4;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_ASSET_PATHS = "";
 			ENABLE_HARDENED_RUNTIME = YES;
@@ -460,7 +468,7 @@
 				"@executable_path/../Frameworks",
 			);
 			MACOSX_DEPLOYMENT_TARGET = 15.0;
-			MARKETING_VERSION = "1.0 Beta 3";
+			MARKETING_VERSION = "1.0 Beta 4";
 			NSPrincipalClass = NSApplication;
 			PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
 			PRODUCT_NAME = MoodistMac;
@@ -478,7 +486,7 @@
 				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 			COMBINE_HIDPI_IMAGES = YES;
-			CURRENT_PROJECT_VERSION = 3;
+			CURRENT_PROJECT_VERSION = 4;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_ASSET_PATHS = "";
 			ENABLE_HARDENED_RUNTIME = YES;
@@ -491,7 +499,7 @@
 				"@executable_path/../Frameworks",
 			);
 			MACOSX_DEPLOYMENT_TARGET = 15.0;
-			MARKETING_VERSION = "1.0 Beta 3";
+			MARKETING_VERSION = "1.0 Beta 4";
 			NSPrincipalClass = NSApplication;
 			PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
 			PRODUCT_NAME = MoodistMac;

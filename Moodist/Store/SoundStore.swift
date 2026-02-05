@@ -47,11 +47,8 @@ final class SoundStore: ObservableObject {
     @Published private(set) var activeTimer: TimerItem?
 
     private let audioService: AudioService
-    /// Volumen guardado antes de mutear; se restaura al desmutear.
-    private var volumeBeforeMute: Double = 1.0
     private var activeTimerToken: Timer?
     private var timerUsageCounts: [Int: Int] = PersistenceService.loadTimerUsageCounts()
-    private let defaultTimerPresetsSeconds: [Int] = [5, 10, 15, 20, 30, 60, 120, 480].map { $0 * 60 }
 
     /// Presets de minutos para el menú Timer (5 opciones): 5m, 10m, 15m, 30m, 45m.
     static let timerMenuMinutesPresets: [Int] = [5, 10, 15, 30, 45].map { $0 * 60 }
@@ -208,6 +205,9 @@ final class SoundStore: ObservableObject {
         item.isSelected = false
         sounds[id] = item
         audioService.pause(soundId: id)
+        if !hasSelection {
+            isPlaying = false
+        }
     }
 
     func unselectAll() {
@@ -237,18 +237,6 @@ final class SoundStore: ObservableObject {
 
     func setGlobalVolume(_ volume: Double) {
         globalVolume = volume
-        if volume > 0 { volumeBeforeMute = volume }
-        audioService.updateVolumes(state: sounds, globalVolume: globalVolume)
-    }
-
-    /// Alterna mute: si hay sonido lo silencia; si está silenciado restaura el volumen anterior.
-    func toggleMute() {
-        if globalVolume == 0 {
-            globalVolume = volumeBeforeMute > 0 ? volumeBeforeMute : 1.0
-        } else {
-            volumeBeforeMute = globalVolume
-            globalVolume = 0
-        }
         audioService.updateVolumes(state: sounds, globalVolume: globalVolume)
     }
 
@@ -326,17 +314,6 @@ final class SoundStore: ObservableObject {
         return L10n.timerRemaining(timerRemainingString(seconds: remaining))
     }
 
-    func topTimerPresets(limit: Int) -> [Int] {
-        var ordered = timerUsageCounts.sorted { lhs, rhs in
-            if lhs.value == rhs.value { return lhs.key < rhs.key }
-            return lhs.value > rhs.value
-        }.map { $0.key }
-        for preset in defaultTimerPresetsSeconds where !ordered.contains(preset) {
-            ordered.append(preset)
-        }
-        return Array(ordered.prefix(limit))
-    }
-
     func timerLabel(forSeconds seconds: Int) -> String {
         timerPresetString(seconds: seconds)
     }
@@ -398,6 +375,10 @@ final class SoundStore: ObservableObject {
     }
 
     func togglePlay() {
+        guard hasSelection else {
+            if isPlaying { isPlaying = false }
+            return
+        }
         isPlaying.toggle()
         if isPlaying {
             for sound in SoundsData.categories.flatMap(\.sounds) {
@@ -453,6 +434,7 @@ final class SoundStore: ObservableObject {
             }
         }
         favoriteSoundIds = []
+        favoriteMixIds = []
     }
 
     // MARK: - Presets
@@ -564,7 +546,14 @@ final class SoundStore: ObservableObject {
         guard let payload = PreferencesImportService.presentImportPanel() else { return false }
         presets = payload.presets
         favoriteMixIds = payload.favoriteMixIds
-        favoriteSoundIds = payload.favoriteSoundIds
+        favoriteSoundIds = payload.favoriteSoundIds.filter { sounds[$0] != nil }
+        let favoriteSet = Set(favoriteSoundIds)
+        var next = sounds
+        for (id, var item) in next {
+            item.isFavorite = favoriteSet.contains(id)
+            next[id] = item
+        }
+        sounds = next
         return true
     }
 
