@@ -41,8 +41,6 @@ final class SoundStore: ObservableObject {
     @Published var favoriteMixIds: [String] = []
     /// IDs de sonidos favoritos en el orden elegido por el usuario (para drag and drop en la barra lateral).
     @Published var favoriteSoundIds: [String] = []
-    /// Solicitud desde la UI para cambiar de sección principal ("sounds" o "mixes").
-    @Published var requestedMainSection: String?
     /// Temporizador activo para detener la reproducción.
     @Published private(set) var activeTimer: TimerItem?
 
@@ -205,6 +203,7 @@ final class SoundStore: ObservableObject {
         item.isSelected = false
         sounds[id] = item
         audioService.pause(soundId: id)
+        audioService.unload(soundId: id)
         if !hasSelection {
             isPlaying = false
         }
@@ -216,6 +215,7 @@ final class SoundStore: ObservableObject {
         guard hasSelection else { return }
         isPlaying = false
         audioService.pauseAll(ids: selectedIds)
+        audioService.unloadAll()
         // Una sola actualización del estado para evitar muchos re-renders y bloqueos de la UI.
         var next = sounds
         let ids = Array(next.keys)
@@ -424,6 +424,7 @@ final class SoundStore: ObservableObject {
         currentMixIconName = nil
         isPlaying = false
         audioService.pauseAll(ids: selectedIds)
+        audioService.unloadAll()
         let ids = Array(sounds.keys)
         for id in ids {
             if var item = sounds[id] {
@@ -584,6 +585,7 @@ final class SoundStore: ObservableObject {
         currentMixIconName = nil
         isPlaying = false
         audioService.pauseAll(ids: selectedIds)
+        audioService.unloadAll()
         globalVolume = 1.0
         let ids = Array(sounds.keys)
         var next = sounds
@@ -606,11 +608,3 @@ final class SoundStore: ObservableObject {
     }
 }
 
-extension SoundStore {
-    static let mainSectionSounds = "sounds"
-    static let mainSectionMixes = "mixes"
-
-    func requestMainSection(_ section: String) {
-        requestedMainSection = section
-    }
-}

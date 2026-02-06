@@ -16,7 +16,7 @@ struct Mix: Identifiable {
 
     /// Converts to Preset so SoundStore.applyPreset can be used.
     func toPreset() -> Preset {
-        Preset(id: id, name: name, soundIds: soundIds, volumes: volumes)
+        Preset(id: id, name: name, iconName: iconName, soundIds: soundIds, volumes: volumes)
     }
 }
 

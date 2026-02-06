@@ -64,8 +64,6 @@ enum L10n {
     static var mediaKeyNextMix: String { tr("media_key_next_mix", "Use \"Next\" media key for next mix") }
     static var mediaKeyNextMixFooter: String { tr("media_key_next_mix_footer", "When enabled, the keyboard or headset \"Next track\" key loads a new random mix.") }
     static var unselectAll: String { tr("unselect_all", "Unselect all") }
-    static var showInSounds: String { tr("show_in_sounds", "Show in Sounds") }
-    static var showInMixes: String { tr("show_in_mixes", "Show in Mixes") }
     static var select: String { tr("select", "Play") }
     static var deselect: String { tr("deselect", "Deselect") }
     static var mute: String { tr("mute", "Mute") }
@@ -132,8 +130,6 @@ enum L10n {
     static var updateCritical: String { tr("update_critical", "Critical") }
     static var updateNotesLoading: String { tr("update_notes_loading", "Loading release notes…") }
     static var updateNotesFailed: String { tr("update_notes_failed", "Could not load release notes.") }
-    static var updatePreviewToggle: String { tr("update_preview_toggle", "Preview update window") }
-    static var updatePreviewFooter: String { tr("update_preview_footer", "Temporary debug switch to test the new update UI.") }
     static var updatePermissionTitle: String { tr("update_permission_title", "Enable Automatic Updates?") }
     static func updatePermissionMessage(_ appName: String) -> String {
         String(format: tr("update_permission_message", "Allow %@ to check for updates automatically?"), appName)

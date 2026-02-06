@@ -7,6 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [BETA 5] – 2026-02-06
+
+### Added
+- **Sounds**: New sound category **Military** (Air Defense Alarm, Army Drill, Battlefield, City Bombing, Distant Battlefield, Futuristic Battle, Machine Gun, Military March, Soldiers Marching, Fighter Jet) with icon.
+- **Sounds**: New sounds in existing categories: Nature (Rainforest, Rocks Falling, Sea Cave, Walking on Wood); Animals (Blackbird, Cat Meow, Ducks, Elephant, Lion, Macaws, Mandrill Baboon, Penguin, Peregrine Falcon, Pipit Bird, Wren Bird); Places (Children Playing, Chinese Kitchen, Flea Market, Trading Floor); Transport (Bike Ride, Dumper Truck, Fog Horn, Diesel Fork Lift); Things (Bells, Cash Register, Mouse Clicking, Printer, Wood Creak, Fetal Heart Beat, Heart Pulse Monitor); Noise (Men Snoring, Baby Crying). All with icons and localized labels (EN/ES).
+- **Sounds**: “Collapse all” / “Expand all” button above the category list to collapse or expand all sound categories in one tap; label and icon switch dynamically depending on state (ContentView).
+- **Mixes**: Same “Collapse all” / “Expand all” button above the mix categories list (ContentView).
+- **Mixes**: 30 new mixes added across categories (Nature & Relaxation, Sea & Coast, Forest Fire & Night, Rain & Storm, Focus & Study, Travel & Motion, Sleep & Noise, Places & Ambience).
+- **Mixes**: New mix category **Military** (14 mixes: Air Defense Watch, Barracks Drill Morning, Combat Engineering Yard, Distant Frontline Wind, Emergency Broadcast, Field Radio Post, Fighter Jet Flyover, Futuristic Ops Center, Marching Column, Night Patrol Steps, Range Practice Distance, Signal Intercept, Urban Blackout, War Room Briefing). Category appears last in the list. Localized title (EN/ES).
+
+### Changed
+- **Sounds**: Sounds within each category are now ordered alphabetically by label; category order is unchanged (SoundsData).
+- **Mixes**: Mixes within each category are now ordered alphabetically by name; category order is unchanged (MixesData).
+- **Options**: Options window size is fixed (510×650); resizing is disabled via `.windowResizability(.contentSize)` and a fixed content frame so the window always opens at the same size (MoodistApp).
+- **Options**: Preference change notifications now use the shared `Notification.Name` extensions (`.menuBarPreferenceDidChange`, `.appearancePreferenceDidChange`, `.transparencyPreferenceDidChange`) instead of string literals (OptionsView).
+- **Mixes**: `Mix.toPreset()` now passes `iconName` into the preset so converted mixes keep their icon (Mix.swift).
+- **Updates**: Check-for-updates menu item uses a single ViewModel created in the app and passed into `CheckForUpdatesView`, so the “can check for updates” state is stable across view updates (MoodistApp, CheckForUpdatesView).
+- **Search**: Toolbar search field resets the focus-request binding in a deferred run so it doesn’t trigger extra update cycles (ContentView, ToolbarSearchField).
+- **Sidebar**: `recentMixes` and `favoriteMixes` use a local variable `byId` instead of shadowing the `presetsById` property, for clearer code (SidebarView).
+- **Audio**: Failed sound loads (missing resource or `AVAudioPlayer` error) are logged to the console for easier debugging (AudioService).
+- **Audio (memory)**: The player releases audio buffers (`AVAudioPlayer`) when a sound is deselected or when "Unselect all" / reset is triggered; only players for currently selected sounds are kept in memory. This optimizes memory usage without affecting application performance (AudioService, SoundStore).
+- **Options**: Default accent color is now Graphite instead of Multicolor (system); new users and invalid preference values get Graphite (MoodistApp, OptionsView, AccentColorChoice).
+- **Sidebar (drag and drop)**: Reordering of Favorite sounds and Favorite mixes now happens only when the user releases the drag (performDrop) instead of on every row crossing; a single animation runs on drop. An insertion line indicates the drop position while dragging. Favorite lists use VStack instead of LazyVStack for stable drop targets and smoother behavior (SidebarView).
+
+### Fixed
+- **Options (accent color)**: Changing the accent color in Options now updates the main window immediately; items no longer appear “stuck” until the app is restarted or the mouse is moved over them. Implemented by posting `.accentPreferenceDidChange` when the accent changes and refreshing the main content identity so SwiftUI re-evaluates accent-dependent views (MoodistApp, OptionsView).
+- **Sidebar**: When scrolling the sidebar, content no longer invades the window traffic lights (close, minimize, maximize). A reserved top area (`safeAreaInset`) keeps hits from reaching the title bar, and a mask clips the scroll content so it is not drawn over the buttons (SidebarView).
+
+### Removed
+- **Options (Text size)**: The "Text size" preference and its picker have been removed from the Appearance section. The app now uses the system default type size; semantic fonts (`.body`, `.subheadline`, etc.) still scale with the system accessibility setting (ContentView, OptionsView, PersistenceService).
+- **Main window**: Removed deprecated `UserDefaults.standard.synchronize()` after saving the window frame; persistence is now handled by the system.
+---
+
 ## [BETA 4] – 2026-02-05
 
 ### Added
@@ -137,7 +170,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-4...HEAD
+[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-5...HEAD
+[BETA 5]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-4...Beta-5
 [BETA 4]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-4
 [Beta 3]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-3
 [Beta 2]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-1...Beta-2

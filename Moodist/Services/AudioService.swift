@@ -22,6 +22,7 @@ final class AudioService: ObservableObject {
         let ext = (sound.fileName as NSString).pathExtension
         let subdir = "sounds/\(sound.categoryFolder)"
         guard let url = bundle.url(forResource: name, withExtension: ext, subdirectory: subdir) else {
+            NSLog("MoodistMac: sound resource not found: %@/%@.%@", subdir, name, ext)
             return nil
         }
 
@@ -32,6 +33,7 @@ final class AudioService: ObservableObject {
             players[sound.id] = player
             return player
         } catch {
+            NSLog("MoodistMac: failed to load sound '%@' from %@: %@", sound.id, url.path, String(describing: error))
             return nil
         }
     }
@@ -47,6 +49,21 @@ final class AudioService: ObservableObject {
 
     func pause(soundId: String) {
         players[soundId]?.pause()
+    }
+
+    /// Deja de reproducir y elimina el player del diccionario para liberar memoria.
+    /// Debe llamarse cuando un sonido se deselecciona.
+    func unload(soundId: String) {
+        players[soundId]?.stop()
+        players.removeValue(forKey: soundId)
+    }
+
+    /// Elimina todos los players cargados (libera memoria). Útil tras unselectAll o reset.
+    func unloadAll() {
+        for (_, player) in players {
+            player.stop()
+        }
+        players.removeAll()
     }
 
     func playAll(ids: [String]) {

@@ -455,7 +455,7 @@
 				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 			COMBINE_HIDPI_IMAGES = YES;
-			CURRENT_PROJECT_VERSION = 4;
+			CURRENT_PROJECT_VERSION = 5;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_ASSET_PATHS = "";
 			ENABLE_HARDENED_RUNTIME = YES;
@@ -468,7 +468,7 @@
 				"@executable_path/../Frameworks",
 			);
 			MACOSX_DEPLOYMENT_TARGET = 15.0;
-			MARKETING_VERSION = "1.0 Beta 4";
+			MARKETING_VERSION = "1.0 Beta 5";
 			NSPrincipalClass = NSApplication;
 			PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
 			PRODUCT_NAME = MoodistMac;
@@ -486,7 +486,7 @@
 				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 			COMBINE_HIDPI_IMAGES = YES;
-			CURRENT_PROJECT_VERSION = 4;
+			CURRENT_PROJECT_VERSION = 5;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_ASSET_PATHS = "";
 			ENABLE_HARDENED_RUNTIME = YES;
@@ -499,7 +499,7 @@
 				"@executable_path/../Frameworks",
 			);
 			MACOSX_DEPLOYMENT_TARGET = 15.0;
-			MARKETING_VERSION = "1.0 Beta 4";
+			MARKETING_VERSION = "1.0 Beta 5";
 			NSPrincipalClass = NSApplication;
 			PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
 			PRODUCT_NAME = MoodistMac;

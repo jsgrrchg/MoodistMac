@@ -96,8 +96,8 @@ private struct ToolbarSearchField: NSViewRepresentable {
             nsView.stringValue = text
         }
         if requestFocus {
+            nsView.window?.makeFirstResponder(nsView)
             DispatchQueue.main.async {
-                nsView.window?.makeFirstResponder(nsView)
                 requestFocus = false
             }
         }
@@ -150,16 +150,6 @@ private enum MainSection: String, CaseIterable {
     case mixes
 }
 
-/// Tamaño de texto elegido por el usuario (small, medium, large, xLarge).
-private func dynamicTypeSizeFromRaw(_ raw: String) -> DynamicTypeSize {
-    switch raw {
-    case "small": return .small
-    case "large": return .large
-    case "xLarge": return .xLarge
-    default: return .medium
-    }
-}
-
 struct ContentView: View {
     private final class ScrollCoordinator {
         var soundsScrollAnchorId: String = ContentView.scrollTopAnchorId
@@ -181,7 +171,6 @@ struct ContentView: View {
 
     @EnvironmentObject var store: SoundStore
     @Environment(\.openWindow) private var openWindow
-    @AppStorage(PersistenceService.textSizeKey) private var textSizeRaw = "medium"
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
     @State private var windowWidth: CGFloat = 800
     @State private var requestToolbarSearchFocus = false
@@ -202,6 +191,8 @@ struct ContentView: View {
     @State private var isUserScrolling = false
     @State private var isSaveMixHovered = false
     @State private var isClearHovered = false
+    @State private var isCollapseAllSoundsHovered = false
+    @State private var isCollapseAllMixesHovered = false
 
     /// La sidebar es siempre visible; el toggle fue eliminado para simplificar la navegación.
     private var isSidebarVisible: Bool { true }
@@ -213,6 +204,11 @@ struct ContentView: View {
     private var contentTopPadding: CGFloat {
         let base = contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large
         return base + titlebarContentInset
+    }
+
+    /// Menor padding superior en Mixes: el primer contenido es solo el botón Expand/Collapse all (no hay bloque "Currently playing").
+    private var mixesScrollTopPadding: CGFloat {
+        titlebarContentInset
     }
 
     var body: some View {
@@ -235,7 +231,6 @@ struct ContentView: View {
             }
         }
         .ignoresSafeArea(.container)
-        .environment(\.dynamicTypeSize, dynamicTypeSizeFromRaw(textSizeRaw))
         .tint(MoodistTheme.Colors.accent)
         .frame(minWidth: 850, minHeight: 480)
         .background(GeometryReader { geometry in
@@ -254,18 +249,6 @@ struct ContentView: View {
                 requestToolbarSearchFocus = true
                 store.requestSearchFocus = false
             }
-        }
-        .onChange(of: store.requestedMainSection) { _, requested in
-            guard let requested else { return }
-            switch requested {
-            case SoundStore.mainSectionSounds:
-                requestSectionChange(to: .sounds)
-            case SoundStore.mainSectionMixes:
-                requestSectionChange(to: .mixes)
-            default:
-                break
-            }
-            store.requestedMainSection = nil
         }
     }
 
@@ -594,7 +577,7 @@ struct ContentView: View {
                 mixesSections
             }
             .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
-            .padding(.top, contentTopPadding)
+            .padding(.top, mixesScrollTopPadding)
             .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
         }
         .scrollPosition(id: $mixesScrollPosition, anchor: .top)
@@ -927,18 +910,60 @@ struct ContentView: View {
 
     /// Sección Mixes: categorías temáticas con mixes aplicables (moodist_presets_en).
     private var mixesPlaceholderSection: some View {
-        VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
-            ForEach(MixesData.categories, id: \.id) { category in
-                MixCategoryView(
-                    category: category,
-                    store: store,
-                    mixesToShow: category.id == MixesData.custom.id ? store.presets.map { $0.toMix() } : nil,
-                    isExpanded: Binding(
-                        get: { mixCategoryExpandedStates[category.id] ?? true },
-                        set: { mixCategoryExpandedStates[category.id] = $0 }
-                    )
+        let isNarrow = contentAreaWidth < 420
+        let isVeryNarrow = contentAreaWidth < 340
+        return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
+            // Primera categoría: Custom Mixes
+            MixCategoryView(
+                category: MixesData.custom,
+                store: store,
+                mixesToShow: store.presets.map { $0.toMix() },
+                isExpanded: Binding(
+                    get: { mixCategoryExpandedStates[MixesData.custom.id] ?? true },
+                    set: { mixCategoryExpandedStates[MixesData.custom.id] = $0 }
                 )
-                .id("mix-category-\(category.id)")
+            )
+            .id("mix-category-\(MixesData.custom.id)")
+
+            // Fila Expand all / Collapse all (entre Custom Mixes y el resto de categorías, como en Sounds)
+            HStack(spacing: MoodistTheme.Spacing.small) {
+                Spacer(minLength: 0)
+                Button(action: { toggleAllMixCategories() }) {
+                    if isVeryNarrow {
+                        Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                              systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                            .labelStyle(.iconOnly)
+                    } else {
+                        Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                              systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                            .labelStyle(.titleAndIcon)
+                    }
+                }
+                .buttonStyle(HeaderActionButtonStyle(
+                    isHovered: isCollapseAllMixesHovered,
+                    isPrimary: false,
+                    isCompact: isNarrow
+                ))
+                .onHover { isCollapseAllMixesHovered = $0 }
+                .help(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
+                .accessibilityLabel(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
+            }
+            .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
+
+            // Resto de categorías (Nature & Relaxation, Walking, etc.)
+            VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
+                ForEach(MixesData.categories.filter { $0.id != MixesData.custom.id }, id: \.id) { category in
+                    MixCategoryView(
+                        category: category,
+                        store: store,
+                        mixesToShow: nil,
+                        isExpanded: Binding(
+                            get: { mixCategoryExpandedStates[category.id] ?? true },
+                            set: { mixCategoryExpandedStates[category.id] = $0 }
+                        )
+                    )
+                    .id("mix-category-\(category.id)")
+                }
             }
         }
         .onAppear {
@@ -1151,17 +1176,45 @@ struct ContentView: View {
     }
 
     private var categoriesSection: some View {
-        VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
-            ForEach(SoundsData.categories, id: \.id) { category in
-                CategoryView(
-                    category: category,
-                    store: store,
-                    isExpanded: Binding(
-                        get: { categoryExpandedStates[category.id] ?? true },
-                        set: { categoryExpandedStates[category.id] = $0 }
+        let isNarrow = contentAreaWidth < 420
+        let isVeryNarrow = contentAreaWidth < 340
+        return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
+            HStack(spacing: MoodistTheme.Spacing.small) {
+                Spacer(minLength: 0)
+                Button(action: { toggleAllCategories() }) {
+                    if isVeryNarrow {
+                        Label(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                              systemImage: allCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                            .labelStyle(.iconOnly)
+                    } else {
+                        Label(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                              systemImage: allCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                            .labelStyle(.titleAndIcon)
+                    }
+                }
+                .buttonStyle(HeaderActionButtonStyle(
+                    isHovered: isCollapseAllSoundsHovered,
+                    isPrimary: false,
+                    isCompact: isNarrow
+                ))
+                .onHover { isCollapseAllSoundsHovered = $0 }
+                .help(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
+                .accessibilityLabel(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
+            }
+            .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
+
+            VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
+                ForEach(SoundsData.categories, id: \.id) { category in
+                    CategoryView(
+                        category: category,
+                        store: store,
+                        isExpanded: Binding(
+                            get: { categoryExpandedStates[category.id] ?? true },
+                            set: { categoryExpandedStates[category.id] = $0 }
+                        )
                     )
-                )
-                .id("category-\(category.id)")
+                    .id("category-\(category.id)")
+                }
             }
         }
         .onAppear {

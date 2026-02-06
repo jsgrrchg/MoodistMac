@@ -15,6 +15,8 @@ struct MixCategoryView: View {
     var mixesToShow: [Mix]? = nil
     /// Binding opcional para controlar el estado expandido desde fuera. Si es nil, usa estado interno.
     var isExpanded: Binding<Bool>? = nil
+    /// Vista opcional a la derecha del título en la cabecera (p. ej. botón "Expand all" en Custom Mixes).
+    var headerTrailing: AnyView? = nil
     @State private var internalIsExpanded = true
     
     private var expandedState: Bool {
@@ -53,7 +55,10 @@ struct MixCategoryView: View {
                         .truncationMode(.tail)
                         .minimumScaleFactor(0.9)
                         .layoutPriority(1)
-                    Spacer()
+                    Spacer(minLength: 0)
+                    if let trailing = headerTrailing {
+                        trailing
+                    }
                     Image(systemName: expandedState ? "chevron.down" : "chevron.right")
                         .font(.caption)
                         .foregroundStyle(MoodistTheme.Colors.secondaryText)

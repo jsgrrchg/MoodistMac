@@ -14,9 +14,11 @@ import Sparkle
 struct MoodistApp: App {
     @StateObject private var soundStore: SoundStore
     @StateObject private var updatePresenter: UpdateWindowPresenter
+    @StateObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
     @NSApplicationDelegateAdaptor(MacOSAppDelegate.self) var appDelegate
     @AppStorage(PersistenceService.appearanceModeKey) private var appearanceModeRaw = "system"
-    @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.system.rawValue
+    @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.graphite.rawValue
+    @State private var accentRefreshID = UUID()
     private let updateUserDriver: MoodistUpdateUserDriver
     private let updater: SPUUpdater
 
@@ -35,6 +37,9 @@ struct MoodistApp: App {
         } catch {
             NSLog("Sparkle updater failed to start: %@", String(describing: error))
         }
+
+        let updaterForCheck = updater
+        _checkForUpdatesViewModel = StateObject(wrappedValue: CheckForUpdatesViewModel(updater: updaterForCheck))
     }
 
     private var accentChoice: AccentColorChoice {
@@ -55,11 +60,15 @@ struct MoodistApp: App {
     var body: some Scene {
         Window(L10n.appName, id: "main") {
             ContentView()
+                .id(accentRefreshID)
                 .environmentObject(soundStore)
                 .applyAppAccent(accentChoice.accentColor)
                 .preferredColorScheme(preferredColorScheme)
                 .onAppear {
                     appDelegate.soundStore = soundStore
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .accentPreferenceDidChange)) { _ in
+                    accentRefreshID = UUID()
                 }
         }
         .windowStyle(.automatic)
@@ -73,9 +82,11 @@ struct MoodistApp: App {
                 .environment(\.sparkleUpdater, updater)
                 .applyAppAccent(accentChoice.accentColor)
                 .preferredColorScheme(preferredColorScheme)
+                .frame(width: 510, height: 650)
         }
         .windowStyle(.automatic)
         .defaultSize(width: 510, height: 650)
+        .windowResizability(.contentSize)
     }
 
     @CommandsBuilder private var commandsContent: some Commands {
@@ -218,7 +229,7 @@ struct MoodistApp: App {
                 }
             }
             CommandGroup(after: .appInfo) {
-                CheckForUpdatesView(updater: updater)
+                CheckForUpdatesView(updater: updater, viewModel: checkForUpdatesViewModel)
             }
         }
 }
@@ -248,20 +259,19 @@ final class CheckForUpdatesViewModel: ObservableObject {
 
 /// Vista para el ítem de menú "Buscar actualizaciones..."
 struct CheckForUpdatesView: View {
-    @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
+    @ObservedObject private var viewModel: CheckForUpdatesViewModel
     private let updater: SPUUpdater
-    
-    init(updater: SPUUpdater) {
+
+    init(updater: SPUUpdater, viewModel: CheckForUpdatesViewModel) {
         self.updater = updater
-        // Crear el view model para CheckForUpdatesView
-        self.checkForUpdatesViewModel = CheckForUpdatesViewModel(updater: updater)
+        self.viewModel = viewModel
     }
-    
+
     var body: some View {
         Button(L10n.checkForUpdates) {
             updater.checkForUpdates()
         }
-        .disabled(!checkForUpdatesViewModel.canCheckForUpdates)
+        .disabled(!viewModel.canCheckForUpdates)
     }
 }
 
@@ -284,6 +294,7 @@ extension Notification.Name {
     static let menuBarPreferenceDidChange = Notification.Name("MoodistMac.menuBarPreferenceDidChange")
     static let appearancePreferenceDidChange = Notification.Name("MoodistMac.appearancePreferenceDidChange")
     static let transparencyPreferenceDidChange = Notification.Name("MoodistMac.transparencyPreferenceDidChange")
+    static let accentPreferenceDidChange = Notification.Name("MoodistMac.accentPreferenceDidChange")
     static let timerStateDidChange = Notification.Name("MoodistMac.timerStateDidChange")
 }
 
@@ -769,7 +780,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         guard window.title != L10n.optionsTitle else { return }
         guard canPersistFrame(window.frame) else { return }
         window.saveFrame(usingName: Self.mainWindowFrameName)
-        UserDefaults.standard.synchronize()
     }
 
     private func canPersistFrame(_ frame: NSRect) -> Bool {

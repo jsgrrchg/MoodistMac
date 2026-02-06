@@ -18,7 +18,6 @@ enum PersistenceService {
     static let menuBarEnabledKey = "MoodistMac.menuBarEnabled"
     static let accentColorHexKey = "MoodistMac.accentColorHex"
     static let appearanceModeKey = "MoodistMac.appearanceMode"
-    static let textSizeKey = "MoodistMac.textSize"
     static let transparencyEnabledKey = "MoodistMac.transparencyEnabled"
     static let mediaKeyNextMixKey = "MoodistMac.mediaKeyNextMix"
     /// Clave que usa AppKit para persistir el frame de la ventana principal.
@@ -196,7 +195,6 @@ enum PersistenceService {
         UserDefaults.standard.removeObject(forKey: menuBarEnabledKey)
         UserDefaults.standard.removeObject(forKey: accentColorHexKey)
         UserDefaults.standard.removeObject(forKey: appearanceModeKey)
-        UserDefaults.standard.removeObject(forKey: textSizeKey)
         UserDefaults.standard.removeObject(forKey: transparencyEnabledKey)
         UserDefaults.standard.removeObject(forKey: mediaKeyNextMixKey)
         UserDefaults.standard.removeObject(forKey: scrollAnchorIdsKey)

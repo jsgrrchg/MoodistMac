@@ -84,8 +84,8 @@ enum AccentColorChoice: String, CaseIterable, Identifiable {
 
     static func loadSelection() -> AccentColorChoice {
         let raw = UserDefaults.standard.string(forKey: PersistenceService.accentColorHexKey)
-            ?? AccentColorChoice.system.rawValue
-        return AccentColorChoice(rawValue: raw) ?? .system
+            ?? AccentColorChoice.graphite.rawValue
+        return AccentColorChoice(rawValue: raw) ?? .graphite
     }
 
     static var resolvedAccentColor: Color {

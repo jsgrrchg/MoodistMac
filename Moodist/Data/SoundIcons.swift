@@ -17,6 +17,8 @@ enum SoundIcons {
     static let dropFill = "drop.fill"
     static let treeFill = "tree.fill"
     static let gridFill = "circle.grid.3x3.fill"
+    static let mountain2Fill = "mountain.2.fill"
+    static let figureWalk = "figure.walk"
 
     // MARK: - Lluvia / clima
     static let cloudRainFill = "cloud.rain.fill"
@@ -61,9 +63,13 @@ enum SoundIcons {
     static let forkKnife = "fork.knife"
     static let booksVerticalFill = "books.vertical.fill"
     static let circleHexagonGridFill = "circle.hexagongrid.fill"
+    static let chartLineUptrend = "chart.line.uptrend.xyaxis"
 
     // MARK: - Transporte
     static let sailboatFill = "sailboat.fill"
+    static let bicycle = "bicycle"
+    static let truckBoxFill = "truck.box.fill"
+    static let speakerFill = "speaker.fill"
 
     // MARK: - Objetos / cosas
     static let cubeFill = "cube.fill"
@@ -80,8 +86,20 @@ enum SoundIcons {
     static let dotRadiowaves = "dot.radiowaves.left.and.right"
     static let recordCircle = "record.circle"
     static let rectangle = "rectangle"
+    static let bellFill = "bell.fill"
+    static let printerFill = "printer.fill"
+    static let heartFill = "heart.fill"
+    static let waveformPathEcg = "waveform.path.ecg"
+    static let dollarSignCircleFill = "dollarsign.circle.fill"
+    static let cursorArrowClick = "cursorarrow.click"
 
     // MARK: - Audio
     static let waveform = "waveform"
     static let waveformCircleFill = "waveform.circle.fill"
+    
+    // MARK: - Militar
+    static let shieldFill = "shield.fill"
+    
+    // MARK: - Personas / ruido
+    static let personFill = "person.fill"
 }

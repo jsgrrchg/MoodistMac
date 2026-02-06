@@ -21,8 +21,7 @@ struct OptionsView: View {
     @Environment(\.sparkleUpdater) private var sparkleUpdater
     @AppStorage(PersistenceService.menuBarEnabledKey) private var menuBarEnabled = false
     @AppStorage(PersistenceService.appearanceModeKey) private var appearanceModeRaw = AppearanceMode.system.rawValue
-    @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.system.rawValue
-    @AppStorage(PersistenceService.textSizeKey) private var textSizeRaw = "medium"
+    @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.graphite.rawValue
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
     @AppStorage(PersistenceService.maxRecentMixesCountKey) private var maxRecentMixesCount: Int = 10
     @AppStorage(PersistenceService.maxRecentSoundsCountKey) private var maxRecentSoundsCount: Int = 12
@@ -37,22 +36,12 @@ struct OptionsView: View {
     }
 
     private var accentChoice: AccentColorChoice {
-        get { AccentColorChoice(rawValue: accentColorRaw) ?? .system }
+        get { AccentColorChoice(rawValue: accentColorRaw) ?? .graphite }
         nonmutating set { accentColorRaw = newValue.rawValue }
-    }
-
-    private var effectiveDynamicTypeSize: DynamicTypeSize {
-        switch textSizeRaw {
-        case "small": return .small
-        case "large": return .large
-        case "xLarge": return .xLarge
-        default: return .medium
-        }
     }
 
     var body: some View {
         formContent
-            .environment(\.dynamicTypeSize, effectiveDynamicTypeSize)
             .formStyle(.grouped)
             .navigationTitle(L10n.optionsTitle)
             .toolbar { toolbarContent }
@@ -70,6 +59,7 @@ struct OptionsView: View {
             .onAppear { handleOnAppear() }
             .onChange(of: menuBarEnabled) { _, _ in handleMenuBarChange() }
             .onChange(of: appearanceModeRaw) { _, _ in handleAppearanceChange() }
+            .onChange(of: accentColorRaw) { _, _ in NotificationCenter.default.post(name: .accentPreferenceDidChange, object: nil) }
             .onChange(of: maxRecentMixesCount) { _, _ in handleMaxRecentMixesChange() }
             .onChange(of: maxRecentSoundsCount) { _, _ in handleMaxRecentSoundsChange() }
             .onChange(of: transparencyEnabled) { _, _ in handleTransparencyToggle() }
@@ -121,12 +111,8 @@ struct OptionsView: View {
         if maxRecentSoundsCount < 10 || maxRecentSoundsCount > 15 {
             maxRecentSoundsCount = 12
         }
-        let validSizes = ["small", "medium", "large", "xLarge"]
-        if !validSizes.contains(textSizeRaw) {
-            textSizeRaw = "medium"
-        }
         if AccentColorChoice(rawValue: accentColorRaw) == nil {
-            accentColorRaw = AccentColorChoice.system.rawValue
+            accentColorRaw = AccentColorChoice.graphite.rawValue
         }
         if UserDefaults.standard.object(forKey: PersistenceService.transparencyEnabledKey) == nil {
             transparencyEnabled = PersistenceService.loadTransparencyEnabled()
@@ -134,11 +120,11 @@ struct OptionsView: View {
     }
     
     private func handleMenuBarChange() {
-        NotificationCenter.default.post(name: Notification.Name("MoodistMac.menuBarPreferenceDidChange"), object: nil)
+        NotificationCenter.default.post(name: .menuBarPreferenceDidChange, object: nil)
     }
     
     private func handleAppearanceChange() {
-        NotificationCenter.default.post(name: Notification.Name("MoodistMac.appearancePreferenceDidChange"), object: nil)
+        NotificationCenter.default.post(name: .appearancePreferenceDidChange, object: nil)
     }
     
     private func handleMaxRecentMixesChange() {
@@ -151,7 +137,7 @@ struct OptionsView: View {
     
     private func handleTransparencyToggle() {
         PersistenceService.saveTransparencyEnabled(transparencyEnabled)
-        NotificationCenter.default.post(name: Notification.Name("MoodistMac.transparencyPreferenceDidChange"), object: nil)
+        NotificationCenter.default.post(name: .transparencyPreferenceDidChange, object: nil)
     }
 
     private var menuBarSection: some View {
@@ -179,16 +165,6 @@ struct OptionsView: View {
             .accessibilityLabel(L10n.appearanceMode)
             .accessibilityValue(appearanceModeValue)
 
-            Picker(selection: $textSizeRaw, label: Text(L10n.textSize)) {
-                Text(L10n.textSizeSmall).tag("small")
-                Text(L10n.textSizeMedium).tag("medium")
-                Text(L10n.textSizeLarge).tag("large")
-                Text(L10n.textSizeExtraLarge).tag("xLarge")
-            }
-            .pickerStyle(.menu)
-            .accessibilityLabel(L10n.textSize)
-            .accessibilityValue(textSizeValue)
-
             VStack(alignment: .leading, spacing: 6) {
                 Text(L10n.accentColor)
                 AccentColorPicker(selection: Binding(
@@ -212,15 +188,6 @@ struct OptionsView: View {
                 .foregroundStyle(MoodistTheme.Colors.secondaryText)
         } header: {
             Text(L10n.appearanceSection)
-        }
-    }
-    
-    private var textSizeValue: String {
-        switch textSizeRaw {
-        case "small": return L10n.textSizeSmall
-        case "large": return L10n.textSizeLarge
-        case "xLarge": return L10n.textSizeExtraLarge
-        default: return L10n.textSizeMedium
         }
     }
 
@@ -350,18 +317,8 @@ struct OptionsView: View {
                 .foregroundStyle(.primary)
                 .disabled(!(sparkleUpdater?.canCheckForUpdates ?? false))
                 .accessibilityLabel(L10n.checkForUpdates)
-
-                Button {
-                    updatePresenter.showPreview()
-                } label: {
-                    Label(L10n.updatePreviewToggle, systemImage: "sparkles")
-                }
-                .foregroundStyle(.primary)
-                .accessibilityLabel(L10n.updatePreviewToggle)
             } header: {
                 Text(L10n.updatesSection)
-            } footer: {
-                Text(L10n.updatePreviewFooter)
             }
         }
     }

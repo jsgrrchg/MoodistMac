@@ -25,11 +25,12 @@ Moodist is a native macOS app that lets you mix and play ambient sounds—rain, 
 ## Features
 
 ### Sounds and mixes
-- **89 sounds** in 9 categories: Nature, Rain, Animals, Urban, Places, Transport, Things, Noise, and Binaural
-- **81 curated mixes** in 10 themed categories: Nature & Relaxation, Walking, Sea & Coast, Forest Fire & Night, Rain & Storm, Focus & Study, Travel & Motion, Sleep & Noise, Places & Ambience, and Custom Mixes
-- **Custom mixes and presets** — create combinations, save them as presets, and recall them anytime
-- **Favorites** — star sounds and mixes for quick access from the sidebar and menu
-- **Recent mixes** — the sidebar shows the last mixes used (configurable between 10 and 15)
+- **131 sounds** in 10 categories: Nature, Rain, Animals, Urban, Places, Transport, Things, Noise, Binaural, and Military
+- **126 curated mixes** in 11 categories: Nature & Relaxation, Walking, Sea & Coast, Forest Fire & Night, Rain & Storm, Focus & Study, Travel & Motion, Sleep & Noise, Places & Ambience, Military, and Custom Mixes
+- **Collapse / Expand all** — one-tap button to collapse or expand all sound or mix categories in the list
+- **Custom mixes and presets** — create combinations, save them as presets (with icon selector), and recall them anytime
+- **Favorites** — star sounds and mixes for quick access from the sidebar and menu; reorder favorites by drag and drop
+- **Recent** — sidebar shows recent mixes and recent sounds (each configurable between 10 and 15)
 
 ### Playback and control
 - **Global and per-sound volume** — master volume plus individual sliders for each active sound
@@ -38,13 +39,13 @@ Moodist is a native macOS app that lets you mix and play ambient sounds—rain, 
 
 ### Interface and windows
 - **Menu bar** — optional menu bar icon with quick access to playback, timer, sounds, and mixes
-- **Floating player** — compact window that stays on top for minimal distraction
+- **Floating player** — compact always-on-top window with stop (unselect all), play, shuffle, next mix, volume, and scrolling mix name (marquee)
 - **Search** — find sounds by name (⌘F)
+- **Sidebar** — always visible; favorites and recent mixes/sounds with configurable list sizes (10–15)
 
 ### Appearance
 - **Theme** — light, dark, or automatic based on system
-- **Text size** — small, medium, large, or extra large
-- **Accent color** — Multicolor (system) or 9 fixed colors: blue, purple, pink, red, orange, yellow, green, graphite
+- **Accent color** — Multicolor (system) or 9 fixed colors: blue, purple, pink, red, orange, yellow, green, graphite (default: graphite)
 - **Transparencies** — option to disable transparencies and frosted glass effects
 
 ### Data and preferences
@@ -52,6 +53,7 @@ Moodist is a native macOS app that lets you mix and play ambient sounds—rain, 
 - **Import preferences** — restore those preferences from an exported file
 - **Reset selection and favorites** — clear only the current selection and favorites list
 - **Restore all to defaults** — reset selection, favorites, and global volume
+- **Check for updates** — from Options or the app menu (when using a Sparkle-enabled build)
 
 ### Accessibility
 - **Keyboard shortcuts** — Play/Pause (⌘R), Shuffle (⌘S), Next mix (⌘N), Unselect all (⌘U), Search (⌘F), Options (⌘,)
@@ -129,6 +131,8 @@ Some sounds used in this project are sourced from third-party providers and are 
 
 Sounds licensed under the Pixabay Content License: Pixabay Content License
 Sounds licensed under CC0: Creative Commons Zero License
+
+Some sound effects are from the [BBC Sound Effects](https://sound-effects.bbcrewind.co.uk/) library ([licensing](https://sound-effects.bbcrewind.co.uk/licensing)). © BBC.
 
 ---
 
