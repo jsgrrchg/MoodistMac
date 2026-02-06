@@ -15,8 +15,8 @@
             <pubDate>Fri, 06 Feb 2026 12:00:00 +0000</pubDate>
             <enclosure
                 url="https://github.com/jsgrrchg/MoodistMac/releases/download/Beta-5/MoodistMac.zip"
-                sparkle:edSignature="PLACEHOLDER_REPLACE_WITH_SIGN_UPDATE_OUTPUT"
-                length="PLACEHOLDER_REPLACE_WITH_FILE_SIZE"
+                sparkle:edSignature="kFE6nzBZByEF5P8b278BIVuXoPDVLVcGeM764MYejqMiX6UqpE7x3UE2GguUbFMVw3BMbwg1pRIkPwHHZYCqBg=="
+                length="200071488"
                 type="application/octet-stream"/>
         </item>
         <!-- 1.0 Beta 4 (build 4). Nomenclature matches Xcode: MARKETING_VERSION "1.0 Beta 4", CURRENT_PROJECT_VERSION 4. -->
