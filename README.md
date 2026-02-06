@@ -15,7 +15,7 @@ Moodist is a native macOS app that lets you mix and play ambient sounds—rain, 
 
 **Original Moodist** (web): [remvze/moodist](https://github.com/remvze/moodist) — *Ambient sounds for focus and calm.*
 
-Buy me a coffee: buymeacoffee.com/jsgrrchg 
+[Support Moodist for MacOS – Buy me a coffee ☕️](https://buymeacoffee.com/jsgrrchg)
 
 ![macOS](https://img.shields.io/badge/macOS-15.0+-black?style=flat-square&logo=apple)
 ![Swift](https://img.shields.io/badge/Swift-5.0-orange?style=flat-square&logo=swift)
