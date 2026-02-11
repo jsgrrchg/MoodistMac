@@ -7,6 +7,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.0.0] – 2026-02-10
+
+### Added
+- **Timer**: New timer panel with a modern UI.
+- **Options (start collapsed)**: New preference for cold start with categories collapsed. Persistent key and `resetAll` support (PersistenceService). Toggle in Options with accessibility and help text (OptionsView). ContentView: Sounds and Mixes start collapsed or expanded per preference; Custom Mixes always starts expanded. Mixes “Collapse all” / “Expand all” now targets only non-custom categories (button state and action exclude Custom Mixes) (ContentView).
+- **Localization (future translation)**: Added the 20 missing keys to `Localizable.strings` (en and es): `media_key_*`, `timer_*` (custom, remaining, finished, start, placeholder), `accent_color_*` (system plus color names), `expand_section`, `collapse_section`. All keys from `L10n.swift` are now present in both languages. Prepares the app for future translation to additional languages.
+
+### Changed
+- **Release**: The application leaves beta; this is the first stable release (1.0).
+- **Media keys (MediaKeyHandler)**: Added `isCurrentlyPlaying` using `MPNowPlayingInfoCenter.default().playbackState`. `playCommand` now only invokes `onTogglePlayPause` when not currently playing; `pauseCommand` only invokes it when playing. This avoids redundant toggles when the system media key state matches the app state (MediaKeyHandler.swift).
+- **Sidebar**: Resizing behavior of the left sidebar was updated for smoother, more fluid interaction.
+- **Layout (live resize)**: `contentAreaWidth` now updates during sidebar drag (0.5 threshold to reduce noise); main content uses `sidebarWidth` in real time. `updateSidebarForWindowWidth` logic and comments reworked; added `mainContentMinWidth` and dynamic `maxSidebarWidth` from total window width (ContentView).
+- **Sidebar (drag & drop)**: Insertion indicator uses `info.location.y` for `insertBefore` (cursor position), not drag direction. Drag restricted to internal `UTType` types with typed provider; separate `onDrop`/`validateDrop` for sounds vs mixes (SidebarView).
+- **Sidebar (performance)**: Preset lookup by id moved to the store (`presetsById`); SidebarView uses it for recent/favorite lists to reduce recomputes (SoundStore, SidebarView).
+- **Resize cursor**: Replaced simple hover with `onContinuousHover` and cleanup in `onDisappear`; added state guard for balanced push/pop of cursor (ContentView).
+- **Resize snap**: Snap value set to 3 for smoother sidebar resize (ContentView).
+- **Main content (single section)**: Replaced ZStack-with-opacity by conditional rendering so only one main section (Sounds or Mixes) is in the view tree at a time, avoiding two live trees (ContentView).
+- **Scroll restoration**: Removed sleeps and duplicate `scrollPosition` assignments; single-step restore with `Task.yield()`. Simplified `onAppear` for both lists to avoid a second deferred restore. Removed unused state `forceInitialSoundsTop` / `forceInitialMixesTop` (ContentView).
+- **Heavy actions (no animation wrap)**: `toggleSound()` no longer wraps select/unselect in `withAnimation` (SoundRow). Mix row tap no longer wraps `applyMix` in `withAnimation` (MixCategoryView). Reduces unnecessary animation around audio and mix-apply work.
+- **Floating player (relayout)**: Removed redundant internal `GeometryReader`s in the three containers (glass, fallback, solid). Content now receives `barWidth` from the outer `GeometryReader`, reducing relayout (FloatingPlayerPanelView).
+- **Currently playing (cache)**: Added `playingSoundsCache` state; updated when `store.sounds` changes and in `onAppear`. The "Currently playing" section now renders from cache instead of recalculating/sorting on every render (e.g. every timer tick) (ContentView). Improves performance and reduces cpu wakes. 
+- **Launch (deferred reconfig)**: Removed redundant delayed `configureExistingMainWindow()` calls at +0.2s and +1.2s in `applicationDidFinishLaunching` (MoodistApp).
+- **Window frame restoration**: Restore frame once in the next runloop via `DispatchQueue.main.async`; removed `frameRestoreDelay` and 300ms `asyncAfter`. In `applyRestoredFrame(to:)`, compare current frame with target and call `window.setFrame` only when the difference is > 1 point; added `frameDistance(_:_:)` helper (MoodistApp).
+- **Main window**: Minimum height aligned with AppKit (`.frame(minHeight: 600)` instead of 480) (ContentView). AppKit frame autosave disabled (`setFrameAutosaveName` removed) to avoid double persistence; manual save/restore with `saveFrame(usingName:)` / `setFrameUsingName` is unchanged (MoodistApp).
+- **Mixes layout**: Mixes now uses the same top padding as Sounds (`mixesScrollTopPadding` returns `contentTopPadding` instead of only `titlebarContentInset`), so both sections start aligned (ContentView).
+- **Options (UI)**: Pill-style (capsule) buttons for Data/Updates/About actions and toolbar Close; new button style (OptionsView). Options window is transparent when transparencies are enabled: Form uses `VisualEffectBackground(material: .sidebar)` instead of solid background; window `isOpaque`/`backgroundColor` set for real transparency (OptionsView).
+- **Options (Recent counts)**: Recent mixes and Recent sounds use sliders (range 5–15, step 1) instead of steppers (OptionsView). Persistence validation updated so the app respects 5…15 everywhere (PersistenceService). L10n footers and Localizable.strings (en/es) updated for the 5–15 range (L10n, Localizable.strings).
+
+---
+
 ## [BETA 5] – 2026-02-06
 
 ### Added
@@ -170,7 +200,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-5...HEAD
+[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/jsgrrchg/MoodistMac/releases/tag/v1.0.0
 [BETA 5]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-4...Beta-5
 [BETA 4]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-4
 [Beta 3]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-3
