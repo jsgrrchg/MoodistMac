@@ -110,10 +110,9 @@ struct SoundRow: View {
 
     private var soundIcon: some View {
         Image(systemName: sound.iconName)
-            .font(.system(size: isNarrow ? 14 : 15, weight: state.isSelected ? .medium : .regular))
+            .font(.system(size: isNarrow ? 14 : 15, weight: .regular))
             .frame(width: isUltraNarrow ? 16 : iconFrame, height: isUltraNarrow ? 16 : iconFrame)
             .foregroundStyle(state.isSelected ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
-            .animation(.easeInOut(duration: 0.2), value: state.isSelected)
     }
 
     private var soundTitle: some View {

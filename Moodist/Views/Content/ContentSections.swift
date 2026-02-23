@@ -13,8 +13,11 @@ struct CurrentlyPlayingSectionView: View {
     let playingSounds: [Sound]
     @Binding var isSaveMixHovered: Bool
     @Binding var isClearHovered: Bool
+    @Binding var isTimerHovered: Bool
+    @Binding var isTimerCancelHovered: Bool
     let onSaveMix: () -> Void
     let onClear: () -> Void
+    let onOpenTimer: () -> Void
     let onCancelTimer: () -> Void
 
     var body: some View {
@@ -83,17 +86,11 @@ struct CurrentlyPlayingSectionView: View {
                     .disabled(!store.hasSelection)
                     .help(L10n.unselectAll)
                     .accessibilityLabel(L10n.clear)
+                    timerHeaderButton(isNarrow: isNarrow, isVeryNarrow: isVeryNarrow)
                 }
                 .fixedSize(horizontal: true, vertical: false)
             }
             .padding(.vertical, headerVerticalPadding)
-            if store.hasActiveTimer {
-                TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
-                    if let timer = store.activeTimer {
-                        timerInlineRow(remainingSeconds: timer.remainingSeconds, onCancelTimer: onCancelTimer)
-                    }
-                }
-            }
             if !playingSounds.isEmpty {
                 LazyVStack(spacing: MoodistTheme.Spacing.small) {
                     ForEach(playingSounds, id: \.id) { sound in
@@ -115,55 +112,67 @@ struct CurrentlyPlayingSectionView: View {
         .accessibilityLabel(L10n.currentlyPlaying)
     }
 
-    private func timerInlineRow(remainingSeconds: Int, onCancelTimer: @escaping () -> Void) -> some View {
-        let isNarrow = contentAreaWidth < 420
-        let isVeryNarrow = contentAreaWidth < 340
-        let isUltraNarrow = contentAreaWidth < 260
-        let rowHorizontalPadding: CGFloat = isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
-        let labelText = isVeryNarrow
-            ? formatTimerRemaining(seconds: remainingSeconds)
-            : "\(L10n.timer) · \(formatTimerRemaining(seconds: remainingSeconds))"
-
-        return HStack(spacing: MoodistTheme.Spacing.small) {
-            Image(systemName: "timer")
-                .font(.system(size: isNarrow ? 12 : 13, weight: .medium))
-            Text(labelText)
-                .font(MoodistTheme.Typography.subheadline)
-                .monospacedDigit()
-            Spacer(minLength: 0)
-            Button(action: onCancelTimer) {
-                if isVeryNarrow {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 11, weight: .semibold))
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 3)
-                } else {
-                    Label(L10n.timerStop, systemImage: "xmark")
-                        .labelStyle(.titleAndIcon)
-                        .font(.system(size: 11, weight: .semibold))
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 3)
-                }
+    @ViewBuilder
+    private func timerHeaderButton(isNarrow: Bool, isVeryNarrow: Bool) -> some View {
+        HStack(spacing: 6) {
+            Button(action: onOpenTimer) {
+                timerHeaderButtonLabel(isVeryNarrow: isVeryNarrow)
             }
-            .buttonStyle(.plain)
-            .foregroundStyle(MoodistTheme.Colors.secondaryText)
-            .background(
-                Capsule()
-                    .fill(MoodistTheme.Colors.cardBackground.opacity(0.6))
-            )
-            .help(L10n.timerStop)
-            .accessibilityLabel(L10n.timerStop)
+            .buttonStyle(HeaderActionButtonStyle(
+                isHovered: isTimerHovered,
+                isPrimary: false,
+                isCompact: isNarrow
+            ))
+            .onHover { isTimerHovered = $0 }
+            .help(store.hasActiveTimer ? (store.timerRemainingMenuTitle ?? L10n.timer) : L10n.timerCustomTitle)
+            .accessibilityLabel(store.hasActiveTimer ? L10n.timer : L10n.timerCustomTitle)
+
+            if store.hasActiveTimer {
+                Button(action: onCancelTimer) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: isNarrow ? 10 : 11, weight: .semibold))
+                        .frame(width: isNarrow ? 20 : 22, height: isNarrow ? 20 : 22)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                .background(
+                    Capsule()
+                        .fill(
+                            (isTimerCancelHovered
+                             ? MoodistTheme.Colors.cardBackground.opacity(0.75)
+                             : MoodistTheme.Colors.cardBackground.opacity(0.45))
+                        )
+                )
+                .overlay(
+                    Capsule()
+                        .strokeBorder(Color.primary.opacity(isTimerCancelHovered ? 0.16 : 0.1), lineWidth: 1)
+                )
+                .onHover { isTimerCancelHovered = $0 }
+                .help(L10n.timerStop)
+                .accessibilityLabel(L10n.timerStop)
+            }
         }
-        .foregroundStyle(MoodistTheme.Colors.secondaryText)
-        .padding(.horizontal, rowHorizontalPadding)
-        .padding(.vertical, isNarrow ? 6 : 8)
-        .background(
-            RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                .fill(MoodistTheme.Colors.selectedBackground.opacity(0.2))
-        )
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(L10n.timerRemaining(formatTimerRemaining(seconds: remainingSeconds)))
+    }
+
+    @ViewBuilder
+    private func timerHeaderButtonLabel(isVeryNarrow: Bool) -> some View {
+        if store.hasActiveTimer {
+            Label {
+                TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
+                    Text(formatTimerRemaining(seconds: store.activeTimer?.remainingSeconds ?? 0))
+                        .monospacedDigit()
+                }
+            } icon: {
+                Image(systemName: "timer")
+            }
+            .labelStyle(.titleAndIcon)
+        } else if isVeryNarrow {
+            Label(L10n.timer, systemImage: "timer")
+                .labelStyle(.iconOnly)
+        } else {
+            Label(L10n.timer, systemImage: "timer")
+                .labelStyle(.titleAndIcon)
+        }
     }
 
     private func formatTimerRemaining(seconds: Int) -> String {
@@ -261,42 +270,44 @@ struct MixesPlaceholderSectionView: View {
             )
             .id("mix-category-\(MixesData.custom.id)")
 
-            HStack(spacing: MoodistTheme.Spacing.small) {
-                Spacer(minLength: 0)
-                Button(action: toggleAllMixCategories) {
-                    if isVeryNarrow {
-                        Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
-                              systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                            .labelStyle(.iconOnly)
-                    } else {
-                        Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
-                              systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                            .labelStyle(.titleAndIcon)
+            VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
+                HStack(spacing: MoodistTheme.Spacing.small) {
+                    Spacer(minLength: 0)
+                    Button(action: toggleAllMixCategories) {
+                        if isVeryNarrow {
+                            Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                                  systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                                .labelStyle(.iconOnly)
+                        } else {
+                            Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                                  systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
+                                .labelStyle(.titleAndIcon)
+                        }
                     }
+                    .buttonStyle(HeaderActionButtonStyle(
+                        isHovered: isCollapseAllMixesHovered,
+                        isPrimary: false,
+                        isCompact: isNarrow
+                    ))
+                    .onHover { isCollapseAllMixesHovered = $0 }
+                    .help(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
+                    .accessibilityLabel(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
                 }
-                .buttonStyle(HeaderActionButtonStyle(
-                    isHovered: isCollapseAllMixesHovered,
-                    isPrimary: false,
-                    isCompact: isNarrow
-                ))
-                .onHover { isCollapseAllMixesHovered = $0 }
-                .help(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
-                .accessibilityLabel(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
-            }
-            .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
+                .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
 
-            VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
-                ForEach(MixesData.categories.filter { $0.id != MixesData.custom.id }, id: \.id) { category in
-                    MixCategoryView(
-                        category: category,
-                        store: store,
-                        mixesToShow: nil,
-                        isExpanded: Binding(
-                            get: { mixCategoryExpandedStates[category.id] ?? defaultMixExpandedState(category.id) },
-                            set: { mixCategoryExpandedStates[category.id] = $0 }
+                VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
+                    ForEach(MixesData.categories.filter { $0.id != MixesData.custom.id }, id: \.id) { category in
+                        MixCategoryView(
+                            category: category,
+                            store: store,
+                            mixesToShow: nil,
+                            isExpanded: Binding(
+                                get: { mixCategoryExpandedStates[category.id] ?? defaultMixExpandedState(category.id) },
+                                set: { mixCategoryExpandedStates[category.id] = $0 }
+                            )
                         )
-                    )
-                    .id("mix-category-\(category.id)")
+                        .id("mix-category-\(category.id)")
+                    }
                 }
             }
         }

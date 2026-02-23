@@ -321,6 +321,7 @@ extension Notification.Name {
     static let transparencyPreferenceDidChange = Notification.Name("MoodistMac.transparencyPreferenceDidChange")
     static let accentPreferenceDidChange = Notification.Name("MoodistMac.accentPreferenceDidChange")
     static let timerStateDidChange = Notification.Name("MoodistMac.timerStateDidChange")
+    static let requestShowCustomTimerWindow = Notification.Name("MoodistMac.requestShowCustomTimerWindow")
 }
 
 @MainActor
@@ -343,6 +344,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     private var appearanceObserver: NSObjectProtocol?
     private var transparencyObserver: NSObjectProtocol?
     private var timerStateObserver: NSObjectProtocol?
+    private var timerWindowRequestObserver: NSObjectProtocol?
     private var windowDidBecomeKeyObserver: NSObjectProtocol?
     private weak var mainWindow: NSWindow?
     private var mainWindowHasRestoredFrame = false
@@ -412,6 +414,15 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
                 if self.statusItem?.menu != nil {
                     self.statusItem?.menu = self.buildStatusMenu()
                 }
+            }
+        }
+        timerWindowRequestObserver = NotificationCenter.default.addObserver(
+            forName: .requestShowCustomTimerWindow,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.showCustomTimerWindow()
             }
         }
         installSpaceKeyMonitor()
@@ -501,6 +512,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         if let o = appearanceObserver { NotificationCenter.default.removeObserver(o) }
         if let o = transparencyObserver { NotificationCenter.default.removeObserver(o) }
         if let o = timerStateObserver { NotificationCenter.default.removeObserver(o) }
+        if let o = timerWindowRequestObserver { NotificationCenter.default.removeObserver(o) }
         if let o = windowDidBecomeKeyObserver { NotificationCenter.default.removeObserver(o) }
         if let o = timerWindowCloseObserver { NotificationCenter.default.removeObserver(o) }
         stopObservingMainWindow()
@@ -1217,6 +1229,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
             if let host = window.contentViewController as? NSHostingController<AnyView> {
                 host.rootView = AnyView(rootView)
             }
+            positionTimerWindow(window)
             NSApplication.shared.activate(ignoringOtherApps: true)
             window.makeKeyAndOrderFront(nil)
             return
@@ -1227,10 +1240,10 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         window.title = L10n.timerCustomTitle
         window.styleMask = NSWindow.StyleMask([.titled, .closable])
         window.isReleasedWhenClosed = false
-        window.center()
-        window.setContentSize(NSSize(width: 380, height: 360))
-        window.minSize = NSSize(width: 380, height: 360)
-        window.maxSize = NSSize(width: 380, height: 360)
+        window.setContentSize(NSSize(width: 348, height: 352))
+        window.minSize = NSSize(width: 348, height: 352)
+        window.maxSize = NSSize(width: 348, height: 352)
+        positionTimerWindow(window)
 
         let controller = NSWindowController(window: window)
         timerWindowController = controller
@@ -1251,6 +1264,20 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         NSApplication.shared.activate(ignoringOtherApps: true)
         controller.showWindow(self)
         window.makeKeyAndOrderFront(self)
+    }
+
+    private func positionTimerWindow(_ window: NSWindow) {
+        let anchorWindow = mainWindow ?? bestMainWindowCandidate(in: NSApplication.shared.windows)
+        guard let anchorWindow else {
+            window.center()
+            return
+        }
+
+        let parentFrame = anchorWindow.frame
+        let windowFrame = window.frame
+        let x = parentFrame.midX - (windowFrame.width / 2)
+        let y = parentFrame.midY - (windowFrame.height / 2)
+        window.setFrameOrigin(NSPoint(x: x.rounded(), y: y.rounded()))
     }
 
     private func closeCustomTimerWindow() {

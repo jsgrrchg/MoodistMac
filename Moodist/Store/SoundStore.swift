@@ -20,6 +20,8 @@ final class SoundStore: ObservableObject {
     @Published var showOptionsPanel = false
     /// Si true, la vista principal muestra la hoja para guardar el preset actual (evita NSAlert y bloqueos).
     @Published var showSavePresetSheet = false
+    /// ID de preset en edición cuando la hoja de Save Mix se reutiliza para renombrar/cambiar icono.
+    @Published var editingPresetId: String?
     /// Presets guardados (combinaciones de sonidos).
     @Published var presets: [Preset] = []
     /// Texto de búsqueda: filtra por nombre de sonido o categoría.
@@ -290,6 +292,7 @@ final class SoundStore: ObservableObject {
     /// Pide mostrar la hoja para guardar el preset actual (SwiftUI sheet; evita NSAlert y bloqueos).
     func promptSaveCurrentPreset() {
         guard canSaveCustomMix else { return }
+        editingPresetId = nil
         showSavePresetSheet = true
     }
 
@@ -512,6 +515,28 @@ final class SoundStore: ObservableObject {
         presets.append(preset)
     }
 
+    func beginEditingPreset(id: String) {
+        guard presets.contains(where: { $0.id == id }) else { return }
+        editingPresetId = id
+        showSavePresetSheet = true
+    }
+
+    func updatePresetMetadata(id: String, name: String, iconName: String) {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return }
+        guard let index = presets.firstIndex(where: { $0.id == id }) else { return }
+        presets[index].name = trimmedName
+        presets[index].iconName = iconName
+        if currentMixId == id {
+            currentMixIconName = iconName
+        }
+    }
+
+    func closeSavePresetSheet() {
+        showSavePresetSheet = false
+        editingPresetId = nil
+    }
+
     func deletePreset(id: String) {
         presets.removeAll { $0.id == id }
     }
@@ -561,6 +586,7 @@ final class SoundStore: ObservableObject {
         guard sounds[soundId] != nil else { return }
         unselectAll()
         select(soundId)
+        editingPresetId = nil
         showSavePresetSheet = true
     }
 

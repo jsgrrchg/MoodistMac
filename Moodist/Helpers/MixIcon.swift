@@ -10,7 +10,6 @@ import SwiftUI
 enum MixIcon {
     static let palmTreeID = "palm-tree-solid"
     static let palmTreeAssetName = "PalmTreeSolid"
-    static let palmTreeVisualScale: CGFloat = 0.82
 
     static func displayName(for iconName: String) -> String {
         if iconName == palmTreeID {
@@ -54,7 +53,6 @@ struct MixIconImage: View {
                     .renderingMode(.template)
                     .resizable()
                     .scaledToFit()
-                    .scaleEffect(MixIcon.palmTreeVisualScale)
             } else {
                 Image(systemName: iconName)
                     .font(.system(size: size, weight: weight))

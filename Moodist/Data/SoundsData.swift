@@ -41,7 +41,7 @@ enum SoundsData {
             Sound(id: "walk-in-snow", label: "Walk in Snow", fileName: "walk-in-snow.mp3", categoryFolder: "nature", iconName: SoundIcons.snowflake),
             Sound(id: "walk-on-gravel", label: "Walk on Gravel", fileName: "walk-on-gravel.mp3", categoryFolder: "nature", iconName: SoundIcons.gridFill),
             Sound(id: "walk-on-leaves", label: "Walk on Leaves", fileName: "walk-on-leaves.mp3", categoryFolder: "nature", iconName: SoundIcons.leafFill),
-            Sound(id: "walking-on-wood", label: "Walking on Wood", fileName: "walking-on-wood.mp3", categoryFolder: "nature", iconName: SoundIcons.figureWalk),
+            Sound(id: "walking-on-wood", label: "Walk on Wood", fileName: "walking-on-wood.mp3", categoryFolder: "nature", iconName: SoundIcons.figureWalk),
             Sound(id: "waterfall", label: "Waterfall", fileName: "waterfall.mp3", categoryFolder: "nature", iconName: SoundIcons.waterWaves),
             Sound(id: "waves", label: "Waves", fileName: "waves.mp3", categoryFolder: "nature", iconName: SoundIcons.waterWaves),
             Sound(id: "wind", label: "Wind", fileName: "wind.mp3", categoryFolder: "nature", iconName: SoundIcons.wind),

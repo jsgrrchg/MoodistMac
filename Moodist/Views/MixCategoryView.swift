@@ -36,6 +36,9 @@ struct MixCategoryView: View {
     }
 
     private var isNarrow: Bool { contentAreaWidth < 420 }
+    private var customHeaderMinHeight: CGFloat? {
+        category.id == MixesData.custom.id ? (isNarrow ? 28 : 30) : nil
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: isNarrow ? MoodistTheme.Spacing.xSmall : MoodistTheme.Spacing.small) {
@@ -64,6 +67,7 @@ struct MixCategoryView: View {
                         .foregroundStyle(MoodistTheme.Colors.secondaryText)
                 }
                 .padding(.vertical, MoodistTheme.Spacing.xSmall)
+                .frame(minHeight: customHeaderMinHeight, alignment: .center)
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
@@ -75,7 +79,7 @@ struct MixCategoryView: View {
                         .font(MoodistTheme.Typography.subheadline)
                         .foregroundStyle(MoodistTheme.Colors.secondaryText)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.vertical, MoodistTheme.Spacing.medium)
+                        .padding(.vertical, MoodistTheme.Spacing.small)
                 } else {
                     LazyVStack(alignment: .leading, spacing: isNarrow ? MoodistTheme.Spacing.xSmall : MoodistTheme.Spacing.small) {
                         ForEach(displayedMixes, id: \.id) { mix in
@@ -215,6 +219,9 @@ struct MixRowView: View {
                 }
                 if store.presets.contains(where: { $0.id == mix.id }) {
                     Divider()
+                    Button("Edit mix…") {
+                        store.beginEditingPreset(id: mix.id)
+                    }
                     Button(L10n.presetDelete, role: .destructive) {
                         store.deletePreset(id: mix.id)
                     }

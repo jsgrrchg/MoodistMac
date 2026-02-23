@@ -134,29 +134,30 @@ private struct SaveMixCategoryPill: View {
     let isSelected: Bool
 
     var body: some View {
-        VStack(spacing: 6) {
-            ZStack {
-                RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                    .fill(isSelected ? MoodistTheme.Colors.selectedBackground.opacity(0.9) : MoodistTheme.Colors.cardBackground)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                            .strokeBorder(
-                                isSelected ? MoodistTheme.Colors.accent.opacity(0.85) : Color.primary.opacity(0.10),
-                                lineWidth: isSelected ? 1.25 : 1
-                            )
-                    )
-                Image(systemName: category.categorySymbol)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(isSelected ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
-            }
-            .frame(width: 34, height: 30)
+        HStack(spacing: 7) {
+            Image(systemName: category.categorySymbol)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(isSelected ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
+                .frame(width: 14)
+
             Text(category.localizedTitle)
-                .font(.system(size: 10, weight: isSelected ? .semibold : .medium))
-                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                .font(.system(size: 11, weight: isSelected ? .semibold : .medium))
+                .foregroundStyle(isSelected ? Color.primary : MoodistTheme.Colors.secondaryText)
                 .lineLimit(1)
-                .frame(width: 58)
         }
-        .padding(.vertical, 1)
+        .padding(.horizontal, MoodistTheme.Spacing.medium)
+        .padding(.vertical, 7)
+        .background(
+            Capsule(style: .continuous)
+                .fill(isSelected ? MoodistTheme.Colors.selectedBackground.opacity(0.95) : MoodistTheme.Colors.cardBackground.opacity(0.7))
+                .overlay(
+                    Capsule(style: .continuous)
+                        .strokeBorder(
+                            isSelected ? MoodistTheme.Colors.accent.opacity(0.9) : Color.primary.opacity(0.10),
+                            lineWidth: isSelected ? 1.2 : 1
+                        )
+                )
+        )
     }
 }
 
@@ -170,10 +171,15 @@ struct SavePresetSheet: View {
     @State private var iconSearchQuery = ""
     @State private var isCancelHovered = false
     @State private var isSaveHovered = false
+    @State private var didInitializeForm = false
     @FocusState private var isNameFocused: Bool
 
+    private var trimmedMixName: String {
+        mixName.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     private var canSave: Bool {
-        !mixName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        !trimmedMixName.isEmpty
     }
 
     private var currentIconOption: SaveMixIconOption {
@@ -205,177 +211,395 @@ struct SavePresetSheet: View {
         currentCategory?.symbols ?? []
     }
 
+    private var iconGridColumns: [GridItem] {
+        [GridItem(.adaptive(minimum: 48, maximum: 56), spacing: MoodistTheme.Spacing.small)]
+    }
+
+    private var previewTitle: String {
+        trimmedMixName.isEmpty ? L10n.presetNamePlaceholder : trimmedMixName
+    }
+
+    private var presetBeingEdited: Preset? {
+        guard let editingPresetId = store.editingPresetId else { return nil }
+        return store.presetsById[editingPresetId]
+    }
+
+    private var isEditingPreset: Bool {
+        presetBeingEdited != nil
+    }
+
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: MoodistTheme.Spacing.large) {
+            headerCard
+            nameCard
+            iconPickerCard
+            footerBar
+        }
+        .padding(20)
+        .frame(width: 460)
+        .background(
+            LinearGradient(
+                colors: [
+                    PlatformColor.windowBackground,
+                    MoodistTheme.Colors.selectedBackground.opacity(0.12)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        )
+        .onAppear {
+            configureInitialFormStateIfNeeded()
+        }
+        .onChange(of: store.editingPresetId) { _, _ in
+            didInitializeForm = false
+            configureInitialFormStateIfNeeded()
+        }
+    }
+
+    private var headerCard: some View {
+        HStack(alignment: .top, spacing: MoodistTheme.Spacing.large) {
             VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xSmall) {
                 HStack(spacing: MoodistTheme.Spacing.small) {
                     Image(systemName: "square.and.pencil")
-                        .font(.title2)
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(MoodistTheme.Colors.accent)
-                    Text(L10n.presetSaveDialogTitle)
-                        .font(.title2.weight(.semibold))
+                    Text(isEditingPreset ? "Edit Mix" : L10n.presetSaveDialogTitle)
+                        .font(MoodistTheme.Typography.title)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                Text(L10n.saveMixSubtitle)
+                Text(isEditingPreset ? "Update the mix name and icon." : L10n.saveMixSubtitle)
                     .font(MoodistTheme.Typography.subheadline)
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(.bottom, MoodistTheme.Spacing.xLarge)
 
-            TextField(L10n.presetNamePlaceholder, text: $mixName)
-                .textFieldStyle(.plain)
-                .focused($isNameFocused)
-                .font(.body)
-                .padding(.horizontal, MoodistTheme.Spacing.medium)
-                .padding(.vertical, MoodistTheme.Spacing.small + 2)
-                .background(
-                    RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                        .fill(MoodistTheme.Colors.cardBackground)
+            Spacer(minLength: MoodistTheme.Spacing.small)
+
+            HStack(spacing: MoodistTheme.Spacing.small) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(MoodistTheme.Colors.selectedBackground.opacity(0.85))
                         .overlay(
-                            RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                                .strokeBorder(Color.primary.opacity(0.12), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .strokeBorder(MoodistTheme.Colors.accent.opacity(0.28), lineWidth: 1)
                         )
-                )
-                .onSubmit { if canSave { saveAndDismiss() } }
-                .padding(.bottom, MoodistTheme.Spacing.xLarge)
-
-            VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
-                Text(L10n.iconLabel)
-                    .font(.subheadline.weight(.medium))
-                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
-
-                TextField(L10n.saveMixIconSearchPlaceholder, text: $iconSearchQuery)
-                    .textFieldStyle(.plain)
-                    .font(.subheadline)
-                    .padding(.horizontal, MoodistTheme.Spacing.medium)
-                    .padding(.vertical, MoodistTheme.Spacing.small)
-                    .background(
-                        RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                            .fill(MoodistTheme.Colors.cardBackground)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                                    .strokeBorder(Color.primary.opacity(0.12), lineWidth: 1)
-                            )
+                    MixIconImage(
+                        iconName: currentIconOption.sfSymbolName,
+                        size: 18,
+                        weight: .semibold,
+                        color: MoodistTheme.Colors.accent
                     )
+                }
+                .frame(width: 36, height: 36)
 
-                if visibleIconCategories.isEmpty {
-                    Text(L10n.saveMixIconNoResults)
-                        .font(MoodistTheme.Typography.subheadline)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(previewTitle)
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(trimmedMixName.isEmpty ? MoodistTheme.Colors.secondaryText : Color.primary)
+                        .lineLimit(1)
+                    Text(currentIconOption.displayName)
+                        .font(.system(size: 11))
                         .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                } else {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: MoodistTheme.Spacing.small) {
-                            ForEach(visibleIconCategories) { category in
-                                let isSelected = category.id == (currentCategory?.id ?? selectedCategoryID)
-                                Button {
-                                    selectedCategoryID = category.id
-                                } label: {
-                                    SaveMixCategoryPill(category: category, isSelected: isSelected)
-                                }
-                                .buttonStyle(.plain)
-                                .help(category.localizedTitle)
-                            }
-                        }
-                        .padding(.vertical, 2)
-                    }
-                    .padding(.horizontal, MoodistTheme.Spacing.xSmall)
-                    .padding(.vertical, MoodistTheme.Spacing.xSmall)
-                    .background(
-                        RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                            .fill(MoodistTheme.Colors.cardBackground.opacity(0.7))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                                    .strokeBorder(Color.primary.opacity(0.10), lineWidth: 1)
-                            )
-                    )
-                    .accessibilityHint(L10n.saveMixIconCategoriesHint)
+                        .lineLimit(1)
                 }
-
-                let columns = [GridItem(.adaptive(minimum: 40, maximum: 52), spacing: MoodistTheme.Spacing.small)]
-                ScrollView {
-                    LazyVGrid(columns: columns, alignment: .leading, spacing: MoodistTheme.Spacing.small) {
-                        ForEach(currentCategorySymbols, id: \.self) { symbolName in
-                            let isSelected = symbolName == currentIconOption.sfSymbolName
-                            Button {
-                                selectedIconID = symbolName
-                            } label: {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                                        .fill(isSelected ? MoodistTheme.Colors.selectedBackground.opacity(0.9) : MoodistTheme.Colors.cardBackground)
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: MoodistTheme.Radius.small)
-                                                .strokeBorder(
-                                                    isSelected ? MoodistTheme.Colors.accent.opacity(0.9) : Color.primary.opacity(0.12),
-                                                    lineWidth: isSelected ? 1.5 : 1
-                                                )
-                                        )
-                                    MixIconImage(
-                                        iconName: symbolName,
-                                        size: 18,
-                                        weight: .semibold,
-                                        color: isSelected ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText
-                                    )
-                                }
-                                .frame(width: 44, height: 44)
-                            }
-                            .buttonStyle(.plain)
-                            .help(MixIcon.displayName(for: symbolName))
-                            .accessibilityLabel(MixIcon.displayName(for: symbolName))
-                            .accessibilityAddTraits(isSelected ? [.isSelected] : [])
-                        }
-                    }
-                    .padding(.horizontal, MoodistTheme.Spacing.xSmall)
-                    .padding(.vertical, MoodistTheme.Spacing.xSmall)
-                }
-                .frame(height: 174)
-                .background(
-                    RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                        .fill(MoodistTheme.Colors.cardBackground.opacity(0.55))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                                .strokeBorder(Color.primary.opacity(0.10), lineWidth: 1)
-                        )
-                )
-                .accessibilityHint(L10n.saveMixIconMenuHint)
-
-                Text(L10n.saveMixIconLabel(currentIconOption.displayName))
-                    .font(MoodistTheme.Typography.subheadline)
-                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.bottom, MoodistTheme.Spacing.xLarge)
+            .padding(.horizontal, MoodistTheme.Spacing.small)
+            .padding(.vertical, MoodistTheme.Spacing.small)
+            .background(
+                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium, style: .continuous)
+                    .fill(MoodistTheme.Colors.cardBackground.opacity(0.8))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium, style: .continuous)
+                            .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+                    )
+            )
+        }
+        .padding(MoodistTheme.Spacing.large)
+        .background(
+            RoundedRectangle(cornerRadius: MoodistTheme.Radius.large, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [
+                            MoodistTheme.Colors.selectedBackground.opacity(0.55),
+                            MoodistTheme.Colors.cardBackground.opacity(0.85)
+                        ],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: MoodistTheme.Radius.large, style: .continuous)
+                        .strokeBorder(Color.primary.opacity(0.07), lineWidth: 1)
+                )
+        )
+    }
 
-            HStack(spacing: MoodistTheme.Spacing.medium) {
+    private var nameCard: some View {
+        VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
+            Text(L10n.presetNamePlaceholder)
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+
+            HStack(spacing: MoodistTheme.Spacing.small) {
+                Image(systemName: "text.cursor")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
+
+                TextField(L10n.presetNamePlaceholder, text: $mixName)
+                    .textFieldStyle(.plain)
+                    .focused($isNameFocused)
+                    .font(.body)
+                    .onSubmit { if canSave { saveAndDismiss() } }
+            }
+            .padding(.horizontal, MoodistTheme.Spacing.medium)
+            .padding(.vertical, MoodistTheme.Spacing.small + 2)
+            .background(nameFieldBackground)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(MoodistTheme.Spacing.large)
+        .background(standardCardBackground)
+    }
+
+    private var iconPickerCard: some View {
+        VStack(alignment: .leading, spacing: MoodistTheme.Spacing.medium) {
+            HStack(alignment: .center, spacing: MoodistTheme.Spacing.small) {
+                Text(L10n.iconLabel)
+                    .font(.subheadline.weight(.semibold))
+
                 Spacer()
-                Button(L10n.cancel) { onDismiss() }
-                    .keyboardShortcut(.cancelAction)
-                    .buttonStyle(HeaderActionButtonStyle(
-                        isHovered: isCancelHovered,
-                        isPrimary: false,
-                        isCompact: false
-                    ))
-                    .onHover { isCancelHovered = $0 }
-                Button(L10n.save) { saveAndDismiss() }
-                    .keyboardShortcut(.defaultAction)
-                    .buttonStyle(HeaderActionButtonStyle(
-                        isHovered: isSaveHovered,
-                        isPrimary: true,
-                        isCompact: false
-                    ))
-                    .onHover { isSaveHovered = $0 }
-                    .disabled(!canSave)
+
+                HStack(spacing: 6) {
+                    MixIconImage(
+                        iconName: currentIconOption.sfSymbolName,
+                        size: 12,
+                        weight: .semibold,
+                        color: MoodistTheme.Colors.accent
+                    )
+                    Text(currentIconOption.displayName)
+                        .font(.system(size: 11, weight: .medium))
+                        .lineLimit(1)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 5)
+                .background(
+                    Capsule(style: .continuous)
+                        .fill(MoodistTheme.Colors.selectedBackground.opacity(0.7))
+                )
+            }
+
+            iconSearchField
+
+            if visibleIconCategories.isEmpty {
+                iconEmptyState
+            } else {
+                iconCategoryScroller
+                iconGrid
             }
         }
-        .padding(MoodistTheme.Spacing.xLarge)
-        .frame(width: 378)
-        .background(PlatformColor.windowBackground)
-        .onAppear { isNameFocused = true }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(MoodistTheme.Spacing.large)
+        .background(standardCardBackground)
+    }
+
+    private var iconSearchField: some View {
+        HStack(spacing: MoodistTheme.Spacing.small) {
+            Image(systemName: "magnifyingglass")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+
+            TextField(L10n.saveMixIconSearchPlaceholder, text: $iconSearchQuery)
+                .textFieldStyle(.plain)
+                .font(.subheadline)
+
+            if !iconSearchQuery.isEmpty {
+                Button {
+                    iconSearchQuery = ""
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 12))
+                        .foregroundStyle(MoodistTheme.Colors.secondaryText.opacity(0.85))
+                }
+                .buttonStyle(.plain)
+                .help(L10n.cancel)
+            }
+        }
+        .padding(.horizontal, MoodistTheme.Spacing.medium)
+        .padding(.vertical, MoodistTheme.Spacing.small)
+        .background(subtlePanelBackground(opacity: 1.0))
+    }
+
+    private var iconEmptyState: some View {
+        VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
+            Text(L10n.saveMixIconNoResults)
+                .font(MoodistTheme.Typography.subheadline)
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(MoodistTheme.Spacing.medium)
+        .background(subtlePanelBackground(opacity: 0.45))
+    }
+
+    private var iconCategoryScroller: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: MoodistTheme.Spacing.small) {
+                ForEach(visibleIconCategories) { category in
+                    let isSelected = category.id == (currentCategory?.id ?? selectedCategoryID)
+                    Button {
+                        selectedCategoryID = category.id
+                    } label: {
+                        SaveMixCategoryPill(category: category, isSelected: isSelected)
+                    }
+                    .buttonStyle(.plain)
+                    .help(category.localizedTitle)
+                }
+            }
+            .padding(.horizontal, MoodistTheme.Spacing.small)
+            .padding(.vertical, MoodistTheme.Spacing.small)
+        }
+        .background(subtlePanelBackground(opacity: 0.42))
+        .accessibilityHint(L10n.saveMixIconCategoriesHint)
+    }
+
+    private var iconGrid: some View {
+        ScrollView {
+            LazyVGrid(columns: iconGridColumns, alignment: .leading, spacing: MoodistTheme.Spacing.small) {
+                ForEach(currentCategorySymbols, id: \.self) { symbolName in
+                    iconGridButton(for: symbolName)
+                }
+            }
+            .padding(MoodistTheme.Spacing.small)
+        }
+        .frame(height: 216)
+        .background(subtlePanelBackground(opacity: 0.36))
+        .accessibilityHint(L10n.saveMixIconMenuHint)
+    }
+
+    private func iconGridButton(for symbolName: String) -> some View {
+        let isSelected = symbolName == currentIconOption.sfSymbolName
+        return Button {
+            selectedIconID = symbolName
+        } label: {
+            ZStack {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .fill(isSelected ? MoodistTheme.Colors.selectedBackground.opacity(0.95) : MoodistTheme.Colors.cardBackground.opacity(0.92))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10, style: .continuous)
+                            .strokeBorder(
+                                isSelected ? MoodistTheme.Colors.accent.opacity(0.9) : Color.primary.opacity(0.10),
+                                lineWidth: isSelected ? 1.4 : 1
+                            )
+                    )
+                    .shadow(
+                        color: isSelected ? MoodistTheme.Colors.accent.opacity(0.12) : .clear,
+                        radius: isSelected ? 6 : 0,
+                        y: 2
+                    )
+
+                MixIconImage(
+                    iconName: symbolName,
+                    size: 18,
+                    weight: .semibold,
+                    color: isSelected ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText
+                )
+            }
+            .frame(width: 48, height: 48)
+        }
+        .buttonStyle(.plain)
+        .help(MixIcon.displayName(for: symbolName))
+        .accessibilityLabel(MixIcon.displayName(for: symbolName))
+        .accessibilityAddTraits(isSelected ? [.isSelected] : [])
+    }
+
+    private var footerBar: some View {
+        HStack(spacing: MoodistTheme.Spacing.medium) {
+            Text(L10n.saveMixIconLabel(currentIconOption.displayName))
+                .font(MoodistTheme.Typography.subheadline)
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                .lineLimit(1)
+
+            Spacer()
+
+            Button(L10n.cancel) { onDismiss() }
+                .keyboardShortcut(.cancelAction)
+                .buttonStyle(HeaderActionButtonStyle(
+                    isHovered: isCancelHovered,
+                    isPrimary: false,
+                    isCompact: false
+                ))
+                .onHover { isCancelHovered = $0 }
+
+            Button(L10n.save) { saveAndDismiss() }
+                .keyboardShortcut(.defaultAction)
+                .buttonStyle(HeaderActionButtonStyle(
+                    isHovered: isSaveHovered,
+                    isPrimary: true,
+                    isCompact: false
+                ))
+                .onHover { isSaveHovered = $0 }
+                .disabled(!canSave)
+        }
+        .padding(MoodistTheme.Spacing.large)
+        .background(
+            RoundedRectangle(cornerRadius: MoodistTheme.Radius.large, style: .continuous)
+                .fill(MoodistTheme.Colors.cardBackground.opacity(0.7))
+                .overlay(
+                    RoundedRectangle(cornerRadius: MoodistTheme.Radius.large, style: .continuous)
+                        .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+                )
+        )
+    }
+
+    private var standardCardBackground: some View {
+        RoundedRectangle(cornerRadius: MoodistTheme.Radius.large, style: .continuous)
+            .fill(MoodistTheme.Colors.cardBackground.opacity(0.5))
+            .overlay(
+                RoundedRectangle(cornerRadius: MoodistTheme.Radius.large, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+            )
+    }
+
+    private var nameFieldBackground: some View {
+        RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium, style: .continuous)
+            .fill(MoodistTheme.Colors.cardBackground)
+            .overlay(
+                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium, style: .continuous)
+                    .strokeBorder(
+                        isNameFocused ? MoodistTheme.Colors.accent.opacity(0.35) : Color.primary.opacity(0.10),
+                        lineWidth: isNameFocused ? 1.2 : 1
+                    )
+            )
+    }
+
+    private func subtlePanelBackground(opacity: Double) -> some View {
+        RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium, style: .continuous)
+            .fill(MoodistTheme.Colors.cardBackground.opacity(opacity))
+            .overlay(
+                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+            )
     }
 
     private func saveAndDismiss() {
-        let name = mixName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let name = trimmedMixName
         guard !name.isEmpty else { return }
-        store.saveCurrentAsPreset(name: name, iconName: currentIconOption.sfSymbolName)
+        if let preset = presetBeingEdited {
+            store.updatePresetMetadata(id: preset.id, name: name, iconName: currentIconOption.sfSymbolName)
+        } else {
+            store.saveCurrentAsPreset(name: name, iconName: currentIconOption.sfSymbolName)
+        }
         onDismiss()
+    }
+
+    private func configureInitialFormStateIfNeeded() {
+        guard !didInitializeForm else { return }
+
+        if let preset = presetBeingEdited {
+            mixName = preset.name
+            selectedIconID = saveMixIconOptionsById[preset.iconName] != nil ? preset.iconName : saveMixDefaultIconID
+        } else if saveMixIconOptionsById[selectedIconID] == nil {
+            selectedIconID = saveMixDefaultIconID
+        }
+
+        didInitializeForm = true
+        isNameFocused = true
     }
 }

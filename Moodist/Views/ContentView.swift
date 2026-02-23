@@ -12,8 +12,6 @@ private let sidebarWidthMin: CGFloat = 180
 private let sidebarWidthMax: CGFloat = 320
 private let sidebarWidthDefault: CGFloat = 220
 private let sidebarResizeHandleWidth: CGFloat = 14
-/// Paso de actualización durante resize para reducir recomputes y lag.
-private let sidebarResizeStep: CGFloat = 3
 /// Por debajo de este ancho de ventana se usa el menú compacto (un solo icono).
 /// Nota: el buscador en la toolbar ocupa espacio; en ventanas estrechas el sistema puede mover controles
 /// al overflow ("»"), donde algunos pickers pueden volverse poco fiables. Preferimos consolidar en un menú.
@@ -92,10 +90,14 @@ struct ContentView: View {
     @State private var isUserScrolling = false
     @State private var isSaveMixHovered = false
     @State private var isClearHovered = false
+    @State private var isTimerButtonHovered = false
+    @State private var isTimerCancelButtonHovered = false
     @State private var isCollapseAllSoundsHovered = false
     @State private var isCollapseAllMixesHovered = false
     @State private var isResizeCursorActive = false
+    @State private var sidebarResizeStartPointerX: CGFloat?
     @State private var playingSoundsCache: [Sound] = []
+    @State private var sectionTransitionDirection: CGFloat = 1
 
     /// La sidebar es siempre visible; el toggle fue eliminado para simplificar la navegación.
     private var isSidebarVisible: Bool { true }
@@ -191,6 +193,7 @@ struct ContentView: View {
                 }
             }
             .onPreferenceChange(ContentWidthKey.self) { newWidth in
+                guard sidebarResizeStartWidth == 0 else { return }
                 if abs(newWidth - contentAreaWidth) >= 0.5 {
                     contentAreaWidth = newWidth
                 }
@@ -225,6 +228,7 @@ struct ContentView: View {
                 .ignoresSafeArea(.container, edges: .top)
         )
         .onPreferenceChange(ContentWidthKey.self) { newWidth in
+            guard sidebarResizeStartWidth == 0 else { return }
             if abs(newWidth - contentAreaWidth) >= 0.5 {
                 contentAreaWidth = newWidth
             }
@@ -270,22 +274,26 @@ struct ContentView: View {
 
     private func requestSectionChange(to newSection: ContentSection) {
         guard selectedSection != newSection else { return }
-        withAnimation(.easeInOut(duration: 0.2)) {
+        sectionTransitionDirection = transitionDirection(from: selectedSection, to: newSection)
+        withAnimation(.easeInOut(duration: 0.22)) {
             selectedSection = newSection
         }
     }
 
     private var mainScrollContent: some View {
         ZStack {
-            soundsScrollContent
-                .opacity(selectedSection == .sounds ? 1 : 0)
-                .allowsHitTesting(selectedSection == .sounds)
-                .accessibilityHidden(selectedSection != .sounds)
-            mixesScrollContent
-                .opacity(selectedSection == .mixes ? 1 : 0)
-                .allowsHitTesting(selectedSection == .mixes)
-                .accessibilityHidden(selectedSection != .mixes)
+            if selectedSection == .sounds {
+                soundsScrollContent
+                    .transition(sectionSwapTransition)
+                    .accessibilityHidden(false)
+            }
+            if selectedSection == .mixes {
+                mixesScrollContent
+                    .transition(sectionSwapTransition)
+                    .accessibilityHidden(false)
+            }
         }
+        .clipped()
         .environment(\.isUserScrolling, isUserScrolling)
         .background(GeometryReader { g in
             Color.clear.preference(key: ContentWidthKey.self, value: g.size.width)
@@ -304,11 +312,31 @@ struct ContentView: View {
         }
         .sheet(isPresented: Binding(
             get: { store.showSavePresetSheet },
-            set: { store.showSavePresetSheet = $0 }
+            set: { if !$0 { store.closeSavePresetSheet() } else { store.showSavePresetSheet = true } }
         )) {
             SavePresetSheet(store: store) {
-                store.showSavePresetSheet = false
+                store.closeSavePresetSheet()
             }
+        }
+    }
+
+    private var sectionSwapTransition: AnyTransition {
+        let insertionEdge: Edge = sectionTransitionDirection > 0 ? .trailing : .leading
+        let removalEdge: Edge = sectionTransitionDirection > 0 ? .leading : .trailing
+        return .asymmetric(
+            insertion: .move(edge: insertionEdge).combined(with: .opacity),
+            removal: .move(edge: removalEdge).combined(with: .opacity)
+        )
+    }
+
+    private func transitionDirection(from oldSection: ContentSection, to newSection: ContentSection) -> CGFloat {
+        switch (oldSection, newSection) {
+        case (.sounds, .mixes):
+            return 1
+        case (.mixes, .sounds):
+            return -1
+        default:
+            return 1
         }
     }
 
@@ -523,6 +551,18 @@ struct ContentView: View {
         )
     }
 
+    private func clampedSidebarWidthForDrag(translationX: CGFloat) -> CGFloat {
+        let baseWidth = sidebarResizeStartWidth == 0 ? sidebarWidth : sidebarResizeStartWidth
+        let newWidth = baseWidth + translationX
+        let maxAllowed = maxSidebarWidth(for: windowWidth)
+        return min(maxAllowed, max(sidebarWidthMin, newWidth)).rounded()
+    }
+
+    private func clampedSidebarWidthForDrag(pointerX: CGFloat) -> CGFloat {
+        let startPointerX = sidebarResizeStartPointerX ?? pointerX
+        return clampedSidebarWidthForDrag(translationX: pointerX - startPointerX)
+    }
+
     private var toolbarContentOffset: CGFloat {
         guard isSidebarVisible else { return 0 }
         if #available(macOS 26.0, *) {
@@ -605,24 +645,33 @@ struct ContentView: View {
         }
         .onDisappear {
             setResizeCursorActive(false)
+            sidebarResizeStartPointerX = nil
         }
         .highPriorityGesture(
-            DragGesture()
+            DragGesture(minimumDistance: 0, coordinateSpace: .global)
                 .onChanged { value in
                     if sidebarResizeStartWidth == 0 {
                         sidebarResizeStartWidth = sidebarWidth
+                        sidebarResizeStartPointerX = value.startLocation.x
+                    } else if sidebarResizeStartPointerX == nil {
+                        sidebarResizeStartPointerX = value.startLocation.x
                     }
-                    let newWidth = sidebarResizeStartWidth + value.translation.width
-                    let maxAllowed = maxSidebarWidth(for: windowWidth)
-                    let clamped = min(maxAllowed, max(sidebarWidthMin, newWidth))
-                    let snapped = (clamped / sidebarResizeStep).rounded() * sidebarResizeStep
-                    if abs(snapped - sidebarWidth) >= sidebarResizeStep / 2 {
-                        sidebarWidth = snapped
+                    let nextWidth = clampedSidebarWidthForDrag(pointerX: value.location.x)
+                    if abs(nextWidth - sidebarWidth) >= 0.5 {
+                        sidebarWidth = nextWidth
                     }
                 }
-                .onEnded { _ in
+                .onEnded { value in
+                    if sidebarResizeStartPointerX == nil {
+                        sidebarResizeStartPointerX = value.startLocation.x
+                    }
+                    let finalWidth = clampedSidebarWidthForDrag(pointerX: value.location.x)
+                    if abs(finalWidth - sidebarWidth) >= 0.5 {
+                        sidebarWidth = finalWidth
+                    }
                     persistedSidebarWidth = Double(sidebarWidth)
                     sidebarResizeStartWidth = 0
+                    sidebarResizeStartPointerX = nil
                 }
         )
         .accessibilityLabel(L10n.resizeSidebar)
@@ -663,8 +712,13 @@ struct ContentView: View {
             playingSounds: playingSoundsCache,
             isSaveMixHovered: $isSaveMixHovered,
             isClearHovered: $isClearHovered,
+            isTimerHovered: $isTimerButtonHovered,
+            isTimerCancelHovered: $isTimerCancelButtonHovered,
             onSaveMix: { store.promptSaveCurrentPreset() },
             onClear: { store.unselectAll() },
+            onOpenTimer: {
+                NotificationCenter.default.post(name: .requestShowCustomTimerWindow, object: nil)
+            },
             onCancelTimer: { store.cancelSleepTimer() }
         )
     }

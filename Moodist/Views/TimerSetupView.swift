@@ -65,7 +65,7 @@ struct TimerSetupView: View {
                         .font(.system(size: 24, weight: .semibold))
                         .foregroundStyle(MoodistTheme.Colors.accent)
                 }
-                .frame(width: 62, height: 62)
+                .frame(width: 56, height: 56)
 
                 Text(L10n.timerCustomTitle)
                     .font(.title3.weight(.semibold))
@@ -74,7 +74,7 @@ struct TimerSetupView: View {
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
                     .multilineTextAlignment(.center)
             }
-            .padding(.bottom, MoodistTheme.Spacing.large)
+            .padding(.bottom, MoodistTheme.Spacing.medium)
 
             if let timer = store.activeTimer {
                 HStack(spacing: 8) {
@@ -85,7 +85,7 @@ struct TimerSetupView: View {
                         .foregroundStyle(MoodistTheme.Colors.secondaryText)
                     Spacer(minLength: 0)
                 }
-                .padding(.horizontal, MoodistTheme.Spacing.medium)
+                .padding(.horizontal, MoodistTheme.Spacing.small)
                 .padding(.vertical, MoodistTheme.Spacing.small)
                 .background(
                     RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
@@ -135,7 +135,7 @@ struct TimerSetupView: View {
                 Text(L10n.timerQuickPresets)
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 72), spacing: 8)], spacing: 8) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 64), spacing: 6)], spacing: 6) {
                     ForEach(quickPresetMinutes, id: \.self) { minutes in
                         Button {
                             minutesText = "\(minutes)"
@@ -153,7 +153,7 @@ struct TimerSetupView: View {
             }
             .padding(.top, MoodistTheme.Spacing.medium)
 
-            HStack(spacing: MoodistTheme.Spacing.small) {
+            HStack(spacing: 8) {
                 Button(L10n.cancel) { onDismiss() }
                     .keyboardShortcut(.cancelAction)
                     .buttonStyle(HeaderActionButtonStyle(
@@ -187,10 +187,11 @@ struct TimerSetupView: View {
                     .disabled(!canStart)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.top, MoodistTheme.Spacing.large)
+            .padding(.top, MoodistTheme.Spacing.medium)
         }
-        .padding(MoodistTheme.Spacing.xLarge)
-        .frame(width: 380)
+        .padding(.horizontal, 16)
+        .padding(.vertical, 18)
+        .frame(width: 348)
         .background(PlatformColor.windowBackground)
         .onAppear { isMinutesFocused = true }
     }

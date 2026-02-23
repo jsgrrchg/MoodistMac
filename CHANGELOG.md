@@ -10,13 +10,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - **Save mix (icon library)**: Redesigned the icon picker as a navigable SF Symbols browser with category tabs and a searchable grid, allowing broader icon discovery while keeping the existing visual language.
 - **Save mix (custom icon)**: Added a custom palm tree SVG icon (`PalmTreeSolid`) as a selectable option in the **Places** category, positioned as the first icon.
+- **Custom mixes (edit action)**: Added an `Edit mix…` option in the context menu for saved custom mixes, opening the Save Mix sheet in edit mode to update name and icon.
 
 ### Changed
 - **Timer**: The custom timer panel was converted into a standalone window, so it can be opened and used while the main app window is hidden (including access from Dock menu, menu bar menu, and app command menus).
+- **Timer (main UI)**: Replaced the inline timer status row in `Currently Playing` with a header action button that opens the timer window; when active, the button now shows a live countdown and includes a quick `x` cancel control.
+- **Timer window (positioning & sizing)**: The custom timer window now opens centered over the Moodist main window (instead of an arbitrary screen position), and its layout/size was tightened to a narrower footprint.
 - **Save mix (layout harmony)**: Moved the category buttons directly below the `Search SF Symbols` field and harmonized spacing, hierarchy, and control styling across the whole sheet.
+- **Save mix (visual redesign)**: Reimagined the Save Mix sheet with a stronger visual hierarchy (header preview, card-based sections, chip categories, larger icon grid, and clearer footer actions) while preserving the existing save flow.
+- **Custom mixes spacing**: Matched the empty-state padding for the `Custom Mixes` placeholder to the `Currently playing` section so both panes align vertically.
+- **Sounds/Mixes transition**: Replaced the fade swap with a directional slide+fade transition, so switching tabs feels like moving between stacked panels.
 - **Mix icon rendering**: Introduced centralized `MixIcon` / `MixIconImage` helpers so custom and SF Symbol icons render consistently in the picker, mix rows, and sidebar entries.
 - **Mix icon sizing**: Matched mix icon sizing to sound-row sizing and normalized the palm icon optical scale to align with SF Symbols.
 - **ContentView refactor**: Broke the oversized `ContentView` into smaller focused components (`ContentSections`, `ContentToolbar`, `ToolbarBridges`, `ScrollStateStore`, `SidebarLayout`) to improve maintainability and reduce complexity.
+
+### Fixed
+- **Timer (header button)**: Fixed the timer header control so clicking it reliably opens the `Set timer` window.
+- **Sidebar resize feel**: Stabilized the left sidebar drag by clamping/respecting the window width throughout the gesture and preventing content width recomputation until the drag ends, eliminating the jitter seen during live resizing.
+- **Sound row (icon stability)**: Removed the selection-state icon animation and fixed the icon weight so selecting a sound no longer produces a jumpy/bouncy visual.
 
 ---
 
