@@ -51,6 +51,17 @@ enum L10n {
         }
         return dict
     }()
+
+    private static let saveMixIconCategoryTitleById: [String: String] = [
+        "featured": "Featured",
+        "nature": "Nature",
+        "weather": "Weather",
+        "sleep": "Sleep",
+        "focus": "Focus",
+        "places": "Places",
+        "audio": "Audio",
+        "shapes": "Shapes",
+    ]
     // MARK: - General
     static var appName: String { tr("app_name", "Moodist") }
     static var options: String { tr("options", "Options") }
@@ -80,6 +91,13 @@ enum L10n {
     static var timerCustomTitle: String { tr("timer_custom_title", "Set timer") }
     static var timerCustomMessage: String { tr("timer_custom_message", "Enter the number of minutes for the timer.") }
     static var timerMinutesPlaceholder: String { tr("timer_minutes_placeholder", "Minutes") }
+    static var timerQuickPresets: String { tr("timer_quick_presets", "Quick presets") }
+    static var timerMinutesValidation: String { tr("timer_minutes_validation", "Enter a value between 1 and 1440 minutes.") }
+    static var timerReplace: String { tr("timer_replace", "Replace timer") }
+    static var timerStopCurrent: String { tr("timer_stop_current", "Stop current") }
+    static func timerActiveNow(_ remaining: String) -> String {
+        String(format: tr("timer_active_now", "Current timer: %@ remaining"), remaining)
+    }
     static var timerStart: String { tr("timer_start", "Start") }
     static var timerFinishedTitle: String { tr("timer_finished_title", "Timer finished") }
     static func timerFinishedBody(_ name: String) -> String {
@@ -163,9 +181,11 @@ enum L10n {
     static var disableTransparencies: String { tr("disable_transparencies", "Disable transparencies") }
     static var disableTransparenciesFooter: String { tr("disable_transparencies_footer", "Turn this on to make the interface solid and reduce frosted effects.") }
     static var maxRecentMixes: String { tr("max_recent_mixes", "Recent mixes in sidebar") }
-    static var maxRecentMixesFooter: String { tr("max_recent_mixes_footer", "Maximum number of recent mixes shown in the sidebar (10–15).") }
+    static var maxRecentMixesFooter: String { tr("max_recent_mixes_footer", "Maximum number of recent mixes shown in the sidebar (5–15).") }
     static var maxRecentSounds: String { tr("max_recent_sounds", "Recent sounds in sidebar") }
-    static var maxRecentSoundsFooter: String { tr("max_recent_sounds_footer", "Maximum number of recent sounds shown in the sidebar (10–15).") }
+    static var maxRecentSoundsFooter: String { tr("max_recent_sounds_footer", "Maximum number of recent sounds shown in the sidebar (5–15).") }
+    static var collapseCategoriesOnColdOpen: String { tr("collapse_categories_on_cold_open", "Start with categories collapsed") }
+    static var collapseCategoriesOnColdOpenFooter: String { tr("collapse_categories_on_cold_open_footer", "On cold launch, sound and mix categories start collapsed (except Custom Mixes).") }
     static var dataSection: String { tr("data_section", "Data") }
     static var exportPreferences: String { tr("export_preferences", "Export preferences…") }
     static var exportPreferencesHint: String { tr("export_preferences_hint", "Save custom mixes, favorite mixes, and favorite sounds to a file") }
@@ -177,10 +197,13 @@ enum L10n {
     static var importFailedMessage: String { tr("import_failed_message", "Could not read the file or the file format is invalid.") }
     static var aboutSection: String { tr("about_section", "About") }
     static var version: String { tr("version", "Version") }
+    static var createdBy: String { tr("created_by", "Created by") }
     static var resetSelectionAndFavorites: String { tr("reset_selection", "Reset selection and favorites") }
     static var restoreAllDefaults: String { tr("restore_defaults", "Restore all to defaults") }
-    static var visitWeb: String { tr("visit_web", "Visit Moodist on the web") }
+    static var visitWeb: String { tr("visit_web", "Inspired by Moodist on the web") }
     static var sourceCode: String { tr("source_code", "Source code (GitHub)") }
+    static var buyMeACoffee: String { tr("buy_me_a_coffee", "Buy me a Coffee") }
+    static var askForNewSound: String { tr("ask_for_new_sound", "Do you want a new sound? Ask me for it!") }
     static var resetConfirmTitle: String { tr("reset_confirm_title", "Reset selection?") }
     static var resetConfirmMessage: String { tr("reset_confirm_message", "All selected sounds and favorites will be cleared. Global volume will not change.") }
     static var restoreConfirmTitle: String { tr("restore_confirm_title", "Restore defaults?") }
@@ -218,6 +241,14 @@ enum L10n {
         String(format: tr("save_mix_icon_label_format", "Icon: %@"), iconName)
     }
     static var saveMixIconMenuHint: String { tr("save_mix_icon_menu_hint", "Opens menu to choose an icon for the mix") }
+    static var saveMixIconSearchPlaceholder: String { tr("save_mix_icon_search_placeholder", "Search SF Symbols…") }
+    static var saveMixIconNoResults: String { tr("save_mix_icon_no_results", "No icons found for that search.") }
+    static var saveMixIconCategoriesHint: String { tr("save_mix_icon_categories_hint", "Browse icon categories") }
+    static func saveMixIconCategoryTitle(_ categoryId: String) -> String {
+        let key = "save_mix_icon_category_\(categoryId)"
+        let fallback = saveMixIconCategoryTitleById[categoryId] ?? categoryId
+        return tr(key, fallback)
+    }
     static var iconLabel: String { tr("icon_label", "Icon") }
     static var addToMix: String { tr("add_to_mix", "Add to mix") }
     static var createNewMix: String { tr("create_new_mix", "Create new mix…") }

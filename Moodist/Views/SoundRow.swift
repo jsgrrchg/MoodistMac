@@ -97,12 +97,10 @@ struct SoundRow: View {
     }
 
     private func toggleSound() {
-        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-            if state.isSelected {
-                store.unselect(sound.id)
-            } else {
-                store.select(sound.id)
-            }
+        if state.isSelected {
+            store.unselect(sound.id)
+        } else {
+            store.select(sound.id)
         }
     }
 

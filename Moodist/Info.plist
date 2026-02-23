@@ -15,5 +15,30 @@
 	<string>https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/appcast.xml</string>
 	<key>SUPublicEDKey</key>
 	<string>uWFTUvgQZYpxlcQ1RVMFbK3m2t5cR2Cc7LbW4DFK1Xc=</string>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.moodistmac.favorite-sound-id</string>
+			<key>UTTypeDescription</key>
+			<string>Moodist Favorite Sound ID</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.text</string>
+			</array>
+		</dict>
+		<dict>
+			<key>UTTypeIdentifier</key>
+			<string>com.moodistmac.favorite-mix-id</string>
+			<key>UTTypeDescription</key>
+			<string>Moodist Favorite Mix ID</string>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+				<string>public.text</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

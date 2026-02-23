@@ -38,7 +38,7 @@ struct Preset: Identifiable, Codable, Equatable {
         name = try container.decode(String.self, forKey: .name)
         iconName = (try? container.decode(String.self, forKey: .iconName)) ?? "sparkles"
         soundIds = try container.decode([String].self, forKey: .soundIds)
-        volumes = try container.decode([String: Double].self, forKey: .volumes)
+        volumes = (try? container.decodeIfPresent([String: Double].self, forKey: .volumes)) ?? [:]
     }
 
     func encode(to encoder: Encoder) throws {

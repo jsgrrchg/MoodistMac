@@ -20,6 +20,7 @@ enum PersistenceService {
     static let appearanceModeKey = "MoodistMac.appearanceMode"
     static let transparencyEnabledKey = "MoodistMac.transparencyEnabled"
     static let mediaKeyNextMixKey = "MoodistMac.mediaKeyNextMix"
+    static let collapseCategoriesOnColdOpenKey = "MoodistMac.collapseCategoriesOnColdOpen"
     /// Clave que usa AppKit para persistir el frame de la ventana principal.
     private static let appKitMainWindowFrameKey = "NSWindow Frame MoodistMainWindow"
     private static let sidebarSectionsCollapsedKey = "MoodistMac.sidebarSectionsCollapsed"
@@ -47,7 +48,35 @@ enum PersistenceService {
 
     static func loadPresets() -> [Preset] {
         guard let data = UserDefaults.standard.data(forKey: presetsKey) else { return [] }
-        return (try? JSONDecoder().decode([Preset].self, from: data)) ?? []
+        let decoder = JSONDecoder()
+        if let presets = try? decoder.decode([Preset].self, from: data) {
+            return presets
+        }
+
+        // Fallback tolerante: recupera elementos válidos si el array contiene
+        // entradas legacy/corruptas que invalidan el decode completo.
+        guard let rawArray = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [Any] else {
+            NSLog("MoodistMac: failed to decode presets payload.")
+            return []
+        }
+
+        var recovered: [Preset] = []
+        recovered.reserveCapacity(rawArray.count)
+        for raw in rawArray {
+            guard JSONSerialization.isValidJSONObject(raw),
+                  let itemData = try? JSONSerialization.data(withJSONObject: raw, options: []),
+                  let preset = try? decoder.decode(Preset.self, from: itemData) else {
+                continue
+            }
+            recovered.append(preset)
+        }
+
+        if !recovered.isEmpty {
+            NSLog("MoodistMac: recovered \(recovered.count)/\(rawArray.count) presets from partially invalid payload.")
+        } else {
+            NSLog("MoodistMac: failed to decode presets payload.")
+        }
+        return recovered
     }
 
     static func savePresets(_ presets: [Preset]) {
@@ -99,24 +128,24 @@ enum PersistenceService {
         UserDefaults.standard.set(data, forKey: favoriteSoundIdsKey)
     }
 
-    /// Máximo de mixes recientes en la barra lateral (10...15). Por defecto 10.
+    /// Máximo de mixes recientes en la barra lateral (5...15). Por defecto 10.
     static func loadMaxRecentMixesCount() -> Int {
         let v = UserDefaults.standard.object(forKey: maxRecentMixesCountKey) as? Int ?? 10
-        return min(15, max(10, v))
+        return min(15, max(5, v))
     }
 
     static func saveMaxRecentMixesCount(_ count: Int) {
-        UserDefaults.standard.set(min(15, max(10, count)), forKey: maxRecentMixesCountKey)
+        UserDefaults.standard.set(min(15, max(5, count)), forKey: maxRecentMixesCountKey)
     }
 
-    /// Máximo de sonidos recientes en la barra lateral (10...15). Por defecto 12.
+    /// Máximo de sonidos recientes en la barra lateral (5...15). Por defecto 12.
     static func loadMaxRecentSoundsCount() -> Int {
         let v = UserDefaults.standard.object(forKey: maxRecentSoundsCountKey) as? Int ?? 12
-        return min(15, max(10, v))
+        return min(15, max(5, v))
     }
 
     static func saveMaxRecentSoundsCount(_ count: Int) {
-        UserDefaults.standard.set(min(15, max(10, count)), forKey: maxRecentSoundsCountKey)
+        UserDefaults.standard.set(min(15, max(5, count)), forKey: maxRecentSoundsCountKey)
     }
 
     static func loadTransparencyEnabled() -> Bool {
@@ -197,6 +226,7 @@ enum PersistenceService {
         UserDefaults.standard.removeObject(forKey: appearanceModeKey)
         UserDefaults.standard.removeObject(forKey: transparencyEnabledKey)
         UserDefaults.standard.removeObject(forKey: mediaKeyNextMixKey)
+        UserDefaults.standard.removeObject(forKey: collapseCategoriesOnColdOpenKey)
         UserDefaults.standard.removeObject(forKey: scrollAnchorIdsKey)
         UserDefaults.standard.removeObject(forKey: appKitMainWindowFrameKey)
         UserDefaults.standard.removeObject(forKey: sidebarSectionsCollapsedKey)

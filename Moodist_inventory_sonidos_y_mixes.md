@@ -1,0 +1,889 @@
+# Inventario de sonidos y mixes de MoodistMac
+
+Generado desde: `Moodist/Data/SoundsData.swift` y `Moodist/Data/MixesData.swift`.
+
+## Sonidos disponibles (131)
+
+### nature (16)
+- `campfire` | Campfire | `nature/campfire.mp3`
+- `droplets` | Droplets | `nature/droplets.mp3`
+- `howling-wind` | Howling Wind | `nature/howling-wind.mp3`
+- `jungle` | Jungle | `nature/jungle.mp3`
+- `rainforest` | Rainforest | `nature/rainforest.mp3`
+- `river` | River | `nature/river.mp3`
+- `rocks-falling` | Rocks Falling | `nature/rocks-falling.mp3`
+- `sea-cave` | Sea Cave | `nature/sea-cave.mp3`
+- `walk-in-snow` | Walk in Snow | `nature/walk-in-snow.mp3`
+- `walk-on-gravel` | Walk on Gravel | `nature/walk-on-gravel.mp3`
+- `walk-on-leaves` | Walk on Leaves | `nature/walk-on-leaves.mp3`
+- `walking-on-wood` | Walking on Wood | `nature/walking-on-wood.mp3`
+- `waterfall` | Waterfall | `nature/waterfall.mp3`
+- `waves` | Waves | `nature/waves.mp3`
+- `wind` | Wind | `nature/wind.mp3`
+- `wind-in-trees` | Wind in Trees | `nature/wind-in-trees.mp3`
+
+### rain (8)
+- `heavy-rain` | Heavy Rain | `rain/heavy-rain.mp3`
+- `light-rain` | Light Rain | `rain/light-rain.mp3`
+- `rain-on-car-roof` | Rain on Car Roof | `rain/rain-on-car-roof.mp3`
+- `rain-on-leaves` | Rain on Leaves | `rain/rain-on-leaves.mp3`
+- `rain-on-tent` | Rain on Tent | `rain/rain-on-tent.mp3`
+- `rain-on-umbrella` | Rain on Umbrella | `rain/rain-on-umbrella.mp3`
+- `rain-on-window` | Rain on Window | `rain/rain-on-window.mp3`
+- `thunder` | Thunder | `rain/thunder.mp3`
+
+### animals (27)
+- `beehive` | Beehive | `animals/beehive.mp3`
+- `birds` | Birds | `animals/birds.mp3`
+- `blackbird` | Blackbird | `animals/blackbird.mp3`
+- `cat-meow` | Cat Meow | `animals/cat-meow.mp3`
+- `cat-purring` | Cat Purring | `animals/cat-purring.mp3`
+- `chickens` | Chickens | `animals/chickens.mp3`
+- `cows` | Cows | `animals/cows.mp3`
+- `crickets` | Crickets | `animals/crickets.mp3`
+- `crows` | Crows | `animals/crows.mp3`
+- `dog-barking` | Dog Barking | `animals/dog-barking.mp3`
+- `ducks` | Ducks | `animals/ducks.mp3`
+- `elephant` | Elephant | `animals/elephant.mp3`
+- `frog` | Frog | `animals/frog.mp3`
+- `horse-gallop` | Horse Gallop | `animals/horse-gallop.mp3`
+- `lion` | Lion | `animals/lion.mp3`
+- `macaws` | Macaws | `animals/macaws.mp3`
+- `mandrill-baboon` | Mandrill Baboon | `animals/mandrill-baboon.mp3`
+- `owl` | Owl | `animals/owl.mp3`
+- `penguin` | Penguin | `animals/penguin.mp3`
+- `peregrine-falcon` | Peregrine Falcon | `animals/peregrine-falcon.mp3`
+- `pipit-bird` | Pipit Bird | `animals/pipit-bird.mp3`
+- `seagulls` | Seagulls | `animals/seagulls.mp3`
+- `sheep` | Sheep | `animals/sheep.mp3`
+- `whale` | Whale | `animals/whale.mp3`
+- `wolf` | Wolf | `animals/wolf.mp3`
+- `woodpecker` | Woodpecker | `animals/woodpecker.mp3`
+- `wren-bird` | Wren Bird | `animals/wren-bird.mp3`
+
+### urban (7)
+- `ambulance-siren` | Ambulance Siren | `urban/ambulance-siren.mp3`
+- `busy-street` | Busy Street | `urban/busy-street.mp3`
+- `crowd` | Crowd | `urban/crowd.mp3`
+- `fireworks` | Fireworks | `urban/fireworks.mp3`
+- `highway` | Highway | `urban/highway.mp3`
+- `road` | Road | `urban/road.mp3`
+- `traffic` | Traffic | `urban/traffic.mp3`
+
+### military (10)
+- `air-defense-alarm` | Air Defense Alarm | `military/air-defense-alarm.mp3`
+- `army-drill` | Army Drill | `military/army-drill.mp3`
+- `battlefield` | Battlefield | `military/battlefield.mp3`
+- `city-bombing` | City Bombing | `military/city-bombing.mp3`
+- `distant-battlefield` | Distant Battlefield | `military/distant-battlefield.mp3`
+- `fighter-jet` | Fighter Jet | `military/fighter-jet.mp3`
+- `futuristic-battle` | Futuristic Battle | `military/futuristic-battle.mp3`
+- `machine-gun` | Machine Gun | `military/machine-gun.mp3`
+- `military-march` | Military March | `military/military-march.mp3`
+- `soldiers-marching` | Soldiers Marching | `military/soldiers-marching.mp3`
+
+### places (20)
+- `airport` | Airport | `places/airport.mp3`
+- `cafe` | Cafe | `places/cafe.mp3`
+- `carousel` | Carousel | `places/carousel.mp3`
+- `children-playing` | Children Playing | `places/children-playing.mp3`
+- `chinese-kitchen` | Chinese Kitchen | `places/chinese-kitchen.mp3`
+- `church` | Church | `places/church.mp3`
+- `construction-site` | Construction Site | `places/construction-site.mp3`
+- `crowded-bar` | Crowded Bar | `places/crowded-bar.mp3`
+- `flea-market` | Flea Market | `places/flea-market.mp3`
+- `laboratory` | Laboratory | `places/laboratory.mp3`
+- `laundry-room` | Laundry Room | `places/laundry-room.mp3`
+- `library` | Library | `places/library.mp3`
+- `night-village` | Night Village | `places/night-village.mp3`
+- `office` | Office | `places/office.mp3`
+- `restaurant` | Restaurant | `places/restaurant.mp3`
+- `subway-station` | Subway Station | `places/subway-station.mp3`
+- `supermarket` | Supermarket | `places/supermarket.mp3`
+- `temple` | Temple | `places/temple.mp3`
+- `trading-floor` | Trading Floor | `places/trading-floor.mp3`
+- `underwater` | Underwater | `places/underwater.mp3`
+
+### transport (10)
+- `airplane` | Airplane | `transport/airplane.mp3`
+- `bike-ride` | Bike Ride | `transport/bike-ride.mp3`
+- `diesel-fork-lift` | Diesel Fork Lift | `transport/diesel-fork-lift.mp3`
+- `dumper-truck` | Dumper Truck | `transport/dumper-truck.mp3`
+- `fog-horn` | Fog Horn | `transport/fog-horn.mp3`
+- `inside-a-train` | Inside a Train | `transport/inside-a-train.mp3`
+- `rowing-boat` | Rowing Boat | `transport/rowing-boat.mp3`
+- `sailboat` | Sailboat | `transport/sailboat.mp3`
+- `submarine` | Submarine | `transport/submarine.mp3`
+- `train` | Train | `transport/train.mp3`
+
+### things (23)
+- `bells` | Bells | `things/bells.mp3`
+- `boiling-water` | Boiling Water | `things/boiling-water.mp3`
+- `bubbles` | Bubbles | `things/bubbles.mp3`
+- `cash-register` | Cash Register | `things/cash-register.mp3`
+- `ceiling-fan` | Ceiling Fan | `things/ceiling-fan.mp3`
+- `clock` | Clock | `things/clock.mp3`
+- `dryer` | Dryer | `things/dryer.mp3`
+- `fetal-heartbeat` | Fetal Heart Beat | `things/fetal-heartbeat.mp3`
+- `heart-pulse-monitor` | Heart Pulse Monitor | `things/heart-pulse-monitor.mp3`
+- `keyboard` | Keyboard | `things/keyboard.mp3`
+- `mouse-clicking` | Mouse Clicking | `things/mouse-clicking.mp3`
+- `morse-code` | Morse Code | `things/morse-code.mp3`
+- `paper` | Paper | `things/paper.mp3`
+- `printer` | Printer | `things/printer.mp3`
+- `singing-bowl` | Singing Bowl | `things/singing-bowl.mp3`
+- `slide-projector` | Slide Projector | `things/slide-projector.mp3`
+- `tuning-radio` | Tuning Radio | `things/tuning-radio.mp3`
+- `typewriter` | Typewriter | `things/typewriter.mp3`
+- `vinyl-effect` | Vinyl Effect | `things/vinyl-effect.mp3`
+- `washing-machine` | Washing Machine | `things/washing-machine.mp3`
+- `wind-chimes` | Wind Chimes | `things/wind-chimes.mp3`
+- `windshield-wipers` | Windshield Wipers | `things/windshield-wipers.mp3`
+- `wood-creak` | Wood Creak | `things/wood-creak.mp3`
+
+### noise (5)
+- `baby-crying` | Baby Crying | `noise/baby-crying.mp3`
+- `brown-noise` | Brown Noise | `noise/brown-noise.wav`
+- `men-snoring` | Men Snoring | `noise/men-snoring.mp3`
+- `pink-noise` | Pink Noise | `noise/pink-noise.wav`
+- `white-noise` | White Noise | `noise/white-noise.wav`
+
+### binaural (5)
+- `binaural-alpha` | Alpha | `binaural/binaural-alpha.wav`
+- `binaural-beta` | Beta | `binaural/binaural-beta.wav`
+- `binaural-delta` | Delta | `binaural/binaural-delta.wav`
+- `binaural-gamma` | Gamma | `binaural/binaural-gamma.wav`
+- `binaural-theta` | Theta | `binaural/binaural-theta.wav`
+
+## Mixes existentes (126)
+
+### Custom Mixes (0)
+- _Sin mixes definidos en código._
+
+### Nature & Relaxation (16)
+- **Blackbird Meadow** (`blackbird-meadow`)
+  - `wind-in-trees`: 30%
+  - `wind`: 25%
+  - `river`: 25%
+  - `blackbird`: 15%
+  - `birds`: 10%
+- **Cave Drip Meditation** (`cave-drip-meditation`)
+  - `sea-cave`: 60%
+  - `droplets`: 25%
+  - `underwater`: 20%
+  - `bubbles`: 12%
+  - `pink-noise`: 10%
+- **Distant Falls** (`distant-falls`)
+  - `river`: 87%
+  - `wind-in-trees`: 87%
+  - `wind`: 55%
+  - `birds`: 22%
+  - `pink-noise`: 12%
+- **Japanese Garden** (`japanese-garden`)
+  - `wind-chimes`: 45%
+  - `river`: 35%
+  - `birds`: 15%
+  - `wind`: 15%
+  - `pink-noise`: 10%
+- **Jungle Dawn Relay** (`jungle-dawn-relay`)
+  - `jungle`: 75%
+  - `birds`: 75%
+  - `beehive`: 75%
+  - `river`: 40%
+  - `droplets`: 40%
+- **Meadow Breeze** (`meadow-breeze`)
+  - `wind`: 45%
+  - `river`: 25%
+  - `birds`: 25%
+  - `wind-chimes`: 20%
+  - `pink-noise`: 10%
+- **Morning River** (`morning-river`)
+  - `river`: 65%
+  - `birds`: 35%
+  - `wind`: 20%
+  - `wind-in-trees`: 20%
+  - `pink-noise`: 10%
+- **Rain on Leaves, River Under** (`rain-on-leaves-river`)
+  - `rain-on-leaves`: 50%
+  - `river`: 40%
+  - `wind-in-trees`: 30%
+  - `droplets`: 20%
+  - `wind`: 10%
+- **Rainforest Shrine** (`rainforest-shrine`)
+  - `rainforest`: 55%
+  - `wind-in-trees`: 25%
+  - `droplets`: 20%
+  - `singing-bowl`: 14%
+  - `birds`: 12%
+- **River Elephants** (`river-elephants`)
+  - `river`: 55%
+  - `elephant`: 18%
+  - `birds`: 18%
+  - `wind`: 15%
+- **River Meditation** (`river-meditation`)
+  - `river`: 55%
+  - `pink-noise`: 30%
+  - `wind-chimes`: 15%
+  - `wind`: 10%
+  - `birds`: 10%
+- **Rockfall River** (`rockfall-river`)
+  - `river`: 50%
+  - `rocks-falling`: 18%
+  - `wind-in-trees`: 22%
+  - `droplets`: 15%
+- **Savanna Sunset** (`savanna-sunset`)
+  - `wind`: 40%
+  - `crickets`: 25%
+  - `lion`: 18%
+  - `birds`: 12%
+- **Sunset Birds** (`sunset-birds`)
+  - `birds`: 55%
+  - `river`: 30%
+  - `wind-chimes`: 20%
+  - `wind-in-trees`: 15%
+  - `pink-noise`: 10%
+- **Waterfall Shrine** (`waterfall-shrine`)
+  - `waterfall`: 60%
+  - `droplets`: 35%
+  - `temple`: 25%
+  - `singing-bowl`: 20%
+  - `wind-in-trees`: 15%
+- **Zen Garden** (`zen-garden`)
+  - `river`: 55%
+  - `wind-chimes`: 35%
+  - `birds`: 25%
+  - `wind-in-trees`: 20%
+  - `pink-noise`: 10%
+
+### Walking (4)
+- **Autumn Footpath** (`autumn-footpath`)
+  - `walk-on-leaves`: 55%
+  - `wind-in-trees`: 45%
+  - `birds`: 25%
+  - `droplets`: 15%
+- **Forest Walk** (`forest-walk`)
+  - `wind-in-trees`: 60%
+  - `birds`: 25%
+  - `wind`: 20%
+  - `river`: 20%
+  - `walk-on-leaves`: 40%
+  - `pink-noise`: 10%
+- **Glacier Footsteps** (`glacier-footsteps`)
+  - `walk-in-snow`: 65%
+  - `howling-wind`: 40%
+  - `wind-in-trees`: 20%
+  - `wind`: 15%
+- **Gravel Miles** (`gravel-miles`)
+  - `walk-on-gravel`: 75%
+  - `road`: 75%
+  - `traffic`: 75%
+  - `wind`: 25%
+  - `clock`: 25%
+
+### Sea & Coast (12)
+- **Calm Beach** (`calm-beach`)
+  - `waves`: 65%
+  - `wind`: 25%
+  - `seagulls`: 15%
+  - `pink-noise`: 10%
+- **Deep Waves** (`deep-waves`)
+  - `waves`: 77%
+  - `pink-noise`: 22%
+  - `wind`: 42%
+- **Distant Seagulls** (`distant-seagulls`)
+  - `waves`: 50%
+  - `seagulls`: 35%
+  - `wind`: 20%
+  - `pink-noise`: 10%
+- **Foghorn Bay** (`foghorn-bay`)
+  - `waves`: 50%
+  - `wind`: 25%
+  - `fog-horn`: 12%
+  - `seagulls`: 12%
+- **Harbor Sunrise** (`harbor-sunrise`)
+  - `waves`: 77%
+  - `seagulls`: 42%
+  - `wind`: 57%
+  - `pink-noise`: 17%
+- **Ocean Storm** (`ocean-storm`)
+  - `waves`: 55%
+  - `heavy-rain`: 45%
+  - `rain-on-window`: 25%
+  - `thunder`: 25%
+  - `wind`: 20%
+  - `pink-noise`: 15%
+- **Penguin Coast** (`penguin-coast`)
+  - `waves`: 55%
+  - `wind`: 25%
+  - `penguin`: 15%
+  - `sea-cave`: 20%
+- **Quiet Bay** (`quiet-bay`)
+  - `waves`: 45%
+  - `river`: 30%
+  - `wind`: 15%
+  - `seagulls`: 10%
+- **Sea Cave Swell** (`sea-cave-swell`)
+  - `waves`: 45%
+  - `sea-cave`: 40%
+  - `underwater`: 20%
+  - `wind`: 15%
+  - `bubbles`: 10%
+- **Sea Window** (`sea-window`)
+  - `rain-on-window`: 50%
+  - `waves`: 45%
+  - `wind`: 20%
+  - `pink-noise`: 10%
+  - `seagulls`: 10%
+- **Whale Under Cave** (`whale-under-cave`)
+  - `underwater`: 45%
+  - `whale`: 18%
+  - `sea-cave`: 30%
+  - `waves`: 20%
+- **Windy Coast** (`windy-coast`)
+  - `waves`: 55%
+  - `wind`: 55%
+  - `seagulls`: 10%
+  - `pink-noise`: 10%
+
+### Forest, Fire & Night (12)
+- **Cabin Creaks & Fire** (`cabin-creaks-fire`)
+  - `campfire`: 50%
+  - `wind-in-trees`: 25%
+  - `wood-creak`: 12%
+  - `walking-on-wood`: 10%
+  - `clock`: 10%
+- **Crickets & Breeze** (`crickets-breeze`)
+  - `crickets`: 75%
+  - `wind-in-trees`: 25%
+  - `wind`: 0%
+  - `pink-noise`: 0%
+- **Deep Night Forest** (`deep-night-forest`)
+  - `wind-in-trees`: 65%
+  - `crickets`: 50%
+  - `wind`: 15%
+- **Fire & Chimes** (`fire-chimes`)
+  - `campfire`: 50%
+  - `wind-chimes`: 30%
+  - `wind-in-trees`: 25%
+  - `crickets`: 15%
+  - `pink-noise`: 10%
+- **Forest Cabin** (`forest-cabin`)
+  - `rain-on-window`: 75%
+  - `campfire`: 90%
+  - `wind-in-trees`: 35%
+  - `wind`: 20%
+  - `pink-noise`: 10%
+- **Jungle Macaws Dawn** (`jungle-macaws-dawn`)
+  - `jungle`: 50%
+  - `river`: 30%
+  - `macaws`: 20%
+  - `birds`: 15%
+  - `wind-in-trees`: 18%
+- **Night Camp** (`night-camp`)
+  - `campfire`: 72%
+  - `crickets`: 62%
+  - `wind-in-trees`: 57%
+  - `pink-noise`: 22%
+  - `wind`: 32%
+- **Night River** (`night-river`)
+  - `river`: 67%
+  - `crickets`: 50%
+  - `wind`: 37%
+  - `wind-in-trees`: 67%
+  - `pink-noise`: 22%
+- **Rainforest Night Camp** (`rainforest-night-camp`)
+  - `campfire`: 55%
+  - `rainforest`: 35%
+  - `crickets`: 25%
+  - `wind-in-trees`: 20%
+  - `owl`: 12%
+- **Rockslide Camp** (`rockslide-camp`)
+  - `campfire`: 45%
+  - `wind-in-trees`: 25%
+  - `crickets`: 20%
+  - `rocks-falling`: 12%
+- **Soft Campfire** (`soft-campfire`)
+  - `campfire`: 77%
+  - `wind-in-trees`: 22%
+  - `crickets`: 77%
+  - `pink-noise`: 0%
+- **Storm Camp** (`storm-camp`)
+  - `heavy-rain`: 62%
+  - `campfire`: 62%
+  - `rain-on-window`: 32%
+  - `thunder`: 87%
+  - `wind-in-trees`: 32%
+
+### Rain & Storm (12)
+- **Car Roof Commute** (`car-roof-commute`)
+  - `rain-on-car-roof`: 55%
+  - `windshield-wipers`: 18%
+  - `traffic`: 30%
+  - `thunder`: 10%
+- **Cathedral Drizzle** (`cathedral-drizzle`)
+  - `church`: 77%
+  - `rain-on-window`: 50%
+  - `light-rain`: 50%
+  - `singing-bowl`: 75%
+  - `wind`: 50%
+- **Distant Thunderstorm** (`distant-thunderstorm`)
+  - `heavy-rain`: 55%
+  - `rain-on-window`: 30%
+  - `wind`: 30%
+  - `thunder`: 15%
+  - `pink-noise`: 10%
+- **Forest Rain** (`forest-rain`)
+  - `light-rain`: 55%
+  - `wind-in-trees`: 45%
+  - `wind`: 20%
+  - `river`: 15%
+  - `pink-noise`: 10%
+- **Heavy Storm** (`heavy-storm`)
+  - `heavy-rain`: 77%
+  - `rain-on-window`: 22%
+  - `thunder`: 77%
+  - `howling-wind`: 65%
+  - `pink-noise`: 12%
+- **Kitchen Rain Boil** (`kitchen-rain-boil`)
+  - `chinese-kitchen`: 35%
+  - `boiling-water`: 25%
+  - `rain-on-window`: 35%
+  - `droplets`: 15%
+- **Rain + River** (`rain-river`)
+  - `light-rain`: 67%
+  - `river`: 87%
+  - `rain-on-window`: 47%
+  - `wind`: 27%
+  - `pink-noise`: 42%
+- **Rainy Afternoon** (`rainy-afternoon`)
+  - `heavy-rain`: 65%
+  - `rain-on-window`: 55%
+  - `thunder`: 20%
+  - `wind`: 15%
+  - `pink-noise`: 10%
+- **Soft Window Rain** (`soft-window-rain`)
+  - `light-rain`: 65%
+  - `rain-on-window`: 60%
+  - `pink-noise`: 15%
+  - `wind`: 10%
+- **Subway Downpour** (`subway-downpour`)
+  - `subway-station`: 40%
+  - `rain-on-window`: 35%
+  - `rain-on-umbrella`: 18%
+  - `crowd`: 20%
+  - `wind`: 10%
+- **Tentstorm Shelter** (`tentstorm-shelter`)
+  - `rain-on-tent`: 65%
+  - `howling-wind`: 30%
+  - `heavy-rain`: 25%
+  - `thunder`: 15%
+  - `wolf`: 18%
+- **Umbrella Bells** (`umbrella-bells`)
+  - `rain-on-umbrella`: 55%
+  - `droplets`: 20%
+  - `wind`: 15%
+  - `bells`: 12%
+  - `windshield-wipers`: 10%
+
+### Focus & Study (10)
+- **Analog Writing** (`analog-writing`)
+  - `typewriter`: 40%
+  - `paper`: 20%
+  - `vinyl-effect`: 25%
+  - `clock`: 12%
+  - `tuning-radio`: 10%
+- **Cafe by the Sea** (`cafe-by-the-sea`)
+  - `cafe`: 50%
+  - `waves`: 50%
+  - `seagulls`: 50%
+- **Focused Writing** (`focused-writing`)
+  - `paper`: 55%
+  - `clock`: 25%
+  - `pink-noise`: 25%
+  - `library`: 20%
+- **Library** (`library`)
+  - `library`: 50%
+  - `paper`: 25%
+  - `clock`: 75%
+- **Morse Focus Protocol** (`morse-focus-protocol`)
+  - `morse-code`: 25%
+  - `typewriter`: 30%
+  - `paper`: 30%
+  - `clock`: 20%
+  - `library`: 20%
+  - `tuning-radio`: 10%
+- **Office Late Hours** (`office-late-hours`)
+  - `office`: 85%
+  - `keyboard`: 35%
+  - `clock`: 65%
+  - `paper`: 35%
+  - `rain-on-window`: 15%
+- **Printer Focus** (`printer-focus`)
+  - `office`: 35%
+  - `keyboard`: 35%
+  - `mouse-clicking`: 20%
+  - `printer`: 18%
+  - `clock`: 12%
+- **Productive Cafe** (`productive-cafe`)
+  - `cafe`: 82%
+  - `light-rain`: 22%
+  - `pink-noise`: 22%
+- **Rainy Library** (`rainy-library`)
+  - `library`: 75%
+  - `clock`: 75%
+  - `paper`: 25%
+- **Trading Floor Terminal** (`trading-floor-terminal`)
+  - `trading-floor`: 45%
+  - `crowd`: 25%
+  - `keyboard`: 20%
+  - `printer`: 12%
+  - `cash-register`: 10%
+
+### Travel & Motion (25)
+- **Airplane Cruise** (`airplane-cruise`)
+  - `airplane`: 72%
+  - `airport`: 32%
+  - `pink-noise`: 42%
+  - `wind`: 72%
+  - `rain-on-window`: 12%
+- **Beach Ride** (`beach-ride`)
+  - `waves`: 60%
+  - `horse-gallop`: 45%
+  - `wind`: 25%
+  - `seagulls`: 30%
+  - `pink-noise`: 10%
+- **Cafe Commute** (`cafe-commute`)
+  - `inside-a-train`: 60%
+  - `cafe`: 50%
+  - `paper`: 40%
+  - `rain-on-window`: 40%
+  - `pink-noise`: 10%
+- **City Bike Rush** (`city-bike-rush`)
+  - `bike-ride`: 30%
+  - `busy-street`: 30%
+  - `traffic`: 25%
+  - `crowd`: 15%
+- **Coastal Ride** (`coastal-ride`)
+  - `inside-a-train`: 80%
+  - `waves`: 60%
+  - `seagulls`: 40%
+  - `wind`: 20%
+  - `rain-on-window`: 20%
+- **Diesel Yard Shift** (`diesel-yard-shift`)
+  - `construction-site`: 35%
+  - `road`: 25%
+  - `diesel-fork-lift`: 18%
+  - `dumper-truck`: 18%
+  - `wind`: 15%
+- **Forest Trail Canter** (`forest-trail-canter`)
+  - `horse-gallop`: 55%
+  - `walk-on-leaves`: 45%
+  - `wind-in-trees`: 35%
+  - `birds`: 25%
+  - `wind`: 10%
+- **Gravel Path Ride** (`gravel-path-ride`)
+  - `walk-on-gravel`: 50%
+  - `wind`: 40%
+  - `birds`: 50%
+  - `road`: 10%
+- **Jungle Trail** (`jungle-trail`)
+  - `jungle`: 45%
+  - `horse-gallop`: 40%
+  - `birds`: 25%
+  - `droplets`: 20%
+  - `beehive`: 10%
+- **Light Rain Ride** (`light-rain-ride`)
+  - `light-rain`: 55%
+  - `rain-on-leaves`: 35%
+  - `horse-gallop`: 40%
+  - `wind-in-trees`: 25%
+  - `wind`: 10%
+- **Meadow Gallop** (`meadow-gallop`)
+  - `horse-gallop`: 60%
+  - `wind`: 40%
+  - `birds`: 20%
+  - `wind-in-trees`: 15%
+  - `pink-noise`: 10%
+- **Mindful Walk** (`mindful-walk`)
+  - `binaural-theta`: 77%
+  - `river`: 55%
+  - `wind-in-trees`: 55%
+  - `birds`: 55%
+  - `walk-on-gravel`: 55%
+- **Night Ride** (`night-ride`)
+  - `wind-in-trees`: 75%
+  - `crickets`: 75%
+  - `horse-gallop`: 45%
+  - `owl`: 70%
+  - `pink-noise`: 45%
+- **Night Train** (`night-train`)
+  - `inside-a-train`: 82%
+  - `pink-noise`: 32%
+  - `rain-on-window`: 62%
+  - `wind`: 22%
+- **Quiet Carriage** (`quiet-carriage`)
+  - `inside-a-train`: 33%
+  - `pink-noise`: 0%
+  - `rain-on-window`: 33%
+- **Rowing at Dawn** (`rowing-at-dawn`)
+  - `rowing-boat`: 55%
+  - `river`: 40%
+  - `seagulls`: 20%
+  - `wind`: 15%
+  - `droplets`: 10%
+- **Riverside Trot** (`riverside-trot`)
+  - `river`: 55%
+  - `horse-gallop`: 45%
+  - `walk-on-gravel`: 25%
+  - `birds`: 20%
+  - `wind-in-trees`: 15%
+- **Sailboat Lullaby** (`sailboat-lullaby`)
+  - `sailboat`: 90%
+  - `waves`: 50%
+  - `wind`: 30%
+  - `seagulls`: 90%
+- **Storm Ride** (`storm-ride`)
+  - `heavy-rain`: 50%
+  - `horse-gallop`: 35%
+  - `wind`: 30%
+  - `thunder`: 15%
+  - `rain-on-leaves`: 15%
+- **Submarine Cave Drift** (`submarine-cave-drift`)
+  - `submarine`: 40%
+  - `sea-cave`: 35%
+  - `underwater`: 30%
+  - `bubbles`: 12%
+- **Submarine Drift** (`submarine-drift`)
+  - `submarine`: 72%
+  - `underwater`: 62%
+  - `bubbles`: 42%
+  - `whale`: 72%
+  - `waves`: 42%
+- **Subway Umbrella Rush** (`subway-umbrella-rush`)
+  - `subway-station`: 72%
+  - `rain-on-umbrella`: 42%
+  - `busy-street`: 62%
+  - `traffic`: 72%
+  - `wind`: 22%
+- **Train Journey** (`train-journey`)
+  - `inside-a-train`: 67%
+  - `rain-on-window`: 47%
+  - `pink-noise`: 47%
+  - `wind`: 47%
+- **Waterfall Pass** (`waterfall-pass`)
+  - `waterfall`: 45%
+  - `horse-gallop`: 40%
+  - `wind-in-trees`: 25%
+  - `droplets`: 20%
+  - `wind`: 10%
+- **Winter Trail** (`winter-trail`)
+  - `horse-gallop`: 40%
+  - `howling-wind`: 30%
+  - `wind-in-trees`: 15%
+  - `wind`: 10%
+
+### Sleep & Noise (10)
+- **Deep Sleep** (`deep-sleep`)
+  - `pink-noise`: 50%
+  - `waves`: 35%
+  - `heavy-rain`: 25%
+  - `rain-on-window`: 20%
+  - `wind`: 10%
+- **Forest Sleep** (`forest-sleep`)
+  - `wind-in-trees`: 50%
+  - `pink-noise`: 35%
+  - `crickets`: 25%
+  - `wind`: 10%
+- **Heartbeat Blanket** (`heartbeat-blanket`)
+  - `pink-noise`: 45%
+  - `ceiling-fan`: 25%
+  - `heart-pulse-monitor`: 18%
+  - `fetal-heartbeat`: 15%
+- **Ocean Sleep** (`ocean-sleep`)
+  - `waves`: 60%
+  - `pink-noise`: 35%
+  - `wind`: 15%
+- **Pure Pink Noise** (`pure-pink-noise`)
+  - `pink-noise`: 80%
+- **Rain Sleep** (`rain-sleep`)
+  - `pink-noise`: 40%
+  - `light-rain`: 45%
+  - `rain-on-window`: 45%
+  - `wind`: 10%
+  - `thunder`: 5%
+- **River Nap** (`river-nap`)
+  - `river`: 55%
+  - `pink-noise`: 35%
+  - `wind`: 15%
+  - `birds`: 10%
+- **Snore Brown Shield** (`snore-brown-shield`)
+  - `brown-noise`: 55%
+  - `ceiling-fan`: 25%
+  - `men-snoring`: 12%
+- **Soft Isolation** (`soft-isolation`)
+  - `pink-noise`: 70%
+  - `wind`: 15%
+  - `waves`: 15%
+  - `rain-on-window`: 10%
+- **Window Night** (`window-night`)
+  - `rain-on-window`: 65%
+  - `pink-noise`: 35%
+  - `wind`: 10%
+  - `crickets`: 10%
+  - `thunder`: 8%
+
+### Places & Ambience (11)
+- **Afterhours Bar Hush** (`afterhours-bar-hush`)
+  - `crowded-bar`: 55%
+  - `crowd`: 25%
+  - `busy-street`: 20%
+  - `traffic`: 15%
+  - `vinyl-effect`: 10%
+- **Analog Lab Session** (`analog-lab-session`)
+  - `laboratory`: 45%
+  - `tuning-radio`: 25%
+  - `keyboard`: 25%
+  - `typewriter`: 15%
+  - `vinyl-effect`: 15%
+- **Carousel Dreams** (`carousel-dreams`)
+  - `carousel`: 45%
+  - `bubbles`: 35%
+  - `crowd`: 20%
+  - `vinyl-effect`: 15%
+- **Construction Flow State** (`construction-flow-state`)
+  - `construction-site`: 55%
+  - `road`: 25%
+  - `traffic`: 25%
+  - `clock`: 10%
+  - `wind`: 10%
+- **Flea Market Morning** (`flea-market-morning`)
+  - `flea-market`: 45%
+  - `crowd`: 25%
+  - `cash-register`: 15%
+  - `road`: 15%
+  - `birds`: 10%
+- **Laundry Spin Calm** (`laundry-spin-calm`)
+  - `washing-machine`: 45%
+  - `dryer`: 35%
+  - `laundry-room`: 30%
+  - `ceiling-fan`: 20%
+  - `wind`: 10%
+- **Night Village Receiver** (`night-village-receiver`)
+  - `night-village`: 55%
+  - `tuning-radio`: 25%
+  - `crickets`: 20%
+  - `wind-in-trees`: 15%
+  - `vinyl-effect`: 10%
+- **Owl at the Temple** (`owl-at-the-temple`)
+  - `temple`: 45%
+  - `owl`: 30%
+  - `wind-in-trees`: 30%
+  - `singing-bowl`: 20%
+  - `droplets`: 10%
+- **Playground Library Afternoon** (`playground-library-afternoon`)
+  - `library`: 45%
+  - `children-playing`: 22%
+  - `paper`: 15%
+  - `clock`: 12%
+- **Quiet Kitchen Night** (`quiet-kitchen-night`)
+  - `restaurant`: 35%
+  - `chinese-kitchen`: 25%
+  - `boiling-water`: 20%
+  - `cash-register`: 12%
+  - `crowd`: 12%
+- **Wooden Laundromat** (`wooden-laundromat`)
+  - `laundry-room`: 35%
+  - `washing-machine`: 35%
+  - `dryer`: 25%
+  - `wood-creak`: 10%
+
+### Military (14)
+- **Air Defense Watch** (`air-defense-watch`)
+  - `air-defense-alarm`: 26%
+  - `distant-battlefield`: 100%
+  - `wind`: 22%
+  - `tuning-radio`: 14%
+  - `morse-code`: 30%
+- **Barracks Drill Morning** (`barracks-drill-morning`)
+  - `army-drill`: 38%
+  - `soldiers-marching`: 22%
+  - `military-march`: 18%
+  - `crowd`: 10%
+  - `road`: 12%
+- **Combat Engineering Yard** (`combat-engineering-yard`)
+  - `construction-site`: 26%
+  - `diesel-fork-lift`: 16%
+  - `dumper-truck`: 16%
+  - `battlefield`: 14%
+  - `road`: 16%
+- **Distant Frontline Wind** (`distant-frontline-wind`)
+  - `distant-battlefield`: 100%
+  - `wind`: 26%
+  - `howling-wind`: 14%
+  - `thunder`: 80%
+  - `rain-on-window`: 12%
+- **Emergency Broadcast** (`emergency-broadcast`)
+  - `air-defense-alarm`: 100%
+  - `tuning-radio`: 18%
+  - `morse-code`: 12%
+  - `white-noise`: 16%
+  - `thunder`: 10%
+- **Field Radio Post** (`field-radio-post`)
+  - `distant-battlefield`: 100%
+  - `battlefield`: 14%
+  - `tuning-radio`: 16%
+  - `morse-code`: 12%
+  - `wind-in-trees`: 20%
+  - `night-village`: 10%
+- **Fighter Jet Flyover** (`fighter-jet-flyover`)
+  - `fighter-jet`: 100%
+  - `wind`: 25%
+  - `highway`: 18%
+  - `traffic`: 40%
+  - `distant-battlefield`: 100%
+- **Futuristic Ops Center** (`futuristic-ops-center`)
+  - `futuristic-battle`: 100%
+  - `office`: 18%
+  - `keyboard`: 16%
+  - `tuning-radio`: 10%
+  - `white-noise`: 14%
+- **Marching Column** (`marching-column`)
+  - `soldiers-marching`: 80%
+  - `military-march`: 25%
+  - `road`: 18%
+  - `crowd`: 10%
+  - `army-drill`: 35%
+- **Night Patrol Steps** (`night-patrol-steps`)
+  - `walk-on-gravel`: 24%
+  - `wind`: 22%
+  - `howling-wind`: 25%
+  - `distant-battlefield`: 75%
+  - `owl`: 40%
+  - `crickets`: 10%
+- **Range Practice Distance** (`range-practice-distance`)
+  - `army-drill`: 100%
+  - `machine-gun`: 14%
+  - `distant-battlefield`: 20%
+  - `wind`: 20%
+  - `road`: 12%
+- **Signal Intercept** (`signal-intercept`)
+  - `morse-code`: 30%
+  - `tuning-radio`: 18%
+  - `white-noise`: 16%
+  - `futuristic-battle`: 12%
+  - `wind`: 18%
+- **Urban Blackout** (`urban-blackout`)
+  - `city-bombing`: 100%
+  - `air-defense-alarm`: 100%
+  - `traffic`: 18%
+  - `ambulance-siren`: 12%
+  - `wind`: 16%
+  - `rain-on-window`: 12%
+  - `fighter-jet`: 80%
+- **War Room Briefing** (`war-room-briefing`)
+  - `battlefield`: 16%
+  - `office`: 50%
+  - `crowd`: 50%
+  - `keyboard`: 30%
+  - `tuning-radio`: 10%
+  - `printer`: 15%

@@ -33,11 +33,20 @@ private enum SidebarStyle {
 
 private let sidebarSectionIds = (favorites: "favorites", recentSounds: "recentSounds", favoriteMixes: "favoriteMixes", recentMixes: "recentMixes")
 
-private let sidebarDragTypes: [UTType] = [.plainText, .utf8PlainText, .text]
+private let favoriteSoundDragType = UTType(exportedAs: "com.moodistmac.favorite-sound-id")
+private let favoriteMixDragType = UTType(exportedAs: "com.moodistmac.favorite-mix-id")
+private let favoriteSoundDragTypes: [UTType] = [favoriteSoundDragType]
+private let favoriteMixDragTypes: [UTType] = [favoriteMixDragType]
+/// Umbral vertical dentro de la fila para decidir inserción antes/después al arrastrar.
+private let sidebarDropSplitY: CGFloat = 14
 
-private func sidebarDragItemProvider(id: String) -> NSItemProvider {
-    // Use a standard text provider for reliable drag recognition on macOS.
-    let provider = NSItemProvider(object: id as NSString)
+private func sidebarDragItemProvider(id: String, type: UTType) -> NSItemProvider {
+    let provider = NSItemProvider()
+    let payload = Data(id.utf8)
+    provider.registerDataRepresentation(forTypeIdentifier: type.identifier, visibility: .all) { completion in
+        completion(payload, nil)
+        return nil
+    }
     provider.suggestedName = id
     return provider
 }
@@ -59,14 +68,6 @@ struct SidebarView: View {
         store.orderedFavoriteSoundIds.compactMap { SoundsData.allSoundsById[$0] }
     }
 
-    private var presetsById: [String: Preset] {
-        var dict: [String: Preset] = [:]
-        for preset in store.presets {
-            dict[preset.id] = preset
-        }
-        return dict
-    }
-
     private func isSectionCollapsed(_ id: String) -> Bool {
         sectionsCollapsed[id] ?? false
     }
@@ -79,7 +80,7 @@ struct SidebarView: View {
     }
 
     private var recentMixes: [Mix] {
-        let byId = presetsById
+        let byId = store.presetsById
         return store.recentMixIds.compactMap { id in
             MixesData.allMixesById[id] ?? byId[id]?.toMix()
         }
@@ -90,7 +91,7 @@ struct SidebarView: View {
     }
 
     private var favoriteMixes: [Mix] {
-        let byId = presetsById
+        let byId = store.presetsById
         return store.favoriteMixIds.compactMap { id in
             MixesData.allMixesById[id] ?? byId[id]?.toMix()
         }
@@ -120,10 +121,10 @@ struct SidebarView: View {
                                                 .onDrag {
                                                     draggedFavoriteMixId = nil
                                                     draggedFavoriteSoundId = sound.id
-                                                    return sidebarDragItemProvider(id: sound.id)
+                                                    return sidebarDragItemProvider(id: sound.id, type: favoriteSoundDragType)
                                                 }
                                                 .onDrop(
-                                                    of: sidebarDragTypes,
+                                                    of: favoriteSoundDragTypes,
                                                     delegate: FavoriteSoundDropDelegate(
                                                         destinationSoundId: sound.id,
                                                         store: store,
@@ -158,10 +159,10 @@ struct SidebarView: View {
                                                 .onDrag {
                                                     draggedFavoriteSoundId = nil
                                                     draggedFavoriteMixId = mix.id
-                                                    return sidebarDragItemProvider(id: mix.id)
+                                                    return sidebarDragItemProvider(id: mix.id, type: favoriteMixDragType)
                                                 }
                                                 .onDrop(
-                                                    of: sidebarDragTypes,
+                                                    of: favoriteMixDragTypes,
                                                     delegate: FavoriteMixDropDelegate(
                                                         destinationMixId: mix.id,
                                                         store: store,
@@ -413,10 +414,13 @@ private struct SidebarMixRow: View {
 
     var body: some View {
         HStack(spacing: 10) {
-            Image(systemName: mix.iconName)
-                .font(.system(size: SidebarStyle.iconSize, weight: .regular))
-                .foregroundStyle(SidebarStyle.secondaryText)
-                .frame(width: 18, height: 18, alignment: .center)
+            MixIconImage(
+                iconName: mix.iconName,
+                size: SidebarStyle.iconSize,
+                frame: 18,
+                weight: .regular,
+                color: SidebarStyle.secondaryText
+            )
             Text(mixDisplayName)
                 .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(SidebarStyle.primaryText)
@@ -465,21 +469,26 @@ private struct FavoriteSoundDropDelegate: DropDelegate {
     @Binding var insertBefore: Bool
 
     func validateDrop(info: DropInfo) -> Bool {
-        info.hasItemsConforming(to: sidebarDragTypes)
+        info.hasItemsConforming(to: favoriteSoundDragTypes)
     }
 
     func dropEntered(info: DropInfo) {
         guard let draggedId = resolveDraggedId(from: info),
               draggedId != destinationSoundId else { return }
         let ordered = store.orderedFavoriteSoundIds
-        guard let from = ordered.firstIndex(of: draggedId),
-              let to = ordered.firstIndex(of: destinationSoundId) else { return }
+        guard ordered.firstIndex(of: draggedId) != nil,
+              ordered.firstIndex(of: destinationSoundId) != nil else { return }
         lastDropTargetId = destinationSoundId
-        insertBefore = (to < from)
+        updateInsertionSide(from: info)
     }
 
     func dropUpdated(info: DropInfo) -> DropProposal? {
-        DropProposal(operation: .move)
+        updateInsertionSide(from: info)
+        return DropProposal(operation: .move)
+    }
+
+    func dropExited(info: DropInfo) {
+        lastDropTargetId = nil
     }
 
     func performDrop(info: DropInfo) -> Bool {
@@ -490,18 +499,25 @@ private struct FavoriteSoundDropDelegate: DropDelegate {
         guard let draggedId = resolveDraggedId(from: info),
               draggedId != destinationSoundId else { return true }
         let ordered = store.orderedFavoriteSoundIds
-        guard let from = ordered.firstIndex(of: draggedId),
-              let to = ordered.firstIndex(of: destinationSoundId) else { return true }
-        let toOffset = to > from ? to + 1 : to
+        guard let from = ordered.firstIndex(of: draggedId) else { return true }
+        var reordered = ordered
+        reordered.remove(at: from)
+        guard let destinationIndex = reordered.firstIndex(of: destinationSoundId) else { return true }
+        let insertionIndex = insertBefore ? destinationIndex : min(destinationIndex + 1, reordered.count)
+        reordered.insert(draggedId, at: insertionIndex)
         withAnimation(.easeInOut(duration: 0.2)) {
-            store.moveFavoriteSounds(fromOffsets: IndexSet(integer: from), toOffset: toOffset)
+            store.favoriteSoundIds = reordered
         }
         return true
     }
 
     private func resolveDraggedId(from info: DropInfo) -> String? {
         if let draggedSoundId { return draggedSoundId }
-        return info.itemProviders(for: sidebarDragTypes).first?.suggestedName
+        return info.itemProviders(for: favoriteSoundDragTypes).first?.suggestedName
+    }
+
+    private func updateInsertionSide(from info: DropInfo) {
+        insertBefore = info.location.y < sidebarDropSplitY
     }
 }
 
@@ -514,21 +530,26 @@ private struct FavoriteMixDropDelegate: DropDelegate {
     @Binding var insertBefore: Bool
 
     func validateDrop(info: DropInfo) -> Bool {
-        info.hasItemsConforming(to: sidebarDragTypes)
+        info.hasItemsConforming(to: favoriteMixDragTypes)
     }
 
     func dropEntered(info: DropInfo) {
         guard let draggedId = resolveDraggedId(from: info),
               draggedId != destinationMixId else { return }
         let ordered = store.favoriteMixIds
-        guard let from = ordered.firstIndex(of: draggedId),
-              let to = ordered.firstIndex(of: destinationMixId) else { return }
+        guard ordered.firstIndex(of: draggedId) != nil,
+              ordered.firstIndex(of: destinationMixId) != nil else { return }
         lastDropTargetId = destinationMixId
-        insertBefore = (to < from)
+        updateInsertionSide(from: info)
     }
 
     func dropUpdated(info: DropInfo) -> DropProposal? {
-        DropProposal(operation: .move)
+        updateInsertionSide(from: info)
+        return DropProposal(operation: .move)
+    }
+
+    func dropExited(info: DropInfo) {
+        lastDropTargetId = nil
     }
 
     func performDrop(info: DropInfo) -> Bool {
@@ -539,18 +560,25 @@ private struct FavoriteMixDropDelegate: DropDelegate {
         guard let draggedId = resolveDraggedId(from: info),
               draggedId != destinationMixId else { return true }
         let ordered = store.favoriteMixIds
-        guard let from = ordered.firstIndex(of: draggedId),
-              let to = ordered.firstIndex(of: destinationMixId) else { return true }
-        let toOffset = to > from ? to + 1 : to
+        guard let from = ordered.firstIndex(of: draggedId) else { return true }
+        var reordered = ordered
+        reordered.remove(at: from)
+        guard let destinationIndex = reordered.firstIndex(of: destinationMixId) else { return true }
+        let insertionIndex = insertBefore ? destinationIndex : min(destinationIndex + 1, reordered.count)
+        reordered.insert(draggedId, at: insertionIndex)
         withAnimation(.easeInOut(duration: 0.2)) {
-            store.moveFavoriteMixes(fromOffsets: IndexSet(integer: from), toOffset: toOffset)
+            store.favoriteMixIds = reordered
         }
         return true
     }
 
     private func resolveDraggedId(from info: DropInfo) -> String? {
         if let draggedMixId { return draggedMixId }
-        return info.itemProviders(for: sidebarDragTypes).first?.suggestedName
+        return info.itemProviders(for: favoriteMixDragTypes).first?.suggestedName
+    }
+
+    private func updateInsertionSide(from info: DropInfo) {
+        insertBefore = info.location.y < sidebarDropSplitY
     }
 }
 

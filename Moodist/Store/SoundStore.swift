@@ -5,9 +5,6 @@
 
 import Foundation
 import Combine
-#if canImport(AppKit)
-import AppKit
-#endif
 
 private extension Collection {
     subscript(safe index: Index) -> Element? {
@@ -70,6 +67,13 @@ final class SoundStore: ObservableObject {
         let inOrder = favoriteSoundIds.filter { sounds[$0]?.isFavorite == true }
         let remaining = favoriteIds.filter { !inOrder.contains($0) }
         return inOrder + remaining
+    }
+
+    /// Índice rápido de presets por id para evitar búsquedas lineales repetidas en la UI.
+    var presetsById: [String: Preset] {
+        presets.reduce(into: [:]) { result, preset in
+            result[preset.id] = preset
+        }
     }
 
     var hasSelection: Bool {
@@ -283,30 +287,11 @@ final class SoundStore: ObservableObject {
         NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
     }
 
-    #if canImport(AppKit)
-    func promptCustomTimer() {
-        let alert = NSAlert()
-        alert.messageText = L10n.timerCustomTitle
-        alert.informativeText = L10n.timerCustomMessage
-        let input = NSTextField(string: "")
-        input.placeholderString = L10n.timerMinutesPlaceholder
-        input.frame = NSRect(x: 0, y: 0, width: 180, height: 24)
-        alert.accessoryView = input
-        alert.addButton(withTitle: L10n.timerStart)
-        alert.addButton(withTitle: L10n.cancel)
-        let response = alert.runModal()
-        guard response == .alertFirstButtonReturn else { return }
-        let raw = input.stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard let minutes = Int(raw), minutes > 0 else { return }
-        startSleepTimer(durationSeconds: minutes * 60)
-    }
-
     /// Pide mostrar la hoja para guardar el preset actual (SwiftUI sheet; evita NSAlert y bloqueos).
     func promptSaveCurrentPreset() {
         guard canSaveCustomMix else { return }
         showSavePresetSheet = true
     }
-    #endif
 
     var timerRemainingMenuTitle: String? {
         guard let activeTimer else { return nil }
@@ -607,4 +592,3 @@ final class SoundStore: ObservableObject {
         PersistenceService.resetAll()
     }
 }
-

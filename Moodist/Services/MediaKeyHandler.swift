@@ -17,6 +17,13 @@ final class MediaKeyHandler: ObservableObject {
     var onNextTrack: (() -> Void)?
 
     private var didSetup = false
+    private var isCurrentlyPlaying: Bool {
+        #if canImport(MediaPlayer)
+        MPNowPlayingInfoCenter.default().playbackState == .playing
+        #else
+        false
+        #endif
+    }
 
     private init() {}
 
@@ -37,7 +44,8 @@ final class MediaKeyHandler: ObservableObject {
         center.playCommand.isEnabled = true
         center.playCommand.addTarget { [weak self] _ in
             Task { @MainActor in
-                self?.onTogglePlayPause?()
+                guard let self, !self.isCurrentlyPlaying else { return }
+                self.onTogglePlayPause?()
             }
             return .success
         }
@@ -45,7 +53,8 @@ final class MediaKeyHandler: ObservableObject {
         center.pauseCommand.isEnabled = true
         center.pauseCommand.addTarget { [weak self] _ in
             Task { @MainActor in
-                self?.onTogglePlayPause?()
+                guard let self, self.isCurrentlyPlaying else { return }
+                self.onTogglePlayPause?()
             }
             return .success
         }

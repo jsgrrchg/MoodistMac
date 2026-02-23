@@ -193,7 +193,7 @@ enum SoundsData {
         sounds: [
             Sound(id: "bells", label: "Bells", fileName: "bells.mp3", categoryFolder: "things", iconName: SoundIcons.bellFill),
             Sound(id: "boiling-water", label: "Boiling Water", fileName: "boiling-water.mp3", categoryFolder: "things", iconName: SoundIcons.dropFill),
-            Sound(id: "bubbles", label: "Bubbles", fileName: "bubbles.mp3", categoryFolder: "things", iconName: SoundIcons.bubbleFill),
+            Sound(id: "bubbles", label: "Bubbles", fileName: "bubbles.mp3", categoryFolder: "things", iconName: SoundIcons.dropFill),
             Sound(id: "cash-register", label: "Cash Register", fileName: "cash-register.mp3", categoryFolder: "things", iconName: SoundIcons.dollarSignCircleFill),
             Sound(id: "ceiling-fan", label: "Ceiling Fan", fileName: "ceiling-fan.mp3", categoryFolder: "things", iconName: SoundIcons.fanbladesFill),
             Sound(id: "clock", label: "Clock", fileName: "clock.mp3", categoryFolder: "things", iconName: SoundIcons.clockFill),

@@ -91,6 +91,11 @@ struct MoodistApp: App {
 
     @CommandsBuilder private var commandsContent: some Commands {
             CommandGroup(replacing: .newItem) {}
+            CommandGroup(replacing: .appInfo) {
+                Button("About \(L10n.appName)") {
+                    showCustomizedAboutPanel()
+                }
+            }
             CommandGroup(before: .appSettings) {
                 Button(L10n.search + "...") {
                     soundStore.requestSearchFocus = true
@@ -153,7 +158,7 @@ struct MoodistApp: App {
                 }
                 Divider()
                 Button(L10n.timerCustom) {
-                    soundStore.promptCustomTimer()
+                    appDelegate.showCustomTimerWindow()
                 }
                 if soundStore.hasActiveTimer {
                     Button(L10n.timerStop) {
@@ -230,8 +235,28 @@ struct MoodistApp: App {
             }
             CommandGroup(after: .appInfo) {
                 CheckForUpdatesView(updater: updater, viewModel: checkForUpdatesViewModel)
+                Button(L10n.buyMeACoffee) {
+                    openBuyMeACoffee()
+                }
             }
         }
+
+    private func showCustomizedAboutPanel() {
+        let credits = NSMutableAttributedString(string: "\(L10n.createdBy): José Gurruchaga\n")
+        let buyMeACoffeeText = NSAttributedString(
+            string: L10n.buyMeACoffee,
+            attributes: [.link: "https://buymeacoffee.com/jsgrrchg"]
+        )
+        credits.append(buyMeACoffeeText)
+
+        NSApplication.shared.orderFrontStandardAboutPanel(options: [.credits: credits])
+        NSApplication.shared.activate(ignoringOtherApps: true)
+    }
+
+    private func openBuyMeACoffee() {
+        guard let url = URL(string: "https://buymeacoffee.com/jsgrrchg") else { return }
+        NSWorkspace.shared.open(url)
+    }
 }
 
 private extension View {
@@ -307,7 +332,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     private static let optionsWindowSize = CGSize(width: 510, height: 650)
     private static let menuBarKey = PersistenceService.menuBarEnabledKey
     private static let frameSaveDebounce: DispatchTimeInterval = .milliseconds(250)
-    private static let frameRestoreDelay: DispatchTimeInterval = .milliseconds(300)
     weak var soundStore: SoundStore? {
         didSet {
             configureDockObservers()
@@ -328,7 +352,10 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     private var pendingFrameRestore: DispatchWorkItem?
     private var timerMenuUpdate: Timer?
     private weak var timerRemainingMenuItem: NSMenuItem?
+    private var timerWindowController: NSWindowController?
+    private var timerWindowCloseObserver: NSObjectProtocol?
     private var spaceKeyMonitor: Any?
+    private var searchFocusResetMonitor: Any?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         applyAppearanceMode()
@@ -348,18 +375,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
             Task { @MainActor in
                 self?.configureExistingMainWindow()
                 self?.updateMenuBarVisibility()
-            }
-        }
-        // Configurar de nuevo cuando la ventana ya exista (por si se creó después)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            Task { @MainActor in
-                self?.configureExistingMainWindow()
-            }
-        }
-        // Dar tiempo a SwiftUI a dar tamaño real a la ventana principal antes de asignar persistencia de frame.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak self] in
-            Task { @MainActor in
-                self?.configureExistingMainWindow()
             }
         }
         menuBarObserver = NotificationCenter.default.addObserver(
@@ -400,6 +415,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
             }
         }
         installSpaceKeyMonitor()
+        installSearchFocusResetMonitor()
     }
 
     private func installSpaceKeyMonitor() {
@@ -423,19 +439,70 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         }
     }
 
+    private func installSearchFocusResetMonitor() {
+        searchFocusResetMonitor = NSEvent.addLocalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]) { [weak self] event in
+            guard let self else { return event }
+            guard let window = event.window ?? NSApp.keyWindow else { return event }
+            guard let firstResponder = window.firstResponder else { return event }
+            guard self.isSearchResponder(firstResponder) else { return event }
+            guard let contentView = window.contentView else {
+                window.makeFirstResponder(nil)
+                return event
+            }
+
+            let hitPoint = contentView.convert(event.locationInWindow, from: nil)
+            guard let hitView = contentView.hitTest(hitPoint) else {
+                window.makeFirstResponder(nil)
+                return event
+            }
+
+            if self.isViewInsideSearchField(hitView) { return event }
+            if hitView is NSTextField || hitView is NSTextView { return event }
+
+            window.makeFirstResponder(nil)
+            return event
+        }
+    }
+
+    private func isSearchResponder(_ responder: NSResponder) -> Bool {
+        if let searchField = responder as? NSSearchField {
+            return isViewInsideSearchField(searchField)
+        }
+        if let textView = responder as? NSTextView, let delegateView = textView.delegate as? NSView {
+            return isViewInsideSearchField(delegateView)
+        }
+        if let view = responder as? NSView {
+            return isViewInsideSearchField(view)
+        }
+        return false
+    }
+
+    private func isViewInsideSearchField(_ view: NSView) -> Bool {
+        var current: NSView? = view
+        while let node = current {
+            if node is NSSearchField { return true }
+            current = node.superview
+        }
+        return false
+    }
+
     func applicationWillTerminate(_ notification: Notification) {
         if let monitor = spaceKeyMonitor { NSEvent.removeMonitor(monitor) }
         spaceKeyMonitor = nil
+        if let monitor = searchFocusResetMonitor { NSEvent.removeMonitor(monitor) }
+        searchFocusResetMonitor = nil
         persistMainWindowFrameNow()
     }
 
     @MainActor deinit {
         if let monitor = spaceKeyMonitor { NSEvent.removeMonitor(monitor) }
+        if let monitor = searchFocusResetMonitor { NSEvent.removeMonitor(monitor) }
         if let o = menuBarObserver { NotificationCenter.default.removeObserver(o) }
         if let o = appearanceObserver { NotificationCenter.default.removeObserver(o) }
         if let o = transparencyObserver { NotificationCenter.default.removeObserver(o) }
         if let o = timerStateObserver { NotificationCenter.default.removeObserver(o) }
         if let o = windowDidBecomeKeyObserver { NotificationCenter.default.removeObserver(o) }
+        if let o = timerWindowCloseObserver { NotificationCenter.default.removeObserver(o) }
         stopObservingMainWindow()
         stopTimerMenuUpdates()
     }
@@ -544,7 +611,8 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
             }
         }
         pendingFrameRestore = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + Self.frameRestoreDelay, execute: work)
+        // Restaurar una sola vez en el siguiente ciclo del runloop para evitar saltos visibles.
+        DispatchQueue.main.async(execute: work)
     }
 
     private func isMainWindowCandidate(_ window: NSWindow) -> Bool {
@@ -590,8 +658,6 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         window.titlebarSeparatorStyle = .none
         // Arrastrar solo desde la barra de título (no desde el contenido).
         window.isMovableByWindowBackground = false
-        // Vincular al nombre de frame para que setFrameUsingName/saveFrame usen la misma clave.
-        window.setFrameAutosaveName(Self.mainWindowFrameName)
         // Reasignar delegate cada vez para que windowShouldClose nos llegue (SwiftUI puede sobrescribirlo).
         window.delegate = self
     }
@@ -788,7 +854,8 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
     
     private func applyRestoredFrame(to window: NSWindow) {
         let restored = window.setFrameUsingName(Self.mainWindowFrameName, force: true)
-        var frame = window.frame
+        let currentFrame = window.frame
+        var frame = currentFrame
         let useRestored = restored && canPersistFrame(frame)
         var shouldPersist = false
         
@@ -805,10 +872,20 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
         }
 
         frame = sanitizedMainWindowFrame(frame)
-        window.setFrame(frame, display: true)
+        if frameDistance(frame, currentFrame) > 1 {
+            window.setFrame(frame, display: true)
+        }
         if shouldPersist {
             persistFrameNow(for: window)
         }
+    }
+
+    private func frameDistance(_ lhs: NSRect, _ rhs: NSRect) -> CGFloat {
+        let dx = abs(lhs.origin.x - rhs.origin.x)
+        let dy = abs(lhs.origin.y - rhs.origin.y)
+        let dw = abs(lhs.size.width - rhs.size.width)
+        let dh = abs(lhs.size.height - rhs.size.height)
+        return max(dx, max(dy, max(dw, dh)))
     }
 
     private func defaultMainWindowFrame() -> NSRect {
@@ -1103,7 +1180,7 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
 
     @objc private func menuCustomTimer() {
         Task { @MainActor in
-            soundStore?.promptCustomTimer()
+            showCustomTimerWindow()
         }
     }
 
@@ -1124,5 +1201,77 @@ final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate, N
 
     @objc private func menuQuit() {
         NSApplication.shared.terminate(nil)
+    }
+
+    func showCustomTimerWindow() {
+        guard let store = soundStore else { return }
+
+        let rootView = TimerSetupView(store: store) { [weak self] in
+            self?.closeCustomTimerWindow()
+        }
+        .applyAppAccent(currentAccentColor())
+        .preferredColorScheme(currentPreferredColorScheme())
+
+        if let controller = timerWindowController,
+           let window = controller.window {
+            if let host = window.contentViewController as? NSHostingController<AnyView> {
+                host.rootView = AnyView(rootView)
+            }
+            NSApplication.shared.activate(ignoringOtherApps: true)
+            window.makeKeyAndOrderFront(nil)
+            return
+        }
+
+        let host = NSHostingController(rootView: AnyView(rootView))
+        let window = NSWindow(contentViewController: host)
+        window.title = L10n.timerCustomTitle
+        window.styleMask = NSWindow.StyleMask([.titled, .closable])
+        window.isReleasedWhenClosed = false
+        window.center()
+        window.setContentSize(NSSize(width: 380, height: 360))
+        window.minSize = NSSize(width: 380, height: 360)
+        window.maxSize = NSSize(width: 380, height: 360)
+
+        let controller = NSWindowController(window: window)
+        timerWindowController = controller
+        timerWindowCloseObserver = NotificationCenter.default.addObserver(
+            forName: NSWindow.willCloseNotification,
+            object: window,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.timerWindowController = nil
+                if let observer = self?.timerWindowCloseObserver {
+                    NotificationCenter.default.removeObserver(observer)
+                    self?.timerWindowCloseObserver = nil
+                }
+            }
+        }
+
+        NSApplication.shared.activate(ignoringOtherApps: true)
+        controller.showWindow(self)
+        window.makeKeyAndOrderFront(self)
+    }
+
+    private func closeCustomTimerWindow() {
+        timerWindowController?.close()
+    }
+
+    private func currentPreferredColorScheme() -> ColorScheme? {
+        let raw = UserDefaults.standard.string(forKey: PersistenceService.appearanceModeKey) ?? "system"
+        switch raw {
+        case "light":
+            return .light
+        case "dark":
+            return .dark
+        default:
+            return nil
+        }
+    }
+
+    private func currentAccentColor() -> Color? {
+        let raw = UserDefaults.standard.string(forKey: PersistenceService.accentColorHexKey) ?? AccentColorChoice.graphite.rawValue
+        let choice = AccentColorChoice(rawValue: raw) ?? .system
+        return choice.accentColor
     }
 }

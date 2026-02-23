@@ -138,10 +138,13 @@ struct MixRowView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xSmall) {
             HStack(spacing: isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium) {
-                Image(systemName: mix.iconName)
-                    .font(.system(size: isNarrow ? 14 : 15, weight: isCurrentMix ? .medium : .regular))
-                    .frame(width: isNarrow ? 18 : 20, height: isNarrow ? 18 : 20)
-                    .foregroundStyle(isCurrentMix ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
+                MixIconImage(
+                    iconName: mix.iconName,
+                    size: isNarrow ? 14 : 15,
+                    frame: isNarrow ? 18 : 20,
+                    weight: isCurrentMix ? .medium : .regular,
+                    color: isCurrentMix ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText
+                )
                 Text(mixDisplayName)
                     .font(MoodistTheme.Typography.body)
                     .fontWeight(isCurrentMix ? .medium : .regular)
@@ -185,9 +188,7 @@ struct MixRowView: View {
                     .fill(rowBackgroundColor)
             )
             .onTapGesture {
-                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                    store.applyMix(mix)
-                }
+                store.applyMix(mix)
             }
             .onHover { hovering in
                 if isUserScrolling && hovering {

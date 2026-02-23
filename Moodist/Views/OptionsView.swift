@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Sparkle
+import AppKit
 
 private enum AppearanceMode: String, CaseIterable {
     case system
@@ -16,7 +17,6 @@ private enum AppearanceMode: String, CaseIterable {
 
 struct OptionsView: View {
     @EnvironmentObject var store: SoundStore
-    @EnvironmentObject private var updatePresenter: UpdateWindowPresenter
     @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.sparkleUpdater) private var sparkleUpdater
     @AppStorage(PersistenceService.menuBarEnabledKey) private var menuBarEnabled = false
@@ -26,6 +26,7 @@ struct OptionsView: View {
     @AppStorage(PersistenceService.maxRecentMixesCountKey) private var maxRecentMixesCount: Int = 10
     @AppStorage(PersistenceService.maxRecentSoundsCountKey) private var maxRecentSoundsCount: Int = 12
     @AppStorage(PersistenceService.mediaKeyNextMixKey) private var mediaKeyNextMix = true
+    @AppStorage(PersistenceService.collapseCategoriesOnColdOpenKey) private var collapseCategoriesOnColdOpen = true
     @State private var showResetConfirmation = false
     @State private var showRestoreConfirmation = false
     private let optionsWindowSize = CGSize(width: 510, height: 650)
@@ -43,9 +44,10 @@ struct OptionsView: View {
     var body: some View {
         formContent
             .formStyle(.grouped)
+            .scrollContentBackground(.hidden)
             .navigationTitle(L10n.optionsTitle)
-            .toolbar { toolbarContent }
-            .background(OptionsWindowConfigurator(size: optionsWindowSize))
+            .background(optionsBackground)
+            .background(OptionsWindowConfigurator(size: optionsWindowSize, transparencyEnabled: transparencyEnabled))
             .confirmationDialog(L10n.resetConfirmTitle, isPresented: $showResetConfirmation) {
                 resetConfirmationButtons
             } message: {
@@ -74,14 +76,7 @@ struct OptionsView: View {
             updatesSection
             aboutSection
         }
-    }
-    
-    @ToolbarContentBuilder
-    private var toolbarContent: some ToolbarContent {
-        ToolbarItem(placement: .confirmationAction) {
-            Button(L10n.close) { closeOptionsWindow() }
-                .keyboardShortcut(.cancelAction)
-        }
+        .toggleStyle(OptionsToggleStyle())
     }
     
     private var resetConfirmationButtons: some View {
@@ -105,10 +100,10 @@ struct OptionsView: View {
     }
     
     private func handleOnAppear() {
-        if maxRecentMixesCount < 10 || maxRecentMixesCount > 15 {
+        if maxRecentMixesCount < 5 || maxRecentMixesCount > 15 {
             maxRecentMixesCount = 10
         }
-        if maxRecentSoundsCount < 10 || maxRecentSoundsCount > 15 {
+        if maxRecentSoundsCount < 5 || maxRecentSoundsCount > 15 {
             maxRecentSoundsCount = 12
         }
         if AccentColorChoice(rawValue: accentColorRaw) == nil {
@@ -222,10 +217,19 @@ struct OptionsView: View {
                 Text("\(maxRecentMixesCount)")
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
                     .frame(minWidth: 24, alignment: .trailing)
-                Stepper(value: $maxRecentMixesCount, in: 10...15, step: 1) {}
             }
             .accessibilityLabel(L10n.maxRecentMixes)
             .accessibilityValue("\(maxRecentMixesCount)")
+            Slider(
+                value: Binding(
+                    get: { Double(maxRecentMixesCount) },
+                    set: { maxRecentMixesCount = Int($0.rounded()) }
+                ),
+                in: 5...15,
+                step: 1
+            )
+            .controlSize(.small)
+            .frame(height: 22)
             Text(L10n.maxRecentMixesFooter)
                 .font(.footnote)
                 .foregroundStyle(MoodistTheme.Colors.secondaryText)
@@ -235,10 +239,19 @@ struct OptionsView: View {
                 Text("\(maxRecentSoundsCount)")
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
                     .frame(minWidth: 24, alignment: .trailing)
-                Stepper(value: $maxRecentSoundsCount, in: 10...15, step: 1) {}
             }
             .accessibilityLabel(L10n.maxRecentSounds)
             .accessibilityValue("\(maxRecentSoundsCount)")
+            Slider(
+                value: Binding(
+                    get: { Double(maxRecentSoundsCount) },
+                    set: { maxRecentSoundsCount = Int($0.rounded()) }
+                ),
+                in: 5...15,
+                step: 1
+            )
+            .controlSize(.small)
+            .frame(height: 22)
             Text(L10n.maxRecentSoundsFooter)
                 .font(.footnote)
                 .foregroundStyle(MoodistTheme.Colors.secondaryText)
@@ -248,6 +261,14 @@ struct OptionsView: View {
             .accessibilityLabel(L10n.mediaKeyNextMix)
             .accessibilityHint(L10n.mediaKeyNextMixFooter)
             Text(L10n.mediaKeyNextMixFooter)
+                .font(.footnote)
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+            Toggle(isOn: $collapseCategoriesOnColdOpen) {
+                Text(L10n.collapseCategoriesOnColdOpen)
+            }
+            .accessibilityLabel(L10n.collapseCategoriesOnColdOpen)
+            .accessibilityHint(L10n.collapseCategoriesOnColdOpenFooter)
+            Text(L10n.collapseCategoriesOnColdOpenFooter)
                 .font(.footnote)
                 .foregroundStyle(MoodistTheme.Colors.secondaryText)
         } header: {
@@ -266,9 +287,13 @@ struct OptionsView: View {
             Button(role: .none) {
                 _ = store.exportPreferences()
             } label: {
-                Label(L10n.exportPreferences, systemImage: "square.and.arrow.up")
+                HStack(spacing: 8) {
+                    Image(systemName: "square.and.arrow.up")
+                        .offset(y: -0.5)
+                    Text(L10n.exportPreferences)
+                }
             }
-            .foregroundStyle(.primary)
+            .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
             .accessibilityLabel(L10n.exportPreferences)
             .accessibilityHint(L10n.exportPreferencesHint)
 
@@ -277,7 +302,7 @@ struct OptionsView: View {
             } label: {
                 Label(L10n.importPreferences, systemImage: "square.and.arrow.down")
             }
-            .foregroundStyle(.primary)
+            .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
             .accessibilityLabel(L10n.importPreferences)
             .accessibilityHint(L10n.importPreferencesHint)
 
@@ -286,7 +311,7 @@ struct OptionsView: View {
             } label: {
                 Label(L10n.resetSelectionAndFavorites, systemImage: "star.slash")
             }
-            .foregroundStyle(.primary)
+            .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
             .accessibilityLabel(L10n.resetSelectionAndFavorites)
             .accessibilityHint(L10n.resetSelectionHint)
 
@@ -295,7 +320,7 @@ struct OptionsView: View {
             } label: {
                 Label(L10n.restoreAllDefaults, systemImage: "arrow.counterclockwise")
             }
-            .foregroundStyle(.primary)
+            .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
             .accessibilityLabel(L10n.restoreAllDefaults)
             .accessibilityHint(L10n.restoreDefaultsHint)
         } header: {
@@ -309,14 +334,11 @@ struct OptionsView: View {
     private var updatesSection: some View {
         if sparkleUpdater != nil {
             Section {
-                Button {
-                    sparkleUpdater?.checkForUpdates()
-                } label: {
-                    Label(L10n.checkForUpdates, systemImage: "arrow.down.circle")
+                if let updater = sparkleUpdater {
+                    SparkleCheckForUpdatesButton(updater: updater)
+                        .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
+                        .accessibilityLabel(L10n.checkForUpdates)
                 }
-                .foregroundStyle(.primary)
-                .disabled(!(sparkleUpdater?.canCheckForUpdates ?? false))
-                .accessibilityLabel(L10n.checkForUpdates)
             } header: {
                 Text(L10n.updatesSection)
             }
@@ -334,18 +356,52 @@ struct OptionsView: View {
             .accessibilityElement(children: .combine)
             .accessibilityLabel("\(L10n.version) \(appVersion)")
 
+            HStack {
+                Text(L10n.createdBy)
+                Spacer()
+                Text("José Gurruchaga")
+                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
+            }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel("\(L10n.createdBy) José Gurruchaga")
+
+            if let url = URL(string: "https://buymeacoffee.com/jsgrrchg") {
+                Link(destination: url) {
+                    Label(L10n.buyMeACoffee, systemImage: "cup.and.saucer")
+                }
+                .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
+            }
+            if let url = URL(string: "mailto:jsgrrchg@outlook.com") {
+                Link(destination: url) {
+                    Label(L10n.askForNewSound, systemImage: "envelope")
+                }
+                .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
+            }
+
             if let url = URL(string: "https://moodist.mvze.net") {
                 Link(destination: url) {
                     Label(L10n.visitWeb, systemImage: "globe")
                 }
+                .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
             }
             if let url = URL(string: "https://github.com/jsgrrchg/MoodistMac") {
                 Link(destination: url) {
                     Label(L10n.sourceCode, systemImage: "chevron.left.forwardslash.chevron.right")
                 }
+                .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
             }
         } header: {
             Text(L10n.aboutSection)
+        }
+    }
+
+    @ViewBuilder private var optionsBackground: some View {
+        if transparencyEnabled {
+            VisualEffectBackground(material: .sidebar, blendingMode: .behindWindow)
+                .ignoresSafeArea(.container)
+        } else {
+            PlatformColor.windowBackground
+                .ignoresSafeArea(.container)
         }
     }
 
@@ -367,6 +423,7 @@ struct OptionsView: View {
 
 private struct OptionsWindowConfigurator: NSViewRepresentable {
     let size: CGSize
+    let transparencyEnabled: Bool
 
     func makeCoordinator() -> Coordinator {
         Coordinator()
@@ -380,6 +437,13 @@ private struct OptionsWindowConfigurator: NSViewRepresentable {
         guard let window = nsView.window else { return }
         if context.coordinator.window !== window {
             context.coordinator.window = window
+        }
+        if transparencyEnabled {
+            window.isOpaque = false
+            window.backgroundColor = .clear
+        } else {
+            window.isOpaque = true
+            window.backgroundColor = NSColor.windowBackgroundColor
         }
         if window.styleMask.contains(.resizable) {
             window.styleMask.remove(.resizable)
@@ -398,6 +462,153 @@ private struct OptionsWindowConfigurator: NSViewRepresentable {
 
     final class Coordinator {
         weak var window: NSWindow?
+    }
+}
+
+private struct OptionsCapsuleButtonStyle: ButtonStyle {
+    let isPrimary: Bool
+    let fillWidth: Bool
+    @Environment(\.isEnabled) private var isEnabled
+
+    init(isPrimary: Bool, fillWidth: Bool = true) {
+        self.isPrimary = isPrimary
+        self.fillWidth = fillWidth
+    }
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 13, weight: .medium))
+            .foregroundStyle(foregroundColor)
+            .frame(maxWidth: fillWidth ? .infinity : nil, alignment: .leading)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 7)
+            .background(
+                Capsule()
+                    .fill(backgroundColor(isPressed: configuration.isPressed))
+            )
+            .overlay(
+                Capsule()
+                    .strokeBorder(borderColor(isPressed: configuration.isPressed), lineWidth: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.985 : 1)
+            .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
+            .opacity(isEnabled ? 1 : 0.5)
+    }
+
+    private var foregroundColor: Color {
+        if !isEnabled { return MoodistTheme.Colors.secondaryText.opacity(0.8) }
+        return isPrimary ? MoodistTheme.Colors.accent : Color.primary.opacity(0.88)
+    }
+
+    private func backgroundColor(isPressed: Bool) -> Color {
+        if !isEnabled { return MoodistTheme.Colors.cardBackground.opacity(0.22) }
+        if isPressed { return MoodistTheme.Colors.cardBackground.opacity(0.9) }
+        return MoodistTheme.Colors.cardBackground.opacity(0.55)
+    }
+
+    private func borderColor(isPressed: Bool) -> Color {
+        if !isEnabled { return Color.primary.opacity(0.08) }
+        if isPrimary {
+            return MoodistTheme.Colors.accent.opacity(isPressed ? 0.5 : 0.34)
+        }
+        return Color.primary.opacity(isPressed ? 0.2 : 0.12)
+    }
+}
+
+private struct SparkleCheckForUpdatesButton: View {
+    private let updater: SPUUpdater
+    @StateObject private var viewModel: CheckForUpdatesViewModel
+
+    init(updater: SPUUpdater) {
+        self.updater = updater
+        _viewModel = StateObject(wrappedValue: CheckForUpdatesViewModel(updater: updater))
+    }
+
+    var body: some View {
+        Button {
+            updater.checkForUpdates()
+        } label: {
+            Label(L10n.checkForUpdates, systemImage: "arrow.down.circle")
+        }
+        .disabled(!viewModel.canCheckForUpdates)
+    }
+}
+
+private struct OptionsToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        ToggleControl(configuration: configuration)
+    }
+
+    private struct ToggleControl: View {
+        let configuration: Configuration
+        @Environment(\.isEnabled) private var isEnabled
+        @State private var isHovered = false
+        @FocusState private var isFocused: Bool
+
+        private let trackSize = CGSize(width: 36, height: 20)
+        private let thumbSize: CGFloat = 16
+
+        var body: some View {
+            Button {
+                configuration.isOn.toggle()
+            } label: {
+                HStack(spacing: MoodistTheme.Spacing.medium) {
+                    configuration.label
+                    Spacer(minLength: MoodistTheme.Spacing.medium)
+                    toggleTrack
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .focusable()
+            .focused($isFocused)
+            .onHover { hovering in
+                isHovered = hovering
+            }
+            .opacity(isEnabled ? 1 : 0.52)
+        }
+
+        private var toggleTrack: some View {
+            RoundedRectangle(cornerRadius: trackSize.height / 2, style: .continuous)
+                .fill(trackFill)
+                .overlay {
+                    RoundedRectangle(cornerRadius: trackSize.height / 2, style: .continuous)
+                        .strokeBorder(trackBorder, lineWidth: 1)
+                }
+                .frame(width: trackSize.width, height: trackSize.height)
+                .overlay(alignment: configuration.isOn ? .trailing : .leading) {
+                    Circle()
+                        .fill(Color.white.opacity(isEnabled ? 0.98 : 0.9))
+                        .frame(width: thumbSize, height: thumbSize)
+                        .padding(2)
+                        .shadow(color: .black.opacity(0.28), radius: isHovered ? 2.5 : 2, x: 0, y: 1)
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: trackSize.height / 2, style: .continuous)
+                        .strokeBorder(
+                            isFocused ? MoodistTheme.Colors.accent.opacity(0.55) : .clear,
+                            lineWidth: 2
+                        )
+                        .padding(-2)
+                }
+                .scaleEffect(isHovered ? 1.01 : 1)
+                .animation(.interactiveSpring(response: 0.22, dampingFraction: 0.82), value: configuration.isOn)
+                .animation(.easeInOut(duration: 0.14), value: isHovered)
+        }
+
+        private var trackFill: Color {
+            if configuration.isOn {
+                return MoodistTheme.Colors.accent.opacity(isHovered ? 0.98 : 0.9)
+            }
+            return MoodistTheme.Colors.cardBackground.opacity(isHovered ? 0.86 : 0.72)
+        }
+
+        private var trackBorder: Color {
+            if configuration.isOn {
+                return MoodistTheme.Colors.accent.opacity(0.42)
+            }
+            return Color.primary.opacity(0.18)
+        }
     }
 }
 

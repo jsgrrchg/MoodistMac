@@ -72,10 +72,13 @@ private struct MarqueeLabel: View {
             ZStack(alignment: .leading) {
                 if shouldScroll {
                     #if os(macOS)
+                    let marqueeNSColor: NSColor = colorScheme == .dark
+                        ? .white
+                        : NSColor(calibratedWhite: 0.42, alpha: 1)
                     MarqueeTextView(
                         text: text,
                         font: NSFont.systemFont(ofSize: fontSize, weight: fontWeight.toNSFontWeight()),
-                        color: NSColor(color),
+                        color: marqueeNSColor,
                         speed: marqueeSpeed,
                         spacing: spacing,
                         containerWidth: containerWidth,
@@ -104,16 +107,12 @@ private struct MarqueeLabel: View {
                     #endif
                 } else {
                     #if os(macOS)
-                    MarqueeTextView(
-                        text: text,
-                        font: NSFont.systemFont(ofSize: fontSize, weight: fontWeight.toNSFontWeight()),
-                        color: NSColor(color),
-                        speed: marqueeSpeed,
-                        spacing: spacing,
-                        containerWidth: containerWidth,
-                        isEnabled: false,
-                        colorScheme: colorScheme
-                    )
+                    Text(text)
+                        .font(swiftUIFont)
+                        .foregroundStyle(color)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     #else
                     Text(text)
                         .font(swiftUIFont)
@@ -174,10 +173,6 @@ struct BottomPlayerBarView: View {
         store.displayedMixName ?? (store.hasSelection ? L10n.customMix : L10n.noSoundsPlaying)
     }
 
-    private var displayIconName: String {
-        store.displayedMixIconName ?? "waveform"
-    }
-
     var body: some View {
         GeometryReader { proxy in
             let availableWidth = proxy.size.width
@@ -188,7 +183,7 @@ struct BottomPlayerBarView: View {
                 Spacer(minLength: 0)
                 HStack(spacing: 0) {
                     Spacer(minLength: 0)
-                    floatingBarContainer
+                    floatingBarContainer(availableWidth: barWidth)
                         .frame(width: barWidth)
                     Spacer(minLength: 0)
                 }
@@ -300,7 +295,7 @@ struct BottomPlayerBarView: View {
         .frame(minWidth: 0, maxWidth: .infinity)
     }
 
-    @ViewBuilder private var floatingBarContainer: some View {
+    @ViewBuilder private func floatingBarContainer(availableWidth: CGFloat) -> some View {
         #if LIQUID_GLASS_SDK
         if #available(macOS 26.0, *) {
             if transparencyEnabled {
@@ -310,7 +305,7 @@ struct BottomPlayerBarView: View {
                         .fill(Color.clear)
                         .glassEffect(.regular.interactive(), in: floatingBarShape)
                         .opacity(0.85)
-                    GeometryReader { g in barContent(availableWidth: g.size.width, barTextColor: playerBarTextColor) }
+                    barContent(availableWidth: availableWidth, barTextColor: playerBarTextColor)
                 }
                 .clipShape(floatingBarShape)
                 .contentShape(floatingBarShape)
@@ -319,30 +314,30 @@ struct BottomPlayerBarView: View {
                 .shadow(color: Color.black.opacity(0.12), radius: 16, x: 0, y: 6)
                 .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
             } else {
-                solidBarContainer
+                solidBarContainer(availableWidth: availableWidth)
             }
         } else {
             if transparencyEnabled {
-                fallbackBarContainer
+                fallbackBarContainer(availableWidth: availableWidth)
             } else {
-                solidBarContainer
+                solidBarContainer(availableWidth: availableWidth)
             }
         }
         #else
         if transparencyEnabled {
-            fallbackBarContainer
+            fallbackBarContainer(availableWidth: availableWidth)
         } else {
-            solidBarContainer
+            solidBarContainer(availableWidth: availableWidth)
         }
         #endif
     }
     
-    private var fallbackBarContainer: some View {
+    private func fallbackBarContainer(availableWidth: CGFloat) -> some View {
         ZStack {
             VisualEffectBackground(material: .hudWindow, blendingMode: .withinWindow)
                 .opacity(0.85)
                 .clipShape(floatingBarShape)
-            GeometryReader { g in barContent(availableWidth: g.size.width, barTextColor: playerBarTextColor) }
+            barContent(availableWidth: availableWidth, barTextColor: playerBarTextColor)
         }
         .clipShape(floatingBarShape)
         .contentShape(floatingBarShape)
@@ -352,11 +347,11 @@ struct BottomPlayerBarView: View {
         .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
     }
     
-    private var solidBarContainer: some View {
+    private func solidBarContainer(availableWidth: CGFloat) -> some View {
         ZStack {
             floatingBarShape
                 .fill(PlatformColor.windowBackground)
-            GeometryReader { g in barContent(availableWidth: g.size.width, barTextColor: playerBarTextColor) }
+            barContent(availableWidth: availableWidth, barTextColor: playerBarTextColor)
         }
         .clipShape(floatingBarShape)
         .contentShape(floatingBarShape)

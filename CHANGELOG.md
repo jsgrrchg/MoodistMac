@@ -5,6 +5,19 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] – Unreleased
+
+### Added
+- **Save mix (icon library)**: Redesigned the icon picker as a navigable SF Symbols browser with category tabs and a searchable grid, allowing broader icon discovery while keeping the existing visual language.
+- **Save mix (custom icon)**: Added a custom palm tree SVG icon (`PalmTreeSolid`) as a selectable option in the **Places** category, positioned as the first icon.
+
+### Changed
+- **Timer**: The custom timer panel was converted into a standalone window, so it can be opened and used while the main app window is hidden (including access from Dock menu, menu bar menu, and app command menus).
+- **Save mix (layout harmony)**: Moved the category buttons directly below the `Search SF Symbols` field and harmonized spacing, hierarchy, and control styling across the whole sheet.
+- **Mix icon rendering**: Introduced centralized `MixIcon` / `MixIconImage` helpers so custom and SF Symbol icons render consistently in the picker, mix rows, and sidebar entries.
+- **Mix icon sizing**: Matched mix icon sizing to sound-row sizing and normalized the palm icon optical scale to align with SF Symbols.
+- **ContentView refactor**: Broke the oversized `ContentView` into smaller focused components (`ContentSections`, `ContentToolbar`, `ToolbarBridges`, `ScrollStateStore`, `SidebarLayout`) to improve maintainability and reduce complexity.
+
 ---
 
 ## [1.0.0] – 2026-02-10
@@ -200,7 +213,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/jsgrrchg/MoodistMac/releases/tag/v1.0.0
 [BETA 5]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-4...Beta-5
 [BETA 4]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-4
