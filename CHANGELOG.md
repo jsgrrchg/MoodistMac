@@ -5,7 +5,7 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.1] – Unreleased
+## [1.0.1] – 2026-02-23
 
 ### Added
 - **Save mix (icon library)**: Redesigned the icon picker as a navigable SF Symbols browser with category tabs and a searchable grid, allowing broader icon discovery while keeping the existing visual language.
