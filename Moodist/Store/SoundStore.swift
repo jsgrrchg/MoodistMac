@@ -3,11 +3,11 @@
 //  MoodistMac
 //
 
-import Foundation
 import Combine
+import Foundation
 
-private extension Collection {
-    subscript(safe index: Index) -> Element? {
+extension Collection {
+    fileprivate subscript(safe index: Index) -> Element? {
         indices.contains(index) ? self[index] : nil
     }
 }
@@ -270,11 +270,14 @@ final class SoundStore: ObservableObject {
         cancelSleepTimer()
         let displayName = name ?? timerLabel(forSeconds: safeDuration)
         let endDate = Date().addingTimeInterval(TimeInterval(safeDuration))
-        activeTimer = TimerItem(name: displayName, durationSeconds: safeDuration, state: .running(endDate: endDate))
+        activeTimer = TimerItem(
+            name: displayName, durationSeconds: safeDuration, state: .running(endDate: endDate))
         timerUsageCounts[safeDuration, default: 0] += 1
         PersistenceService.saveTimerUsageCounts(timerUsageCounts)
         TimerNotificationManager.shared.requestAuthorizationIfNeeded()
-        activeTimerToken = Timer.scheduledTimer(withTimeInterval: TimeInterval(safeDuration), repeats: false) { [weak self] _ in
+        activeTimerToken = Timer.scheduledTimer(
+            withTimeInterval: TimeInterval(safeDuration), repeats: false
+        ) { [weak self] _ in
             Task { @MainActor in
                 self?.completeSleepTimer()
             }
@@ -339,18 +342,6 @@ final class SoundStore: ObservableObject {
         stopPlayback()
         TimerNotificationManager.shared.scheduleFinishedNotification(name: timerName)
         NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
-    }
-
-    /// Reordena los sonidos favoritos (drag and drop en la barra lateral).
-    func moveFavoriteSounds(fromOffsets: IndexSet, toOffset: Int) {
-        var ordered = orderedFavoriteSoundIds
-        ordered.move(fromOffsets: fromOffsets, toOffset: toOffset)
-        favoriteSoundIds = ordered
-    }
-
-    /// Reordena los mixes favoritos (drag and drop en la barra lateral).
-    func moveFavoriteMixes(fromOffsets: IndexSet, toOffset: Int) {
-        favoriteMixIds.move(fromOffsets: fromOffsets, toOffset: toOffset)
     }
 
     /// Añade o quita un mix de favoritos por su id.
@@ -499,7 +490,9 @@ final class SoundStore: ObservableObject {
     /// Guarda la selección actual como un nuevo preset.
     func saveCurrentAsPreset(name: String, iconName: String = "sparkles") {
         let ids = selectedIds
-        guard !ids.isEmpty, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+        guard !ids.isEmpty, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return
+        }
         var volumes: [String: Double] = [:]
         for id in ids {
             if let item = sounds[id] {

@@ -55,7 +55,8 @@ enum PersistenceService {
 
         // Fallback tolerante: recupera elementos válidos si el array contiene
         // entradas legacy/corruptas que invalidan el decode completo.
-        guard let rawArray = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [Any] else {
+        guard let rawArray = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [Any]
+        else {
             NSLog("MoodistMac: failed to decode presets payload.")
             return []
         }
@@ -64,15 +65,18 @@ enum PersistenceService {
         recovered.reserveCapacity(rawArray.count)
         for raw in rawArray {
             guard JSONSerialization.isValidJSONObject(raw),
-                  let itemData = try? JSONSerialization.data(withJSONObject: raw, options: []),
-                  let preset = try? decoder.decode(Preset.self, from: itemData) else {
+                let itemData = try? JSONSerialization.data(withJSONObject: raw, options: []),
+                let preset = try? decoder.decode(Preset.self, from: itemData)
+            else {
                 continue
             }
             recovered.append(preset)
         }
 
         if !recovered.isEmpty {
-            NSLog("MoodistMac: recovered \(recovered.count)/\(rawArray.count) presets from partially invalid payload.")
+            NSLog(
+                "MoodistMac: recovered \(recovered.count)/\(rawArray.count) presets from partially invalid payload."
+            )
         } else {
             NSLog("MoodistMac: failed to decode presets payload.")
         }
@@ -86,7 +90,8 @@ enum PersistenceService {
 
     static func loadRecentMixIds() -> [String] {
         guard let data = UserDefaults.standard.data(forKey: recentMixIdsKey),
-              let ids = try? JSONDecoder().decode([String].self, from: data) else { return [] }
+            let ids = try? JSONDecoder().decode([String].self, from: data)
+        else { return [] }
         return ids
     }
 
@@ -97,7 +102,8 @@ enum PersistenceService {
 
     static func loadRecentSoundIds() -> [String] {
         guard let data = UserDefaults.standard.data(forKey: recentSoundIdsKey),
-              let ids = try? JSONDecoder().decode([String].self, from: data) else { return [] }
+            let ids = try? JSONDecoder().decode([String].self, from: data)
+        else { return [] }
         return ids
     }
 
@@ -108,7 +114,8 @@ enum PersistenceService {
 
     static func loadFavoriteMixIds() -> [String] {
         guard let data = UserDefaults.standard.data(forKey: favoriteMixIdsKey),
-              let ids = try? JSONDecoder().decode([String].self, from: data) else { return [] }
+            let ids = try? JSONDecoder().decode([String].self, from: data)
+        else { return [] }
         return ids
     }
 
@@ -119,7 +126,8 @@ enum PersistenceService {
 
     static func loadFavoriteSoundIds() -> [String] {
         guard let data = UserDefaults.standard.data(forKey: favoriteSoundIdsKey),
-              let ids = try? JSONDecoder().decode([String].self, from: data) else { return [] }
+            let ids = try? JSONDecoder().decode([String].self, from: data)
+        else { return [] }
         return ids
     }
 
@@ -134,22 +142,16 @@ enum PersistenceService {
         return min(15, max(5, v))
     }
 
-    static func saveMaxRecentMixesCount(_ count: Int) {
-        UserDefaults.standard.set(min(15, max(5, count)), forKey: maxRecentMixesCountKey)
-    }
-
     /// Máximo de sonidos recientes en la barra lateral (5...15). Por defecto 12.
     static func loadMaxRecentSoundsCount() -> Int {
         let v = UserDefaults.standard.object(forKey: maxRecentSoundsCountKey) as? Int ?? 12
         return min(15, max(5, v))
     }
 
-    static func saveMaxRecentSoundsCount(_ count: Int) {
-        UserDefaults.standard.set(min(15, max(5, count)), forKey: maxRecentSoundsCountKey)
-    }
-
     static func loadTransparencyEnabled() -> Bool {
-        guard UserDefaults.standard.object(forKey: transparencyEnabledKey) != nil else { return true }
+        guard UserDefaults.standard.object(forKey: transparencyEnabledKey) != nil else {
+            return true
+        }
         return UserDefaults.standard.bool(forKey: transparencyEnabledKey)
     }
 
@@ -163,14 +165,11 @@ enum PersistenceService {
         return UserDefaults.standard.bool(forKey: mediaKeyNextMixKey)
     }
 
-    static func saveMediaKeyNextMix(_ value: Bool) {
-        UserDefaults.standard.set(value, forKey: mediaKeyNextMixKey)
-    }
-
     /// Estado colapsado de secciones de la barra lateral (id -> true = colapsado). Por defecto todas expandidas.
     static func loadSidebarSectionsCollapsed() -> [String: Bool] {
         guard let data = UserDefaults.standard.data(forKey: sidebarSectionsCollapsedKey),
-              let dict = try? JSONDecoder().decode([String: Bool].self, from: data) else { return [:] }
+            let dict = try? JSONDecoder().decode([String: Bool].self, from: data)
+        else { return [:] }
         return dict
     }
 
@@ -181,7 +180,10 @@ enum PersistenceService {
 
     /// Uso de temporizadores (duración en segundos -> cantidad de uso).
     static func loadTimerUsageCounts() -> [Int: Int] {
-        guard let dict = UserDefaults.standard.dictionary(forKey: timerUsageCountsKey) as? [String: Int] else {
+        guard
+            let dict = UserDefaults.standard.dictionary(forKey: timerUsageCountsKey)
+                as? [String: Int]
+        else {
             return [:]
         }
         var result: [Int: Int] = [:]
@@ -201,7 +203,8 @@ enum PersistenceService {
     /// Anchors de scroll por panel (sounds, mixes, soundsSearch, mixesSearch) para restaurar posición al cambiar de pestaña o reabrir la app.
     static func loadScrollAnchorIds() -> [String: String] {
         guard let data = UserDefaults.standard.data(forKey: scrollAnchorIdsKey),
-              let dict = try? JSONDecoder().decode([String: String].self, from: data) else { return [:] }
+            let dict = try? JSONDecoder().decode([String: String].self, from: data)
+        else { return [:] }
         return dict
     }
 

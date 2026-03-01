@@ -73,36 +73,6 @@ final class UpdateWindowPresenter: NSObject, ObservableObject, NSWindowDelegate 
     private var lastUserState: SPUUserUpdateState?
     private let defaultWindowSize = CGSize(width: 560, height: 520)
 
-    func showPreview() {
-        replyHandler = nil
-        cancellationHandler = nil
-        expectedContentLength = 122_000_000
-        receivedContentLength = 0
-        model = UpdateWindowModel(
-            phase: .available,
-            title: L10n.updateAvailableTitle,
-            subtitle: L10n.updateAvailableSubtitle("1.0 Beta 4 (4)", "1.0 Beta 3 (3)"),
-            currentVersion: "1.0 Beta 3 (3)",
-            newVersion: "1.0 Beta 4 (4)",
-            fileSize: formattedFileSize(expectedContentLength),
-            isCritical: false,
-            isInformationOnly: false,
-            infoURL: nil,
-            releaseNotes: .text("""
-• Floating player controls improved
-• New timer presets and cleaner menu
-• Better sidebar performance
-• Several bug fixes and polish
-"""),
-            releaseNotesError: nil,
-            progressFraction: nil,
-            progressText: nil,
-            primaryActionTitle: L10n.updateDownload,
-            showsCancel: false
-        )
-        presentWindow()
-    }
-
     func showChecking(cancellation: @escaping () -> Void) {
         replyHandler = nil
         cancellationHandler = cancellation
@@ -128,7 +98,10 @@ final class UpdateWindowPresenter: NSObject, ObservableObject, NSWindowDelegate 
         presentWindow()
     }
 
-    func showUpdateFound(appcastItem: SUAppcastItem, state: SPUUserUpdateState, reply: @escaping (SPUUserUpdateChoice) -> Void) {
+    func showUpdateFound(
+        appcastItem: SUAppcastItem, state: SPUUserUpdateState,
+        reply: @escaping (SPUUserUpdateChoice) -> Void
+    ) {
         lastAppcastItem = appcastItem
         lastUserState = state
         replyHandler = reply
@@ -248,7 +221,9 @@ final class UpdateWindowPresenter: NSObject, ObservableObject, NSWindowDelegate 
         dismiss()
     }
 
-    private func updatePhase(_ phase: UpdateWindowModel.Phase, showsCancel: Bool, resetProgress: Bool) {
+    private func updatePhase(
+        _ phase: UpdateWindowModel.Phase, showsCancel: Bool, resetProgress: Bool
+    ) {
         let appcastItem = lastAppcastItem
         let state = lastUserState
         var next = makeModel(for: phase, appcastItem: appcastItem, state: state)
@@ -278,7 +253,9 @@ final class UpdateWindowPresenter: NSObject, ObservableObject, NSWindowDelegate 
         model = next
     }
 
-    private func makeModel(for phase: UpdateWindowModel.Phase, appcastItem: SUAppcastItem?, state: SPUUserUpdateState?) -> UpdateWindowModel {
+    private func makeModel(
+        for phase: UpdateWindowModel.Phase, appcastItem: SUAppcastItem?, state: SPUUserUpdateState?
+    ) -> UpdateWindowModel {
         let currentVersion = currentAppVersionDisplay()
         let newVersion = appcastItem.map { appcastVersionDisplay($0) }
         let subtitle: String
@@ -307,7 +284,8 @@ final class UpdateWindowPresenter: NSObject, ObservableObject, NSWindowDelegate 
 
         let isInformationOnly = appcastItem?.isInformationOnlyUpdate ?? false
         let isCritical = appcastItem?.isCriticalUpdate ?? false
-        let infoURL = appcastItem?.infoURL ?? appcastItem?.releaseNotesURL ?? appcastItem?.fullReleaseNotesURL
+        let infoURL =
+            appcastItem?.infoURL ?? appcastItem?.releaseNotesURL ?? appcastItem?.fullReleaseNotesURL
         let fileSize = appcastItem?.contentLength ?? expectedContentLength
         let primaryActionTitle: String? = {
             if phase == .available || phase == .readyToInstall {
@@ -377,8 +355,11 @@ final class UpdateWindowPresenter: NSObject, ObservableObject, NSWindowDelegate 
     }
 
     private func currentAppVersionDisplay() -> String {
-        let shortVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0"
-        let buildVersion = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
+        let shortVersion =
+            Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String
+            ?? "1.0"
+        let buildVersion =
+            Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1"
         if buildVersion.isEmpty || buildVersion == shortVersion {
             return shortVersion
         }
@@ -424,9 +405,13 @@ final class MoodistUpdateUserDriver: NSObject, SPUUserDriver {
         self.presenter = presenter
     }
 
-    func show(_ _: SPUUpdatePermissionRequest, reply: @escaping @Sendable (SUUpdatePermissionResponse) -> Void) {
+    func show(
+        _ _: SPUUpdatePermissionRequest,
+        reply: @escaping @Sendable (SUUpdatePermissionResponse) -> Void
+    ) {
         Task { @MainActor in
-            let appName = Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? L10n.appName
+            let appName =
+                Bundle.main.object(forInfoDictionaryKey: "CFBundleName") as? String ?? L10n.appName
             let alert = NSAlert()
             alert.messageText = L10n.updatePermissionTitle
             alert.informativeText = L10n.updatePermissionMessage(appName)
@@ -434,7 +419,8 @@ final class MoodistUpdateUserDriver: NSObject, SPUUserDriver {
             alert.addButton(withTitle: L10n.updatePermissionNotNow)
             let response = alert.runModal()
             let allow = response == .alertFirstButtonReturn
-            reply(SUUpdatePermissionResponse(automaticUpdateChecks: allow, sendSystemProfile: false))
+            reply(
+                SUUpdatePermissionResponse(automaticUpdateChecks: allow, sendSystemProfile: false))
         }
     }
 
@@ -444,7 +430,10 @@ final class MoodistUpdateUserDriver: NSObject, SPUUserDriver {
         }
     }
 
-    func showUpdateFound(with appcastItem: SUAppcastItem, state: SPUUserUpdateState, reply: @escaping @Sendable (SPUUserUpdateChoice) -> Void) {
+    func showUpdateFound(
+        with appcastItem: SUAppcastItem, state: SPUUserUpdateState,
+        reply: @escaping @Sendable (SPUUserUpdateChoice) -> Void
+    ) {
         Task { @MainActor in
             presenter.showUpdateFound(appcastItem: appcastItem, state: state, reply: reply)
         }
@@ -462,7 +451,9 @@ final class MoodistUpdateUserDriver: NSObject, SPUUserDriver {
         }
     }
 
-    func showUpdateNotFoundWithError(_ error: any Error, acknowledgement: @escaping @Sendable () -> Void) {
+    func showUpdateNotFoundWithError(
+        _ error: any Error, acknowledgement: @escaping @Sendable () -> Void
+    ) {
         Task { @MainActor in
             let alert = NSAlert(error: error)
             alert.runModal()
@@ -516,13 +507,18 @@ final class MoodistUpdateUserDriver: NSObject, SPUUserDriver {
         }
     }
 
-    func showInstallingUpdate(withApplicationTerminated _: Bool, retryTerminatingApplication _: @escaping @Sendable () -> Void) {
+    func showInstallingUpdate(
+        withApplicationTerminated _: Bool,
+        retryTerminatingApplication _: @escaping @Sendable () -> Void
+    ) {
         Task { @MainActor in
             presenter.showInstalling()
         }
     }
 
-    func showUpdateInstalledAndRelaunched(_ _: Bool, acknowledgement: @escaping @Sendable () -> Void) {
+    func showUpdateInstalledAndRelaunched(
+        _ _: Bool, acknowledgement: @escaping @Sendable () -> Void
+    ) {
         Task { @MainActor in
             presenter.dismiss()
             acknowledgement()

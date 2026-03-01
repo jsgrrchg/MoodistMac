@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+  
 struct SoundRow: View {
     let sound: Sound
     @ObservedObject var store: SoundStore

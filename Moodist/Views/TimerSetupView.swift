@@ -1,42 +1,102 @@
 import SwiftUI
 
+// MARK: - Drum Column Picker
+
+private struct TimerColumnPicker: View {
+    @Binding var value: Int
+    let range: ClosedRange<Int>
+    let label: String
+
+    @State private var isEditing = false
+    @State private var editText = ""
+    @FocusState private var fieldFocused: Bool
+
+    var body: some View {
+        VStack(spacing: 6) {
+            Text(label)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+
+            // Number: TextField while editing, Text otherwise
+            if isEditing {
+                TextField("", text: $editText)
+                    .font(.system(size: 48, weight: .thin, design: .monospaced))
+                    .multilineTextAlignment(.center)
+                    .textFieldStyle(.plain)
+                    .frame(width: 72, height: 58)
+                    .focused($fieldFocused)
+                    .onSubmit { commitEdit() }
+                    .onChange(of: editText) { _, newVal in
+                        let filtered = String(newVal.filter(\.isNumber).prefix(2))
+                        if filtered != newVal { editText = filtered }
+                    }
+                    .onChange(of: fieldFocused) { _, focused in
+                        if !focused { commitEdit() }
+                    }
+            } else {
+                Text(String(format: "%02d", value))
+                    .font(.system(size: 48, weight: .thin, design: .monospaced))
+                    .foregroundStyle(.primary)
+                    .frame(width: 72, height: 58)
+                    .contentShape(Rectangle())
+                    .onTapGesture { beginEdit() }
+            }
+        }
+    }
+
+    private func beginEdit() {
+        editText = String(format: "%02d", value)
+        isEditing = true
+        fieldFocused = true
+    }
+
+    private func commitEdit() {
+        if let parsed = Int(editText) {
+            value = max(range.lowerBound, min(range.upperBound, parsed))
+        }
+        isEditing = false
+        editText = ""
+    }
+}
+
+// MARK: - Separator
+
+private struct ColonSeparator: View {
+    var body: some View {
+        VStack(spacing: 6) {
+            // Spacer matching the label row height
+            Color.clear.frame(height: 16)
+            Text(":")
+                .font(.system(size: 42, weight: .thin, design: .monospaced))
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                .frame(height: 58)
+        }
+    }
+}
+
+// MARK: - Timer Setup View
+
 struct TimerSetupView: View {
     @ObservedObject var store: SoundStore
     var onDismiss: () -> Void
 
-    @State private var minutesText = ""
+    @State private var selectedHours: Int = 0
+    @State private var selectedMinutes: Int = 15
+    @State private var selectedSeconds: Int = 0
+
     @State private var isCancelHovered = false
     @State private var isStopHovered = false
     @State private var isStartHovered = false
-    @FocusState private var isMinutesFocused: Bool
 
     private let quickPresetMinutes: [Int] = [15, 30, 45, 60, 90, 120]
-    private let maxMinutes = 24 * 60
 
-    private var parsedMinutes: Int? {
-        Int(minutesText.trimmingCharacters(in: .whitespacesAndNewlines))
+    private var totalSeconds: Int {
+        selectedHours * 3600 + selectedMinutes * 60 + selectedSeconds
     }
 
-    private var canStart: Bool {
-        guard let minutes = parsedMinutes else { return false }
-        return (1...maxMinutes).contains(minutes)
-    }
+    private var canStart: Bool { totalSeconds >= 1 }
 
-    private var validationMessage: String? {
-        guard !minutesText.isEmpty else { return nil }
-        guard let minutes = parsedMinutes, (1...maxMinutes).contains(minutes) else {
-            return L10n.timerMinutesValidation
-        }
-        if minutes >= 60 {
-            let hours = Double(minutes) / 60.0
-            return String(format: "%.1f h", hours)
-        }
-        return "\(minutes) min"
-    }
-
-    private var hasActiveTimer: Bool {
-        store.activeTimer != nil
-    }
+    private var hasActiveTimer: Bool { store.activeTimer != nil }
 
     private var primaryButtonTitle: String {
         hasActiveTimer ? L10n.timerReplace : L10n.timerStart
@@ -44,6 +104,8 @@ struct TimerSetupView: View {
 
     var body: some View {
         VStack(spacing: 0) {
+
+            // MARK: Header
             VStack(spacing: MoodistTheme.Spacing.small) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 14)
@@ -51,7 +113,7 @@ struct TimerSetupView: View {
                             LinearGradient(
                                 colors: [
                                     MoodistTheme.Colors.accent.opacity(0.25),
-                                    MoodistTheme.Colors.cardBackground.opacity(0.85)
+                                    MoodistTheme.Colors.cardBackground.opacity(0.85),
                                 ],
                                 startPoint: .topLeading,
                                 endPoint: .bottomTrailing
@@ -76,6 +138,7 @@ struct TimerSetupView: View {
             }
             .padding(.bottom, MoodistTheme.Spacing.medium)
 
+            // MARK: Active timer banner
             if let timer = store.activeTimer {
                 HStack(spacing: 8) {
                     Image(systemName: "clock.badge.checkmark")
@@ -98,39 +161,28 @@ struct TimerSetupView: View {
                 .padding(.bottom, MoodistTheme.Spacing.medium)
             }
 
-            HStack(spacing: 8) {
-                Image(systemName: "clock")
-                    .foregroundStyle(MoodistTheme.Colors.secondaryText)
-                TextField(L10n.timerMinutesPlaceholder, text: $minutesText)
-                    .focused($isMinutesFocused)
-                    .textFieldStyle(.plain)
-                    .onSubmit { startAndDismiss() }
-                    .onChange(of: minutesText) { _, newValue in
-                        let filtered = String(newValue.filter(\.isNumber))
-                        if filtered != newValue {
-                            minutesText = filtered
-                        }
-                    }
+            // MARK: Drum Picker
+            HStack(alignment: .top, spacing: 0) {
+                Spacer(minLength: 0)
+                TimerColumnPicker(value: $selectedHours, range: 0...23, label: "h")
+                ColonSeparator()
+                TimerColumnPicker(value: $selectedMinutes, range: 0...59, label: "min")
+                ColonSeparator()
+                TimerColumnPicker(value: $selectedSeconds, range: 0...59, label: "s")
+                Spacer(minLength: 0)
             }
             .padding(.horizontal, MoodistTheme.Spacing.medium)
-            .padding(.vertical, MoodistTheme.Spacing.small + 2)
+            .padding(.vertical, MoodistTheme.Spacing.small)
             .background(
-                RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
+                RoundedRectangle(cornerRadius: MoodistTheme.Radius.large)
                     .fill(MoodistTheme.Colors.cardBackground)
                     .overlay(
-                        RoundedRectangle(cornerRadius: MoodistTheme.Radius.medium)
-                            .strokeBorder(canStart || minutesText.isEmpty ? Color.primary.opacity(0.12) : Color.red.opacity(0.45), lineWidth: 1)
+                        RoundedRectangle(cornerRadius: MoodistTheme.Radius.large)
+                            .strokeBorder(Color.primary.opacity(0.1), lineWidth: 1)
                     )
             )
 
-            if let validationMessage {
-                Text(validationMessage)
-                    .font(.footnote)
-                    .foregroundStyle(canStart ? MoodistTheme.Colors.secondaryText : .red)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.top, MoodistTheme.Spacing.xSmall)
-            }
-
+            // MARK: Quick Presets
             VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
                 Text(L10n.timerQuickPresets)
                     .font(.subheadline.weight(.medium))
@@ -138,29 +190,33 @@ struct TimerSetupView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 64), spacing: 6)], spacing: 6) {
                     ForEach(quickPresetMinutes, id: \.self) { minutes in
                         Button {
-                            minutesText = "\(minutes)"
+                            applyQuickPreset(minutes: minutes)
                         } label: {
                             Text(formatQuickPreset(minutes))
                                 .frame(maxWidth: .infinity)
                         }
-                        .buttonStyle(HeaderActionButtonStyle(
-                            isHovered: false,
-                            isPrimary: parsedMinutes == minutes,
-                            isCompact: true
-                        ))
+                        .buttonStyle(
+                            HeaderActionButtonStyle(
+                                isHovered: false,
+                                isPrimary: isActivePreset(minutes: minutes),
+                                isCompact: true
+                            ))
                     }
                 }
             }
             .padding(.top, MoodistTheme.Spacing.medium)
 
+            // MARK: Action Buttons
             HStack(spacing: 8) {
                 Button(L10n.cancel) { onDismiss() }
                     .keyboardShortcut(.cancelAction)
-                    .buttonStyle(HeaderActionButtonStyle(
-                        isHovered: isCancelHovered,
-                        isPrimary: false,
-                        isCompact: false
-                    ))
+                    .buttonStyle(
+                        HeaderActionButtonStyle(
+                            isHovered: isCancelHovered,
+                            isPrimary: false,
+                            isCompact: false
+                        )
+                    )
                     .onHover { isCancelHovered = $0 }
 
                 if hasActiveTimer {
@@ -168,21 +224,25 @@ struct TimerSetupView: View {
                         store.cancelSleepTimer()
                         onDismiss()
                     }
-                    .buttonStyle(HeaderActionButtonStyle(
-                        isHovered: isStopHovered,
-                        isPrimary: false,
-                        isCompact: false
-                    ))
+                    .buttonStyle(
+                        HeaderActionButtonStyle(
+                            isHovered: isStopHovered,
+                            isPrimary: false,
+                            isCompact: false
+                        )
+                    )
                     .onHover { isStopHovered = $0 }
                 }
 
                 Button(primaryButtonTitle) { startAndDismiss() }
                     .keyboardShortcut(.defaultAction)
-                    .buttonStyle(HeaderActionButtonStyle(
-                        isHovered: isStartHovered,
-                        isPrimary: true,
-                        isCompact: false
-                    ))
+                    .buttonStyle(
+                        HeaderActionButtonStyle(
+                            isHovered: isStartHovered,
+                            isPrimary: true,
+                            isCompact: false
+                        )
+                    )
                     .onHover { isStartHovered = $0 }
                     .disabled(!canStart)
             }
@@ -193,12 +253,23 @@ struct TimerSetupView: View {
         .padding(.vertical, 18)
         .frame(width: 348)
         .background(PlatformColor.windowBackground)
-        .onAppear { isMinutesFocused = true }
+    }
+
+    // MARK: - Helpers
+
+    private func applyQuickPreset(minutes: Int) {
+        selectedHours = minutes / 60
+        selectedMinutes = minutes % 60
+        selectedSeconds = 0
+    }
+
+    private func isActivePreset(minutes: Int) -> Bool {
+        selectedSeconds == 0 && selectedHours == minutes / 60 && selectedMinutes == minutes % 60
     }
 
     private func startAndDismiss() {
-        guard canStart, let minutes = parsedMinutes else { return }
-        store.startSleepTimer(durationSeconds: minutes * 60)
+        guard canStart else { return }
+        store.startSleepTimer(durationSeconds: totalSeconds)
         onDismiss()
     }
 
@@ -219,12 +290,8 @@ struct TimerSetupView: View {
     private func formatQuickPreset(_ minutes: Int) -> String {
         let hours = minutes / 60
         let remainder = minutes % 60
-        if hours > 0 && remainder > 0 {
-            return "\(hours)h \(remainder)m"
-        }
-        if hours > 0 {
-            return "\(hours)h"
-        }
+        if hours > 0 && remainder > 0 { return "\(hours)h \(remainder)m" }
+        if hours > 0 { return "\(hours)h" }
         return "\(minutes)m"
     }
 }

@@ -81,7 +81,6 @@ enum SoundIcons {
     static let fanbladesFill = "fanblades.fill"
     static let dryerFill = "dryer.fill"
     static let filmFill = "film.fill"
-    static let bubbleFill = "bubble.left.and.bubble.right.fill"
     static let radioFill = "radio.fill"
     static let dotRadiowaves = "dot.radiowaves.left.and.right"
     static let recordCircle = "record.circle"
@@ -96,10 +95,10 @@ enum SoundIcons {
     // MARK: - Audio
     static let waveform = "waveform"
     static let waveformCircleFill = "waveform.circle.fill"
-    
+
     // MARK: - Militar
     static let shieldFill = "shield.fill"
-    
+
     // MARK: - Personas / ruido
     static let personFill = "person.fill"
 }

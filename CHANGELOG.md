@@ -5,6 +5,24 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] – 2026-03_01
+
+### Added
+- None.
+
+### Changed
+- **Timer (UI redesign)**: Replaced the plain minutes text field with a drum-style `h : min : s` picker inspired by the macOS Clock app. Each column displays a large monospaced number; clicking any column activates an inline text field for manual input (digits only, clamped to valid range on confirm). Quick presets below remain unchanged.
+- **Save mix (UI redesign)**: Completely redesigned the Save Mix sheet for better usability and visual clarity. Key improvements: centered preview icon header with subtle accent glow (replaces heavy header card), streamlined layout with fewer visual layers (single unified background instead of 3 separate cards), clean name input field without wrapper, removal of redundant "Sparkles" badge in the icon section and footer, narrower width (420px vs 460px) for a more compact feel, non-selected icons now display cleanly without background (only selected icons have accent background/border), smooth animations for icon preview changes and input focus states. The overall design maintains design system consistency while significantly reducing visual noise and improving the form hierarchy.
+- **Sounds/Mixes transition internals**: Kept both section scroll views mounted and applied the section switch effect with slide+fade (`offset` + `opacity`) instead of mount/unmount transitions.
+- **Sounds/Mixes transition feel**: Updated the section switch animation curve to a faster spring with a clearer bounce (`interpolatingSpring`) so tab changes feel snappier and more tactile.
+- **Codebase cleanup**: Removed unused/dead code across models, services, theme tokens, localization entries, and UI helpers to keep the project leaner and easier to maintain.
+
+### Fixed
+- **Sounds/Mixes scroll restoration**: Fixed a regression where switching between sections reset the previous panel to the top. The app now preserves each section scroll position when moving from Sounds to Mixes and back. This bug was introduced accidentally in the previous release.
+- **Sidebar drag & drop**: Improved reorder behavior in the Favorites and Favorite Mixes sections. Items now animate smoothly to their new position using a spring curve, an insertion line indicator appears at the drop target while dragging, and window controls no longer flicker during drag interactions.
+
+---
+
 ## [1.0.1] – 2026-02-23
 
 ### Added
@@ -224,8 +242,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.1...HEAD
-[1.0.1]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jsgrrchg/MoodistMac/releases/tag/v1.0.0
 [BETA 5]: https://github.com/jsgrrchg/MoodistMac/compare/Beta-4...Beta-5
 [BETA 4]: https://github.com/jsgrrchg/MoodistMac/releases/tag/Beta-4

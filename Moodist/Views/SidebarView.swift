@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import UniformTypeIdentifiers
 
 // MARK: - Constantes de estilo (sidebar limpio / tipo Cursor)
 
@@ -18,50 +17,25 @@ private enum SidebarStyle {
     static let rowSpacing: CGFloat = 4
     static let sectionSpacing: CGFloat = 10
     static let iconSize: CGFloat = 14
-    static let selectionRadius: CGFloat = 6
-    static let selectionOpacity: Double = 0.08
     static let primaryText = Color.primary.opacity(0.9)
     static let secondaryText = Color.primary.opacity(0.45)
     static let sidebarInset: CGFloat = 8
-    static let titlebarInset: CGFloat = 14
-    static let chromeHeight: CGFloat = 34
     /// Altura reservada en la parte superior para que el contenido del scroll no invada los traffic lights.
     static let titleBarReservedHeight: CGFloat = 52
-    static let topFadeHeight: CGFloat = 24
-    static let bottomFadeHeight: CGFloat = 18
 }
 
-private let sidebarSectionIds = (favorites: "favorites", recentSounds: "recentSounds", favoriteMixes: "favoriteMixes", recentMixes: "recentMixes")
-
-private let favoriteSoundDragType = UTType(exportedAs: "com.moodistmac.favorite-sound-id")
-private let favoriteMixDragType = UTType(exportedAs: "com.moodistmac.favorite-mix-id")
-private let favoriteSoundDragTypes: [UTType] = [favoriteSoundDragType]
-private let favoriteMixDragTypes: [UTType] = [favoriteMixDragType]
-/// Umbral vertical dentro de la fila para decidir inserción antes/después al arrastrar.
-private let sidebarDropSplitY: CGFloat = 14
-
-private func sidebarDragItemProvider(id: String, type: UTType) -> NSItemProvider {
-    let provider = NSItemProvider()
-    let payload = Data(id.utf8)
-    provider.registerDataRepresentation(forTypeIdentifier: type.identifier, visibility: .all) { completion in
-        completion(payload, nil)
-        return nil
-    }
-    provider.suggestedName = id
-    return provider
-}
+private let sidebarSectionIds = (
+    favorites: "favorites", recentSounds: "recentSounds", favoriteMixes: "favoriteMixes",
+    recentMixes: "recentMixes"
+)
 
 struct SidebarView: View {
     @EnvironmentObject var store: SoundStore
-    @State private var sectionsCollapsed: [String: Bool] = PersistenceService.loadSidebarSectionsCollapsed()
-    @State private var draggedFavoriteSoundId: String?
-    @State private var draggedFavoriteMixId: String?
-    @State private var lastFavoriteSoundDropTargetId: String?
-    @State private var lastFavoriteMixDropTargetId: String?
-    /// Indica si el indicador de inserción va "antes" (true) o "después" (false) de la fila objetivo.
-    @State private var soundDropInsertBefore: Bool = true
-    @State private var mixDropInsertBefore: Bool = true
+    @State private var sectionsCollapsed: [String: Bool] =
+        PersistenceService.loadSidebarSectionsCollapsed()
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
+    @State private var soundDropTargetId: String? = nil
+    @State private var mixDropTargetId: String? = nil
 
     /// Sonidos favoritos en el orden elegido por el usuario (permite drag and drop).
     private var orderedFavoriteSounds: [Sound] {
@@ -101,88 +75,111 @@ struct SidebarView: View {
         ZStack {
             // Fondo opaco que cubre todo el sidebar (incluida zona de scroller).
             sidebarBackground
-            
+
             VStack(spacing: 0) {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: SidebarStyle.sectionSpacing) {
                         // Sección Favoritos (reordenable con drag and drop)
-                        sidebarSectionHeader(L10n.sidebarFavorites, sectionId: sidebarSectionIds.favorites)
+                        sidebarSectionHeader(
+                            L10n.sidebarFavorites, sectionId: sidebarSectionIds.favorites)
                         if !isSectionCollapsed(sidebarSectionIds.favorites) {
                             if orderedFavoriteSounds.isEmpty {
                                 sidebarPlaceholder(L10n.sidebarFavoritesEmpty)
                             } else {
                                 VStack(spacing: 1) {
                                     ForEach(orderedFavoriteSounds, id: \.id) { sound in
-                                        VStack(spacing: 0) {
-                                            if lastFavoriteSoundDropTargetId == sound.id && draggedFavoriteSoundId != nil && soundDropInsertBefore {
-                                                sidebarInsertionLine
-                                            }
-                                            SidebarSoundRow(sound: sound, store: store)
-                                                .onDrag {
-                                                    draggedFavoriteMixId = nil
-                                                    draggedFavoriteSoundId = sound.id
-                                                    return sidebarDragItemProvider(id: sound.id, type: favoriteSoundDragType)
+                                        SidebarSoundRow(sound: sound, store: store)
+                                            .draggable(sound.id)
+                                            .dropDestination(for: String.self) { droppedIds, _ in
+                                                guard let draggedId = droppedIds.first,
+                                                    draggedId != sound.id,
+                                                    store.orderedFavoriteSoundIds.contains(
+                                                        draggedId)
+                                                else { return false }
+                                                var ordered = store.orderedFavoriteSoundIds
+                                                guard let from = ordered.firstIndex(of: draggedId)
+                                                else { return false }
+                                                ordered.remove(at: from)
+                                                guard let to = ordered.firstIndex(of: sound.id)
+                                                else { return false }
+                                                ordered.insert(draggedId, at: to)
+                                                store.favoriteSoundIds = ordered
+                                                return true
+                                            } isTargeted: { isTargeted in
+                                                if isTargeted {
+                                                    soundDropTargetId = sound.id
+                                                } else if soundDropTargetId == sound.id {
+                                                    soundDropTargetId = nil
                                                 }
-                                                .onDrop(
-                                                    of: favoriteSoundDragTypes,
-                                                    delegate: FavoriteSoundDropDelegate(
-                                                        destinationSoundId: sound.id,
-                                                        store: store,
-                                                        draggedSoundId: $draggedFavoriteSoundId,
-                                                        lastDropTargetId: $lastFavoriteSoundDropTargetId,
-                                                        insertBefore: $soundDropInsertBefore
-                                                    )
-                                                )
-                                            if lastFavoriteSoundDropTargetId == sound.id && draggedFavoriteSoundId != nil && !soundDropInsertBefore {
-                                                sidebarInsertionLine
                                             }
-                                        }
-                                        .id("sidebar-favorite-sound-\(sound.id)")
+                                            .overlay(alignment: .top) {
+                                                insertionLine
+                                                    .opacity(soundDropTargetId == sound.id ? 1 : 0)
+                                                    .animation(
+                                                        .easeInOut(duration: 0.12),
+                                                        value: soundDropTargetId == sound.id)
+                                            }
+                                            .id("sidebar-favorite-sound-\(sound.id)")
                                     }
                                 }
+                                .animation(
+                                    .spring(response: 0.3, dampingFraction: 0.8),
+                                    value: orderedFavoriteSounds.map(\.id))
                             }
                         }
 
                         // Sección Mixes favoritos (reordenable con drag and drop)
-                        sidebarSectionHeader(L10n.sidebarFavoriteMixes, sectionId: sidebarSectionIds.favoriteMixes)
+                        sidebarSectionHeader(
+                            L10n.sidebarFavoriteMixes, sectionId: sidebarSectionIds.favoriteMixes)
                         if !isSectionCollapsed(sidebarSectionIds.favoriteMixes) {
                             if favoriteMixes.isEmpty {
                                 sidebarPlaceholder(L10n.sidebarFavoriteMixesEmpty)
                             } else {
                                 VStack(spacing: 1) {
                                     ForEach(favoriteMixes, id: \.id) { mix in
-                                        VStack(spacing: 0) {
-                                            if lastFavoriteMixDropTargetId == mix.id && draggedFavoriteMixId != nil && mixDropInsertBefore {
-                                                sidebarInsertionLine
-                                            }
-                                            SidebarMixRow(mix: mix, store: store)
-                                                .onDrag {
-                                                    draggedFavoriteSoundId = nil
-                                                    draggedFavoriteMixId = mix.id
-                                                    return sidebarDragItemProvider(id: mix.id, type: favoriteMixDragType)
+                                        SidebarMixRow(mix: mix, store: store)
+                                            .draggable(mix.id)
+                                            .dropDestination(for: String.self) { droppedIds, _ in
+                                                guard let draggedId = droppedIds.first,
+                                                    draggedId != mix.id,
+                                                    store.favoriteMixIds.contains(draggedId)
+                                                else { return false }
+                                                var ordered = store.favoriteMixIds
+                                                guard let from = ordered.firstIndex(of: draggedId)
+                                                else { return false }
+                                                ordered.remove(at: from)
+                                                guard let to = ordered.firstIndex(of: mix.id) else {
+                                                    return false
                                                 }
-                                                .onDrop(
-                                                    of: favoriteMixDragTypes,
-                                                    delegate: FavoriteMixDropDelegate(
-                                                        destinationMixId: mix.id,
-                                                        store: store,
-                                                        draggedMixId: $draggedFavoriteMixId,
-                                                        lastDropTargetId: $lastFavoriteMixDropTargetId,
-                                                        insertBefore: $mixDropInsertBefore
-                                                    )
-                                                )
-                                            if lastFavoriteMixDropTargetId == mix.id && draggedFavoriteMixId != nil && !mixDropInsertBefore {
-                                                sidebarInsertionLine
+                                                ordered.insert(draggedId, at: to)
+                                                store.favoriteMixIds = ordered
+                                                return true
+                                            } isTargeted: { isTargeted in
+                                                if isTargeted {
+                                                    mixDropTargetId = mix.id
+                                                } else if mixDropTargetId == mix.id {
+                                                    mixDropTargetId = nil
+                                                }
                                             }
-                                        }
-                                        .id("sidebar-favorite-mix-\(mix.id)")
+                                            .overlay(alignment: .top) {
+                                                insertionLine
+                                                    .opacity(mixDropTargetId == mix.id ? 1 : 0)
+                                                    .animation(
+                                                        .easeInOut(duration: 0.12),
+                                                        value: mixDropTargetId == mix.id)
+                                            }
+                                            .id("sidebar-favorite-mix-\(mix.id)")
                                     }
                                 }
+                                .animation(
+                                    .spring(response: 0.3, dampingFraction: 0.8),
+                                    value: favoriteMixes.map(\.id))
                             }
                         }
 
                         // Sección sonidos recientes
-                        sidebarSectionHeader(L10n.sidebarRecentSounds, sectionId: sidebarSectionIds.recentSounds)
+                        sidebarSectionHeader(
+                            L10n.sidebarRecentSounds, sectionId: sidebarSectionIds.recentSounds)
                         if !isSectionCollapsed(sidebarSectionIds.recentSounds) {
                             if recentSounds.isEmpty {
                                 sidebarPlaceholder(L10n.sidebarRecentSoundsEmpty)
@@ -191,7 +188,10 @@ struct SidebarView: View {
                                     ForEach(recentSounds, id: \.id) { sound in
                                         SidebarSoundRow(sound: sound, store: store)
                                             .contextMenu {
-                                                Button(L10n.addToFavoritesLabel(L10n.soundLabel(sound.id))) {
+                                                Button(
+                                                    L10n.addToFavoritesLabel(
+                                                        L10n.soundLabel(sound.id))
+                                                ) {
                                                     store.toggleFavorite(sound.id)
                                                 }
                                             }
@@ -202,7 +202,8 @@ struct SidebarView: View {
                         }
 
                         // Sección Mixes recientes
-                        sidebarSectionHeader(L10n.sidebarRecentMixes, sectionId: sidebarSectionIds.recentMixes)
+                        sidebarSectionHeader(
+                            L10n.sidebarRecentMixes, sectionId: sidebarSectionIds.recentMixes)
                         if !isSectionCollapsed(sidebarSectionIds.recentMixes) {
                             if recentMixes.isEmpty {
                                 sidebarPlaceholder(L10n.sidebarRecentMixesEmpty)
@@ -216,11 +217,17 @@ struct SidebarView: View {
                                                 }
                                                 Divider()
                                                 if store.favoriteMixIds.contains(mix.id) {
-                                                    Button(L10n.removeFromFavoritesLabel(L10n.mixName(mix.id))) {
+                                                    Button(
+                                                        L10n.removeFromFavoritesLabel(
+                                                            L10n.mixName(mix.id))
+                                                    ) {
                                                         store.toggleFavoriteMix(id: mix.id)
                                                     }
                                                 } else {
-                                                    Button(L10n.addToFavoritesLabel(L10n.mixName(mix.id))) {
+                                                    Button(
+                                                        L10n.addToFavoritesLabel(
+                                                            L10n.mixName(mix.id))
+                                                    ) {
                                                         store.toggleFavoriteMix(id: mix.id)
                                                     }
                                                 }
@@ -287,6 +294,13 @@ struct SidebarView: View {
         }
     }
 
+    private var insertionLine: some View {
+        Rectangle()
+            .fill(Color.accentColor)
+            .frame(height: 2)
+            .offset(y: -1)
+    }
+
     /// Encabezado de sección con chevron para colapsar/expandir.
     private func sidebarSectionHeader(_ title: String, sectionId: String) -> some View {
         return Button(action: { toggleSection(sectionId) }) {
@@ -317,12 +331,6 @@ struct SidebarView: View {
             .padding(.horizontal, SidebarStyle.rowPaddingH)
     }
 
-    private var sidebarInsertionLine: some View {
-        Rectangle()
-            .fill(Color.accentColor)
-            .frame(height: 2)
-            .padding(.leading, SidebarStyle.rowPaddingH + 18 + 10)
-    }
 }
 
 // MARK: - Helper para etiqueta de fila (icono + texto)
@@ -389,7 +397,9 @@ private struct SidebarSoundRow: View {
                 store.toggleFavorite(sound.id)
             }
         }
-        .accessibilityLabel("\(L10n.soundLabel(sound.id)), \(isSelected ? L10n.stateSelected : L10n.stateNotSelected)")
+        .accessibilityLabel(
+            "\(L10n.soundLabel(sound.id)), \(isSelected ? L10n.stateSelected : L10n.stateNotSelected)"
+        )
         .accessibilityHint(L10n.clickToggleSelection)
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { toggleSelection() }
@@ -410,7 +420,9 @@ private struct SidebarMixRow: View {
     let mix: Mix
     @ObservedObject var store: SoundStore
     private var isPlaying: Bool { store.isPlaying && store.displayedMixId == mix.id }
-    private var mixDisplayName: String { (L10n.mixName(mix.id) == mix.id) ? mix.name : L10n.mixName(mix.id) }
+    private var mixDisplayName: String {
+        (L10n.mixName(mix.id) == mix.id) ? mix.name : L10n.mixName(mix.id)
+    }
 
     var body: some View {
         HStack(spacing: 10) {
@@ -455,130 +467,6 @@ private struct SidebarMixRow: View {
         .accessibilityHint(L10n.clickApplyMix)
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { store.applyMix(mix) }
-    }
-}
-
-// MARK: - Drag & drop reorder (favorites)
-
-@MainActor
-private struct FavoriteSoundDropDelegate: DropDelegate {
-    let destinationSoundId: String
-    let store: SoundStore
-    @Binding var draggedSoundId: String?
-    @Binding var lastDropTargetId: String?
-    @Binding var insertBefore: Bool
-
-    func validateDrop(info: DropInfo) -> Bool {
-        info.hasItemsConforming(to: favoriteSoundDragTypes)
-    }
-
-    func dropEntered(info: DropInfo) {
-        guard let draggedId = resolveDraggedId(from: info),
-              draggedId != destinationSoundId else { return }
-        let ordered = store.orderedFavoriteSoundIds
-        guard ordered.firstIndex(of: draggedId) != nil,
-              ordered.firstIndex(of: destinationSoundId) != nil else { return }
-        lastDropTargetId = destinationSoundId
-        updateInsertionSide(from: info)
-    }
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        updateInsertionSide(from: info)
-        return DropProposal(operation: .move)
-    }
-
-    func dropExited(info: DropInfo) {
-        lastDropTargetId = nil
-    }
-
-    func performDrop(info: DropInfo) -> Bool {
-        defer {
-            draggedSoundId = nil
-            lastDropTargetId = nil
-        }
-        guard let draggedId = resolveDraggedId(from: info),
-              draggedId != destinationSoundId else { return true }
-        let ordered = store.orderedFavoriteSoundIds
-        guard let from = ordered.firstIndex(of: draggedId) else { return true }
-        var reordered = ordered
-        reordered.remove(at: from)
-        guard let destinationIndex = reordered.firstIndex(of: destinationSoundId) else { return true }
-        let insertionIndex = insertBefore ? destinationIndex : min(destinationIndex + 1, reordered.count)
-        reordered.insert(draggedId, at: insertionIndex)
-        withAnimation(.easeInOut(duration: 0.2)) {
-            store.favoriteSoundIds = reordered
-        }
-        return true
-    }
-
-    private func resolveDraggedId(from info: DropInfo) -> String? {
-        if let draggedSoundId { return draggedSoundId }
-        return info.itemProviders(for: favoriteSoundDragTypes).first?.suggestedName
-    }
-
-    private func updateInsertionSide(from info: DropInfo) {
-        insertBefore = info.location.y < sidebarDropSplitY
-    }
-}
-
-@MainActor
-private struct FavoriteMixDropDelegate: DropDelegate {
-    let destinationMixId: String
-    let store: SoundStore
-    @Binding var draggedMixId: String?
-    @Binding var lastDropTargetId: String?
-    @Binding var insertBefore: Bool
-
-    func validateDrop(info: DropInfo) -> Bool {
-        info.hasItemsConforming(to: favoriteMixDragTypes)
-    }
-
-    func dropEntered(info: DropInfo) {
-        guard let draggedId = resolveDraggedId(from: info),
-              draggedId != destinationMixId else { return }
-        let ordered = store.favoriteMixIds
-        guard ordered.firstIndex(of: draggedId) != nil,
-              ordered.firstIndex(of: destinationMixId) != nil else { return }
-        lastDropTargetId = destinationMixId
-        updateInsertionSide(from: info)
-    }
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        updateInsertionSide(from: info)
-        return DropProposal(operation: .move)
-    }
-
-    func dropExited(info: DropInfo) {
-        lastDropTargetId = nil
-    }
-
-    func performDrop(info: DropInfo) -> Bool {
-        defer {
-            draggedMixId = nil
-            lastDropTargetId = nil
-        }
-        guard let draggedId = resolveDraggedId(from: info),
-              draggedId != destinationMixId else { return true }
-        let ordered = store.favoriteMixIds
-        guard let from = ordered.firstIndex(of: draggedId) else { return true }
-        var reordered = ordered
-        reordered.remove(at: from)
-        guard let destinationIndex = reordered.firstIndex(of: destinationMixId) else { return true }
-        let insertionIndex = insertBefore ? destinationIndex : min(destinationIndex + 1, reordered.count)
-        reordered.insert(draggedId, at: insertionIndex)
-        withAnimation(.easeInOut(duration: 0.2)) {
-            store.favoriteMixIds = reordered
-        }
-        return true
-    }
-
-    private func resolveDraggedId(from info: DropInfo) -> String? {
-        if let draggedMixId { return draggedMixId }
-        return info.itemProviders(for: favoriteMixDragTypes).first?.suggestedName
-    }
-
-    private func updateInsertionSide(from info: DropInfo) {
-        insertBefore = info.location.y < sidebarDropSplitY
     }
 }
 

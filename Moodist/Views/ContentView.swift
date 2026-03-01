@@ -5,8 +5,8 @@
 //  Vista principal: controles, favoritos, volumen, categorías. macOS Sequoia 15.0+.
 //
 
-import SwiftUI
 import AppKit
+import SwiftUI
 
 private let sidebarWidthMin: CGFloat = 180
 private let sidebarWidthMax: CGFloat = 320
@@ -70,11 +70,13 @@ struct ContentView: View {
     @EnvironmentObject var store: SoundStore
     @Environment(\.openWindow) private var openWindow
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
-    @AppStorage(PersistenceService.collapseCategoriesOnColdOpenKey) private var collapseCategoriesOnColdOpen = true
+    @AppStorage(PersistenceService.collapseCategoriesOnColdOpenKey) private
+        var collapseCategoriesOnColdOpen = true
     @State private var windowWidth: CGFloat = 800
     @State private var requestToolbarSearchFocus = false
     @State private var selectedSection: ContentSection = .sounds
-    @AppStorage("MoodistMac.sidebarWidth") private var persistedSidebarWidth: Double = sidebarWidthDefault
+    @AppStorage("MoodistMac.sidebarWidth") private var persistedSidebarWidth: Double =
+        sidebarWidthDefault
     /// Ancho en uso durante arrastre; solo se persiste al soltar para evitar lag.
     @State private var sidebarWidth: CGFloat = CGFloat(sidebarWidthDefault)
     @State private var sidebarResizeStartWidth: CGFloat = 0
@@ -97,7 +99,6 @@ struct ContentView: View {
     @State private var isResizeCursorActive = false
     @State private var sidebarResizeStartPointerX: CGFloat?
     @State private var playingSoundsCache: [Sound] = []
-    @State private var sectionTransitionDirection: CGFloat = 1
 
     /// La sidebar es siempre visible; el toggle fue eliminado para simplificar la navegación.
     private var isSidebarVisible: Bool { true }
@@ -116,7 +117,8 @@ struct ContentView: View {
     var body: some View {
         ZStack(alignment: .leading) {
             GeometryReader { proxy in
-                let contentWidth = max(0, proxy.size.width - (isSidebarVisible ? contentSidebarWidth : 0))
+                let contentWidth = max(
+                    0, proxy.size.width - (isSidebarVisible ? contentSidebarWidth : 0))
                 mainContent
                     .frame(width: contentWidth, height: proxy.size.height, alignment: .leading)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
@@ -135,9 +137,11 @@ struct ContentView: View {
         .ignoresSafeArea(.container)
         .tint(MoodistTheme.Colors.accent)
         .frame(minWidth: 850, minHeight: 600)
-        .background(GeometryReader { geometry in
-            Color.clear.preference(key: WindowWidthKey.self, value: geometry.size.width)
-        })
+        .background(
+            GeometryReader { geometry in
+                Color.clear.preference(key: WindowWidthKey.self, value: geometry.size.width)
+            }
+        )
         .onPreferenceChange(WindowWidthKey.self) { totalWidth in
             windowWidth = totalWidth
             updateSidebarForWindowWidth(totalWidth)
@@ -157,7 +161,6 @@ struct ContentView: View {
         }
     }
 
-
     private var sidebarOverlay: some View {
         SidebarView()
             .environmentObject(store)
@@ -167,45 +170,45 @@ struct ContentView: View {
 
     @ViewBuilder private var mainContent: some View {
         #if LIQUID_GLASS_SDK
-        if #available(macOS 26.0, *) {
-            // GlassEffectContainer coordina el cristal del reproductor con el contenido:
-            // el contenido detrás se distorsiona/refracta según Liquid Glass.
-            GlassEffectContainer {
-                ZStack(alignment: .bottom) {
-                    // Fondo con extensión para que el cristal pueda muestrear más allá del safe area (Liquid Glass).
-                    PlatformColor.windowBackground
-                        .backgroundExtensionEffect()
-                        .ignoresSafeArea(.container, edges: .top)
-                    NavigationStack {
-                        mainScrollContent
+            if #available(macOS 26.0, *) {
+                // GlassEffectContainer coordina el cristal del reproductor con el contenido:
+                // el contenido detrás se distorsiona/refracta según Liquid Glass.
+                GlassEffectContainer {
+                    ZStack(alignment: .bottom) {
+                        // Fondo con extensión para que el cristal pueda muestrear más allá del safe area (Liquid Glass).
+                        PlatformColor.windowBackground
+                            .backgroundExtensionEffect()
+                            .ignoresSafeArea(.container, edges: .top)
+                        NavigationStack {
+                            mainScrollContent
+                        }
+                        .environment(\.contentAreaWidth, contentAreaWidth)
+                        .frame(minHeight: 0)
+                        .overlay(alignment: .top) {
+                            topControlsBackdrop
+                        }
+                        BottomPlayerBarView()
+                            .environmentObject(store)
+                            .frame(width: contentAreaWidth)
+                            .frame(height: 76)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(maxHeight: .infinity, alignment: .bottom)
                     }
-                    .environment(\.contentAreaWidth, contentAreaWidth)
-                    .frame(minHeight: 0)
-                    .overlay(alignment: .top) {
-                        topControlsBackdrop
+                }
+                .onPreferenceChange(ContentWidthKey.self) { newWidth in
+                    guard sidebarResizeStartWidth == 0 else { return }
+                    if abs(newWidth - contentAreaWidth) >= 0.5 {
+                        contentAreaWidth = newWidth
                     }
-                    BottomPlayerBarView()
-                        .environmentObject(store)
-                        .frame(width: contentAreaWidth)
-                        .frame(height: 76)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .frame(maxHeight: .infinity, alignment: .bottom)
                 }
+            } else {
+                mainContentFallback
             }
-            .onPreferenceChange(ContentWidthKey.self) { newWidth in
-                guard sidebarResizeStartWidth == 0 else { return }
-                if abs(newWidth - contentAreaWidth) >= 0.5 {
-                    contentAreaWidth = newWidth
-                }
-            }
-        } else {
-            mainContentFallback
-        }
         #else
-        mainContentFallback
+            mainContentFallback
         #endif
     }
-    
+
     private var mainContentFallback: some View {
         ZStack(alignment: .bottom) {
             NavigationStack {
@@ -261,48 +264,53 @@ struct ContentView: View {
     }
 
     private func scheduleSoundsScrollRestore(for context: ScrollContext, scrollToTopFirst: Bool) {
-        scrollState.scheduleSoundsScrollRestore(for: context, scrollToTopFirst: scrollToTopFirst) { position in
+        scrollState.scheduleSoundsScrollRestore(for: context, scrollToTopFirst: scrollToTopFirst) {
+            position in
             soundsScrollPosition = position
         }
     }
 
     private func scheduleMixesScrollRestore(for context: ScrollContext, scrollToTopFirst: Bool) {
-        scrollState.scheduleMixesScrollRestore(for: context, scrollToTopFirst: scrollToTopFirst) { position in
+        scrollState.scheduleMixesScrollRestore(for: context, scrollToTopFirst: scrollToTopFirst) {
+            position in
             mixesScrollPosition = position
         }
     }
 
     private func requestSectionChange(to newSection: ContentSection) {
         guard selectedSection != newSection else { return }
-        sectionTransitionDirection = transitionDirection(from: selectedSection, to: newSection)
-        withAnimation(.easeInOut(duration: 0.22)) {
+        withAnimation(.interpolatingSpring(stiffness: 420, damping: 24)) {
             selectedSection = newSection
         }
     }
 
     private var mainScrollContent: some View {
         ZStack {
-            if selectedSection == .sounds {
-                soundsScrollContent
-                    .transition(sectionSwapTransition)
-                    .accessibilityHidden(false)
-            }
-            if selectedSection == .mixes {
-                mixesScrollContent
-                    .transition(sectionSwapTransition)
-                    .accessibilityHidden(false)
-            }
+            soundsScrollContent
+                .offset(x: selectedSection == .sounds ? 0 : -sectionSwapSlideDistance)
+                .opacity(selectedSection == .sounds ? 1 : 0)
+                .allowsHitTesting(selectedSection == .sounds)
+                .accessibilityHidden(selectedSection != .sounds)
+            mixesScrollContent
+                .offset(x: selectedSection == .mixes ? 0 : sectionSwapSlideDistance)
+                .opacity(selectedSection == .mixes ? 1 : 0)
+                .allowsHitTesting(selectedSection == .mixes)
+                .accessibilityHidden(selectedSection != .mixes)
         }
         .clipped()
         .environment(\.isUserScrolling, isUserScrolling)
-        .background(GeometryReader { g in
-            Color.clear.preference(key: ContentWidthKey.self, value: g.size.width)
-        })
+        .background(
+            GeometryReader { g in
+                Color.clear.preference(key: ContentWidthKey.self, value: g.size.width)
+            }
+        )
         .background(mainBackground)
         .navigationTitle("")
         .toolbar { toolbarContent }
         // With transparency enabled, let the sidebar frosting show under the titlebar (Finder-like).
-        .toolbarBackground(transparencyEnabled ? .clear : PlatformColor.windowBackground, for: .windowToolbar)
+        .toolbarBackground(
+            transparencyEnabled ? .clear : PlatformColor.windowBackground, for: .windowToolbar
+        )
         .toolbarBackground(transparencyEnabled ? .hidden : .visible, for: .windowToolbar)
         .onChange(of: store.showOptionsPanel) { _, show in
             if show {
@@ -310,47 +318,49 @@ struct ContentView: View {
                 store.showOptionsPanel = false
             }
         }
-        .sheet(isPresented: Binding(
-            get: { store.showSavePresetSheet },
-            set: { if !$0 { store.closeSavePresetSheet() } else { store.showSavePresetSheet = true } }
-        )) {
+        .sheet(
+            isPresented: Binding(
+                get: { store.showSavePresetSheet },
+                set: {
+                    if !$0 {
+                        store.closeSavePresetSheet()
+                    } else {
+                        store.showSavePresetSheet = true
+                    }
+                }
+            )
+        ) {
             SavePresetSheet(store: store) {
                 store.closeSavePresetSheet()
             }
         }
     }
 
-    private var sectionSwapTransition: AnyTransition {
-        let insertionEdge: Edge = sectionTransitionDirection > 0 ? .trailing : .leading
-        let removalEdge: Edge = sectionTransitionDirection > 0 ? .leading : .trailing
-        return .asymmetric(
-            insertion: .move(edge: insertionEdge).combined(with: .opacity),
-            removal: .move(edge: removalEdge).combined(with: .opacity)
-        )
-    }
-
-    private func transitionDirection(from oldSection: ContentSection, to newSection: ContentSection) -> CGFloat {
-        switch (oldSection, newSection) {
-        case (.sounds, .mixes):
-            return 1
-        case (.mixes, .sounds):
-            return -1
-        default:
-            return 1
-        }
+    private var sectionSwapSlideDistance: CGFloat {
+        max(44, min(132, contentAreaWidth * 0.18))
     }
 
     private var soundsScrollContent: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: contentAreaWidth < 400 ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge) {
+            LazyVStack(
+                alignment: .leading,
+                spacing: contentAreaWidth < 400
+                    ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge
+            ) {
                 Color.clear
                     .frame(height: 1)
                     .id(Self.scrollTopAnchorId)
                 soundsSections
             }
-            .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
+            .padding(
+                .horizontal,
+                contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large
+            )
             .padding(.top, contentTopPadding)
-            .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
+            .padding(
+                .bottom,
+                (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
+                    + 88)
         }
         .scrollPosition(id: $soundsScrollPosition, anchor: .top)
         .onScrollPhaseChange { _, phase in
@@ -368,7 +378,9 @@ struct ContentView: View {
         }
         .onChange(of: store.searchQuery) { oldValue, newValue in
             let oldContext = scrollContext(for: .sounds, searchQuery: oldValue)
-            if let current = soundsScrollPosition, isRelevantScrollAnchorId(current, for: oldContext) {
+            if let current = soundsScrollPosition,
+                isRelevantScrollAnchorId(current, for: oldContext)
+            {
                 setStoredScrollAnchorId(current, for: oldContext)
                 schedulePersistScrollAnchors()
             }
@@ -396,15 +408,25 @@ struct ContentView: View {
 
     private var mixesScrollContent: some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: contentAreaWidth < 400 ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge) {
+            LazyVStack(
+                alignment: .leading,
+                spacing: contentAreaWidth < 400
+                    ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge
+            ) {
                 Color.clear
                     .frame(height: 1)
                     .id(Self.scrollTopAnchorId)
                 mixesSections
             }
-            .padding(.horizontal, contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
+            .padding(
+                .horizontal,
+                contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large
+            )
             .padding(.top, mixesScrollTopPadding)
-            .padding(.bottom, (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large) + 88)
+            .padding(
+                .bottom,
+                (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
+                    + 88)
         }
         .scrollPosition(id: $mixesScrollPosition, anchor: .top)
         .onScrollPhaseChange { _, phase in
@@ -422,7 +444,8 @@ struct ContentView: View {
         }
         .onChange(of: store.searchQuery) { oldValue, newValue in
             let oldContext = scrollContext(for: .mixes, searchQuery: oldValue)
-            if let current = mixesScrollPosition, isRelevantScrollAnchorId(current, for: oldContext) {
+            if let current = mixesScrollPosition, isRelevantScrollAnchorId(current, for: oldContext)
+            {
                 setStoredScrollAnchorId(current, for: oldContext)
                 schedulePersistScrollAnchors()
             }
@@ -513,7 +536,10 @@ struct ContentView: View {
     private func refreshPlayingSoundsCache() {
         playingSoundsCache = store.selectedIds
             .compactMap { SoundsData.allSoundsById[$0] }
-            .sorted { L10n.soundLabel($0.id).localizedStandardCompare(L10n.soundLabel($1.id)) == .orderedAscending }
+            .sorted {
+                L10n.soundLabel($0.id).localizedStandardCompare(L10n.soundLabel($1.id))
+                    == .orderedAscending
+            }
     }
 
     private var defaultSoundCategoryExpandedState: Bool {
@@ -607,7 +633,7 @@ struct ContentView: View {
                         stops: [
                             .init(color: .black, location: 0),
                             .init(color: .black, location: 0.7),
-                            .init(color: .black.opacity(0), location: 1)
+                            .init(color: .black.opacity(0), location: 1),
                         ],
                         startPoint: .top,
                         endPoint: .bottom
@@ -753,7 +779,9 @@ struct ContentView: View {
     }
 
     private var allMixCategoriesExpanded: Bool {
-        nonCustomMixCategories.allSatisfy { mixCategoryExpandedStates[$0.id] ?? defaultMixCategoryExpandedState(for: $0.id) }
+        nonCustomMixCategories.allSatisfy {
+            mixCategoryExpandedStates[$0.id] ?? defaultMixCategoryExpandedState(for: $0.id)
+        }
     }
 
     private func toggleAllMixCategories() {
@@ -787,7 +815,8 @@ struct HeaderActionButtonStyle: ButtonStyle {
                 Capsule().fill(backgroundColor(isPressed: configuration.isPressed))
             )
             .overlay(
-                Capsule().strokeBorder(borderColor(isPressed: configuration.isPressed), lineWidth: 1)
+                Capsule().strokeBorder(
+                    borderColor(isPressed: configuration.isPressed), lineWidth: 1)
             )
             .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)

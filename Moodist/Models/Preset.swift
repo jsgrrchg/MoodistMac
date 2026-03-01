@@ -16,7 +16,10 @@ struct Preset: Identifiable, Codable, Equatable {
     /// Volumen por soundId (opcional; si falta usa 0.5)
     var volumes: [String: Double]
 
-    init(id: String = UUID().uuidString, name: String, iconName: String = "sparkles", soundIds: [String], volumes: [String: Double] = [:]) {
+    init(
+        id: String = UUID().uuidString, name: String, iconName: String = "sparkles",
+        soundIds: [String], volumes: [String: Double] = [:]
+    ) {
         self.id = id
         self.name = name
         self.iconName = iconName
