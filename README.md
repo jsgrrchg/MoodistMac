@@ -13,7 +13,7 @@
 
 Moodist is a native macOS app that lets you mix and play ambient sounds—rain, nature, cafés, white noise, binaural tones, and more—to help you focus, relax, or sleep. Combine individual sounds, use curated mixes, save presets, export and import preferences, and control everything from the menu bar or keyboard.
 
-For non technical users, you can download the latest release from the releases page, you will find a MoodistMac.app inside a zip file of the same name, simply extract and double click to install.
+For non technical users, you can download the latest release from the releases page, you will find a MoodistMac.app inside a zip file of the same name, simply extract and move the binary to your Applications folder.
 
 Inspired by the original Moodist web app [remvze/moodist](https://github.com/remvze/moodist) — *Ambient sounds for focus and calm.* 
 
