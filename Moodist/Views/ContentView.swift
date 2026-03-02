@@ -130,7 +130,6 @@ struct ContentView: View {
                     .zIndex(1)
                     .transition(.move(edge: .leading).combined(with: .opacity))
                 sidebarResizeHandle
-                    .offset(x: sidebarWidth - (sidebarResizeHandleWidth / 2))
                     .zIndex(2)
             }
         }
@@ -304,6 +303,14 @@ struct ContentView: View {
                 Color.clear.preference(key: ContentWidthKey.self, value: g.size.width)
             }
         )
+        .overlay {
+            HorizontalSectionSwipeDetector(
+                onSwipeToMixes: { requestSectionChange(to: .mixes) },
+                onSwipeToSounds: { requestSectionChange(to: .sounds) },
+                isEnabled: true
+            )
+            .allowsHitTesting(false)
+        }
         .background(mainBackground)
         .navigationTitle("")
         .toolbar { toolbarContent }
@@ -341,133 +348,104 @@ struct ContentView: View {
     }
 
     private var soundsScrollContent: some View {
-        ScrollView {
-            LazyVStack(
-                alignment: .leading,
-                spacing: contentAreaWidth < 400
-                    ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge
-            ) {
-                Color.clear
-                    .frame(height: 1)
-                    .id(Self.scrollTopAnchorId)
-                soundsSections
-            }
-            .padding(
-                .horizontal,
-                contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large
-            )
-            .padding(.top, contentTopPadding)
-            .padding(
-                .bottom,
-                (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
-                    + 88)
-        }
-        .scrollPosition(id: $soundsScrollPosition, anchor: .top)
-        .onScrollPhaseChange { _, phase in
-            guard selectedSection == .sounds else { return }
-            isUserScrolling = phase != .idle
-        }
-        .onChange(of: soundsScrollPosition) { _, newValue in
-            guard !scrollState.suppressSoundsScrollMemoryUpdates else { return }
-            guard let newValue else { return }
-            let context = scrollContext(for: .sounds, searchQuery: store.searchQuery)
-            guard isRelevantScrollAnchorId(newValue, for: context) else { return }
-            guard newValue != storedScrollAnchorId(for: context) else { return }
-            setStoredScrollAnchorId(newValue, for: context)
-            schedulePersistScrollAnchors()
-        }
-        .onChange(of: store.searchQuery) { oldValue, newValue in
-            let oldContext = scrollContext(for: .sounds, searchQuery: oldValue)
-            if let current = soundsScrollPosition,
-                isRelevantScrollAnchorId(current, for: oldContext)
-            {
-                setStoredScrollAnchorId(current, for: oldContext)
+        ContentScrollPanelView(
+            section: .sounds,
+            selectedSection: selectedSection,
+            contentAreaWidth: contentAreaWidth,
+            topPadding: contentTopPadding,
+            scrollTopAnchorId: Self.scrollTopAnchorId,
+            scrollPosition: $soundsScrollPosition,
+            isUserScrolling: $isUserScrolling,
+            searchQuery: store.searchQuery,
+            onScrollAnchorChanged: { newValue in
+                guard !scrollState.suppressSoundsScrollMemoryUpdates else { return }
+                let context = scrollContext(for: .sounds, searchQuery: store.searchQuery)
+                guard isRelevantScrollAnchorId(newValue, for: context) else { return }
+                guard newValue != storedScrollAnchorId(for: context) else { return }
+                setStoredScrollAnchorId(newValue, for: context)
                 schedulePersistScrollAnchors()
+            },
+            onSearchQueryChanged: { oldValue, newValue in
+                let oldContext = scrollContext(for: .sounds, searchQuery: oldValue)
+                if let current = soundsScrollPosition,
+                    isRelevantScrollAnchorId(current, for: oldContext)
+                {
+                    setStoredScrollAnchorId(current, for: oldContext)
+                    schedulePersistScrollAnchors()
+                }
+                let newContext = scrollContext(for: .sounds, searchQuery: newValue)
+                if oldContext != newContext {
+                    scheduleSoundsScrollRestore(for: newContext, scrollToTopFirst: true)
+                } else if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    setStoredScrollAnchorId(Self.scrollTopAnchorId, for: newContext)
+                    scheduleSoundsScrollRestore(for: newContext, scrollToTopFirst: true)
+                }
+            },
+            onFirstAppear: {
+                guard !scrollState.didRestoreSounds else { return }
+                scrollState.didRestoreSounds = true
+                let context = scrollContext(for: .sounds, searchQuery: store.searchQuery)
+                if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    // En el primer arranque mostramos "Currently playing" en la parte superior.
+                    setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
+                    scheduleSoundsScrollRestore(for: context, scrollToTopFirst: true)
+                    return
+                }
+                scheduleSoundsScrollRestore(for: context, scrollToTopFirst: false)
             }
-            let newContext = scrollContext(for: .sounds, searchQuery: newValue)
-            if oldContext != newContext {
-                scheduleSoundsScrollRestore(for: newContext, scrollToTopFirst: true)
-            } else if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: newContext)
-                scheduleSoundsScrollRestore(for: newContext, scrollToTopFirst: true)
-            }
-        }
-        .onAppear {
-            guard !scrollState.didRestoreSounds else { return }
-            scrollState.didRestoreSounds = true
-            let context = scrollContext(for: .sounds, searchQuery: store.searchQuery)
-            if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                // En el primer arranque mostramos "Currently playing" en la parte superior.
-                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
-                scheduleSoundsScrollRestore(for: context, scrollToTopFirst: true)
-                return
-            }
-            scheduleSoundsScrollRestore(for: context, scrollToTopFirst: false)
+        ) {
+            soundsSections
         }
     }
 
     private var mixesScrollContent: some View {
-        ScrollView {
-            LazyVStack(
-                alignment: .leading,
-                spacing: contentAreaWidth < 400
-                    ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge
-            ) {
-                Color.clear
-                    .frame(height: 1)
-                    .id(Self.scrollTopAnchorId)
-                mixesSections
-            }
-            .padding(
-                .horizontal,
-                contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large
-            )
-            .padding(.top, mixesScrollTopPadding)
-            .padding(
-                .bottom,
-                (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
-                    + 88)
-        }
-        .scrollPosition(id: $mixesScrollPosition, anchor: .top)
-        .onScrollPhaseChange { _, phase in
-            guard selectedSection == .mixes else { return }
-            isUserScrolling = phase != .idle
-        }
-        .onChange(of: mixesScrollPosition) { _, newValue in
-            guard !scrollState.suppressMixesScrollMemoryUpdates else { return }
-            guard let newValue else { return }
-            let context = scrollContext(for: .mixes, searchQuery: store.searchQuery)
-            guard isRelevantScrollAnchorId(newValue, for: context) else { return }
-            guard newValue != storedScrollAnchorId(for: context) else { return }
-            setStoredScrollAnchorId(newValue, for: context)
-            schedulePersistScrollAnchors()
-        }
-        .onChange(of: store.searchQuery) { oldValue, newValue in
-            let oldContext = scrollContext(for: .mixes, searchQuery: oldValue)
-            if let current = mixesScrollPosition, isRelevantScrollAnchorId(current, for: oldContext)
-            {
-                setStoredScrollAnchorId(current, for: oldContext)
+        ContentScrollPanelView(
+            section: .mixes,
+            selectedSection: selectedSection,
+            contentAreaWidth: contentAreaWidth,
+            topPadding: mixesScrollTopPadding,
+            scrollTopAnchorId: Self.scrollTopAnchorId,
+            scrollPosition: $mixesScrollPosition,
+            isUserScrolling: $isUserScrolling,
+            searchQuery: store.searchQuery,
+            onScrollAnchorChanged: { newValue in
+                guard !scrollState.suppressMixesScrollMemoryUpdates else { return }
+                let context = scrollContext(for: .mixes, searchQuery: store.searchQuery)
+                guard isRelevantScrollAnchorId(newValue, for: context) else { return }
+                guard newValue != storedScrollAnchorId(for: context) else { return }
+                setStoredScrollAnchorId(newValue, for: context)
                 schedulePersistScrollAnchors()
+            },
+            onSearchQueryChanged: { oldValue, newValue in
+                let oldContext = scrollContext(for: .mixes, searchQuery: oldValue)
+                if let current = mixesScrollPosition,
+                    isRelevantScrollAnchorId(current, for: oldContext)
+                {
+                    setStoredScrollAnchorId(current, for: oldContext)
+                    schedulePersistScrollAnchors()
+                }
+                let newContext = scrollContext(for: .mixes, searchQuery: newValue)
+                if oldContext != newContext {
+                    scheduleMixesScrollRestore(for: newContext, scrollToTopFirst: true)
+                } else if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    setStoredScrollAnchorId(Self.scrollTopAnchorId, for: newContext)
+                    scheduleMixesScrollRestore(for: newContext, scrollToTopFirst: true)
+                }
+            },
+            onFirstAppear: {
+                guard !scrollState.didRestoreMixes else { return }
+                scrollState.didRestoreMixes = true
+                let context = scrollContext(for: .mixes, searchQuery: store.searchQuery)
+                if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    // En el primer arranque mostramos el inicio de la lista en Mixes.
+                    setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
+                    scheduleMixesScrollRestore(for: context, scrollToTopFirst: true)
+                    return
+                }
+                scheduleMixesScrollRestore(for: context, scrollToTopFirst: false)
             }
-            let newContext = scrollContext(for: .mixes, searchQuery: newValue)
-            if oldContext != newContext {
-                scheduleMixesScrollRestore(for: newContext, scrollToTopFirst: true)
-            } else if !newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: newContext)
-                scheduleMixesScrollRestore(for: newContext, scrollToTopFirst: true)
-            }
-        }
-        .onAppear {
-            guard !scrollState.didRestoreMixes else { return }
-            scrollState.didRestoreMixes = true
-            let context = scrollContext(for: .mixes, searchQuery: store.searchQuery)
-            if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                // En el primer arranque mostramos el inicio de la lista en Mixes.
-                setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
-                scheduleMixesScrollRestore(for: context, scrollToTopFirst: true)
-                return
-            }
-            scheduleMixesScrollRestore(for: context, scrollToTopFirst: false)
+        ) {
+            mixesSections
         }
     }
 
@@ -502,10 +480,10 @@ struct ContentView: View {
             windowWidth: windowWidth,
             compactThreshold: toolbarCompactThreshold,
             mediumThreshold: toolbarMediumThreshold,
-            toolbarContentOffset: toolbarContentOffset,
-            toolbarSearchFieldWidth: toolbarSearchFieldWidth,
-            toolbarSearchFieldHeight: toolbarSearchFieldHeight,
-            toolbarSearchFieldFocusPadding: toolbarSearchFieldFocusPadding,
+            toolbarContentOffset: toolbarMetrics.contentOffset,
+            toolbarSearchFieldWidth: toolbarMetrics.searchFieldWidth,
+            toolbarSearchFieldHeight: toolbarMetrics.searchFieldHeight,
+            toolbarSearchFieldFocusPadding: toolbarMetrics.searchFieldFocusPadding,
             toolbarSearchFieldYOffset: toolbarSearchFieldYOffset,
             selectedSection: $selectedSection,
             searchQuery: $store.searchQuery,
@@ -589,35 +567,15 @@ struct ContentView: View {
         return clampedSidebarWidthForDrag(translationX: pointerX - startPointerX)
     }
 
-    private var toolbarContentOffset: CGFloat {
-        guard isSidebarVisible else { return 0 }
-        if #available(macOS 26.0, *) {
-            return 0
-        }
-        let desired = sidebarWidth / 2
-        let width = contentAreaWidth
-        if width <= toolbarOffsetMinWidth { return 0 }
-        if width >= toolbarOffsetMaxWidth { return desired }
-        let t = (width - toolbarOffsetMinWidth) / (toolbarOffsetMaxWidth - toolbarOffsetMinWidth)
-        return desired * t
-    }
-
-    private var toolbarSearchFieldWidth: CGFloat {
-        min(240, max(140, windowWidth * 0.25))
-    }
-
-    private var toolbarSearchFieldHeight: CGFloat {
-        if #available(macOS 26.0, *) {
-            return 32
-        }
-        return 28
-    }
-
-    private var toolbarSearchFieldFocusPadding: CGFloat {
-        if #available(macOS 26.0, *) {
-            return 4
-        }
-        return 0
+    private var toolbarMetrics: ContentToolbarMetrics {
+        ContentToolbarMetrics.resolve(
+            windowWidth: windowWidth,
+            contentAreaWidth: contentAreaWidth,
+            isSidebarVisible: isSidebarVisible,
+            sidebarWidth: sidebarWidth,
+            toolbarOffsetMinWidth: toolbarOffsetMinWidth,
+            toolbarOffsetMaxWidth: toolbarOffsetMaxWidth
+        )
     }
 
     /// Backdrop superior: bloquea clics para que no lleguen al contenido (categorías/sonidos).
@@ -652,56 +610,45 @@ struct ContentView: View {
     }
 
     private var sidebarResizeHandle: some View {
-        ZStack {
-            // Línea visible para indicar el borde de resize.
-            Rectangle()
-                .fill(Color.primary.opacity(0.12))
-                .frame(width: 1)
-        }
-        .frame(width: sidebarResizeHandleWidth)
-        .frame(maxHeight: .infinity)
-        .contentShape(Rectangle())
-        .onContinuousHover { phase in
-            switch phase {
-            case .active:
-                setResizeCursorActive(true)
-            case .ended:
+        SidebarResizeHandleView(
+            handleWidth: sidebarResizeHandleWidth,
+            sidebarWidth: sidebarWidth,
+            accessibilityLabel: L10n.resizeSidebar,
+            accessibilityHint: L10n.resizeSidebarHint,
+            onHoverChanged: setResizeCursorActive(_:),
+            onDisappearAction: {
                 setResizeCursorActive(false)
-            }
-        }
-        .onDisappear {
-            setResizeCursorActive(false)
-            sidebarResizeStartPointerX = nil
-        }
-        .highPriorityGesture(
-            DragGesture(minimumDistance: 0, coordinateSpace: .global)
-                .onChanged { value in
-                    if sidebarResizeStartWidth == 0 {
-                        sidebarResizeStartWidth = sidebarWidth
-                        sidebarResizeStartPointerX = value.startLocation.x
-                    } else if sidebarResizeStartPointerX == nil {
-                        sidebarResizeStartPointerX = value.startLocation.x
-                    }
-                    let nextWidth = clampedSidebarWidthForDrag(pointerX: value.location.x)
-                    if abs(nextWidth - sidebarWidth) >= 0.5 {
-                        sidebarWidth = nextWidth
-                    }
-                }
-                .onEnded { value in
-                    if sidebarResizeStartPointerX == nil {
-                        sidebarResizeStartPointerX = value.startLocation.x
-                    }
-                    let finalWidth = clampedSidebarWidthForDrag(pointerX: value.location.x)
-                    if abs(finalWidth - sidebarWidth) >= 0.5 {
-                        sidebarWidth = finalWidth
-                    }
-                    persistedSidebarWidth = Double(sidebarWidth)
-                    sidebarResizeStartWidth = 0
-                    sidebarResizeStartPointerX = nil
-                }
+                sidebarResizeStartPointerX = nil
+            },
+            onDragChanged: handleSidebarResizeDragChanged(_:),
+            onDragEnded: handleSidebarResizeDragEnded(_:)
         )
-        .accessibilityLabel(L10n.resizeSidebar)
-        .accessibilityHint(L10n.resizeSidebarHint)
+    }
+
+    private func handleSidebarResizeDragChanged(_ value: DragGesture.Value) {
+        if sidebarResizeStartWidth == 0 {
+            sidebarResizeStartWidth = sidebarWidth
+            sidebarResizeStartPointerX = value.startLocation.x
+        } else if sidebarResizeStartPointerX == nil {
+            sidebarResizeStartPointerX = value.startLocation.x
+        }
+        let nextWidth = clampedSidebarWidthForDrag(pointerX: value.location.x)
+        if abs(nextWidth - sidebarWidth) >= 0.5 {
+            sidebarWidth = nextWidth
+        }
+    }
+
+    private func handleSidebarResizeDragEnded(_ value: DragGesture.Value) {
+        if sidebarResizeStartPointerX == nil {
+            sidebarResizeStartPointerX = value.startLocation.x
+        }
+        let finalWidth = clampedSidebarWidthForDrag(pointerX: value.location.x)
+        if abs(finalWidth - sidebarWidth) >= 0.5 {
+            sidebarWidth = finalWidth
+        }
+        persistedSidebarWidth = Double(sidebarWidth)
+        sidebarResizeStartWidth = 0
+        sidebarResizeStartPointerX = nil
     }
 
     private func setResizeCursorActive(_ active: Bool) {
@@ -795,62 +742,6 @@ struct ContentView: View {
 
     private var searchResultsSection: some View {
         SoundsSearchResultsSectionView(store: store, contentAreaWidth: contentAreaWidth)
-    }
-}
-
-struct HeaderActionButtonStyle: ButtonStyle {
-    let isHovered: Bool
-    let isPrimary: Bool
-    let isCompact: Bool
-
-    @Environment(\.isEnabled) private var isEnabled
-
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.system(size: isCompact ? 12 : 13, weight: .medium))
-            .padding(.horizontal, isCompact ? 8 : 10)
-            .padding(.vertical, isCompact ? 4 : 5)
-            .foregroundStyle(foregroundColor)
-            .background(
-                Capsule().fill(backgroundColor(isPressed: configuration.isPressed))
-            )
-            .overlay(
-                Capsule().strokeBorder(
-                    borderColor(isPressed: configuration.isPressed), lineWidth: 1)
-            )
-            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-            .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
-            .opacity(isEnabled ? 1 : 0.45)
-    }
-
-    private var foregroundColor: Color {
-        if !isEnabled {
-            return MoodistTheme.Colors.secondaryText.opacity(0.8)
-        }
-        return isPrimary ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText
-    }
-
-    private func backgroundColor(isPressed: Bool) -> Color {
-        if !isEnabled {
-            return MoodistTheme.Colors.cardBackground.opacity(0.25)
-        }
-        if isPressed {
-            return MoodistTheme.Colors.cardBackground.opacity(0.9)
-        }
-        if isHovered {
-            return MoodistTheme.Colors.cardBackground.opacity(0.7)
-        }
-        return MoodistTheme.Colors.cardBackground.opacity(0.4)
-    }
-
-    private func borderColor(isPressed: Bool) -> Color {
-        if !isEnabled {
-            return Color.primary.opacity(0.08)
-        }
-        if isPrimary {
-            return MoodistTheme.Colors.accent.opacity(isPressed ? 0.5 : (isHovered ? 0.4 : 0.25))
-        }
-        return Color.primary.opacity(isPressed ? 0.22 : (isHovered ? 0.16 : 0.1))
     }
 }
 

@@ -396,6 +396,7 @@ final class UpdateWindowPresenter: NSObject, ObservableObject, NSWindowDelegate 
         formatter.maximumFractionDigits = 0
         return formatter.string(from: NSNumber(value: value))
     }
+
 }
 
 final class MoodistUpdateUserDriver: NSObject, SPUUserDriver {

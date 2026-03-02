@@ -5,6 +5,28 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] – 2026-03-01
+
+### Added
+- **Sounds/Mixes (gesture navigation)**: Added horizontal two-finger swipe support (trackpad and Magic Mouse) to switch between `Sounds` and `Mixes`, with tuned sensitivity to reduce accidental section changes.
+
+### Changed
+- **App entrypoint architecture**: Refactored the oversized `MoodistApp.swift` into focused app modules and coordinators. `MoodistApp` now acts as composition root, while app lifecycle and platform responsibilities were split into `MacOSAppDelegate`, `AppWindowCoordinator`, `AppMenuBarCoordinator`, `AppDockCoordinator`, `AppTimerCoordinator`, `MoodistCommands`, and Sparkle integration helpers.
+- **SoundStore architecture**: Refactored `SoundStore.swift` into a facade plus domain-focused extensions to reduce complexity and improve maintainability. Responsibilities are now separated into `SoundStore+Playback`, `SoundStore+Timer`, `SoundStore+Presets`, `SoundStore+RecentsFavorites`, and `SoundStore+Persistence`.
+- **Project structure**: Added a dedicated `App/` folder (with `Coordinators/`) and registered new split files in the Xcode project target to keep concerns grouped by domain.
+- **ContentView architecture**: Refactored `ContentView.swift` to reduce local complexity and move responsibilities into reusable view modules. Scroll restoration wiring for Sounds/Mixes now goes through a shared `ContentScrollPanelView`, toolbar width/offset/search metrics were extracted into `ContentToolbarMetrics`, sidebar resize UI/gesture plumbing was extracted into `SidebarResizeHandleView`, and `HeaderActionButtonStyle` was centralized outside `ContentView` for reuse.
+
+### Fixed
+- **Timer (custom window start action)**: Fixed an issue where pressing `Start` could launch a 15-minute timer if a picker column (`h:min:s`) was still being edited. The Start flow now commits the active field before reading the duration, so the selected time is always applied correctly.
+- **Intel compatibility (project configuration)**: Restored Intel Mac support after an unintended Xcode project configuration error had temporarily removed/affected it.
+- **Command menu (custom mixes visibility)**: Fixed the `Mixes` app command menu so user-created custom mixes are listed correctly, including in the `Favorites` submenu.
+- **Custom mix deletion (state cleanup)**: Fixed stale references after deleting a custom mix. Deletion now also removes related entries from recent/favorite mix lists and clears current editing/now-playing metadata when applicable.
+- **Menu bar timer ticker lifecycle**: Fixed a menu-bar edge case where the 1-second timer updater could remain active after menu close/rebuild cycles. Timer menu updates are now stopped and detached reliably when the menu closes or the status item is hidden.
+- **Preferences import (data sanitization)**: Fixed import robustness by sanitizing imported custom mixes and favorite IDs (deduplicating entries, filtering invalid IDs, and clamping imported volume values to valid bounds).
+- **Updates (release notes rendering)**: Fixed Sparkle appcast release-note links to use versioned HTML notes, so the custom update window shows in-app release notes content instead of loading the generic GitHub Releases page.
+
+---
+
 ## [1.0.2] – 2026-03_01
 
 ### Added
@@ -242,7 +264,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/jsgrrchg/MoodistMac/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/jsgrrchg/MoodistMac/releases/tag/v1.0.0

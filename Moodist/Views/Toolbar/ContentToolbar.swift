@@ -143,3 +143,54 @@ struct ContentToolbar: ToolbarContent {
         .accessibilityValue(selectedSection == .sounds ? L10n.sounds : L10n.mixes)
     }
 }
+
+struct ContentToolbarMetrics {
+    let contentOffset: CGFloat
+    let searchFieldWidth: CGFloat
+    let searchFieldHeight: CGFloat
+    let searchFieldFocusPadding: CGFloat
+
+    static func resolve(
+        windowWidth: CGFloat,
+        contentAreaWidth: CGFloat,
+        isSidebarVisible: Bool,
+        sidebarWidth: CGFloat,
+        toolbarOffsetMinWidth: CGFloat,
+        toolbarOffsetMaxWidth: CGFloat
+    ) -> Self {
+        let contentOffset: CGFloat = {
+            guard isSidebarVisible else { return 0 }
+            if #available(macOS 26.0, *) {
+                return 0
+            }
+            let desired = sidebarWidth / 2
+            let width = contentAreaWidth
+            if width <= toolbarOffsetMinWidth { return 0 }
+            if width >= toolbarOffsetMaxWidth { return desired }
+            let t =
+                (width - toolbarOffsetMinWidth) / (toolbarOffsetMaxWidth - toolbarOffsetMinWidth)
+            return desired * t
+        }()
+
+        let searchFieldWidth = min(240, max(140, windowWidth * 0.25))
+        let searchFieldHeight: CGFloat
+        if #available(macOS 26.0, *) {
+            searchFieldHeight = 32
+        } else {
+            searchFieldHeight = 28
+        }
+        let searchFieldFocusPadding: CGFloat
+        if #available(macOS 26.0, *) {
+            searchFieldFocusPadding = 4
+        } else {
+            searchFieldFocusPadding = 0
+        }
+
+        return .init(
+            contentOffset: contentOffset,
+            searchFieldWidth: searchFieldWidth,
+            searchFieldHeight: searchFieldHeight,
+            searchFieldFocusPadding: searchFieldFocusPadding
+        )
+    }
+}

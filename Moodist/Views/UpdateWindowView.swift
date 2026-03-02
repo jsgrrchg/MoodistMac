@@ -27,7 +27,8 @@ struct UpdateWindowView: View {
     private var background: some View {
         ZStack {
             if transparencyEnabled {
-                VisualEffectBackground(material: .underWindowBackground, blendingMode: .behindWindow)
+                VisualEffectBackground(
+                    material: .underWindowBackground, blendingMode: .behindWindow)
             } else {
                 MoodistTheme.Colors.windowBackground
             }
@@ -68,7 +69,10 @@ struct UpdateWindowView: View {
                 }
 
                 if presenter.model.phase != .checking {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 130), spacing: 8)], alignment: .leading, spacing: 8) {
+                    LazyVGrid(
+                        columns: [GridItem(.adaptive(minimum: 130), spacing: 8)],
+                        alignment: .leading, spacing: 8
+                    ) {
                         if let newVersion = presenter.model.newVersion {
                             UpdateMetaChip(title: L10n.updateNewVersion, value: newVersion)
                         }
@@ -101,7 +105,7 @@ struct UpdateWindowView: View {
                 accentHex: accent.hexString,
                 colorScheme: colorScheme
             )
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .padding(12)
         .frame(minHeight: 200, idealHeight: 230, maxHeight: 260)
@@ -156,7 +160,8 @@ struct UpdateWindowView: View {
             .resizable()
             .frame(width: 56, height: 56)
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
-            .shadow(color: .black.opacity(colorScheme == .dark ? 0.35 : 0.18), radius: 8, x: 0, y: 4)
+            .shadow(
+                color: .black.opacity(colorScheme == .dark ? 0.35 : 0.18), radius: 8, x: 0, y: 4)
     }
 
     private var notesBackground: some View {
@@ -182,12 +187,16 @@ struct UpdateWindowView: View {
                     Group {
                         if isVertical {
                             VStack(alignment: .leading, spacing: spacing) {
-                                actionButton(L10n.cancel, fillWidth: true) { presenter.cancelOperation() }
+                                actionButton(L10n.cancel, fillWidth: true) {
+                                    presenter.cancelOperation()
+                                }
                             }
                             .frame(maxWidth: .infinity, alignment: .leading)
                         } else {
                             HStack(spacing: spacing) {
-                                actionButton(L10n.cancel, fillWidth: false) { presenter.cancelOperation() }
+                                actionButton(L10n.cancel, fillWidth: false) {
+                                    presenter.cancelOperation()
+                                }
                                 Spacer()
                             }
                         }
@@ -199,15 +208,23 @@ struct UpdateWindowView: View {
                         Group {
                             if isVertical {
                                 VStack(alignment: .leading, spacing: spacing) {
-                                    actionButton(L10n.updateLater, fillWidth: true) { presenter.chooseLater() }
-                                    actionButton(L10n.updateLearnMore, isPrimary: true, fillWidth: true) { presenter.openInfoURL() }
+                                    actionButton(L10n.updateLater, fillWidth: true) {
+                                        presenter.chooseLater()
+                                    }
+                                    actionButton(
+                                        L10n.updateLearnMore, isPrimary: true, fillWidth: true
+                                    ) { presenter.openInfoURL() }
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             } else {
                                 HStack(spacing: spacing) {
-                                    actionButton(L10n.updateLater, fillWidth: false) { presenter.chooseLater() }
+                                    actionButton(L10n.updateLater, fillWidth: false) {
+                                        presenter.chooseLater()
+                                    }
                                     Spacer()
-                                    actionButton(L10n.updateLearnMore, isPrimary: true, fillWidth: false) { presenter.openInfoURL() }
+                                    actionButton(
+                                        L10n.updateLearnMore, isPrimary: true, fillWidth: false
+                                    ) { presenter.openInfoURL() }
                                 }
                             }
                         }
@@ -218,10 +235,17 @@ struct UpdateWindowView: View {
                             if isVertical {
                                 VStack(alignment: .leading, spacing: spacing) {
                                     if !presenter.model.isCritical {
-                                        actionButton(L10n.updateSkip, fillWidth: true) { presenter.chooseSkip() }
+                                        actionButton(L10n.updateSkip, fillWidth: true) {
+                                            presenter.chooseSkip()
+                                        }
                                     }
-                                    actionButton(L10n.updateLater, fillWidth: true) { presenter.chooseLater() }
-                                    actionButton(presenter.model.primaryActionTitle ?? L10n.updateDownload, isPrimary: true, fillWidth: true) {
+                                    actionButton(L10n.updateLater, fillWidth: true) {
+                                        presenter.chooseLater()
+                                    }
+                                    actionButton(
+                                        presenter.model.primaryActionTitle ?? L10n.updateDownload,
+                                        isPrimary: true, fillWidth: true
+                                    ) {
                                         presenter.chooseInstall()
                                     }
                                 }
@@ -229,11 +253,18 @@ struct UpdateWindowView: View {
                             } else {
                                 HStack(spacing: spacing) {
                                     if !presenter.model.isCritical {
-                                        actionButton(L10n.updateSkip, fillWidth: false) { presenter.chooseSkip() }
+                                        actionButton(L10n.updateSkip, fillWidth: false) {
+                                            presenter.chooseSkip()
+                                        }
                                     }
-                                    actionButton(L10n.updateLater, fillWidth: false) { presenter.chooseLater() }
+                                    actionButton(L10n.updateLater, fillWidth: false) {
+                                        presenter.chooseLater()
+                                    }
                                     Spacer()
-                                    actionButton(presenter.model.primaryActionTitle ?? L10n.updateDownload, isPrimary: true, fillWidth: false) {
+                                    actionButton(
+                                        presenter.model.primaryActionTitle ?? L10n.updateDownload,
+                                        isPrimary: true, fillWidth: false
+                                    ) {
                                         presenter.chooseInstall()
                                     }
                                 }
@@ -247,7 +278,9 @@ struct UpdateWindowView: View {
                         if isVertical {
                             VStack(alignment: .leading, spacing: spacing) {
                                 if presenter.model.showsCancel {
-                                    actionButton(L10n.cancel, fillWidth: true) { presenter.cancelOperation() }
+                                    actionButton(L10n.cancel, fillWidth: true) {
+                                        presenter.cancelOperation()
+                                    }
                                 }
                                 actionButton(L10n.close, fillWidth: true) { presenter.dismiss() }
                             }
@@ -255,7 +288,9 @@ struct UpdateWindowView: View {
                         } else {
                             HStack(spacing: spacing) {
                                 if presenter.model.showsCancel {
-                                    actionButton(L10n.cancel, fillWidth: false) { presenter.cancelOperation() }
+                                    actionButton(L10n.cancel, fillWidth: false) {
+                                        presenter.cancelOperation()
+                                    }
                                 }
                                 Spacer()
                                 actionButton(L10n.close, fillWidth: false) { presenter.dismiss() }
@@ -271,7 +306,9 @@ struct UpdateWindowView: View {
     }
 
     @ViewBuilder
-    private func actionButton(_ title: String, isPrimary: Bool = false, fillWidth: Bool, action: @escaping () -> Void) -> some View {
+    private func actionButton(
+        _ title: String, isPrimary: Bool = false, fillWidth: Bool, action: @escaping () -> Void
+    ) -> some View {
         Button(title, action: action)
             .buttonStyle(UpdateActionButtonStyle(isPrimary: isPrimary, accent: accent))
             .frame(maxWidth: fillWidth ? .infinity : nil)
@@ -284,8 +321,12 @@ private struct UpdateActionButtonStyle: ButtonStyle {
     @Environment(\.colorScheme) private var colorScheme
 
     func makeBody(configuration: Configuration) -> some View {
-        let baseFill = isPrimary ? accent : (colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.06))
-        let borderColor = colorScheme == .dark ? Color.white.opacity(0.16) : Color.black.opacity(0.12)
+        let baseFill =
+            isPrimary
+            ? accent
+            : (colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.06))
+        let borderColor =
+            colorScheme == .dark ? Color.white.opacity(0.16) : Color.black.opacity(0.12)
         let pressOpacity = configuration.isPressed ? 0.8 : 1.0
         let textColor: Color = {
             if isPrimary {
@@ -358,7 +399,8 @@ private struct UpdateReleaseNotesView: View {
         if let notes {
             switch notes {
             case .html(let html, let baseURL):
-                UpdateHTMLView(html: html, baseURL: baseURL, accentHex: accentHex, colorScheme: colorScheme)
+                UpdateHTMLView(
+                    html: html, baseURL: baseURL, accentHex: accentHex, colorScheme: colorScheme)
             case .text(let text):
                 UpdatePlainNotesView(text: text)
             }
@@ -463,29 +505,30 @@ private struct UpdateHTMLView: NSViewRepresentable {
         let secondary = isDark ? "#B5B5B8" : "#4A4A4A"
         let background = "transparent"
         let style = """
-        <style>
-        :root { color-scheme: \(isDark ? "dark" : "light"); }
-        body { margin: 0; padding: 0; font: 15px -apple-system, BlinkMacSystemFont, \"SF Pro Text\"; color: \(bodyColor); background: \(background); }
-        a { color: \(accentHex); }
-        h1, h2, h3 { margin: 0 0 0.6em 0; font-weight: 600; }
-        p { margin: 0 0 0.8em 0; line-height: 1.5; }
-        ul { margin: 0.2em 0 0.8em 1.1em; padding: 0; }
-        li { margin: 0 0 0.4em 0; }
-        small, .muted { color: \(secondary); }
-        img { max-width: 100%; height: auto; border-radius: 10px; }
-        </style>
-        """
+            <style>
+            :root { color-scheme: \(isDark ? "dark" : "light"); }
+            body { margin: 0; padding: 0; font: 15px -apple-system, BlinkMacSystemFont, \"SF Pro Text\"; color: \(bodyColor); background: \(background); }
+            a { color: \(accentHex); }
+            h1, h2, h3 { margin: 0 0 0.6em 0; font-weight: 600; }
+            p { margin: 0 0 0.8em 0; line-height: 1.5; }
+            ul { margin: 0.2em 0 0.8em 1.1em; padding: 0; }
+            li { margin: 0 0 0.4em 0; }
+            small, .muted { color: \(secondary); }
+            img { max-width: 100%; height: auto; border-radius: 10px; }
+            </style>
+            """
 
         let lower = html.lowercased()
         if lower.contains("<html") {
-            return html.replacingOccurrences(of: "</head>", with: "\(style)</head>", options: .caseInsensitive)
+            return html.replacingOccurrences(
+                of: "</head>", with: "\(style)</head>", options: .caseInsensitive)
         }
         return """
-        <!doctype html>
-        <html>
-        <head>\(style)</head>
-        <body>\(html)</body>
-        </html>
-        """
+            <!doctype html>
+            <html>
+            <head>\(style)</head>
+            <body>\(html)</body>
+            </html>
+            """
     }
 }

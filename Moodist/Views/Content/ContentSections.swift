@@ -21,6 +21,7 @@ struct CurrentlyPlayingSectionView: View {
     let onCancelTimer: () -> Void
 
     var body: some View {
+        // Título contextual: muestra nombre de mix cuando existe y el ancho lo permite.
         let title: String = {
             guard let mixName = store.displayedMixName else { return L10n.currentlyPlaying }
             if contentAreaWidth < 420 { return mixName }
@@ -30,16 +31,24 @@ struct CurrentlyPlayingSectionView: View {
         let isVeryNarrow = contentAreaWidth < 340
         let isUltraNarrow = contentAreaWidth < 260
         let headerIconFrame: CGFloat = isNarrow ? 18 : 20
-        let headerRowSpacing: CGFloat = isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
+        let headerRowSpacing: CGFloat =
+            isUltraNarrow
+            ? 4
+            : (isVeryNarrow
+                ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium))
         let headerVerticalPadding: CGFloat = MoodistTheme.Spacing.xSmall
-        let sectionHorizontalPadding: CGFloat = isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium
+        let sectionHorizontalPadding: CGFloat =
+            isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium
 
+        // Bloque principal: header de controles + lista de sonidos activos.
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
             HStack(spacing: headerRowSpacing) {
                 Image(systemName: store.isPlaying ? "waveform" : "waveform.slash")
                     .font(.system(size: isNarrow ? 14 : 15, weight: .medium))
                     .frame(width: headerIconFrame, height: headerIconFrame)
-                    .foregroundStyle(store.isPlaying ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
+                    .foregroundStyle(
+                        store.isPlaying
+                            ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText)
                 Text(title)
                     .font(isNarrow ? .headline : .title2)
                     .fontWeight(.semibold)
@@ -59,11 +68,13 @@ struct CurrentlyPlayingSectionView: View {
                                     .labelStyle(.titleAndIcon)
                             }
                         }
-                        .buttonStyle(HeaderActionButtonStyle(
-                            isHovered: isSaveMixHovered,
-                            isPrimary: true,
-                            isCompact: isNarrow
-                        ))
+                        .buttonStyle(
+                            HeaderActionButtonStyle(
+                                isHovered: isSaveMixHovered,
+                                isPrimary: true,
+                                isCompact: isNarrow
+                            )
+                        )
                         .onHover { isSaveMixHovered = $0 }
                         .help(L10n.presetSaveCurrent)
                         .accessibilityLabel(L10n.addCustom)
@@ -77,11 +88,13 @@ struct CurrentlyPlayingSectionView: View {
                                 .labelStyle(.titleAndIcon)
                         }
                     }
-                    .buttonStyle(HeaderActionButtonStyle(
-                        isHovered: isClearHovered,
-                        isPrimary: false,
-                        isCompact: isNarrow
-                    ))
+                    .buttonStyle(
+                        HeaderActionButtonStyle(
+                            isHovered: isClearHovered,
+                            isPrimary: false,
+                            isCompact: isNarrow
+                        )
+                    )
                     .onHover { isClearHovered = $0 }
                     .disabled(!store.hasSelection)
                     .help(L10n.unselectAll)
@@ -92,12 +105,14 @@ struct CurrentlyPlayingSectionView: View {
             }
             .padding(.vertical, headerVerticalPadding)
             if !playingSounds.isEmpty {
+                // Lista cacheada para no recalcular en cada tick de timer.
                 LazyVStack(spacing: MoodistTheme.Spacing.small) {
                     ForEach(playingSounds, id: \.id) { sound in
                         SoundRow(sound: sound, store: store)
                     }
                 }
             } else {
+                // Estado vacío cuando no hay sonidos en reproducción.
                 Text(L10n.noSoundsPlaying)
                     .font(MoodistTheme.Typography.subheadline)
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
@@ -114,20 +129,27 @@ struct CurrentlyPlayingSectionView: View {
 
     @ViewBuilder
     private func timerHeaderButton(isNarrow: Bool, isVeryNarrow: Bool) -> some View {
+        // Control de timer: abrir ventana + cancelación rápida.
         HStack(spacing: 6) {
             Button(action: onOpenTimer) {
                 timerHeaderButtonLabel(isVeryNarrow: isVeryNarrow)
             }
-            .buttonStyle(HeaderActionButtonStyle(
-                isHovered: isTimerHovered,
-                isPrimary: false,
-                isCompact: isNarrow
-            ))
+            .buttonStyle(
+                HeaderActionButtonStyle(
+                    isHovered: isTimerHovered,
+                    isPrimary: false,
+                    isCompact: isNarrow
+                )
+            )
             .onHover { isTimerHovered = $0 }
-            .help(store.hasActiveTimer ? (store.timerRemainingMenuTitle ?? L10n.timer) : L10n.timerCustomTitle)
+            .help(
+                store.hasActiveTimer
+                    ? (store.timerRemainingMenuTitle ?? L10n.timer) : L10n.timerCustomTitle
+            )
             .accessibilityLabel(store.hasActiveTimer ? L10n.timer : L10n.timerCustomTitle)
 
             if store.hasActiveTimer {
+                // Botón "x" para detener timer sin abrir la ventana de configuración.
                 Button(action: onCancelTimer) {
                     Image(systemName: "xmark")
                         .font(.system(size: isNarrow ? 10 : 11, weight: .semibold))
@@ -139,13 +161,14 @@ struct CurrentlyPlayingSectionView: View {
                     Capsule()
                         .fill(
                             (isTimerCancelHovered
-                             ? MoodistTheme.Colors.cardBackground.opacity(0.75)
-                             : MoodistTheme.Colors.cardBackground.opacity(0.45))
+                                ? MoodistTheme.Colors.cardBackground.opacity(0.75)
+                                : MoodistTheme.Colors.cardBackground.opacity(0.45))
                         )
                 )
                 .overlay(
                     Capsule()
-                        .strokeBorder(Color.primary.opacity(isTimerCancelHovered ? 0.16 : 0.1), lineWidth: 1)
+                        .strokeBorder(
+                            Color.primary.opacity(isTimerCancelHovered ? 0.16 : 0.1), lineWidth: 1)
                 )
                 .onHover { isTimerCancelHovered = $0 }
                 .help(L10n.timerStop)
@@ -157,6 +180,7 @@ struct CurrentlyPlayingSectionView: View {
     @ViewBuilder
     private func timerHeaderButtonLabel(isVeryNarrow: Bool) -> some View {
         if store.hasActiveTimer {
+            // Cuenta regresiva en vivo con dígitos monoespaciados para estabilidad visual.
             Label {
                 TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
                     Text(formatTimerRemaining(seconds: store.activeTimer?.remainingSeconds ?? 0))
@@ -176,8 +200,11 @@ struct CurrentlyPlayingSectionView: View {
     }
 
     private func formatTimerRemaining(seconds: Int) -> String {
+        // Formato compacto: h:mm:ss o m:ss según duración restante.
         let s = max(0, seconds)
-        let h = s / 3600, m = (s % 3600) / 60, sec = s % 60
+        let h = s / 3600
+        let m = (s % 3600) / 60
+        let sec = s % 60
         if h > 0 {
             return String(format: "%d:%02d:%02d", h, m, sec)
         }
@@ -197,32 +224,46 @@ struct CategoriesSectionView: View {
     var body: some View {
         let isNarrow = contentAreaWidth < 420
         let isVeryNarrow = contentAreaWidth < 340
+        // Sección de categorías de sonidos con acción global expandir/colapsar.
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
             HStack(spacing: MoodistTheme.Spacing.small) {
                 Spacer(minLength: 0)
                 Button(action: toggleAllCategories) {
                     if isVeryNarrow {
-                        Label(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
-                              systemImage: allCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                            .labelStyle(.iconOnly)
+                        Label(
+                            allCategoriesExpanded
+                                ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                            systemImage: allCategoriesExpanded
+                                ? "chevron.up.circle" : "chevron.down.circle"
+                        )
+                        .labelStyle(.iconOnly)
                     } else {
-                        Label(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
-                              systemImage: allCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                            .labelStyle(.titleAndIcon)
+                        Label(
+                            allCategoriesExpanded
+                                ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                            systemImage: allCategoriesExpanded
+                                ? "chevron.up.circle" : "chevron.down.circle"
+                        )
+                        .labelStyle(.titleAndIcon)
                     }
                 }
-                .buttonStyle(HeaderActionButtonStyle(
-                    isHovered: isCollapseAllHovered,
-                    isPrimary: false,
-                    isCompact: isNarrow
-                ))
+                .buttonStyle(
+                    HeaderActionButtonStyle(
+                        isHovered: isCollapseAllHovered,
+                        isPrimary: false,
+                        isCompact: isNarrow
+                    )
+                )
                 .onHover { isCollapseAllHovered = $0 }
                 .help(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
-                .accessibilityLabel(allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
+                .accessibilityLabel(
+                    allCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
             }
-            .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
+            .padding(
+                .horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
 
             VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
+                // Estado expandido por categoría usando diccionario por id.
                 ForEach(SoundsData.categories, id: \.id) { category in
                     CategoryView(
                         category: category,
@@ -237,6 +278,7 @@ struct CategoriesSectionView: View {
             }
         }
         .onAppear {
+            // Inicializa estados sólo en primera carga de la vista.
             if categoryExpandedStates.isEmpty {
                 for category in SoundsData.categories {
                     categoryExpandedStates[category.id] = defaultExpandedState
@@ -258,13 +300,17 @@ struct MixesPlaceholderSectionView: View {
     var body: some View {
         let isNarrow = contentAreaWidth < 420
         let isVeryNarrow = contentAreaWidth < 340
+        // Sección Mixes: bloque custom + categorías estándar con control global.
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
             MixCategoryView(
                 category: MixesData.custom,
                 store: store,
                 mixesToShow: store.presets.map { $0.toMix() },
                 isExpanded: Binding(
-                    get: { mixCategoryExpandedStates[MixesData.custom.id] ?? defaultMixExpandedState(MixesData.custom.id) },
+                    get: {
+                        mixCategoryExpandedStates[MixesData.custom.id]
+                            ?? defaultMixExpandedState(MixesData.custom.id)
+                    },
                     set: { mixCategoryExpandedStates[MixesData.custom.id] = $0 }
                 )
             )
@@ -275,34 +321,56 @@ struct MixesPlaceholderSectionView: View {
                     Spacer(minLength: 0)
                     Button(action: toggleAllMixCategories) {
                         if isVeryNarrow {
-                            Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
-                                  systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                                .labelStyle(.iconOnly)
+                            Label(
+                                allMixCategoriesExpanded
+                                    ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                                systemImage: allMixCategoriesExpanded
+                                    ? "chevron.up.circle" : "chevron.down.circle"
+                            )
+                            .labelStyle(.iconOnly)
                         } else {
-                            Label(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories,
-                                  systemImage: allMixCategoriesExpanded ? "chevron.up.circle" : "chevron.down.circle")
-                                .labelStyle(.titleAndIcon)
+                            Label(
+                                allMixCategoriesExpanded
+                                    ? L10n.collapseAllCategories : L10n.expandAllCategories,
+                                systemImage: allMixCategoriesExpanded
+                                    ? "chevron.up.circle" : "chevron.down.circle"
+                            )
+                            .labelStyle(.titleAndIcon)
                         }
                     }
-                    .buttonStyle(HeaderActionButtonStyle(
-                        isHovered: isCollapseAllMixesHovered,
-                        isPrimary: false,
-                        isCompact: isNarrow
-                    ))
+                    .buttonStyle(
+                        HeaderActionButtonStyle(
+                            isHovered: isCollapseAllMixesHovered,
+                            isPrimary: false,
+                            isCompact: isNarrow
+                        )
+                    )
                     .onHover { isCollapseAllMixesHovered = $0 }
-                    .help(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
-                    .accessibilityLabel(allMixCategoriesExpanded ? L10n.collapseAllCategories : L10n.expandAllCategories)
+                    .help(
+                        allMixCategoriesExpanded
+                            ? L10n.collapseAllCategories : L10n.expandAllCategories
+                    )
+                    .accessibilityLabel(
+                        allMixCategoriesExpanded
+                            ? L10n.collapseAllCategories : L10n.expandAllCategories)
                 }
-                .padding(.horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
+                .padding(
+                    .horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium
+                )
 
                 VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
-                    ForEach(MixesData.categories.filter { $0.id != MixesData.custom.id }, id: \.id) { category in
+                    // Excluye custom para no duplicar la categoría de presets del usuario.
+                    ForEach(MixesData.categories.filter { $0.id != MixesData.custom.id }, id: \.id)
+                    { category in
                         MixCategoryView(
                             category: category,
                             store: store,
                             mixesToShow: nil,
                             isExpanded: Binding(
-                                get: { mixCategoryExpandedStates[category.id] ?? defaultMixExpandedState(category.id) },
+                                get: {
+                                    mixCategoryExpandedStates[category.id]
+                                        ?? defaultMixExpandedState(category.id)
+                                },
                                 set: { mixCategoryExpandedStates[category.id] = $0 }
                             )
                         )
@@ -312,6 +380,7 @@ struct MixesPlaceholderSectionView: View {
             }
         }
         .onAppear {
+            // Inicializa mapa de expansión de mixes una sola vez.
             if mixCategoryExpandedStates.isEmpty {
                 for category in MixesData.categories {
                     mixCategoryExpandedStates[category.id] = defaultMixExpandedState(category.id)
@@ -327,13 +396,15 @@ struct MixesSearchResultsSectionView: View {
     var body: some View {
         let query = store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let customMixes = store.presets.map { $0.toMix() }
+        // Filtra por nombre de mix o nombre de categoría; incluye mixes personalizados.
         let filtered: [(MixCategory, [Mix])] = MixesData.categories.compactMap { category in
             let categoryTitle = L10n.mixCategoryTitle(category.id)
             let categoryMatches = categoryTitle.localizedStandardContains(query)
             let mixesSource = category.id == MixesData.custom.id ? customMixes : category.mixes
             let matching = mixesSource.filter { mix in
                 let displayName = (L10n.mixName(mix.id) == mix.id) ? mix.name : L10n.mixName(mix.id)
-                return query.isEmpty || displayName.localizedStandardContains(query) || categoryMatches
+                return query.isEmpty || displayName.localizedStandardContains(query)
+                    || categoryMatches
             }
             if matching.isEmpty { return nil }
             return (category, matching)
@@ -341,6 +412,7 @@ struct MixesSearchResultsSectionView: View {
 
         return Group {
             if filtered.isEmpty {
+                // Empty state cuando no hay resultados para la búsqueda.
                 VStack(spacing: MoodistTheme.Spacing.medium) {
                     Image(systemName: "magnifyingglass")
                         .font(.largeTitle)
@@ -352,6 +424,7 @@ struct MixesSearchResultsSectionView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, MoodistTheme.Spacing.xLarge)
             } else {
+                // Resultados agrupados por categoría para mantener jerarquía visual.
                 VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
                     ForEach(filtered, id: \.0.id) { category, mixes in
                         MixCategoryView(category: category, store: store, mixesToShow: mixes)
@@ -369,11 +442,13 @@ struct SoundsSearchResultsSectionView: View {
 
     var body: some View {
         let query = store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        // Filtra sonidos por etiqueta o por coincidencia con el nombre de categoría.
         let filtered: [(SoundCategory, [Sound])] = SoundsData.categories.compactMap { category in
             let categoryTitle = L10n.categoryTitle(category.id)
             let categoryMatches = categoryTitle.localizedStandardContains(query)
             let matching = category.sounds.filter { sound in
-                query.isEmpty || L10n.soundLabel(sound.id).localizedStandardContains(query) || categoryMatches
+                query.isEmpty || L10n.soundLabel(sound.id).localizedStandardContains(query)
+                    || categoryMatches
             }
             if matching.isEmpty { return nil }
             return (category, matching)
@@ -381,6 +456,7 @@ struct SoundsSearchResultsSectionView: View {
 
         return Group {
             if filtered.isEmpty {
+                // Empty state de búsqueda para sonidos.
                 VStack(spacing: MoodistTheme.Spacing.medium) {
                     Image(systemName: "magnifyingglass")
                         .font(.largeTitle)
@@ -392,6 +468,7 @@ struct SoundsSearchResultsSectionView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, MoodistTheme.Spacing.xLarge)
             } else {
+                // Resultados de sonidos agrupados por categoría.
                 VStack(alignment: .leading, spacing: MoodistTheme.Spacing.large) {
                     ForEach(filtered, id: \.0.id) { category, sounds in
                         VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
@@ -414,11 +491,130 @@ struct SoundsSearchResultsSectionView: View {
                             }
                         }
                         .padding(.vertical, MoodistTheme.Spacing.small)
-                        .padding(.horizontal, contentAreaWidth < 420 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
+                        .padding(
+                            .horizontal,
+                            contentAreaWidth < 420
+                                ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium
+                        )
                         .id("search-category-\(category.id)")
                     }
                 }
             }
         }
+    }
+}
+
+struct ContentScrollPanelView<SectionContent: View>: View {
+    let section: ContentSection
+    let selectedSection: ContentSection
+    let contentAreaWidth: CGFloat
+    let topPadding: CGFloat
+    let scrollTopAnchorId: String
+    @Binding var scrollPosition: String?
+    @Binding var isUserScrolling: Bool
+    let searchQuery: String
+    let onScrollAnchorChanged: (String) -> Void
+    let onSearchQueryChanged: (String, String) -> Void
+    let onFirstAppear: () -> Void
+    @ViewBuilder let sections: () -> SectionContent
+
+    var body: some View {
+        // Contenedor reusable de scroll con hooks de memoria de posición y búsqueda.
+        ScrollView {
+            LazyVStack(
+                alignment: .leading,
+                spacing: contentAreaWidth < 400
+                    ? MoodistTheme.Spacing.medium : MoodistTheme.Spacing.xLarge
+            ) {
+                Color.clear
+                    .frame(height: 1)
+                    .id(scrollTopAnchorId)
+                sections()
+            }
+            .padding(
+                .horizontal,
+                contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large
+            )
+            .padding(.top, topPadding)
+            .padding(
+                .bottom,
+                (contentAreaWidth < 400 ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.large)
+                    + 88
+            )
+        }
+        .scrollPosition(id: $scrollPosition, anchor: .top)
+        .onScrollPhaseChange { _, phase in
+            // Solo marca scrolling para la sección visible.
+            guard selectedSection == section else { return }
+            isUserScrolling = phase != .idle
+        }
+        .onChange(of: scrollPosition) { _, newValue in
+            guard let newValue else { return }
+            // Delegación de persistencia/validación al caller (ContentView + ScrollStateStore).
+            onScrollAnchorChanged(newValue)
+        }
+        .onChange(of: searchQuery) { oldValue, newValue in
+            onSearchQueryChanged(oldValue, newValue)
+        }
+        .onAppear(perform: onFirstAppear)
+    }
+}
+
+struct HeaderActionButtonStyle: ButtonStyle {
+    let isHovered: Bool
+    let isPrimary: Bool
+    let isCompact: Bool
+
+    @Environment(\.isEnabled) private var isEnabled
+
+    func makeBody(configuration: Configuration) -> some View {
+        // Estilo cápsula compartido para acciones en headers.
+        configuration.label
+            .font(.system(size: isCompact ? 12 : 13, weight: .medium))
+            .padding(.horizontal, isCompact ? 8 : 10)
+            .padding(.vertical, isCompact ? 4 : 5)
+            .foregroundStyle(foregroundColor)
+            .background(
+                Capsule().fill(backgroundColor(isPressed: configuration.isPressed))
+            )
+            .overlay(
+                Capsule().strokeBorder(
+                    borderColor(isPressed: configuration.isPressed), lineWidth: 1)
+            )
+            .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
+            .animation(.easeInOut(duration: 0.12), value: configuration.isPressed)
+            .opacity(isEnabled ? 1 : 0.45)
+    }
+
+    private var foregroundColor: Color {
+        if !isEnabled {
+            return MoodistTheme.Colors.secondaryText.opacity(0.8)
+        }
+        return isPrimary ? MoodistTheme.Colors.accent : MoodistTheme.Colors.secondaryText
+    }
+
+    private func backgroundColor(isPressed: Bool) -> Color {
+        // Estados visuales: disabled, pressed, hover e idle.
+        if !isEnabled {
+            return MoodistTheme.Colors.cardBackground.opacity(0.25)
+        }
+        if isPressed {
+            return MoodistTheme.Colors.cardBackground.opacity(0.9)
+        }
+        if isHovered {
+            return MoodistTheme.Colors.cardBackground.opacity(0.7)
+        }
+        return MoodistTheme.Colors.cardBackground.opacity(0.4)
+    }
+
+    private func borderColor(isPressed: Bool) -> Color {
+        // Refuerzo visual adicional para botones primarios.
+        if !isEnabled {
+            return Color.primary.opacity(0.08)
+        }
+        if isPrimary {
+            return MoodistTheme.Colors.accent.opacity(isPressed ? 0.5 : (isHovered ? 0.4 : 0.25))
+        }
+        return Color.primary.opacity(isPressed ? 0.22 : (isHovered ? 0.16 : 0.1))
     }
 }

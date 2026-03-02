@@ -5,9 +5,9 @@
 //  Menú de opciones: Reproducción, Datos, Acerca de.
 //
 
-import SwiftUI
-import Sparkle
 import AppKit
+import Sparkle
+import SwiftUI
 
 private enum AppearanceMode: String, CaseIterable {
     case system
@@ -20,13 +20,17 @@ struct OptionsView: View {
     @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.sparkleUpdater) private var sparkleUpdater
     @AppStorage(PersistenceService.menuBarEnabledKey) private var menuBarEnabled = false
-    @AppStorage(PersistenceService.appearanceModeKey) private var appearanceModeRaw = AppearanceMode.system.rawValue
-    @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice.graphite.rawValue
+    @AppStorage(PersistenceService.appearanceModeKey) private var appearanceModeRaw = AppearanceMode
+        .system.rawValue
+    @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice
+        .graphite.rawValue
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
     @AppStorage(PersistenceService.maxRecentMixesCountKey) private var maxRecentMixesCount: Int = 10
-    @AppStorage(PersistenceService.maxRecentSoundsCountKey) private var maxRecentSoundsCount: Int = 12
+    @AppStorage(PersistenceService.maxRecentSoundsCountKey) private var maxRecentSoundsCount: Int =
+        12
     @AppStorage(PersistenceService.mediaKeyNextMixKey) private var mediaKeyNextMix = true
-    @AppStorage(PersistenceService.collapseCategoriesOnColdOpenKey) private var collapseCategoriesOnColdOpen = true
+    @AppStorage(PersistenceService.collapseCategoriesOnColdOpenKey) private
+        var collapseCategoriesOnColdOpen = true
     @State private var showResetConfirmation = false
     @State private var showRestoreConfirmation = false
     private let optionsWindowSize = CGSize(width: 510, height: 650)
@@ -47,7 +51,10 @@ struct OptionsView: View {
             .scrollContentBackground(.hidden)
             .navigationTitle(L10n.optionsTitle)
             .background(optionsBackground)
-            .background(OptionsWindowConfigurator(size: optionsWindowSize, transparencyEnabled: transparencyEnabled))
+            .background(
+                OptionsWindowConfigurator(
+                    size: optionsWindowSize, transparencyEnabled: transparencyEnabled)
+            )
             .confirmationDialog(L10n.resetConfirmTitle, isPresented: $showResetConfirmation) {
                 resetConfirmationButtons
             } message: {
@@ -61,12 +68,14 @@ struct OptionsView: View {
             .onAppear { handleOnAppear() }
             .onChange(of: menuBarEnabled) { _, _ in handleMenuBarChange() }
             .onChange(of: appearanceModeRaw) { _, _ in handleAppearanceChange() }
-            .onChange(of: accentColorRaw) { _, _ in NotificationCenter.default.post(name: .accentPreferenceDidChange, object: nil) }
+            .onChange(of: accentColorRaw) { _, _ in
+                NotificationCenter.default.post(name: .accentPreferenceDidChange, object: nil)
+            }
             .onChange(of: maxRecentMixesCount) { _, _ in handleMaxRecentMixesChange() }
             .onChange(of: maxRecentSoundsCount) { _, _ in handleMaxRecentSoundsChange() }
             .onChange(of: transparencyEnabled) { _, _ in handleTransparencyToggle() }
     }
-    
+
     private var formContent: some View {
         Form {
             menuBarSection
@@ -78,7 +87,7 @@ struct OptionsView: View {
         }
         .toggleStyle(OptionsToggleStyle())
     }
-    
+
     private var resetConfirmationButtons: some View {
         Group {
             Button(L10n.reset, role: .destructive) {
@@ -88,7 +97,7 @@ struct OptionsView: View {
             Button(L10n.cancel, role: .cancel) {}
         }
     }
-    
+
     private var restoreConfirmationButtons: some View {
         Group {
             Button(L10n.restore, role: .destructive) {
@@ -98,7 +107,7 @@ struct OptionsView: View {
             Button(L10n.cancel, role: .cancel) {}
         }
     }
-    
+
     private func handleOnAppear() {
         if maxRecentMixesCount < 5 || maxRecentMixesCount > 15 {
             maxRecentMixesCount = 10
@@ -113,15 +122,15 @@ struct OptionsView: View {
             transparencyEnabled = PersistenceService.loadTransparencyEnabled()
         }
     }
-    
+
     private func handleMenuBarChange() {
         NotificationCenter.default.post(name: .menuBarPreferenceDidChange, object: nil)
     }
-    
+
     private func handleAppearanceChange() {
         NotificationCenter.default.post(name: .appearancePreferenceDidChange, object: nil)
     }
-    
+
     private func handleMaxRecentMixesChange() {
         store.trimRecentMixIdsToLimit()
     }
@@ -129,7 +138,7 @@ struct OptionsView: View {
     private func handleMaxRecentSoundsChange() {
         store.trimRecentSoundIdsToLimit()
     }
-    
+
     private func handleTransparencyToggle() {
         PersistenceService.saveTransparencyEnabled(transparencyEnabled)
         NotificationCenter.default.post(name: .transparencyPreferenceDidChange, object: nil)
@@ -162,19 +171,22 @@ struct OptionsView: View {
 
             VStack(alignment: .leading, spacing: 6) {
                 Text(L10n.accentColor)
-                AccentColorPicker(selection: Binding(
-                    get: { accentChoice },
-                    set: { accentChoice = $0 }
-                ))
+                AccentColorPicker(
+                    selection: Binding(
+                        get: { accentChoice },
+                        set: { accentChoice = $0 }
+                    ))
                 Text(accentChoice.displayName)
                     .font(.footnote)
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
             }
-            
-            Toggle(isOn: Binding(
-                get: { !transparencyEnabled },
-                set: { transparencyEnabled = !$0 }
-            )) {
+
+            Toggle(
+                isOn: Binding(
+                    get: { !transparencyEnabled },
+                    set: { transparencyEnabled = !$0 }
+                )
+            ) {
                 Text(L10n.disableTransparencies)
             }
             .accessibilityLabel(L10n.disableTransparencies)
@@ -330,18 +342,15 @@ struct OptionsView: View {
         }
     }
 
-    @ViewBuilder
     private var updatesSection: some View {
-        if sparkleUpdater != nil {
-            Section {
-                if let updater = sparkleUpdater {
-                    SparkleCheckForUpdatesButton(updater: updater)
-                        .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
-                        .accessibilityLabel(L10n.checkForUpdates)
-                }
-            } header: {
-                Text(L10n.updatesSection)
+        Section {
+            if let updater = sparkleUpdater {
+                SparkleCheckForUpdatesButton(updater: updater)
+                    .buttonStyle(OptionsCapsuleButtonStyle(isPrimary: false))
+                    .accessibilityLabel(L10n.checkForUpdates)
             }
+        } header: {
+            Text(L10n.updatesSection)
         }
     }
 
@@ -581,7 +590,8 @@ private struct OptionsToggleStyle: ToggleStyle {
                         .fill(Color.white.opacity(isEnabled ? 0.98 : 0.9))
                         .frame(width: thumbSize, height: thumbSize)
                         .padding(2)
-                        .shadow(color: .black.opacity(0.28), radius: isHovered ? 2.5 : 2, x: 0, y: 1)
+                        .shadow(
+                            color: .black.opacity(0.28), radius: isHovered ? 2.5 : 2, x: 0, y: 1)
                 }
                 .overlay {
                     RoundedRectangle(cornerRadius: trackSize.height / 2, style: .continuous)
@@ -592,7 +602,10 @@ private struct OptionsToggleStyle: ToggleStyle {
                         .padding(-2)
                 }
                 .scaleEffect(isHovered ? 1.01 : 1)
-                .animation(.interactiveSpring(response: 0.22, dampingFraction: 0.82), value: configuration.isOn)
+                .animation(
+                    .interactiveSpring(response: 0.22, dampingFraction: 0.82),
+                    value: configuration.isOn
+                )
                 .animation(.easeInOut(duration: 0.14), value: isHovered)
         }
 

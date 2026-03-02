@@ -268,9 +268,13 @@ struct TimerSetupView: View {
     }
 
     private func startAndDismiss() {
-        guard canStart else { return }
-        store.startSleepTimer(durationSeconds: totalSeconds)
-        onDismiss()
+        // Fuerza commit del TextField activo antes de leer totalSeconds.
+        NSApp.keyWindow?.makeFirstResponder(nil)
+        DispatchQueue.main.async {
+            guard canStart else { return }
+            store.startSleepTimer(durationSeconds: totalSeconds)
+            onDismiss()
+        }
     }
 
     private func formatRemaining(seconds: Int) -> String {
