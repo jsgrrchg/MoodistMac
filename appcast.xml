@@ -4,6 +4,22 @@
         <title>MoodistMac Updates</title>
         <description>MoodistMac ambient sound app updates.</description>
         <language>en</language>
+        <!-- 1.0.4 (build 10). MARKETING_VERSION "1.0.4", CURRENT_PROJECT_VERSION 10. -->
+        <!-- Signed with Sparkle sign_update. Upload MoodistMac.zip to GitHub Release tag v1.0.4. -->
+        <item>
+            <title>Version 1.0.4</title>
+            <link>https://github.com/jsgrrchg/MoodistMac/releases/tag/v1.0.4</link>
+            <sparkle:version>10</sparkle:version>
+            <sparkle:shortVersionString>1.0.4</sparkle:shortVersionString>
+            <sparkle:releaseNotesLink>https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/v1.0.4.html</sparkle:releaseNotesLink>
+            <sparkle:fullReleaseNotesLink>https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/v1.0.4.html</sparkle:fullReleaseNotesLink>
+            <pubDate>Mon, 17 Mar 2026 12:00:00 +0000</pubDate>
+            <enclosure
+                url="https://github.com/jsgrrchg/MoodistMac/releases/download/v1.0.4/MoodistMac.zip"
+                sparkle:edSignature="PN+NGQCdLc0OcDBCVcCeJER8ZlGu1xuLvtps5hq5lIcKb9pZnlIHbYi5cOMoZZK2VgVOdZhijhY+YLqvIIauCg=="
+                length="200254418"
+                type="application/octet-stream"/>
+        </item>
         <!-- 1.0.3 (build 9). MARKETING_VERSION "1.0.3", CURRENT_PROJECT_VERSION 9. -->
         <!-- Signed with Sparkle sign_update. Upload MoodistMac.zip to GitHub Release tag v1.0.3. -->
         <item>

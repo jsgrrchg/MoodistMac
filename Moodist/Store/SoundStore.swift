@@ -42,10 +42,15 @@ final class SoundStore: ObservableObject {
     @Published var favoriteSoundIds: [String] = []
     /// Temporizador activo para detener la reproducción.
     @Published var activeTimer: TimerItem?
+    /// Intervalo en segundos para cambio automático de mix (nil = desactivado).
+    @Published var autoMixIntervalSeconds: Int?
+    /// Si true, el auto-mix rota solo entre mixes personalizados del usuario.
+    @Published var autoMixCustomOnly: Bool = false
 
     // Internal para permitir organización por extensiones en múltiples archivos.
     let audioService: AudioService
     var activeTimerToken: Timer?
+    var autoMixTimerToken: Timer?
     var timerUsageCounts: [Int: Int] = PersistenceService.loadTimerUsageCounts()
 
     /// Presets de minutos para el menú Timer (5 opciones): 5m, 10m, 15m, 30m, 45m.

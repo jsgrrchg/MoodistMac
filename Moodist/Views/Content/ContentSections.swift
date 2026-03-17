@@ -12,6 +12,8 @@ struct CurrentlyPlayingSectionView: View {
     let contentAreaWidth: CGFloat
     let playingSounds: [Sound]
     @Binding var isSaveMixHovered: Bool
+    @Binding var isPomodoroHovered: Bool
+    @Binding var isPomodoroXHovered: Bool
     @Binding var isClearHovered: Bool
     @Binding var isTimerHovered: Bool
     @Binding var isTimerCancelHovered: Bool
@@ -79,6 +81,7 @@ struct CurrentlyPlayingSectionView: View {
                         .help(L10n.presetSaveCurrent)
                         .accessibilityLabel(L10n.addCustom)
                     }
+                    pomodoroHeaderButton(isNarrow: isNarrow, isVeryNarrow: isVeryNarrow)
                     Button(action: onClear) {
                         if isVeryNarrow {
                             Label(L10n.clear, systemImage: "stop.fill")
@@ -128,6 +131,120 @@ struct CurrentlyPlayingSectionView: View {
     }
 
     @ViewBuilder
+    private func pomodoroHeaderButton(isNarrow: Bool, isVeryNarrow: Bool) -> some View {
+        HStack(spacing: 6) {
+            Menu {
+                Picker("Rotate", selection: $store.autoMixCustomOnly) {
+                    Text("All Mixes").tag(false)
+                    Text("Only Custom").tag(true)
+                }
+                Divider()
+                ForEach(SoundStore.autoMixIntervalPresets, id: \.self) { seconds in
+                    Button(store.autoMixIntervalLabel(forSeconds: seconds)) {
+                        store.startAutoMixTimer(intervalSeconds: seconds)
+                    }
+                }
+                if store.hasActiveAutoMixTimer {
+                    Divider()
+                    Button(L10n.timerStop, role: .destructive) {
+                        store.cancelAutoMixTimer()
+                    }
+                }
+            } label: {
+                if store.hasActiveAutoMixTimer && isVeryNarrow {
+                    Label {
+                        TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
+                            let secs = max(
+                                0,
+                                Int(
+                                    (store.autoMixNextFireDate ?? Date())
+                                        .timeIntervalSinceNow))
+                            Text(formatTimerRemaining(seconds: secs))
+                                .monospacedDigit()
+                                .contentTransition(.numericText(countsDown: true))
+                                .animation(.linear(duration: 0.3), value: secs)
+                        }
+                    } icon: {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                    }
+                    .labelStyle(.iconOnly)
+                } else if store.hasActiveAutoMixTimer {
+                    Label {
+                        TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
+                            let secs = max(
+                                0,
+                                Int(
+                                    (store.autoMixNextFireDate ?? Date())
+                                        .timeIntervalSinceNow))
+                            Text(formatTimerRemaining(seconds: secs))
+                                .monospacedDigit()
+                                .contentTransition(.numericText(countsDown: true))
+                                .animation(.linear(duration: 0.3), value: secs)
+                        }
+                    } icon: {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                    }
+                    .labelStyle(.titleAndIcon)
+                } else if isVeryNarrow {
+                    Label("Pomodoro", systemImage: "arrow.triangle.2.circlepath")
+                        .labelStyle(.iconOnly)
+                } else {
+                    Label("Pomodoro", systemImage: "arrow.triangle.2.circlepath")
+                        .labelStyle(.titleAndIcon)
+                }
+            }
+            .buttonStyle(
+                HeaderActionButtonStyle(
+                    isHovered: isPomodoroHovered,
+                    isPrimary: store.hasActiveAutoMixTimer,
+                    isCompact: isNarrow
+                )
+            )
+            .onHover { isPomodoroHovered = $0 }
+            .help(
+                store.hasActiveAutoMixTimer
+                    ? "Pomodoro – \(store.timerLabel(forSeconds: store.autoMixIntervalSeconds ?? 0))"
+                    : "Pomodoro – auto mix"
+            )
+            .accessibilityLabel("Pomodoro")
+
+            if store.hasActiveAutoMixTimer {
+                Button(action: { store.cancelAutoMixTimer() }) {
+                    Image(systemName: "xmark")
+                        .font(.system(size: isNarrow ? 10 : 11, weight: .semibold))
+                        .frame(width: isNarrow ? 20 : 22, height: isNarrow ? 20 : 22)
+                }
+                .buttonStyle(.plain)
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
+                .background(
+                    Capsule()
+                        .fill(
+                            isPomodoroXHovered
+                                ? MoodistTheme.Colors.cardBackground.opacity(0.75)
+                                : MoodistTheme.Colors.cardBackground.opacity(0.45)
+                        )
+                )
+                .overlay(
+                    Capsule()
+                        .strokeBorder(
+                            Color.primary.opacity(isPomodoroXHovered ? 0.16 : 0.1), lineWidth: 1)
+                )
+                .onHover { isPomodoroXHovered = $0 }
+                .help(L10n.timerStop)
+                .accessibilityLabel(L10n.timerStop)
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .leading).combined(with: .scale(scale: 0.6))
+                            .combined(with: .opacity),
+                        removal: .scale(scale: 0.6).combined(with: .opacity)
+                    ))
+            }
+        }
+        .animation(
+            .spring(response: 0.35, dampingFraction: 0.75), value: store.hasActiveAutoMixTimer)
+    }
+
+    @ViewBuilder
     private func timerHeaderButton(isNarrow: Bool, isVeryNarrow: Bool) -> some View {
         // Control de timer: abrir ventana + cancelación rápida.
         HStack(spacing: 6) {
@@ -173,8 +290,15 @@ struct CurrentlyPlayingSectionView: View {
                 .onHover { isTimerCancelHovered = $0 }
                 .help(L10n.timerStop)
                 .accessibilityLabel(L10n.timerStop)
+                .transition(
+                    .asymmetric(
+                        insertion: .move(edge: .leading).combined(with: .scale(scale: 0.6))
+                            .combined(with: .opacity),
+                        removal: .scale(scale: 0.6).combined(with: .opacity)
+                    ))
             }
         }
+        .animation(.spring(response: 0.35, dampingFraction: 0.75), value: store.hasActiveTimer)
     }
 
     @ViewBuilder
@@ -183,8 +307,11 @@ struct CurrentlyPlayingSectionView: View {
             // Cuenta regresiva en vivo con dígitos monoespaciados para estabilidad visual.
             Label {
                 TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
-                    Text(formatTimerRemaining(seconds: store.activeTimer?.remainingSeconds ?? 0))
+                    let secs = store.activeTimer?.remainingSeconds ?? 0
+                    Text(formatTimerRemaining(seconds: secs))
                         .monospacedDigit()
+                        .contentTransition(.numericText(countsDown: true))
+                        .animation(.linear(duration: 0.3), value: secs)
                 }
             } icon: {
                 Image(systemName: "timer")

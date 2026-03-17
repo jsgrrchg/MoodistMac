@@ -5,6 +5,22 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] – 2026-03-17
+
+### Added
+
+- Smooth crossfade (~1.5s) when switching mixes or presets: outgoing sounds fade out, incoming sounds fade in, and sounds common to both presets transition volume without reloading.
+- Pomodoro auto-mix: automatically switches to a random mix at a chosen interval (5m–1h), with a live countdown in the button.
+
+### Changed
+
+- **Liquid Glass (macOS 26)**: Applied native Liquid Glass material to panels and UI elements when running on macOS 26, maintaining the classic appearance on macOS 15.
+- **Search bar (main window)**: Harmonized the search bar visual style in the main window for a more cohesive look.
+
+### Fixed
+
+- **Update window**: Aligned the app icon position in the update window for a more polished layout.
+
 ## [1.0.3] – 2026-03-01
 
 ### Added

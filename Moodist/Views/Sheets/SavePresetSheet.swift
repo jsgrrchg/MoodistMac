@@ -5,6 +5,7 @@
 //  Save Mix modal with SF Symbols picker.
 //
 
+import AppKit
 import Foundation
 import SwiftUI
 
@@ -135,6 +136,55 @@ extension SaveMixIconOption {
 extension SaveMixIconCategory {
     fileprivate var localizedTitle: String {
         L10n.saveMixIconCategoryTitle(id)
+    }
+}
+
+// MARK: - Vertical-to-horizontal scroll interceptor
+
+/// Redirige el scroll vertical del mouse (rueda) a scroll horizontal en la vista padre.
+private struct HScrollWheelInterceptorView: NSViewRepresentable {
+    func makeNSView(context: Context) -> HScrollWheelNSView { HScrollWheelNSView() }
+    func updateNSView(_ nsView: HScrollWheelNSView, context: Context) {}
+}
+
+private class HScrollWheelNSView: NSView {
+    private var monitor: Any?
+
+    override func viewWillMove(toWindow newWindow: NSWindow?) {
+        if let m = monitor {
+            NSEvent.removeMonitor(m)
+            monitor = nil
+        }
+        super.viewWillMove(toWindow: newWindow)
+    }
+
+    override func viewDidMoveToWindow() {
+        super.viewDidMoveToWindow()
+        guard window != nil else { return }
+        monitor = NSEvent.addLocalMonitorForEvents(matching: .scrollWheel) { [weak self] event in
+            guard let self,
+                let win = self.window,
+                event.window === win,
+                event.scrollingDeltaX == 0,
+                event.scrollingDeltaY != 0
+            else { return event }
+            let pt = self.convert(event.locationInWindow, from: nil)
+            guard self.bounds.contains(pt) else { return event }
+            guard let cge = event.cgEvent?.copy() else { return event }
+            // Mueve el delta del eje vertical al eje horizontal
+            let dy = cge.getDoubleValueField(.scrollWheelEventDeltaAxis1)
+            let dypt = cge.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)
+            let dyfp = cge.getDoubleValueField(.scrollWheelEventFixedPtDeltaAxis1)
+            cge.setDoubleValueField(.scrollWheelEventDeltaAxis1, value: 0)
+            cge.setDoubleValueField(.scrollWheelEventPointDeltaAxis1, value: 0)
+            cge.setDoubleValueField(.scrollWheelEventFixedPtDeltaAxis1, value: 0)
+            cge.setDoubleValueField(.scrollWheelEventDeltaAxis2, value: dy)
+            cge.setDoubleValueField(.scrollWheelEventPointDeltaAxis2, value: dypt)
+            cge.setDoubleValueField(.scrollWheelEventFixedPtDeltaAxis2, value: dyfp)
+            guard let newEvent = NSEvent(cgEvent: cge) else { return event }
+            NSApplication.shared.sendEvent(newEvent)
+            return nil  // Consume el evento original
+        }
     }
 }
 
@@ -435,6 +485,10 @@ struct SavePresetSheet: View {
                 }
             }
         }
+        .background(
+            HScrollWheelInterceptorView()
+                .allowsHitTesting(false)
+        )
         .accessibilityHint(L10n.saveMixIconCategoriesHint)
     }
 

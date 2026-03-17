@@ -10,23 +10,81 @@ extension SoundStore {
         showSavePresetSheet = true
     }
 
-    /// Aplica un preset: limpia selección, selecciona los sonidos del preset con sus volúmenes y opcionalmente inicia reproducción.
+    /// Aplica un preset con crossfade suave: los sonidos que salen hacen fade-out, los que entran fade-in,
+    /// y los comunes transicionan volumen sin recargarse.
     func applyPreset(_ preset: Preset, startPlaying: Bool = true) {
-        // Reinicia selección previa y aplica la nueva configuración de ids + volúmenes.
-        unselectAll()
-        for soundId in preset.soundIds {
-            guard sounds[soundId] != nil else { continue }
-            if var item = sounds[soundId] {
-                item.isSelected = true
-                item.volume = preset.volume(for: soundId)
-                sounds[soundId] = item
+        let fadeDuration = AudioService.crossfadeDuration
+
+        // 1. Clasificar sonidos en tres categorías.
+        let oldSelectedIds = Set(selectedIds)
+        let newSelectedIds = Set(preset.soundIds.filter { sounds[$0] != nil })
+
+        let fadeOutOnly = oldSelectedIds.subtracting(newSelectedIds)
+        let fadeInOnly = newSelectedIds.subtracting(oldSelectedIds)
+        let common = oldSelectedIds.intersection(newSelectedIds)
+
+        let shouldPlay = startPlaying || isPlaying
+
+        // 2. Cancelar crossfade previo (rapid switching).
+        audioService.cancelCrossfadeAndCleanup()
+
+        // 3. Fade-out: sonidos que salen.
+        for soundId in fadeOutOnly {
+            audioService.fadeOutAndUnload(soundId: soundId, duration: fadeDuration)
+        }
+
+        // 4. Actualizar estado UI en un solo batch.
+        var next = sounds
+        for id in fadeOutOnly {
+            if var item = next[id] {
+                item.isSelected = false
+                next[id] = item
             }
         }
+        for soundId in newSelectedIds {
+            if var item = next[soundId] {
+                item.isSelected = true
+                item.volume = preset.volume(for: soundId)
+                next[soundId] = item
+            }
+        }
+        sounds = next
+        currentMixId = nil
+        currentMixIconName = nil
+
+        // 5. Sonidos comunes: transición suave de volumen (sin recargar).
+        for soundId in common {
+            let targetVolume = preset.volume(for: soundId)
+            audioService.setVolume(
+                soundId: soundId, volume: targetVolume,
+                globalVolume: globalVolume, fadeDuration: fadeDuration
+            )
+        }
+
+        // 6. Fade-in: cargar nuevos sonidos a volumen 0, luego fade al objetivo.
+        for soundId in fadeInOnly {
+            guard let sound = SoundsData.allSoundsById[soundId] else { continue }
+            if audioService.load(sound: sound) != nil {
+                audioService.setVolume(soundId: soundId, volume: 0, globalVolume: 1.0)
+                if shouldPlay {
+                    audioService.play(soundId: soundId)
+                }
+                let targetVolume = preset.volume(for: soundId)
+                audioService.setVolume(
+                    soundId: soundId, volume: targetVolume,
+                    globalVolume: globalVolume, fadeDuration: fadeDuration
+                )
+            }
+        }
+
+        // 7. Estado de reproducción y recientes.
         for soundId in preset.soundIds.reversed() {
             addToRecentSounds(soundId: soundId)
         }
         if startPlaying { isPlaying = true }
-        updatePlaybackForSelection()
+
+        // 8. Programar limpieza de outgoing players.
+        audioService.scheduleOutgoingCleanup(after: fadeDuration)
     }
 
     /// Aplica un mix temático y guarda su id e icono para mostrarlos en la UI.
@@ -39,13 +97,16 @@ extension SoundStore {
     }
 
     /// Aplica un mix aleatorio (otro distinto al actual si hay varios).
+    /// Cuando `autoMixCustomOnly` es true, rota solo entre presets del usuario.
     func playNextRandomMix() {
-        let all = MixesData.categories.flatMap(\.mixes)
-        guard !all.isEmpty else { return }
-        // Evita repetir el actual si hay alternativas disponibles.
+        let pool: [Mix] =
+            autoMixCustomOnly
+            ? presets.map { $0.toMix() }
+            : MixesData.categories.flatMap(\.mixes)
+        guard !pool.isEmpty else { return }
         let currentId = recentMixIds.first
-        let others = all.filter { $0.id != currentId }
-        let next = others.isEmpty ? all.randomElement()! : others.randomElement()!
+        let others = pool.filter { $0.id != currentId }
+        let next = others.isEmpty ? pool.randomElement()! : others.randomElement()!
         applyMix(next)
     }
 
@@ -69,14 +130,14 @@ extension SoundStore {
         )
         presets.append(preset)
     }
-
+    // Inicia edición de un preset existente: carga su id para que la hoja de guardado sepa que es edición, no creación.
     func beginEditingPreset(id: String) {
         // Reutiliza la misma sheet de guardado en modo edición.
         guard presets.contains(where: { $0.id == id }) else { return }
         editingPresetId = id
         showSavePresetSheet = true
     }
-
+    // Actualiza el preset editado con nuevos valores. Si se editó el preset actualmente aplicado como mix, actualiza su icono en la UI.
     func updatePresetMetadata(id: String, name: String, iconName: String) {
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedName.isEmpty else { return }
@@ -88,12 +149,12 @@ extension SoundStore {
             currentMixIconName = iconName
         }
     }
-
+    // Cierra la hoja de guardado sin guardar cambios y limpia el estado de edición.
     func closeSavePresetSheet() {
         showSavePresetSheet = false
         editingPresetId = nil
     }
-
+    // Elimina un preset y limpia cualquier referencia a él en favoritos, recientes y selección actual.
     func deletePreset(id: String) {
         presets.removeAll { $0.id == id }
         favoriteMixIds.removeAll { $0 == id }
@@ -106,7 +167,7 @@ extension SoundStore {
             editingPresetId = nil
         }
     }
-
+    // Agrega un sonido a un preset existente, asegurando que el sonido exista, no se duplique en el preset y que tenga un volumen asignado.
     func addSound(_ soundId: String, toPreset presetId: String) {
         guard sounds[soundId] != nil else { return }
         guard let index = presets.firstIndex(where: { $0.id == presetId }) else { return }

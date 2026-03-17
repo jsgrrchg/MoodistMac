@@ -14,7 +14,7 @@ private let sidebarWidthDefault: CGFloat = 220
 private let sidebarResizeHandleWidth: CGFloat = 14
 /// Por debajo de este ancho de ventana se usa el menú compacto (un solo icono).
 /// Nota: el buscador en la toolbar ocupa espacio; en ventanas estrechas el sistema puede mover controles
-/// al overflow ("»"), donde algunos pickers pueden volverse poco fiables. Preferimos consolidar en un menú.
+/// al overflow ("»"), donde algunos pickers pueden volverse poco fiables.
 private let toolbarCompactThreshold: CGFloat = 600
 /// Por debajo de este ancho de ventana el selector Sounds/Mixes pasa a menú desplegable en lugar de segmentado.
 private let toolbarMediumThreshold: CGFloat = 720
@@ -91,6 +91,8 @@ struct ContentView: View {
     @State private var mixesScrollPosition: String? = ScrollStateStore.scrollTopAnchorId
     @State private var isUserScrolling = false
     @State private var isSaveMixHovered = false
+    @State private var isPomodoroHovered = false
+    @State private var isPomodoroXHovered = false
     @State private var isClearHovered = false
     @State private var isTimerButtonHovered = false
     @State private var isTimerCancelButtonHovered = false
@@ -684,6 +686,8 @@ struct ContentView: View {
             contentAreaWidth: contentAreaWidth,
             playingSounds: playingSoundsCache,
             isSaveMixHovered: $isSaveMixHovered,
+            isPomodoroHovered: $isPomodoroHovered,
+            isPomodoroXHovered: $isPomodoroXHovered,
             isClearHovered: $isClearHovered,
             isTimerHovered: $isTimerButtonHovered,
             isTimerCancelHovered: $isTimerCancelButtonHovered,

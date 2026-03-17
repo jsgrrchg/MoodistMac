@@ -173,18 +173,8 @@ struct ContentToolbarMetrics {
         }()
 
         let searchFieldWidth = min(240, max(140, windowWidth * 0.25))
-        let searchFieldHeight: CGFloat
-        if #available(macOS 26.0, *) {
-            searchFieldHeight = 32
-        } else {
-            searchFieldHeight = 28
-        }
-        let searchFieldFocusPadding: CGFloat
-        if #available(macOS 26.0, *) {
-            searchFieldFocusPadding = 4
-        } else {
-            searchFieldFocusPadding = 0
-        }
+        let searchFieldHeight: CGFloat = 28
+        let searchFieldFocusPadding: CGFloat = 0
 
         return .init(
             contentOffset: contentOffset,

@@ -107,6 +107,7 @@ extension SoundStore {
         currentMixId = nil
         currentMixIconName = nil
         isPlaying = false
+        audioService.cancelCrossfadeAndCleanup()
         audioService.pauseAll(ids: selectedIds)
         audioService.unloadAll()
         globalVolume = 1.0
@@ -134,7 +135,7 @@ extension SoundStore {
         var seen = Set<String>()
         return values.filter { seen.insert($0).inserted }
     }
-
+    // Valida y limpia un preset importado, asegurando que sólo contenga sonidos válidos y volúmenes en rango, y que su id sea único y no vacío.
     private func sanitizeImportedPreset(_ preset: Preset, validSoundIds: Set<String>) -> Preset? {
         let presetId = preset.id.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !presetId.isEmpty else { return nil }

@@ -1,6 +1,41 @@
 import Foundation
 
 extension SoundStore {
+    // MARK: - Auto Mix Timer
+
+    /// Intervalos disponibles para el cambio automático de mix.
+    static let autoMixIntervalPresets: [Int] = [5, 10, 15, 20, 30, 40, 50, 60].map { $0 * 60 }
+
+    var hasActiveAutoMixTimer: Bool { autoMixIntervalSeconds != nil }
+    /// Fecha en que el timer disparará el siguiente cambio de mix.
+    var autoMixNextFireDate: Date? { autoMixTimerToken?.fireDate }
+
+    /// Inicia un timer repetitivo que cambia al siguiente mix aleatorio cada `intervalSeconds`.
+    func startAutoMixTimer(intervalSeconds: Int) {
+        autoMixTimerToken?.invalidate()
+        autoMixIntervalSeconds = intervalSeconds
+        autoMixTimerToken = Timer.scheduledTimer(
+            withTimeInterval: TimeInterval(intervalSeconds), repeats: true
+        ) { [weak self] _ in
+            Task { @MainActor in self?.playNextRandomMix() }
+        }
+    }
+
+    /// Detiene el timer de cambio automático de mix.
+    func cancelAutoMixTimer() {
+        autoMixTimerToken?.invalidate()
+        autoMixTimerToken = nil
+        autoMixIntervalSeconds = nil
+    }
+
+    /// Etiqueta larga para el menú del Pomodoro ("5 minutes", "1 hour", etc.).
+    func autoMixIntervalLabel(forSeconds seconds: Int) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .full
+        formatter.allowedUnits = seconds >= 3600 ? [.hour] : [.minute]
+        return formatter.string(from: TimeInterval(seconds)) ?? timerLabel(forSeconds: seconds)
+    }
+
     // MARK: - Timers (Sleep)
 
     // Inicia timer de sueño, registra uso y programa callback de finalización.
@@ -31,7 +66,7 @@ extension SoundStore {
         activeTimer = nil
         NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
     }
-
+    // Calcula tiempo restante del timer activo y formatea etiqueta
     var timerRemainingMenuTitle: String? {
         guard let activeTimer else { return nil }
         let remaining = activeTimer.remainingSeconds

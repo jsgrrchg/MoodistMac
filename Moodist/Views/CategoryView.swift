@@ -2,7 +2,7 @@
 //  CategoryView.swift
 //  MoodistMac
 //
-//  Vista de una categoría: título e icono, lista de sonidos. Compatible con Liquid Glass (macOS 26+).
+//  Vista de una categoría: título e icono, lista de sonidos. 
 //
 
 import SwiftUI

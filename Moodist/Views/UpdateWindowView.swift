@@ -14,6 +14,7 @@ struct UpdateWindowView: View {
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
 
+    private let appIconTopOffset: CGFloat = 4
     private var accent: Color { MoodistTheme.Colors.accent }
 
     var body: some View {
@@ -159,6 +160,9 @@ struct UpdateWindowView: View {
         Image(nsImage: NSApp.applicationIconImage)
             .resizable()
             .frame(width: 56, height: 56)
+            .alignmentGuide(.top) { dimensions in
+                dimensions[.top] + appIconTopOffset
+            }
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .shadow(
                 color: .black.opacity(colorScheme == .dark ? 0.35 : 0.18), radius: 8, x: 0, y: 4)

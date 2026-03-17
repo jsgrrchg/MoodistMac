@@ -5,10 +5,10 @@
 //  Barra flotante del reproductor con Liquid Glass (macOS 26+) o NSVisualEffectView (versiones anteriores).
 //
 
-import SwiftUI
 import AppKit
+import SwiftUI
 
-/// Forma redondeada sutil para el reproductor (estilo Liquid Glass / Apple Music)
+/// Forma redondeada sutil para el reproductor
 private let floatingBarShape = RoundedRectangle(
     cornerRadius: 12,
     style: .continuous
@@ -43,7 +43,7 @@ private let barZoneSpacing: CGFloat = 20
 private let marqueeSpeed: CGFloat = 25
 /// Intervalo de refresco para marquesina SwiftUI (fallback)
 #if !os(macOS)
-private let marqueeTickInterval: TimeInterval = 0.06
+    private let marqueeTickInterval: TimeInterval = 0.06
 #endif
 
 private struct TextWidthKey: PreferenceKey {
@@ -72,54 +72,57 @@ private struct MarqueeLabel: View {
             ZStack(alignment: .leading) {
                 if shouldScroll {
                     #if os(macOS)
-                    let marqueeNSColor: NSColor = colorScheme == .dark
-                        ? .white
-                        : NSColor(calibratedWhite: 0.42, alpha: 1)
-                    MarqueeTextView(
-                        text: text,
-                        font: NSFont.systemFont(ofSize: fontSize, weight: fontWeight.toNSFontWeight()),
-                        color: marqueeNSColor,
-                        speed: marqueeSpeed,
-                        spacing: spacing,
-                        containerWidth: containerWidth,
-                        isEnabled: shouldScroll,
-                        colorScheme: colorScheme
-                    )
+                        let marqueeNSColor: NSColor =
+                            colorScheme == .dark
+                            ? .white
+                            : NSColor(calibratedWhite: 0.42, alpha: 1)
+                        MarqueeTextView(
+                            text: text,
+                            font: NSFont.systemFont(
+                                ofSize: fontSize, weight: fontWeight.toNSFontWeight()),
+                            color: marqueeNSColor,
+                            speed: marqueeSpeed,
+                            spacing: spacing,
+                            containerWidth: containerWidth,
+                            isEnabled: shouldScroll,
+                            colorScheme: colorScheme
+                        )
                     #else
-                    TimelineView(.periodic(from: .now, by: marqueeTickInterval)) { context in
-                        let cycleWidth = measuredTextWidth + spacing
-                        let elapsed = context.date.timeIntervalSinceReferenceDate
-                        let offset = (-CGFloat(elapsed) * marqueeSpeed).truncatingRemainder(dividingBy: cycleWidth)
-                        HStack(spacing: spacing) {
-                            Text(text)
-                                .font(swiftUIFont)
-                                .foregroundStyle(color)
-                                .lineLimit(1)
-                                .fixedSize()
-                            Text(text)
-                                .font(swiftUIFont)
-                                .foregroundStyle(color)
-                                .lineLimit(1)
-                                .fixedSize()
+                        TimelineView(.periodic(from: .now, by: marqueeTickInterval)) { context in
+                            let cycleWidth = measuredTextWidth + spacing
+                            let elapsed = context.date.timeIntervalSinceReferenceDate
+                            let offset = (-CGFloat(elapsed) * marqueeSpeed).truncatingRemainder(
+                                dividingBy: cycleWidth)
+                            HStack(spacing: spacing) {
+                                Text(text)
+                                    .font(swiftUIFont)
+                                    .foregroundStyle(color)
+                                    .lineLimit(1)
+                                    .fixedSize()
+                                Text(text)
+                                    .font(swiftUIFont)
+                                    .foregroundStyle(color)
+                                    .lineLimit(1)
+                                    .fixedSize()
+                            }
+                            .offset(x: offset)
                         }
-                        .offset(x: offset)
-                    }
                     #endif
                 } else {
                     #if os(macOS)
-                    Text(text)
-                        .font(swiftUIFont)
-                        .foregroundStyle(color)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        Text(text)
+                            .font(swiftUIFont)
+                            .foregroundStyle(color)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     #else
-                    Text(text)
-                        .font(swiftUIFont)
-                        .foregroundStyle(color)
-                        .lineLimit(1)
-                        .truncationMode(.tail)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                        Text(text)
+                            .font(swiftUIFont)
+                            .foregroundStyle(color)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     #endif
                 }
             }
@@ -133,17 +136,19 @@ private struct MarqueeLabel: View {
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)
                 .hidden()
-                .background(GeometryReader { g in
-                    Color.clear.preference(key: TextWidthKey.self, value: g.size.width)
-                })
+                .background(
+                    GeometryReader { g in
+                        Color.clear.preference(key: TextWidthKey.self, value: g.size.width)
+                    }
+                )
                 .allowsHitTesting(false)
         }
         .onPreferenceChange(TextWidthKey.self) { measuredTextWidth = $0 }
     }
 }
 
-private extension Font.Weight {
-    func toNSFontWeight() -> NSFont.Weight {
+extension Font.Weight {
+    fileprivate func toNSFontWeight() -> NSFont.Weight {
         switch self {
         case .ultraLight: return .ultraLight
         case .thin: return .thin
@@ -177,8 +182,10 @@ struct BottomPlayerBarView: View {
         GeometryReader { proxy in
             let availableWidth = proxy.size.width
             let isNarrow = availableWidth < narrowWindowThreshold
-            let horizontalMargin = isNarrow ? floatingBarHorizontalMarginNarrow : floatingBarHorizontalMarginNormal
-            let barWidth = barTargetWidth(availableWidth: availableWidth, horizontalMargin: horizontalMargin)
+            let horizontalMargin =
+                isNarrow ? floatingBarHorizontalMarginNarrow : floatingBarHorizontalMarginNormal
+            let barWidth = barTargetWidth(
+                availableWidth: availableWidth, horizontalMargin: horizontalMargin)
             VStack(spacing: 0) {
                 Spacer(minLength: 0)
                 HStack(spacing: 0) {
@@ -196,9 +203,12 @@ struct BottomPlayerBarView: View {
 
     private func barTargetWidth(availableWidth: CGFloat, horizontalMargin: CGFloat) -> CGFloat {
         let usableWidth = max(0, availableWidth - (horizontalMargin * 2))
-        let ratio = usableWidth < narrowWindowThreshold ? floatingBarWidthRatioNarrow : floatingBarWidthRatioNormal
+        let ratio =
+            usableWidth < narrowWindowThreshold
+            ? floatingBarWidthRatioNarrow : floatingBarWidthRatioNormal
         let proportionalWidth = usableWidth * ratio
-        return min(max(proportionalWidth, floatingBarMinWidth), min(usableWidth, floatingBarMaxWidth))
+        return min(
+            max(proportionalWidth, floatingBarMinWidth), min(usableWidth, floatingBarMaxWidth))
     }
 
     private func barContent(availableWidth: CGFloat, barTextColor: Color) -> some View {
@@ -243,7 +253,10 @@ struct BottomPlayerBarView: View {
 
                     Button(action: { store.togglePlay() }) {
                         Image(systemName: store.isPlaying ? "pause.fill" : "play.fill")
-                            .font(.system(size: isMinimal ? 13 : (isCompact ? 14 : 16), weight: .medium))
+                            .font(
+                                .system(
+                                    size: isMinimal ? 13 : (isCompact ? 14 : 16), weight: .medium)
+                            )
                             .frame(width: playSize, height: playSize)
                             .contentShape(Rectangle())
                     }
@@ -261,30 +274,30 @@ struct BottomPlayerBarView: View {
                     .help(L10n.nextMix)
                 }
 
-            // Zona central: título del mix (marquesina si no cabe)
-            MarqueeLabel(
-                text: displayLabel,
-                fontSize: titleFontSize,
-                fontWeight: titleFontWeight,
-                color: barTextColor
-            )
-            .layoutPriority(0)
+                // Zona central: título del mix (marquesina si no cabe)
+                MarqueeLabel(
+                    text: displayLabel,
+                    fontSize: titleFontSize,
+                    fontWeight: titleFontWeight,
+                    color: barTextColor
+                )
+                .layoutPriority(0)
 
-            // Zona derecha: volumen (altavoz + slider), fondo opaco para que la marquesina no se trasluzca
-            HStack(alignment: .center, spacing: volumeSpacing) {
-                Image(systemName: store.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
-                    .font(.system(size: isMinimal ? 8 : (isCompact ? 9 : 11)))
-                    .foregroundStyle(barTextColor)
-                    .frame(width: isMinimal ? 14 : 18, alignment: .center)
-                volumeSlider(isMinimal: isMinimal)
-                .frame(minWidth: sliderMinWidth, maxWidth: sliderWidth)
-            }
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .compositingGroup()
-            .clipped()
-            .frame(minWidth: sliderMinWidth + (isMinimal ? 18 : 24), alignment: .trailing)
-            .accessibilityLabel(L10n.globalVolume)
+                // Zona derecha: volumen (altavoz + slider), fondo opaco para que la marquesina no se trasluzca
+                HStack(alignment: .center, spacing: volumeSpacing) {
+                    Image(systemName: store.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                        .font(.system(size: isMinimal ? 8 : (isCompact ? 9 : 11)))
+                        .foregroundStyle(barTextColor)
+                        .frame(width: isMinimal ? 14 : 18, alignment: .center)
+                    volumeSlider(isMinimal: isMinimal)
+                        .frame(minWidth: sliderMinWidth, maxWidth: sliderWidth)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .compositingGroup()
+                .clipped()
+                .frame(minWidth: sliderMinWidth + (isMinimal ? 18 : 24), alignment: .trailing)
+                .accessibilityLabel(L10n.globalVolume)
             }
             Spacer(minLength: 0)
         }
@@ -297,41 +310,32 @@ struct BottomPlayerBarView: View {
 
     @ViewBuilder private func floatingBarContainer(availableWidth: CGFloat) -> some View {
         #if LIQUID_GLASS_SDK
-        if #available(macOS 26.0, *) {
-            if transparencyEnabled {
-                // Liquid Glass (Adopting Liquid Glass): material translúcido que deja ver el contenido detrás
-                ZStack {
-                    floatingBarShape
-                        .fill(Color.clear)
-                        .glassEffect(.regular.interactive(), in: floatingBarShape)
-                        .opacity(0.85)
-                    barContent(availableWidth: availableWidth, barTextColor: playerBarTextColor)
+            if #available(macOS 26.0, *) {
+                if transparencyEnabled {
+                    // Liquid Glass: .glassEffect aplica el efecto de cristal real en macOS 26
+                    barContent(availableWidth: availableWidth, barTextColor: .primary)
+                        .glassEffect(in: .rect(cornerRadius: 12))
+                        .contentShape(floatingBarShape)
+                        .allowsHitTesting(true)
+                } else {
+                    solidBarContainer(availableWidth: availableWidth)
                 }
-                .clipShape(floatingBarShape)
-                .contentShape(floatingBarShape)
-                .allowsHitTesting(true)
-                .overlay(barOverlay)
-                .shadow(color: Color.black.opacity(0.12), radius: 16, x: 0, y: 6)
-                .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
             } else {
-                solidBarContainer(availableWidth: availableWidth)
+                if transparencyEnabled {
+                    fallbackBarContainer(availableWidth: availableWidth)
+                } else {
+                    solidBarContainer(availableWidth: availableWidth)
+                }
             }
-        } else {
+        #else
             if transparencyEnabled {
                 fallbackBarContainer(availableWidth: availableWidth)
             } else {
                 solidBarContainer(availableWidth: availableWidth)
             }
-        }
-        #else
-        if transparencyEnabled {
-            fallbackBarContainer(availableWidth: availableWidth)
-        } else {
-            solidBarContainer(availableWidth: availableWidth)
-        }
         #endif
     }
-    
+
     private func fallbackBarContainer(availableWidth: CGFloat) -> some View {
         ZStack {
             VisualEffectBackground(material: .hudWindow, blendingMode: .withinWindow)
@@ -346,7 +350,7 @@ struct BottomPlayerBarView: View {
         .shadow(color: Color.black.opacity(0.12), radius: 16, x: 0, y: 6)
         .shadow(color: Color.black.opacity(0.06), radius: 4, x: 0, y: 2)
     }
-    
+
     private func solidBarContainer(availableWidth: CGFloat) -> some View {
         ZStack {
             floatingBarShape
@@ -359,7 +363,7 @@ struct BottomPlayerBarView: View {
         .overlay(barOverlay)
         .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 4)
     }
-    
+
     private var barOverlay: some View {
         floatingBarShape
             .strokeBorder(
@@ -377,18 +381,18 @@ struct BottomPlayerBarView: View {
 
     @ViewBuilder private func volumeSlider(isMinimal: Bool) -> some View {
         #if LIQUID_GLASS_SDK
-        if #available(macOS 26.0, *), transparencyEnabled {
-            Slider(value: globalVolumeBinding, in: 0...1)
-                .controlSize(isMinimal ? .mini : .small)
-                .tint(MoodistTheme.Colors.accent)
-                .frame(height: isMinimal ? 20 : 22)
-                .clipped()
-                .accessibilityValue("\(Int(store.globalVolume * 100))%")
-        } else {
-            ModernVolumeSlider(value: globalVolumeBinding, isMinimal: isMinimal)
-        }
+            if #available(macOS 26.0, *), transparencyEnabled {
+                Slider(value: globalVolumeBinding, in: 0...1)
+                    .controlSize(isMinimal ? .mini : .small)
+                    .tint(MoodistTheme.Colors.accent)
+                    .frame(height: isMinimal ? 20 : 22)
+                    .clipped()
+                    .accessibilityValue("\(Int(store.globalVolume * 100))%")
+            } else {
+                ModernVolumeSlider(value: globalVolumeBinding, isMinimal: isMinimal)
+            }
         #else
-        ModernVolumeSlider(value: globalVolumeBinding, isMinimal: isMinimal)
+            ModernVolumeSlider(value: globalVolumeBinding, isMinimal: isMinimal)
         #endif
     }
 }

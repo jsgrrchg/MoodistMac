@@ -571,6 +571,7 @@ private struct OptionsToggleStyle: ToggleStyle {
             .buttonStyle(.plain)
             .focusable()
             .focused($isFocused)
+            .focusEffectDisabled()
             .onHover { hovering in
                 isHovered = hovering
             }

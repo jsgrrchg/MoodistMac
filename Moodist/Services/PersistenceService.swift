@@ -82,12 +82,12 @@ enum PersistenceService {
         }
         return recovered
     }
-
+    // Guarda los presets codificados como JSON. Si el encode falla, no hace nada para evitar corromper datos existentes.
     static func savePresets(_ presets: [Preset]) {
         guard let data = try? JSONEncoder().encode(presets) else { return }
         UserDefaults.standard.set(data, forKey: presetsKey)
     }
-
+    // Carga y guarda arrays de ids (recientes y favoritos) codificados como JSON. Si el decode falla, devuelve array vacío para evitar corromper datos existentes.
     static func loadRecentMixIds() -> [String] {
         guard let data = UserDefaults.standard.data(forKey: recentMixIdsKey),
             let ids = try? JSONDecoder().decode([String].self, from: data)

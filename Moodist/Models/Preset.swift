@@ -34,7 +34,7 @@ struct Preset: Identifiable, Codable, Equatable {
         case soundIds
         case volumes
     }
-
+    // Personaliza codificación/decodificación para manejar valores por defecto y asegurar compatibilidad con versiones anteriores.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)

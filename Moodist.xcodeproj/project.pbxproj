@@ -26,7 +26,6 @@
 		B175D2272F310AB600907398 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000011 /* L10n.swift */; };
 		B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000012 /* VisualEffectBackground.swift */; };
 		B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000013 /* MediaKeyHandler.swift */; };
-		B175D22C2F310AB600907398 /* LiquidGlassModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000015 /* LiquidGlassModifier.swift */; };
 		B175D22D2F310AB600907398 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000016 /* Preset.swift */; };
 		B175D22E2F310AB600907398 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000017 /* SidebarView.swift */; };
 		B175D2302F310AB600907398 /* SoundIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000019 /* SoundIcons.swift */; };
@@ -91,7 +90,6 @@
 		A20000000000000100000011 /* L10n.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = L10n.swift; sourceTree = "<group>"; };
 		A20000000000000100000012 /* VisualEffectBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualEffectBackground.swift; sourceTree = "<group>"; };
 		A20000000000000100000013 /* MediaKeyHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaKeyHandler.swift; sourceTree = "<group>"; };
-		A20000000000000100000015 /* LiquidGlassModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiquidGlassModifier.swift; sourceTree = "<group>"; };
 		A20000000000000100000016 /* Preset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preset.swift; sourceTree = "<group>"; };
 		A20000000000000100000017 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
 		A20000000000000100000019 /* SoundIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundIcons.swift; sourceTree = "<group>"; };
@@ -263,7 +261,6 @@
 				A20000000000000100000010 /* MoodistTheme.swift */,
 				A20000000000000100000011 /* L10n.swift */,
 				A20000000000000100000012 /* VisualEffectBackground.swift */,
-				A20000000000000100000015 /* LiquidGlassModifier.swift */,
 				A2000000000000010000001D /* Color+Hex.swift */,
 				A2000000000000010000003C /* SidebarLayout.swift */,
 				A2000000000000010000003D /* MixIcon.swift */,
@@ -387,7 +384,6 @@
 				B175D2272F310AB600907398 /* L10n.swift in Sources */,
 				B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */,
 				B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */,
-				B175D22C2F310AB600907398 /* LiquidGlassModifier.swift in Sources */,
 				B175D22D2F310AB600907398 /* Preset.swift in Sources */,
 				B175D22E2F310AB600907398 /* SidebarView.swift in Sources */,
 				B175D2302F310AB600907398 /* SoundIcons.swift in Sources */,
@@ -494,7 +490,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG LIQUID_GLASS_SDK $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -551,6 +547,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "LIQUID_GLASS_SDK $(inherited)";
 				SWIFT_COMPILATION_MODE = wholemodule;
 			};
 			name = Release;
@@ -564,7 +561,7 @@
 					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 					CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_ASSET_PATHS = "";
 			ENABLE_HARDENED_RUNTIME = YES;
@@ -577,7 +574,7 @@
 				"@executable_path/../Frameworks",
 			);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.0.3";
+						MARKETING_VERSION = "1.0.4";
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
@@ -597,7 +594,7 @@
 					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 					CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_ASSET_PATHS = "";
 			ENABLE_HARDENED_RUNTIME = YES;
@@ -610,7 +607,7 @@
 				"@executable_path/../Frameworks",
 			);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.0.3";
+						MARKETING_VERSION = "1.0.4";
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = net.mvze.MoodistMac;
