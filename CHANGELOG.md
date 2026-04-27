@@ -5,6 +5,12 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.5] – 2026-04-27
+
+### Fixed
+
+- **Menu bar icon**: Fixed an issue where the menu bar icon could appear invisible by removing the manual translucency adjustment.
+
 ## [1.0.4] – 2026-03-17
 
 ### Added
