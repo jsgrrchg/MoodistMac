@@ -27,11 +27,10 @@ xcuserdata/
 # Cursor / IDE
 .cursor/
 .vscode/
-.claude/
 
-# Local notes
+
 .plans/
 
-# Personal files
+
 .PERSONAL/
 CLAUDE.md

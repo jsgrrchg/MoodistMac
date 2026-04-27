@@ -44,72 +44,25 @@ final class AppMenuBarCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func createStatusItem() {
-        // Instala un ícono SF Symbol translúcido para mantener estética sutil en la barra.
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
 
-        let config = NSImage.SymbolConfiguration(pointSize: 13, weight: .ultraLight)
+        let config = NSImage.SymbolConfiguration(pointSize: 15, weight: .regular)
         guard
-            let baseImage = NSImage(
+            let image = NSImage(
                 systemSymbolName: "waveform", accessibilityDescription: L10n.appName)?
                 .withSymbolConfiguration(config)
         else { return }
 
-        let translucentImage = createTranslucentImage(from: baseImage, opacity: 0.5)
-        translucentImage.isTemplate = true
+        image.isTemplate = true
 
         guard let button = statusItem?.button else { return }
-        button.image = translucentImage
+        button.image = image
         button.title = ""
         button.appearsDisabled = false
         button.imagePosition = .imageLeading
         button.bezelStyle = .texturedRounded
 
         statusItem?.menu = buildStatusMenu()
-    }
-
-    private func createTranslucentImage(from image: NSImage, opacity: CGFloat) -> NSImage {
-        // Fallback seguro si no se puede rasterizar la imagen original.
-        func fallbackTemplateImage() -> NSImage {
-            let fallbackImage = (image.copy() as? NSImage) ?? image
-            fallbackImage.isTemplate = true
-            return fallbackImage
-        }
-
-        let size = image.size
-
-        guard let cgImage = image.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
-            return fallbackTemplateImage()
-        }
-
-        let width = Int(size.width)
-        let height = Int(size.height)
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
-
-        guard
-            let context = CGContext(
-                data: nil,
-                width: width,
-                height: height,
-                bitsPerComponent: 8,
-                bytesPerRow: width * 4,
-                space: colorSpace,
-                bitmapInfo: bitmapInfo.rawValue
-            )
-        else {
-            return fallbackTemplateImage()
-        }
-
-        context.setAlpha(opacity)
-        context.draw(cgImage, in: CGRect(origin: .zero, size: size))
-
-        guard let renderedCGImage = context.makeImage() else {
-            return fallbackTemplateImage()
-        }
-
-        let translucentImage = NSImage(cgImage: renderedCGImage, size: size)
-        translucentImage.isTemplate = true
-        return translucentImage
     }
 
     private func buildStatusMenu() -> NSMenu {
