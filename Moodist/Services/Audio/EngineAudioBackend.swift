@@ -328,12 +328,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
 
     private func stopEngineIfIdle() {
         guard !hasActivePlayback else { return }
-
-        if sounds.isEmpty && outgoingSounds.isEmpty {
-            engine.stop()
-        } else {
-            engine.pause()
-        }
+        engine.stop()
     }
 
     private func ensureEngineIsRunning() -> Bool {
