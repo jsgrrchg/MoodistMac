@@ -141,9 +141,11 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     }
 
     func playAll(ids: [String]) {
+        let playbacks = ids.compactMap { sounds[$0] }
+        guard !playbacks.isEmpty else { return }
         guard ensureEngineIsRunning() else { return }
-        for id in ids {
-            guard let playback = sounds[id] else { continue }
+
+        for playback in playbacks {
             playback.shouldBePlaying = true
             scheduleLoopIfNeeded(playback)
             if !playback.playerNode.isPlaying {
