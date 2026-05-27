@@ -86,12 +86,12 @@ final class AudioService: ObservableObject {
     private static func makeDefaultBackend() -> AudioPlaybackBackend {
         let processInfo = ProcessInfo.processInfo
         let backendName = processInfo.environment["MOODIST_AUDIO_BACKEND"]?.lowercased()
-        let usesEngineArgument = processInfo.arguments.contains("--audio-backend=engine")
+        let usesLegacyArgument = processInfo.arguments.contains("--audio-backend=legacy")
 
-        if backendName == "engine" || usesEngineArgument {
-            return EngineAudioBackend()
+        if backendName == "legacy" || usesLegacyArgument {
+            return LegacyAudioPlayerBackend()
         }
 
-        return LegacyAudioPlayerBackend()
+        return EngineAudioBackend()
     }
 }
