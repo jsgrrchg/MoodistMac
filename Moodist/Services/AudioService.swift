@@ -13,7 +13,7 @@ final class AudioService: ObservableObject {
     private let backend: AudioPlaybackBackend
 
     init() {
-        self.backend = LegacyAudioPlayerBackend()
+        self.backend = Self.makeDefaultBackend()
     }
 
     init(backend: AudioPlaybackBackend) {
@@ -81,5 +81,17 @@ final class AudioService: ObservableObject {
     /// Cancela cualquier crossfade en curso y limpia outgoing players inmediatamente.
     func cancelCrossfadeAndCleanup() {
         backend.cancelCrossfadeAndCleanup()
+    }
+
+    private static func makeDefaultBackend() -> AudioPlaybackBackend {
+        let processInfo = ProcessInfo.processInfo
+        let backendName = processInfo.environment["MOODIST_AUDIO_BACKEND"]?.lowercased()
+        let usesEngineArgument = processInfo.arguments.contains("--audio-backend=engine")
+
+        if backendName == "engine" || usesEngineArgument {
+            return EngineAudioBackend()
+        }
+
+        return LegacyAudioPlayerBackend()
     }
 }
