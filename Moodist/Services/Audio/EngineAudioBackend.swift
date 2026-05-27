@@ -8,24 +8,59 @@ import Foundation
 
 @MainActor
 final class EngineAudioBackend: AudioPlaybackBackend {
-    private struct SoundPlayback {
+    private final class SoundPlayback {
+        let id: String
         let playerNode: AVAudioPlayerNode
         let mixerNode: AVAudioMixerNode
-        let buffer: AVAudioPCMBuffer
+        let url: URL
+        let format: AVAudioFormat
+        var pendingLoopSchedules = 0
+        var scheduleGeneration = UUID()
+        var shouldBePlaying = false
+
+        init(id: String, url: URL, format: AVAudioFormat) {
+            self.id = id
+            self.url = url
+            self.format = format
+            self.playerNode = AVAudioPlayerNode()
+            self.mixerNode = AVAudioMixerNode()
+        }
+
+        func invalidateSchedule() {
+            scheduleGeneration = UUID()
+            pendingLoopSchedules = 0
+        }
     }
 
     private let engine = AVAudioEngine()
     private let bundle: Bundle
     private let defaultRoutingMode: AudioRoutingMode = .mainMixer
     private let spatialRenderMode: SpatialRenderMode = .disabled
+    private let loopScheduleDepth = 2
     private var sounds: [String: SoundPlayback] = [:]
     private var outgoingSounds: [String: SoundPlayback] = [:]
     private var fadeTasks: [String: Task<Void, Never>] = [:]
     private var outgoingCleanupTask: Task<Void, Never>?
+    private var configurationChangeObserver: NSObjectProtocol?
 
     init(bundle: Bundle = .main) {
         self.bundle = bundle
         // macOS no usa AVAudioSession; AVAudioEngine se mezcla con el sistema por defecto.
+        configurationChangeObserver = NotificationCenter.default.addObserver(
+            forName: .AVAudioEngineConfigurationChange,
+            object: engine,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in
+                self?.handleEngineConfigurationChange()
+            }
+        }
+    }
+
+    deinit {
+        if let configurationChangeObserver {
+            NotificationCenter.default.removeObserver(configurationChangeObserver)
+        }
     }
 
     @discardableResult
@@ -49,24 +84,8 @@ final class EngineAudioBackend: AudioPlaybackBackend {
 
         do {
             let audioFile = try AVAudioFile(forReading: url)
-            let format = audioFile.processingFormat
-            guard let buffer = AVAudioPCMBuffer(
-                pcmFormat: format,
-                frameCapacity: AVAudioFrameCount(audioFile.length)
-            ) else {
-                NSLog("MoodistMac: failed to allocate audio buffer for sound '%@'", sound.id)
-                return false
-            }
-
-            try audioFile.read(into: buffer)
-
-            let playback = SoundPlayback(
-                playerNode: AVAudioPlayerNode(),
-                mixerNode: AVAudioMixerNode(),
-                buffer: buffer
-            )
+            let playback = SoundPlayback(id: sound.id, url: url, format: audioFile.processingFormat)
             attach(playback)
-            playback.playerNode.scheduleBuffer(buffer, at: nil, options: [.loops])
             sounds[sound.id] = playback
             return true
         } catch {
@@ -90,13 +109,18 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     func play(soundId: String) {
         guard let playback = sounds[soundId] else { return }
         guard ensureEngineIsRunning() else { return }
+        playback.shouldBePlaying = true
+        scheduleLoopIfNeeded(playback)
         if !playback.playerNode.isPlaying {
             playback.playerNode.play()
         }
     }
 
     func pause(soundId: String) {
-        sounds[soundId]?.playerNode.pause()
+        guard let playback = sounds[soundId] else { return }
+        playback.shouldBePlaying = false
+        playback.playerNode.pause()
+        stopEngineIfIdle()
     }
 
     func unload(soundId: String) {
@@ -104,9 +128,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         fadeTasks[soundId]?.cancel()
         fadeTasks[soundId] = nil
         detach(playback)
-        if sounds.isEmpty && outgoingSounds.isEmpty {
-            engine.stop()
-        }
+        stopEngineIfIdle()
     }
 
     func unloadAll() {
@@ -121,15 +143,22 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     func playAll(ids: [String]) {
         guard ensureEngineIsRunning() else { return }
         for id in ids {
-            guard let playback = sounds[id], !playback.playerNode.isPlaying else { continue }
-            playback.playerNode.play()
+            guard let playback = sounds[id] else { continue }
+            playback.shouldBePlaying = true
+            scheduleLoopIfNeeded(playback)
+            if !playback.playerNode.isPlaying {
+                playback.playerNode.play()
+            }
         }
     }
 
     func pauseAll(ids: [String]) {
         for id in ids {
-            sounds[id]?.playerNode.pause()
+            guard let playback = sounds[id] else { continue }
+            playback.shouldBePlaying = false
+            playback.playerNode.pause()
         }
+        stopEngineIfIdle()
     }
 
     func updateVolumes(state: [String: SoundStateItem], globalVolume: Double) {
@@ -142,6 +171,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         guard let playback = sounds.removeValue(forKey: soundId) else { return }
         outgoingSounds[soundId] = playback
         fade(soundId: soundId, mixerNode: playback.mixerNode, targetVolume: 0, duration: duration)
+        stopEngineIfIdle()
     }
 
     func scheduleOutgoingCleanup(after duration: TimeInterval) {
@@ -162,8 +192,12 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     private func attach(_ playback: SoundPlayback) {
         engine.attach(playback.playerNode)
         engine.attach(playback.mixerNode)
-        engine.connect(playback.playerNode, to: playback.mixerNode, format: playback.buffer.format)
-        engine.connect(playback.mixerNode, to: destinationNode(for: defaultRoutingMode), format: playback.buffer.format)
+        connect(playback)
+    }
+
+    private func connect(_ playback: SoundPlayback) {
+        engine.connect(playback.playerNode, to: playback.mixerNode, format: playback.format)
+        engine.connect(playback.mixerNode, to: destinationNode(for: defaultRoutingMode), format: playback.format)
     }
 
     private func destinationNode(for routingMode: AudioRoutingMode) -> AVAudioNode {
@@ -179,6 +213,8 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     }
 
     private func detach(_ playback: SoundPlayback) {
+        playback.shouldBePlaying = false
+        playback.invalidateSchedule()
         playback.playerNode.stop()
         engine.disconnectNodeOutput(playback.playerNode)
         engine.disconnectNodeOutput(playback.mixerNode)
@@ -216,8 +252,87 @@ final class EngineAudioBackend: AudioPlaybackBackend {
             detach(playback)
         }
         outgoingSounds.removeAll()
-        if sounds.isEmpty {
+        stopEngineIfIdle()
+    }
+
+    private func scheduleLoopIfNeeded(_ playback: SoundPlayback) {
+        guard playback.pendingLoopSchedules < loopScheduleDepth else { return }
+
+        let generation = playback.scheduleGeneration
+        let soundId = playback.id
+        while playback.pendingLoopSchedules < loopScheduleDepth {
+            do {
+                let audioFile = try AVAudioFile(forReading: playback.url)
+                playback.pendingLoopSchedules += 1
+                playback.playerNode.scheduleFile(audioFile, at: nil, completionCallbackType: .dataPlayedBack) { [weak self] _ in
+                    Task { @MainActor [weak self] in
+                        guard
+                            let self,
+                            let playback = self.playback(for: soundId),
+                            playback.scheduleGeneration == generation
+                        else { return }
+                        playback.pendingLoopSchedules = max(0, playback.pendingLoopSchedules - 1)
+                        if playback.shouldBePlaying {
+                            self.scheduleLoopIfNeeded(playback)
+                        }
+                    }
+                }
+            } catch {
+                NSLog(
+                    "MoodistMac: failed to schedule sound '%@' from %@: %@",
+                    playback.id, playback.url.path, String(describing: error)
+                )
+                break
+            }
+        }
+    }
+
+    private func playback(for soundId: String) -> SoundPlayback? {
+        sounds[soundId] ?? outgoingSounds[soundId]
+    }
+
+    private func handleEngineConfigurationChange() {
+        let activePlaybacks = Array(sounds.values) + Array(outgoingSounds.values)
+        guard !activePlaybacks.isEmpty else {
             engine.stop()
+            return
+        }
+
+        engine.stop()
+        for playback in activePlaybacks {
+            playback.invalidateSchedule()
+            playback.playerNode.stop()
+            engine.disconnectNodeOutput(playback.playerNode)
+            engine.disconnectNodeOutput(playback.mixerNode)
+            connect(playback)
+            if playback.shouldBePlaying {
+                scheduleLoopIfNeeded(playback)
+            }
+        }
+
+        guard hasActivePlayback else {
+            engine.stop()
+            return
+        }
+
+        guard ensureEngineIsRunning() else { return }
+        for playback in activePlaybacks where playback.shouldBePlaying {
+            playback.playerNode.play()
+        }
+    }
+
+    private var hasActivePlayback: Bool {
+        sounds.values.contains { $0.shouldBePlaying }
+            || outgoingSounds.values.contains { $0.shouldBePlaying }
+    }
+
+    private func stopEngineIfIdle() {
+        guard !hasActivePlayback else { return }
+
+        if sounds.isEmpty && outgoingSounds.isEmpty {
+            engine.stop()
+        } else {
+            engine.pause()
         }
     }
 
