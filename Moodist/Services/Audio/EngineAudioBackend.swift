@@ -133,6 +133,9 @@ final class EngineAudioBackend: AudioPlaybackBackend {
 
     func unloadAll() {
         cancelCrossfadeAndCleanup()
+        fadeTasks.values.forEach { $0.cancel() }
+        fadeTasks.removeAll()
+
         for (_, playback) in sounds {
             detach(playback)
         }
