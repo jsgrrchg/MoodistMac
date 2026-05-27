@@ -16,6 +16,8 @@ final class EngineAudioBackend: AudioPlaybackBackend {
 
     private let engine = AVAudioEngine()
     private let bundle: Bundle
+    private let defaultRoutingMode: AudioRoutingMode = .mainMixer
+    private let spatialRenderMode: SpatialRenderMode = .disabled
     private var sounds: [String: SoundPlayback] = [:]
     private var outgoingSounds: [String: SoundPlayback] = [:]
     private var fadeTasks: [String: Task<Void, Never>] = [:]
@@ -161,7 +163,19 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         engine.attach(playback.playerNode)
         engine.attach(playback.mixerNode)
         engine.connect(playback.playerNode, to: playback.mixerNode, format: playback.buffer.format)
-        engine.connect(playback.mixerNode, to: engine.mainMixerNode, format: playback.buffer.format)
+        engine.connect(playback.mixerNode, to: destinationNode(for: defaultRoutingMode), format: playback.buffer.format)
+    }
+
+    private func destinationNode(for routingMode: AudioRoutingMode) -> AVAudioNode {
+        guard spatialRenderMode != .disabled else { return engine.mainMixerNode }
+
+        switch routingMode {
+        case .positioned:
+            // Future spatial hook: attach AVAudioEnvironmentNode here and route positioned sounds through it.
+            return engine.mainMixerNode
+        case .mainMixer, .channel:
+            return engine.mainMixerNode
+        }
     }
 
     private func detach(_ playback: SoundPlayback) {
