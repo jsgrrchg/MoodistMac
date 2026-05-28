@@ -80,4 +80,5 @@ jobs:
             -scheme MoodistMac \
             -configuration Release \
             -destination "generic/platform=macOS" \
+            CODE_SIGNING_ALLOWED=NO \
             build
