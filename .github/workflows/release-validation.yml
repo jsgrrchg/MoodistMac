@@ -1,0 +1,175 @@
+name: Release Workflow Validation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/release-macos.yml"
+      - ".github/workflows/release-validation.yml"
+      - "scripts/release/**"
+      - "appcast.xml"
+      - "CHANGELOG.md"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/release-macos.yml"
+      - ".github/workflows/release-validation.yml"
+      - "scripts/release/**"
+      - "appcast.xml"
+      - "CHANGELOG.md"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-release-tooling:
+    name: Validate release tooling
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate workflow YAML
+        run: |
+          set -euo pipefail
+          ruby -e 'require "yaml"; YAML.load_file(".github/workflows/release-macos.yml"); YAML.load_file(".github/workflows/release-validation.yml")'
+
+      - name: Validate release scripts
+        run: |
+          set -euo pipefail
+          bash -n scripts/release/*.sh
+          node --check scripts/release/build-release-notes.mjs
+          node --check scripts/release/update-appcast.mjs
+
+      - name: Validate app metadata
+        run: |
+          set -euo pipefail
+          plutil -lint Moodist/Info.plist Moodist/MoodistMac.entitlements
+          metadata="$(scripts/release/read-xcode-version.sh)"
+          echo "$metadata"
+          deployment_target="$(printf '%s\n' "$metadata" | awk -F= '$1 == "deployment_target" { print $2 }')"
+          if [[ "$deployment_target" != "15.0" ]]; then
+            echo "::error::MACOSX_DEPLOYMENT_TARGET must remain 15.0."
+            exit 1
+          fi
+
+      - name: Validate appcast update script
+        run: |
+          set -euo pipefail
+          tmp_appcast="$RUNNER_TEMP/appcast.xml"
+          cp appcast.xml "$tmp_appcast"
+          node scripts/release/update-appcast.mjs \
+            --appcast "$tmp_appcast" \
+            --tag v9.9.9 \
+            --version 9.9.9 \
+            --build 9999 \
+            --signature dummySignature== \
+            --length 123456 \
+            --release-notes-url https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/v9.9.9.html \
+            --asset-url https://github.com/jsgrrchg/MoodistMac/releases/download/v9.9.9/MoodistMac.zip
+          xmllint --noout "$tmp_appcast"
+
+      - name: Build app
+        run: |
+          set -euo pipefail
+          xcodebuild -resolvePackageDependencies \
+            -project Moodist.xcodeproj \
+            -scheme MoodistMac
+          xcodebuild \
+            -project Moodist.xcodeproj \
+            -scheme MoodistMac \
+            -configuration Release \
+            -destination "generic/platform=macOS" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+  smoke-release-dry-run:
+    name: Smoke release dry run
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run release pipeline dry run
+        run: |
+          set -euo pipefail
+
+          release_tag="v9.9.9"
+          version="9.9.9"
+          build="9999"
+          smoke_dir="$RUNNER_TEMP/release-smoke"
+          changelog="$smoke_dir/CHANGELOG.md"
+          appcast="$smoke_dir/appcast.xml"
+          notes_html="$smoke_dir/release-notes/$release_tag.html"
+          notes_md="$smoke_dir/release-notes.md"
+          archive_path="$smoke_dir/MoodistMac.xcarchive"
+          export_dir="$smoke_dir/export"
+          app_path="$archive_path/Products/Applications/MoodistMac.app"
+          final_zip="$smoke_dir/MoodistMac.zip"
+
+          mkdir -p "$smoke_dir"
+          cp appcast.xml "$appcast"
+          cat > "$changelog" <<'CHANGELOG'
+          # Changelog
+
+          ## [9.9.9] – 2099-09-09
+
+          ### Added
+
+          - Smoke-test release notes entry.
+          CHANGELOG
+
+          APPCAST_PATH="$appcast" scripts/release/validate-release-tag.sh \
+            "$release_tag" \
+            "$version" \
+            "$build" \
+            "$changelog"
+
+          node scripts/release/build-release-notes.mjs \
+            --changelog "$changelog" \
+            --tag "$release_tag" \
+            --version "$version" \
+            --html-out "$notes_html" \
+            --markdown-out "$notes_md"
+          test -s "$notes_html"
+          test -s "$notes_md"
+
+          xcodebuild archive \
+            -project Moodist.xcodeproj \
+            -scheme MoodistMac \
+            -configuration Release \
+            -archivePath "$archive_path" \
+            -destination "generic/platform=macOS" \
+            CODE_SIGNING_ALLOWED=NO
+          test -d "$app_path"
+
+          feed_url="$(plutil -extract SUFeedURL raw -o - "$app_path/Contents/Info.plist")"
+          public_key="$(plutil -extract SUPublicEDKey raw -o - "$app_path/Contents/Info.plist")"
+          if [[ "$feed_url" != "https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/appcast.xml" ]]; then
+            echo "::error::Unexpected SUFeedURL in smoke archive: $feed_url"
+            exit 1
+          fi
+          if [[ "$public_key" != "uWFTUvgQZYpxlcQ1RVMFbK3m2t5cR2Cc7LbW4DFK1Xc=" ]]; then
+            echo "::error::Unexpected SUPublicEDKey in smoke archive."
+            exit 1
+          fi
+
+          mkdir -p "$export_dir"
+          ditto "$app_path" "$export_dir/MoodistMac.app"
+          ditto -c -k --sequesterRsrc --keepParent "$export_dir/MoodistMac.app" "$final_zip"
+          test -s "$final_zip"
+          zip_length="$(stat -f%z "$final_zip")"
+
+          node scripts/release/update-appcast.mjs \
+            --appcast "$appcast" \
+            --tag "$release_tag" \
+            --version "$version" \
+            --build "$build" \
+            --signature dummySignature== \
+            --length "$zip_length" \
+            --release-notes-url "https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/$release_tag.html" \
+            --asset-url "https://github.com/jsgrrchg/MoodistMac/releases/download/$release_tag/MoodistMac.zip"
+
+          xmllint --noout "$appcast"
+          grep -Fq "releases/download/$release_tag/MoodistMac.zip" "$appcast"
+          grep -Fq "release-notes/$release_tag.html" "$appcast"

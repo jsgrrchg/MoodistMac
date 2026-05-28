@@ -1,0 +1,553 @@
+name: Release macOS
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to publish, for example v1.0.6"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-macos-${{ github.event.inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  PROJECT: Moodist.xcodeproj
+  SCHEME: MoodistMac
+  CONFIGURATION: Release
+  APP_NAME: MoodistMac
+  ASSET_NAME: MoodistMac.zip
+  EXPECTED_SU_FEED_URL: https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/appcast.xml
+  EXPECTED_SPARKLE_PUBLIC_KEY: uWFTUvgQZYpxlcQ1RVMFbK3m2t5cR2Cc7LbW4DFK1Xc=
+  EXPECTED_DEPLOYMENT_TARGET: "15.0"
+
+jobs:
+  prepare:
+    name: Prepare release metadata
+    runs-on: macos-26
+    outputs:
+      tag: ${{ steps.release-tag.outputs.tag }}
+      version: ${{ steps.xcode-metadata.outputs.version }}
+      build: ${{ steps.xcode-metadata.outputs.build }}
+      bundle_id: ${{ steps.xcode-metadata.outputs.bundle_id }}
+      deployment_target: ${{ steps.xcode-metadata.outputs.deployment_target }}
+    steps:
+      - name: Resolve release tag
+        id: release-tag
+        run: |
+          set -euo pipefail
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            release_tag="${{ inputs.tag }}"
+          else
+            release_tag="${GITHUB_REF_NAME}"
+          fi
+          echo "tag=$release_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.release-tag.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Validate release tag is on main
+        run: |
+          set -euo pipefail
+          git fetch origin main:refs/remotes/origin/main
+          tag_commit="$(git rev-parse "${{ steps.release-tag.outputs.tag }}^{commit}")"
+          if ! git merge-base --is-ancestor "$tag_commit" origin/main; then
+            echo "::error::Release tag ${{ steps.release-tag.outputs.tag }} must point to a commit already reachable from main."
+            exit 1
+          fi
+
+      - name: Read Xcode release metadata
+        id: xcode-metadata
+        run: |
+          set -euo pipefail
+          scripts/release/read-xcode-version.sh | tee "$RUNNER_TEMP/xcode-metadata.env"
+          cat "$RUNNER_TEMP/xcode-metadata.env" >> "$GITHUB_OUTPUT"
+
+      - name: Validate release metadata against tag
+        run: |
+          set -euo pipefail
+          if [[ "${{ steps.xcode-metadata.outputs.deployment_target }}" != "$EXPECTED_DEPLOYMENT_TARGET" ]]; then
+            echo "::error::MACOSX_DEPLOYMENT_TARGET must remain $EXPECTED_DEPLOYMENT_TARGET for installed macOS 15 users."
+            exit 1
+          fi
+          scripts/release/validate-release-tag.sh \
+            "${{ steps.release-tag.outputs.tag }}" \
+            "${{ steps.xcode-metadata.outputs.version }}" \
+            "${{ steps.xcode-metadata.outputs.build }}"
+
+      - name: Validate release metadata against public appcast
+        run: |
+          set -euo pipefail
+          git fetch origin main:refs/remotes/origin/main --depth=1
+          git show origin/main:appcast.xml > "$RUNNER_TEMP/main-appcast.xml"
+          APPCAST_PATH="$RUNNER_TEMP/main-appcast.xml" scripts/release/validate-release-tag.sh \
+            "${{ steps.release-tag.outputs.tag }}" \
+            "${{ steps.xcode-metadata.outputs.version }}" \
+            "${{ steps.xcode-metadata.outputs.build }}"
+
+      - name: Build release notes
+        run: |
+          set -euo pipefail
+          node scripts/release/build-release-notes.mjs \
+            --tag "${{ steps.release-tag.outputs.tag }}" \
+            --version "${{ steps.xcode-metadata.outputs.version }}" \
+            --html-out "$RUNNER_TEMP/release-notes/${{ steps.release-tag.outputs.tag }}.html" \
+            --markdown-out "$RUNNER_TEMP/release-notes.md"
+
+      - name: Upload release preparation artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-prep
+          path: |
+            ${{ runner.temp }}/release-notes/${{ steps.release-tag.outputs.tag }}.html
+            ${{ runner.temp }}/release-notes.md
+            ${{ runner.temp }}/xcode-metadata.env
+          if-no-files-found: error
+
+  build-sign-notarize:
+    name: Build, sign, notarize, and package
+    runs-on: macos-26
+    needs: prepare
+    env:
+      RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+      VERSION: ${{ needs.prepare.outputs.version }}
+      BUILD_NUMBER: ${{ needs.prepare.outputs.build }}
+      BUNDLE_ID: ${{ needs.prepare.outputs.bundle_id }}
+      DEVELOPER_ID_APPLICATION_CERTIFICATE_BASE64: ${{ secrets.DEVELOPER_ID_APPLICATION_CERTIFICATE_BASE64 }}
+      DEVELOPER_ID_APPLICATION_CERTIFICATE_PASSWORD: ${{ secrets.DEVELOPER_ID_APPLICATION_CERTIFICATE_PASSWORD }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+      APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+      APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY_BASE64 }}
+      SPARKLE_ED_PRIVATE_KEY: ${{ secrets.SPARKLE_ED_PRIVATE_KEY }}
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+          fetch-depth: 0
+
+      - name: Validate required secrets
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in \
+            DEVELOPER_ID_APPLICATION_CERTIFICATE_BASE64 \
+            DEVELOPER_ID_APPLICATION_CERTIFICATE_PASSWORD \
+            APPLE_TEAM_ID \
+            APPLE_API_KEY_ID \
+            APPLE_API_ISSUER_ID \
+            APPLE_API_KEY_BASE64 \
+            SPARKLE_ED_PRIVATE_KEY
+          do
+            if [[ -z "${!name:-}" ]]; then
+              echo "::error::Missing required secret: $name"
+              missing=1
+            fi
+          done
+          exit "$missing"
+
+      - name: Resolve Swift packages
+        run: |
+          set -euo pipefail
+          xcodebuild -resolvePackageDependencies \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData"
+
+      - name: Build, sign, notarize, staple, and sign update
+        id: package
+        run: |
+          set -euo pipefail
+
+          cert_path="$RUNNER_TEMP/developer_id_application.p12"
+          api_key_path="$RUNNER_TEMP/AuthKey_${APPLE_API_KEY_ID}.p8"
+          keychain_path="$RUNNER_TEMP/app-signing.keychain-db"
+          keychain_password="$(uuidgen)"
+          archive_path="$RUNNER_TEMP/${APP_NAME}.xcarchive"
+          export_dir="$RUNNER_TEMP/export"
+          app_path="$export_dir/${APP_NAME}.app"
+          notary_zip="$RUNNER_TEMP/${APP_NAME}-notary.zip"
+          final_zip="$RUNNER_TEMP/$ASSET_NAME"
+          metadata_path="$RUNNER_TEMP/release-metadata.json"
+          notary_json="$RUNNER_TEMP/notary-result.json"
+          notary_log="$RUNNER_TEMP/notary-log.json"
+
+          printf '%s' "$DEVELOPER_ID_APPLICATION_CERTIFICATE_BASE64" | base64 --decode > "$cert_path"
+          printf '%s' "$APPLE_API_KEY_BASE64" | base64 --decode > "$api_key_path"
+          chmod 600 "$api_key_path"
+
+          security create-keychain -p "$keychain_password" "$keychain_path"
+          security set-keychain-settings -lut 21600 "$keychain_path"
+          security unlock-keychain -p "$keychain_password" "$keychain_path"
+          security import "$cert_path" \
+            -P "$DEVELOPER_ID_APPLICATION_CERTIFICATE_PASSWORD" \
+            -A \
+            -t cert \
+            -f pkcs12 \
+            -k "$keychain_path"
+          security list-keychains -d user -s "$keychain_path"
+          security default-keychain -s "$keychain_path"
+          security set-key-partition-list \
+            -S apple-tool:,apple:,codesign: \
+            -s \
+            -k "$keychain_password" \
+            "$keychain_path"
+          security find-identity -v -p codesigning "$keychain_path"
+
+          xcodebuild archive \
+            -project "$PROJECT" \
+            -scheme "$SCHEME" \
+            -configuration "$CONFIGURATION" \
+            -archivePath "$archive_path" \
+            -destination "generic/platform=macOS" \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
+            CODE_SIGN_IDENTITY="Developer ID Application" \
+            CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
+            OTHER_CODE_SIGN_FLAGS="--timestamp" \
+            ONLY_ACTIVE_ARCH=NO
+
+          mkdir -p "$export_dir"
+          ditto "$archive_path/Products/Applications/${APP_NAME}.app" "$app_path"
+
+          actual_feed_url="$(plutil -extract SUFeedURL raw -o - "$app_path/Contents/Info.plist")"
+          actual_public_key="$(plutil -extract SUPublicEDKey raw -o - "$app_path/Contents/Info.plist")"
+          if [[ "$actual_feed_url" != "$EXPECTED_SU_FEED_URL" ]]; then
+            echo "::error::SUFeedURL changed in the release app: $actual_feed_url"
+            exit 1
+          fi
+          if [[ "$actual_public_key" != "$EXPECTED_SPARKLE_PUBLIC_KEY" ]]; then
+            echo "::error::SUPublicEDKey changed in the release app."
+            exit 1
+          fi
+
+          codesign --verify --deep --strict --verbose=2 "$app_path"
+          codesign --display --verbose=4 "$app_path"
+          if codesign -d --entitlements :- "$app_path" 2>/dev/null \
+            | plutil -extract com.apple.security.get-task-allow raw -o - - 2>/dev/null \
+            | grep -q true
+          then
+            echo "::error::Developer ID release app must not include get-task-allow=true."
+            exit 1
+          fi
+
+          ditto -c -k --sequesterRsrc --keepParent "$app_path" "$notary_zip"
+          set +e
+          xcrun notarytool submit "$notary_zip" \
+            --key "$api_key_path" \
+            --key-id "$APPLE_API_KEY_ID" \
+            --issuer "$APPLE_API_ISSUER_ID" \
+            --wait \
+            --output-format json | tee "$notary_json"
+          notary_exit="${PIPESTATUS[0]}"
+          set -e
+
+          notary_status="$(node -e 'const fs = require("fs"); try { const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.status || ""); } catch { console.log(""); }' "$notary_json")"
+          notary_id="$(node -e 'const fs = require("fs"); try { const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.id || ""); } catch { console.log(""); }' "$notary_json")"
+          if [[ "$notary_exit" -ne 0 || "$notary_status" != "Accepted" ]]; then
+            echo "::error::Notarization failed with exit $notary_exit and status ${notary_status:-unknown}."
+            if [[ -n "$notary_id" ]]; then
+              xcrun notarytool log "$notary_id" \
+                --key "$api_key_path" \
+                --key-id "$APPLE_API_KEY_ID" \
+                --issuer "$APPLE_API_ISSUER_ID" \
+                --output-format json | tee "$notary_log" || true
+            fi
+            exit 1
+          fi
+
+          xcrun stapler staple "$app_path"
+          xcrun stapler validate "$app_path"
+          spctl --assess --type execute --verbose=4 "$app_path"
+
+          ditto -c -k --sequesterRsrc --keepParent "$app_path" "$final_zip"
+
+          sparkle_sign_update="$(
+            find "$RUNNER_TEMP/DerivedData/SourcePackages" \
+              -path "*/Sparkle/bin/sign_update" \
+              -type f \
+              -print \
+              -quit
+          )"
+          if [[ -z "$sparkle_sign_update" ]]; then
+            echo "::error::Could not find Sparkle sign_update."
+            exit 1
+          fi
+          chmod +x "$sparkle_sign_update"
+
+          sparkle_public_key_check="$RUNNER_TEMP/verify_sparkle_private_key.swift"
+          cat > "$sparkle_public_key_check" <<'SWIFT'
+          import CryptoKit
+          import Foundation
+
+          let privateKey = ProcessInfo.processInfo.environment["SPARKLE_ED_PRIVATE_KEY"]?
+              .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+          let expectedPublicKey = ProcessInfo.processInfo.environment["EXPECTED_SPARKLE_PUBLIC_KEY"] ?? ""
+
+          guard let rawPrivateKey = Data(base64Encoded: privateKey), rawPrivateKey.count == 32 else {
+              fatalError("SPARKLE_ED_PRIVATE_KEY must be a base64-encoded 32-byte Ed25519 seed.")
+          }
+
+          let signingKey = try Curve25519.Signing.PrivateKey(rawRepresentation: rawPrivateKey)
+          let derivedPublicKey = signingKey.publicKey.rawRepresentation.base64EncodedString()
+
+          guard derivedPublicKey == expectedPublicKey else {
+              fatalError("SPARKLE_ED_PRIVATE_KEY does not match the SUPublicEDKey installed in the app.")
+          }
+          SWIFT
+          swift "$sparkle_public_key_check"
+
+          sparkle_output="$(printf '%s' "$SPARKLE_ED_PRIVATE_KEY" | "$sparkle_sign_update" --ed-key-file - "$final_zip")"
+          echo "$sparkle_output"
+          sparkle_signature="$(printf '%s\n' "$sparkle_output" | sed -n 's/.*sparkle:edSignature="\([^"]*\)".*/\1/p' | tail -1)"
+          sparkle_length="$(printf '%s\n' "$sparkle_output" | sed -n 's/.*length="\([^"]*\)".*/\1/p' | tail -1)"
+          zip_length="$(stat -f%z "$final_zip")"
+          zip_sha256="$(shasum -a 256 "$final_zip" | awk '{print $1}')"
+
+          if [[ -z "$sparkle_signature" || -z "$sparkle_length" ]]; then
+            echo "::error::Could not parse Sparkle signature output."
+            exit 1
+          fi
+
+          if [[ "$sparkle_length" != "$zip_length" ]]; then
+            echo "::error::Sparkle length $sparkle_length does not match zip size $zip_length."
+            exit 1
+          fi
+
+          METADATA_PATH="$metadata_path" \
+          RELEASE_TAG="$RELEASE_TAG" \
+          VERSION="$VERSION" \
+          BUILD_NUMBER="$BUILD_NUMBER" \
+          BUNDLE_ID="$BUNDLE_ID" \
+          ASSET_NAME="$ASSET_NAME" \
+          SPARKLE_SIGNATURE="$sparkle_signature" \
+          ZIP_LENGTH="$zip_length" \
+          ZIP_SHA256="$zip_sha256" \
+          NOTARY_ID="$notary_id" \
+          node -e 'const fs = require("fs"); const env = process.env; fs.writeFileSync(env.METADATA_PATH, JSON.stringify({ tag: env.RELEASE_TAG, version: env.VERSION, build: env.BUILD_NUMBER, bundleId: env.BUNDLE_ID, assetName: env.ASSET_NAME, sparkleEdSignature: env.SPARKLE_SIGNATURE, length: env.ZIP_LENGTH, sha256: env.ZIP_SHA256, notarizationSubmissionId: env.NOTARY_ID }, null, 2) + "\n");'
+
+          echo "zip_path=$final_zip" >> "$GITHUB_OUTPUT"
+          echo "metadata_path=$metadata_path" >> "$GITHUB_OUTPUT"
+
+      - name: Upload notarized update artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-zip
+          path: ${{ runner.temp }}/MoodistMac.zip
+          if-no-files-found: error
+
+      - name: Upload release metadata artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-metadata
+          path: ${{ runner.temp }}/release-metadata.json
+          if-no-files-found: error
+
+      - name: Delete temporary keychain
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/app-signing.keychain-db" || true
+
+  publish-release:
+    name: Publish GitHub Release asset
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+      - build-sign-notarize
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+      VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - name: Download release zip
+        uses: actions/download-artifact@v4
+        with:
+          name: release-zip
+          path: artifacts/release-zip
+
+      - name: Download release metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: release-metadata
+          path: artifacts/release-metadata
+
+      - name: Download release preparation artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-prep
+          path: artifacts/release-prep
+
+      - name: Create or update GitHub Release
+        run: |
+          set -euo pipefail
+          zip_path="artifacts/release-zip/$ASSET_NAME"
+          metadata_path="artifacts/release-metadata/release-metadata.json"
+          notes_path="artifacts/release-prep/release-notes.md"
+
+          if [[ ! -s "$zip_path" ]]; then
+            echo "::error::Missing release zip at $zip_path"
+            exit 1
+          fi
+          if [[ ! -s "$metadata_path" ]]; then
+            echo "::error::Missing release metadata at $metadata_path"
+            exit 1
+          fi
+
+          expected_length="$(node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.length);' "$metadata_path")"
+          expected_sha256="$(node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.sha256);' "$metadata_path")"
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            if gh release view "$RELEASE_TAG" --json assets --jq '.assets[].name' | grep -Fxq "$ASSET_NAME"; then
+              existing_asset_dir="$RUNNER_TEMP/existing-release-asset"
+              mkdir -p "$existing_asset_dir"
+              gh release download "$RELEASE_TAG" \
+                --pattern "$ASSET_NAME" \
+                --dir "$existing_asset_dir"
+              existing_asset="$existing_asset_dir/$ASSET_NAME"
+              existing_length="$(stat -c%s "$existing_asset")"
+              existing_sha256="$(sha256sum "$existing_asset" | awk '{print $1}')"
+              if [[ "$existing_length" != "$expected_length" || "$existing_sha256" != "$expected_sha256" ]]; then
+                echo "::error::Release $RELEASE_TAG already has a different $ASSET_NAME. Refusing to overwrite an update asset."
+                exit 1
+              fi
+              echo "Release $RELEASE_TAG already has the expected $ASSET_NAME; reusing it."
+            else
+              gh release upload "$RELEASE_TAG" "$zip_path"
+            fi
+            gh release edit "$RELEASE_TAG" \
+              --title "$RELEASE_TAG" \
+              --notes-file "$notes_path" \
+              --latest
+          else
+            gh release create "$RELEASE_TAG" "$zip_path" \
+              --title "$RELEASE_TAG" \
+              --notes-file "$notes_path" \
+              --latest
+          fi
+
+  update-appcast:
+    name: Update public Sparkle appcast
+    runs-on: ubuntu-latest
+    needs:
+      - prepare
+      - build-sign-notarize
+      - publish-release
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+      VERSION: ${{ needs.prepare.outputs.version }}
+      BUILD_NUMBER: ${{ needs.prepare.outputs.build }}
+    steps:
+      - name: Checkout main appcast branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Download release metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: release-metadata
+          path: artifacts/release-metadata
+
+      - name: Download release preparation artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-prep
+          path: artifacts/release-prep
+
+      - name: Checkout release scripts
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.tag }}
+          path: release-source
+
+      - name: Insert appcast item
+        run: |
+          set -euo pipefail
+          metadata_path="artifacts/release-metadata/release-metadata.json"
+          release_notes_source="artifacts/release-prep/release-notes/${RELEASE_TAG}.html"
+          release_notes_target="release-notes/${RELEASE_TAG}.html"
+
+          if [[ ! -s "$metadata_path" ]]; then
+            echo "::error::Missing release metadata."
+            exit 1
+          fi
+          if [[ ! -s "$release_notes_source" ]]; then
+            echo "::error::Missing release notes HTML."
+            exit 1
+          fi
+
+          mkdir -p release-notes
+          if [[ -e "$release_notes_target" ]]; then
+            echo "::error::$release_notes_target already exists. Refusing to overwrite release notes."
+            exit 1
+          fi
+          cp "$release_notes_source" "$release_notes_target"
+
+          signature="$(node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.sparkleEdSignature);' "$metadata_path")"
+          length="$(node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.length);' "$metadata_path")"
+          sha256="$(node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.sha256);' "$metadata_path")"
+          asset_url="https://github.com/jsgrrchg/MoodistMac/releases/download/${RELEASE_TAG}/${ASSET_NAME}"
+          release_notes_url="https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/${RELEASE_TAG}.html"
+
+          remote_asset_dir="$RUNNER_TEMP/remote-release-asset"
+          mkdir -p "$remote_asset_dir"
+          gh release download "$RELEASE_TAG" \
+            --pattern "$ASSET_NAME" \
+            --dir "$remote_asset_dir"
+          remote_asset="$remote_asset_dir/$ASSET_NAME"
+          if [[ ! -s "$remote_asset" ]]; then
+            echo "::error::Published release asset is missing or empty: $ASSET_NAME"
+            exit 1
+          fi
+          remote_length="$(stat -c%s "$remote_asset")"
+          remote_sha256="$(sha256sum "$remote_asset" | awk '{print $1}')"
+          if [[ "$remote_length" != "$length" ]]; then
+            echo "::error::Published asset length $remote_length does not match signed metadata length $length."
+            exit 1
+          fi
+          if [[ "$remote_sha256" != "$sha256" ]]; then
+            echo "::error::Published asset checksum does not match the signed update artifact."
+            exit 1
+          fi
+
+          node release-source/scripts/release/update-appcast.mjs \
+            --appcast appcast.xml \
+            --tag "$RELEASE_TAG" \
+            --version "$VERSION" \
+            --build "$BUILD_NUMBER" \
+            --signature "$signature" \
+            --length "$length" \
+            --release-notes-url "$release_notes_url" \
+            --asset-url "$asset_url"
+
+          xmllint --noout appcast.xml
+
+      - name: Commit appcast update
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- appcast.xml "release-notes/${RELEASE_TAG}.html"; then
+            echo "No appcast changes to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add appcast.xml "release-notes/${RELEASE_TAG}.html"
+          git commit -m "Update appcast for ${RELEASE_TAG}"
+          git push origin HEAD:main
