@@ -333,7 +333,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
 
     private func stopEngineIfIdle() {
         guard !hasActivePlayback else { return }
-        engine.stop()
+        engine.pause()
     }
 
     private func ensureEngineIsRunning() -> Bool {
