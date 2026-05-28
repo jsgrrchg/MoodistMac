@@ -73,7 +73,12 @@ jobs:
             --length 123456 \
             --release-notes-url https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/v9.9.9.html \
             --asset-url https://github.com/jsgrrchg/MoodistMac/releases/download/v9.9.9/MoodistMac.zip
-          xmllint --noout "$tmp_appcast"
+          python3 - "$tmp_appcast" <<'PY'
+          import sys
+          import xml.etree.ElementTree as ET
+
+          ET.parse(sys.argv[1])
+          PY
 
       - name: Build app
         run: |
@@ -176,6 +181,11 @@ jobs:
             --release-notes-url "https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/$release_tag.html" \
             --asset-url "https://github.com/jsgrrchg/MoodistMac/releases/download/$release_tag/MoodistMac.zip"
 
-          xmllint --noout "$appcast"
+          python3 - "$appcast" <<'PY'
+          import sys
+          import xml.etree.ElementTree as ET
+
+          ET.parse(sys.argv[1])
+          PY
           grep -Fq "releases/download/$release_tag/MoodistMac.zip" "$appcast"
           grep -Fq "release-notes/$release_tag.html" "$appcast"
