@@ -56,6 +56,16 @@ jobs:
           ref: ${{ steps.release-tag.outputs.tag }}
           fetch-depth: 0
 
+      - name: Validate release tag is on main
+        run: |
+          set -euo pipefail
+          git fetch origin main:refs/remotes/origin/main
+          tag_commit="$(git rev-parse "${{ steps.release-tag.outputs.tag }}^{commit}")"
+          if ! git merge-base --is-ancestor "$tag_commit" origin/main; then
+            echo "::error::Release tag ${{ steps.release-tag.outputs.tag }} must point to a commit already reachable from main."
+            exit 1
+          fi
+
       - name: Read Xcode release metadata
         id: xcode-metadata
         run: |
@@ -171,6 +181,7 @@ jobs:
           final_zip="$RUNNER_TEMP/$ASSET_NAME"
           metadata_path="$RUNNER_TEMP/release-metadata.json"
           notary_json="$RUNNER_TEMP/notary-result.json"
+          notary_log="$RUNNER_TEMP/notary-log.json"
 
           printf '%s' "$DEVELOPER_ID_APPLICATION_CERTIFICATE_BASE64" | base64 --decode > "$cert_path"
           printf '%s' "$APPLE_API_KEY_BASE64" | base64 --decode > "$api_key_path"
@@ -233,19 +244,29 @@ jobs:
           fi
 
           ditto -c -k --sequesterRsrc --keepParent "$app_path" "$notary_zip"
+          set +e
           xcrun notarytool submit "$notary_zip" \
             --key "$api_key_path" \
             --key-id "$APPLE_API_KEY_ID" \
             --issuer "$APPLE_API_ISSUER_ID" \
             --wait \
             --output-format json | tee "$notary_json"
+          notary_exit="${PIPESTATUS[0]}"
+          set -e
 
-          notary_status="$(node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.status || "");' "$notary_json")"
-          if [[ "$notary_status" != "Accepted" ]]; then
-            echo "::error::Notarization status was $notary_status"
+          notary_status="$(node -e 'const fs = require("fs"); try { const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.status || ""); } catch { console.log(""); }' "$notary_json")"
+          notary_id="$(node -e 'const fs = require("fs"); try { const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.id || ""); } catch { console.log(""); }' "$notary_json")"
+          if [[ "$notary_exit" -ne 0 || "$notary_status" != "Accepted" ]]; then
+            echo "::error::Notarization failed with exit $notary_exit and status ${notary_status:-unknown}."
+            if [[ -n "$notary_id" ]]; then
+              xcrun notarytool log "$notary_id" \
+                --key "$api_key_path" \
+                --key-id "$APPLE_API_KEY_ID" \
+                --issuer "$APPLE_API_ISSUER_ID" \
+                --output-format json | tee "$notary_log" || true
+            fi
             exit 1
           fi
-          notary_id="$(node -e 'const fs = require("fs"); const data = JSON.parse(fs.readFileSync(process.argv[1], "utf8")); console.log(data.id || "");' "$notary_json")"
 
           xcrun stapler staple "$app_path"
           xcrun stapler validate "$app_path"

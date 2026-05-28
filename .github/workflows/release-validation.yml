@@ -1,0 +1,70 @@
+name: Release Workflow Validation
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/release-macos.yml"
+      - ".github/workflows/release-validation.yml"
+      - "scripts/release/**"
+      - "appcast.xml"
+      - "CHANGELOG.md"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/release-macos.yml"
+      - ".github/workflows/release-validation.yml"
+      - "scripts/release/**"
+      - "appcast.xml"
+      - "CHANGELOG.md"
+
+permissions:
+  contents: read
+
+jobs:
+  validate-release-tooling:
+    name: Validate release tooling
+    runs-on: macos-26
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate workflow YAML
+        run: |
+          set -euo pipefail
+          ruby -e 'require "yaml"; YAML.load_file(".github/workflows/release-macos.yml"); YAML.load_file(".github/workflows/release-validation.yml")'
+
+      - name: Validate release scripts
+        run: |
+          set -euo pipefail
+          bash -n scripts/release/*.sh
+          node --check scripts/release/build-release-notes.mjs
+          node --check scripts/release/update-appcast.mjs
+
+      - name: Validate app metadata
+        run: |
+          set -euo pipefail
+          plutil -lint Moodist/Info.plist Moodist/MoodistMac.entitlements
+          metadata="$(scripts/release/read-xcode-version.sh)"
+          echo "$metadata"
+          deployment_target="$(printf '%s\n' "$metadata" | awk -F= '$1 == "deployment_target" { print $2 }')"
+          if [[ "$deployment_target" != "15.0" ]]; then
+            echo "::error::MACOSX_DEPLOYMENT_TARGET must remain 15.0."
+            exit 1
+          fi
+
+      - name: Validate appcast update script
+        run: |
+          set -euo pipefail
+          tmp_appcast="$RUNNER_TEMP/appcast.xml"
+          cp appcast.xml "$tmp_appcast"
+          node scripts/release/update-appcast.mjs \
+            --appcast "$tmp_appcast" \
+            --tag v9.9.9 \
+            --version 9.9.9 \
+            --build 9999 \
+            --signature dummySignature== \
+            --length 123456 \
+            --release-notes-url https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/v9.9.9.html \
+            --asset-url https://github.com/jsgrrchg/MoodistMac/releases/download/v9.9.9/MoodistMac.zip
+          xmllint --noout "$tmp_appcast"
