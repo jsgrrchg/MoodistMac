@@ -5,6 +5,27 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] – 2026-05-28
+
+### Added
+
+- **Audio engine**: Added a new `AVAudioEngine` playback backend with a shared playback abstraction, while keeping a legacy `AVAudioPlayer` backend available for fallback/debugging.
+- **Release automation**: Added a macOS GitHub Actions release workflow to validate tags, build, sign, notarize, package, publish GitHub Releases, and update the Sparkle appcast.
+- **Release tooling**: Added scripts to read Xcode release metadata, validate release tags/build numbers, generate versioned release notes, and update `appcast.xml`.
+- **Release validation tests**: Added automated tests for appcast updates, release-note generation, tag/version validation, build ordering, and the macOS 15 deployment target.
+- **Contributing guide**: Added `CONTRIBUTING.md` with project setup, compatibility, UI, audio/data/assets, validation, and pull request guidelines.
+
+### Changed
+
+- **Playback architecture**: Ported default playback to `AVAudioEngine`, preserving existing crossfade behavior and preparing the audio layer for future spatial routing work.
+- **Code comments**: Cleaned and translated remaining Spanish code comments to English for consistency across the codebase.
+- **Release checks**: Hardened release validation so published updates keep the expected Sparkle feed URL, public key, bundle metadata, signing/notarization requirements, and macOS 15 compatibility.
+
+### Fixed
+
+- **Audio engine lifecycle**: Fixed several playback lifecycle edge cases by avoiding engine startup with no active sounds, pausing/stopping the engine when idle, restoring playback after configuration changes, and cancelling fades during full unload.
+- **Project signing**: Restored the expected development team and bundle identifier settings needed for signing and release preparation.
+
 ## [1.0.5] – 2026-04-27
 
 ### Fixed

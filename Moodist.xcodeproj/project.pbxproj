@@ -577,7 +577,7 @@
 					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 					CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_TEAM = 9WD82WQ56W;
 			DEVELOPMENT_ASSET_PATHS = "";
@@ -591,7 +591,7 @@
 				"@executable_path/../Frameworks",
 			);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.0.5";
+						MARKETING_VERSION = "1.1.0";
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
@@ -611,7 +611,7 @@
 					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 					CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_TEAM = 9WD82WQ56W;
 			DEVELOPMENT_ASSET_PATHS = "";
@@ -625,7 +625,7 @@
 				"@executable_path/../Frameworks",
 			);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.0.5";
+						MARKETING_VERSION = "1.1.0";
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
