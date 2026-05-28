@@ -64,7 +64,7 @@ extension SoundStore {
         // 6. Fade-in: cargar nuevos sonidos a volumen 0, luego fade al objetivo.
         for soundId in fadeInOnly {
             guard let sound = SoundsData.allSoundsById[soundId] else { continue }
-            if audioService.load(sound: sound) != nil {
+            if audioService.load(sound: sound) {
                 audioService.setVolume(soundId: soundId, volume: 0, globalVolume: 1.0)
                 if shouldPlay {
                     audioService.play(soundId: soundId)
