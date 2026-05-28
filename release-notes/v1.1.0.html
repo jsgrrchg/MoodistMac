@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>MoodistMac 1.1.0 Release Notes</title>
+    </head>
+    <body>
+        <h2>1.1.0 (2026-05-28)</h2>
+        <h3>Added</h3>
+        <ul>
+            <li><strong>Audio engine</strong>: Added a new `AVAudioEngine` playback backend with a shared playback abstraction, while keeping a legacy `AVAudioPlayer` backend available for fallback/debugging.</li>
+            <li><strong>Release automation</strong>: Added a macOS GitHub Actions release workflow to validate tags, build, sign, notarize, package, publish GitHub Releases, and update the Sparkle appcast.</li>
+            <li><strong>Release tooling</strong>: Added scripts to read Xcode release metadata, validate release tags/build numbers, generate versioned release notes, and update `appcast.xml`.</li>
+            <li><strong>Release validation tests</strong>: Added automated tests for appcast updates, release-note generation, tag/version validation, build ordering, and the macOS 15 deployment target.</li>
+            <li><strong>Contributing guide</strong>: Added `CONTRIBUTING.md` with project setup, compatibility, UI, audio/data/assets, validation, and pull request guidelines.</li>
+        </ul>
+        <h3>Changed</h3>
+        <ul>
+            <li><strong>Playback architecture</strong>: Ported default playback to `AVAudioEngine`, preserving existing crossfade behavior and preparing the audio layer for future spatial routing work.</li>
+            <li><strong>Code comments</strong>: Cleaned and translated remaining Spanish code comments to English for consistency across the codebase.</li>
+            <li><strong>Release checks</strong>: Hardened release validation so published updates keep the expected Sparkle feed URL, public key, bundle metadata, signing/notarization requirements, and macOS 15 compatibility.</li>
+        </ul>
+        <h3>Fixed</h3>
+        <ul>
+            <li><strong>Audio engine lifecycle</strong>: Fixed several playback lifecycle edge cases by avoiding engine startup with no active sounds, pausing/stopping the engine when idle, restoring playback after configuration changes, and cancelling fades during full unload.</li>
+            <li><strong>Project signing</strong>: Restored the expected development team and bundle identifier settings needed for signing and release preparation.</li>
+        </ul>
+
+        <p>
+            <a href="https://github.com/jsgrrchg/MoodistMac/releases/tag/v1.1.0">View this release on GitHub</a>
+        </p>
+    </body>
+</html>
