@@ -2,12 +2,12 @@
 //  SidebarView.swift
 //  MoodistMac
 //
-//  Barra lateral estilo limpio: fondo claro, tipografía suave, metadatos a la derecha.
+//  Clean sidebar style with a light background, soft typography, and right-aligned metadata.
 //
 
 import SwiftUI
 
-// MARK: - Constantes de estilo (sidebar limpio / tipo Cursor)
+// MARK: - Style Constants
 
 private enum SidebarStyle {
     static let headerFont = Font.system(.subheadline, design: .default).weight(.medium)
@@ -20,7 +20,7 @@ private enum SidebarStyle {
     static let primaryText = Color.primary.opacity(0.9)
     static let secondaryText = Color.primary.opacity(0.45)
     static let sidebarInset: CGFloat = 8
-    /// Altura reservada en la parte superior para que el contenido del scroll no invada los traffic lights.
+    /// Top reserved height so scroll content does not overlap the traffic lights.
     static let titleBarReservedHeight: CGFloat = 52
 }
 
@@ -37,7 +37,7 @@ struct SidebarView: View {
     @State private var soundDropTargetId: String? = nil
     @State private var mixDropTargetId: String? = nil
 
-    /// Sonidos favoritos en el orden elegido por el usuario (permite drag and drop).
+    /// Favorite sounds in user-defined order, allowing drag and drop.
     private var orderedFavoriteSounds: [Sound] {
         store.orderedFavoriteSoundIds.compactMap { SoundsData.allSoundsById[$0] }
     }
@@ -73,13 +73,13 @@ struct SidebarView: View {
 
     var body: some View {
         ZStack {
-            // Fondo opaco que cubre todo el sidebar (incluida zona de scroller).
+            // Opaque background covering the full sidebar, including the scroller area.
             sidebarBackground
 
             VStack(spacing: 0) {
                 ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack(alignment: .leading, spacing: SidebarStyle.sectionSpacing) {
-                        // Sección Favoritos (reordenable con drag and drop)
+                        // Favorites section, reorderable with drag and drop.
                         sidebarSectionHeader(
                             L10n.sidebarFavorites, sectionId: sidebarSectionIds.favorites)
                         if !isSectionCollapsed(sidebarSectionIds.favorites) {
@@ -128,7 +128,7 @@ struct SidebarView: View {
                             }
                         }
 
-                        // Sección Mixes favoritos (reordenable con drag and drop)
+                        // Favorite mixes section, reorderable with drag and drop.
                         sidebarSectionHeader(
                             L10n.sidebarFavoriteMixes, sectionId: sidebarSectionIds.favoriteMixes)
                         if !isSectionCollapsed(sidebarSectionIds.favoriteMixes) {
@@ -177,7 +177,7 @@ struct SidebarView: View {
                             }
                         }
 
-                        // Sección sonidos recientes
+                        // Recent sounds section.
                         sidebarSectionHeader(
                             L10n.sidebarRecentSounds, sectionId: sidebarSectionIds.recentSounds)
                         if !isSectionCollapsed(sidebarSectionIds.recentSounds) {
@@ -201,7 +201,7 @@ struct SidebarView: View {
                             }
                         }
 
-                        // Sección Mixes recientes
+                        // Recent mixes section.
                         sidebarSectionHeader(
                             L10n.sidebarRecentMixes, sectionId: sidebarSectionIds.recentMixes)
                         if !isSectionCollapsed(sidebarSectionIds.recentMixes) {
@@ -286,7 +286,7 @@ struct SidebarView: View {
             if transparencyEnabled {
                 VisualEffectBackground(material: .sidebar, blendingMode: .behindWindow)
                     .ignoresSafeArea(.container)
-                // Sin tinte para que el cristal se vea como en Finder.
+                // No tint, so the glass looks like Finder.
             } else {
                 PlatformColor.windowBackground
                     .ignoresSafeArea(.container)
@@ -301,7 +301,7 @@ struct SidebarView: View {
             .offset(y: -1)
     }
 
-    /// Encabezado de sección con chevron para colapsar/expandir.
+    /// Section header with a chevron for collapse and expand.
     private func sidebarSectionHeader(_ title: String, sectionId: String) -> some View {
         return Button(action: { toggleSection(sectionId) }) {
             HStack(spacing: 6) {
@@ -333,7 +333,7 @@ struct SidebarView: View {
 
 }
 
-// MARK: - Helper para etiqueta de fila (icono + texto)
+// MARK: - Row Label Helper
 
 private func sidebarRowLabel(title: String, systemImage: String, isSelected: Bool) -> some View {
     HStack(spacing: 10) {
@@ -352,7 +352,7 @@ private func sidebarRowLabel(title: String, systemImage: String, isSelected: Boo
     .contentShape(Rectangle())
 }
 
-// MARK: - Fila de sonido (estilo Finder: resaltado redondeado al seleccionar)
+// MARK: - Sound Row
 
 private struct SidebarSoundRow: View {
     let sound: Sound
@@ -414,7 +414,7 @@ private struct SidebarSoundRow: View {
     }
 }
 
-// MARK: - Fila de mix reciente (estilo Finder)
+// MARK: - Recent Mix Row
 
 private struct SidebarMixRow: View {
     let mix: Mix

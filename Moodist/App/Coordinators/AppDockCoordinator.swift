@@ -13,14 +13,14 @@ final class AppDockCoordinator: NSObject {
     }
 
     func updateSoundStore(_ store: SoundStore?) {
-        // Reenlaza la fuente de estado y reinicia observadores para evitar suscripciones huérfanas.
+        // Rebind the state source and restart observers to avoid orphaned subscriptions.
         soundStore = store
         configureDockObservers()
         updateDockTitle()
     }
 
     func applicationDockMenu() -> NSMenu? {
-        // Construye dinámicamente el menú contextual del icono en el Dock.
+        // Dynamically build the Dock icon context menu.
         let menu = NSMenu()
         let isPlaying = soundStore?.isPlaying == true
         let hasSelection = soundStore?.hasSelection == true
@@ -69,11 +69,11 @@ final class AppDockCoordinator: NSObject {
     }
 
     private func configureDockObservers() {
-        // Al cambiar de store, se limpian subscriptions previas para evitar duplicados.
+        // When the store changes, clear previous subscriptions to avoid duplicates.
         dockCancellables.removeAll()
         guard let store = soundStore else { return }
 
-        // Cambios estructurales de mezcla/sonidos/presets que afectan el estado visible del Dock.
+        // Structural mix, sound, and preset changes that affect visible Dock state.
         Publishers.CombineLatest3(
             store.$currentMixId,
             store.$sounds,
@@ -87,7 +87,7 @@ final class AppDockCoordinator: NSObject {
         }
         .store(in: &dockCancellables)
 
-        // Estado de reproducción para refrescar acciones disponibles.
+        // Playback state refreshes available actions.
         store.$isPlaying
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
@@ -99,7 +99,7 @@ final class AppDockCoordinator: NSObject {
     }
 
     private func updateDockTitle() {
-        // Actualmente no se usa badge; se fuerza limpio para evitar residuos visuales.
+        // No badge is currently used; force it clean to avoid visual leftovers.
         NSApp.dockTile.badgeLabel = nil
     }
 }

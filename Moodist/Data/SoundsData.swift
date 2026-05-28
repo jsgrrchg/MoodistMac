@@ -2,7 +2,7 @@
 //  SoundsData.swift
 //  MoodistMac
 //
-//  Categorías y sonidos (equivalente a src/data/sounds).
+//  Categories and sounds, equivalent to src/data/sounds.
 //
 
 import Foundation
@@ -21,7 +21,7 @@ enum SoundsData {
         military
     ]
 
-    /// Diccionario estático para búsquedas O(1) de sonidos por ID (evita duplicar en vistas).
+    /// Static dictionary for O(1) sound lookup by ID, avoiding duplication in views.
     static let allSoundsById: [String: Sound] = Dictionary(uniqueKeysWithValues: categories.flatMap(\.sounds).map { ($0.id, $0) })
 
     // MARK: - Nature
@@ -231,7 +231,7 @@ enum SoundsData {
         ]
     )
 
-    // MARK: - Binaural (waveform.circle para diferenciar de noise)
+    // MARK: - Binaural (waveform.circle distinguishes it from noise)
     static let binaural = SoundCategory(
         id: "binaural",
         title: "Binaural",

@@ -1,7 +1,7 @@
 import Foundation
 
 extension SoundStore {
-    // Selecciona un sonido, lo carga en audio y arranca reproducción inmediata.
+    // Selects a sound, loads it into audio, and starts playback immediately.
     func select(_ id: String) {
         currentMixId = nil
         currentMixIconName = nil
@@ -20,7 +20,7 @@ extension SoundStore {
         }
     }
 
-    // Quita selección de un sonido y libera su reproductor asociado.
+    // Deselects a sound and releases its associated player.
     func unselect(_ id: String) {
         currentMixId = nil
         currentMixIconName = nil
@@ -34,7 +34,7 @@ extension SoundStore {
         }
     }
 
-    // Limpia toda la selección en un único batch para reducir re-renders.
+    // Clears the whole selection in one batch to reduce re-renders.
     func unselectAll() {
         currentMixId = nil
         currentMixIconName = nil
@@ -43,7 +43,7 @@ extension SoundStore {
         audioService.cancelCrossfadeAndCleanup()
         audioService.pauseAll(ids: selectedIds)
         audioService.unloadAll()
-        // Una sola actualización del estado para evitar muchos re-renders y bloqueos de la UI.
+        // Use one state update to avoid repeated re-renders and UI stalls.
         var next = sounds
         let ids = Array(next.keys)
         for id in ids {
@@ -55,7 +55,7 @@ extension SoundStore {
         sounds = next
     }
 
-    // Ajusta volumen individual (estado + motor de audio).
+    // Adjusts the individual volume in both state and the audio engine.
     func setVolume(_ id: String, _ volume: Double) {
         guard var item = sounds[id] else { return }
         item.volume = volume
@@ -63,13 +63,13 @@ extension SoundStore {
         audioService.setVolume(soundId: id, volume: volume, globalVolume: globalVolume)
     }
 
-    // Ajusta volumen global y recalcula mezcla efectiva en audio.
+    // Adjusts global volume and recomputes the effective audio mix.
     func setGlobalVolume(_ volume: Double) {
         globalVolume = volume
         audioService.updateVolumes(state: sounds, globalVolume: globalVolume)
     }
 
-    // Pausa reproducción activa sin alterar selección.
+    // Pauses active playback without changing the selection.
     func stopPlayback() {
         guard isPlaying else { return }
         isPlaying = false
@@ -77,7 +77,7 @@ extension SoundStore {
         audioService.pauseAll(ids: selectedIds)
     }
 
-    // Alterna play/pause respetando si hay o no selección activa.
+    // Toggles play/pause while respecting whether a selection exists.
     func togglePlay() {
         guard hasSelection else {
             if isPlaying { isPlaying = false }
@@ -98,7 +98,7 @@ extension SoundStore {
         }
     }
 
-    // Construye selección aleatoria de 4 sonidos y reproduce con crossfade.
+    // Builds a random four-sound selection and plays it with crossfade.
     func shuffle() {
         let allIds = Array(sounds.keys)
         guard allIds.count >= 4 else { return }
@@ -113,7 +113,7 @@ extension SoundStore {
         currentMixIconName = nil
     }
 
-    // Asegura que el motor de audio refleje la selección/volúmenes actuales.
+    // Ensures the audio engine reflects the current selection and volumes.
     func updatePlaybackForSelection() {
         for sound in SoundsData.categories.flatMap(\.sounds) {
             if sounds[sound.id]?.isSelected == true {
@@ -124,7 +124,7 @@ extension SoundStore {
         if isPlaying { audioService.playAll(ids: selectedIds) }
     }
 
-    // Resetea sólo selección y favoritos (sin borrar presets ni preferencias globales).
+    // Resets only selection and favorites without clearing presets or global preferences.
     func resetSelectionAndFavorites() {
         currentMixId = nil
         currentMixIconName = nil

@@ -2,13 +2,13 @@
 //  ExportedPreferences.swift
 //  MoodistMac
 //
-//  Modelo para exportar/importar preferencias: mixes personalizados, mixes favoritos, sonidos favoritos.
+//  Model for exporting and importing preferences.
 //
 
 import Foundation
 
 struct ExportedPreferences: Codable {
-    /// Versión del formato para futuras importaciones.
+    /// Format version for future imports.
     static let currentVersion = 1
 
     let version: Int

@@ -268,7 +268,7 @@ struct TimerSetupView: View {
     }
 
     private func startAndDismiss() {
-        // Fuerza commit del TextField activo antes de leer totalSeconds.
+        // Force the active TextField to commit before reading totalSeconds.
         NSApp.keyWindow?.makeFirstResponder(nil)
         DispatchQueue.main.async {
             guard canStart else { return }

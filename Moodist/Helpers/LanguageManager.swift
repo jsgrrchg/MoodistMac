@@ -2,7 +2,7 @@
 //  LanguageManager.swift
 //  MoodistMac
 //
-//  (Desactivado) El soporte de idiomas se eliminó.
+//  Language support was removed.
 //
 
-// Soporte de idiomas eliminado: archivo mantenido para referencia histórica.
+// Kept for historical reference.

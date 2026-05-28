@@ -2,13 +2,13 @@
 //  MoodistTheme.swift
 //  MoodistMac
 //
-//  Tokens de diseño: espaciado, colores, tipografía, radios.
+//  Design tokens for spacing, colors, typography, and radii.
 //
 
 import SwiftUI
 
 enum MoodistTheme {
-    // MARK: - Spacing (retícula 4/8/12/16/24)
+    // MARK: - Spacing (4/8/12/16/24 grid)
     enum Spacing {
         static let xSmall: CGFloat = 4
         static let small: CGFloat = 8
@@ -24,7 +24,7 @@ enum MoodistTheme {
         static let large: CGFloat = 14
     }
 
-    // MARK: - Colors (identidad + estados)
+    // MARK: - Colors (identity and states)
     enum Colors {
         static var accent: Color { AccentColorChoice.resolvedAccentColor }
         static var selectedBackground: Color { AccentColorChoice.resolvedAccentColor.opacity(0.12) }
@@ -38,7 +38,7 @@ enum MoodistTheme {
     enum Typography {
         static let largeTitle = Font.largeTitle.weight(.semibold)
         static let title = Font.title2.weight(.semibold)
-        /// Títulos de sección (Favoritos, Categorías, etc.): un paso por encima de body para jerarquía clara.
+        /// Section titles sit one step above body text for clear hierarchy.
         static let headline = Font.title3.weight(.semibold)
         static let body = Font.body
         static let subheadline = Font.subheadline

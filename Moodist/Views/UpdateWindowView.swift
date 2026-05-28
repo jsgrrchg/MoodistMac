@@ -2,7 +2,7 @@
 //  UpdateWindowView.swift
 //  MoodistMac
 //
-//  UI para la ventana de actualizaciones (Sparkle custom user driver).
+//  UI for the Sparkle custom update window.
 //
 
 import AppKit

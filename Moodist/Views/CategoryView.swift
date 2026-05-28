@@ -2,7 +2,7 @@
 //  CategoryView.swift
 //  MoodistMac
 //
-//  Vista de una categoría: título e icono, lista de sonidos. 
+//  Category view with title, icon, and sound list.
 //
 
 import SwiftUI

@@ -2,7 +2,7 @@
 //  PreferencesExportService.swift
 //  MoodistMac
 //
-//  Presenta NSSavePanel y escribe las preferencias exportadas a un archivo JSON.
+//  Presents NSSavePanel and writes exported preferences to a JSON file.
 //
 
 import Foundation
@@ -12,8 +12,8 @@ import AppKit
 #endif
 
 enum PreferencesExportService {
-    /// Presenta el panel de guardado y escribe las preferencias en el archivo elegido.
-    /// - Returns: true si el usuario guardó correctamente, false si canceló o hubo error.
+    /// Presents the save panel and writes preferences to the chosen file.
+    /// - Returns: true when the user saved successfully; false when canceled or on error.
     @MainActor
     static func presentExportPanel(presets: [Preset], favoriteMixIds: [String], favoriteSoundIds: [String]) -> Bool {
         let payload = ExportedPreferences(

@@ -2,7 +2,7 @@
 //  UpdateWindowPresenter.swift
 //  MoodistMac
 //
-//  Presenta la ventana custom de actualización para Sparkle.
+//  Presents the custom Sparkle update window.
 //
 
 import AppKit

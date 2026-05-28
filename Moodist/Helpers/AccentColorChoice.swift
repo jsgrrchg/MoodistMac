@@ -2,7 +2,7 @@
 //  AccentColorChoice.swift
 //  MoodistMac
 //
-//  Paleta de acentos estilo macOS (Multicolor + colores clásicos).
+//  macOS-style accent palette with multicolor and classic colors.
 //
 
 import SwiftUI
@@ -35,7 +35,7 @@ enum AccentColorChoice: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Color a aplicar a la app (nil = usar acento del sistema).
+    /// Color applied to the app. Nil means use the system accent.
     var accentColor: Color? {
         switch self {
         case .system:

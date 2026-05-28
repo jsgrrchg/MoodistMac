@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  MoodistMac
 //
-//  Vista principal: controles, favoritos, volumen, categorías. macOS Sequoia 15.0+.
+//  Main view: controls, favorites, volume, and categories. macOS Sequoia 15.0+.
 //
 
 import AppKit
@@ -12,22 +12,22 @@ private let sidebarWidthMin: CGFloat = 180
 private let sidebarWidthMax: CGFloat = 320
 private let sidebarWidthDefault: CGFloat = 220
 private let sidebarResizeHandleWidth: CGFloat = 14
-/// Por debajo de este ancho de ventana se usa el menú compacto (un solo icono).
-/// Nota: el buscador en la toolbar ocupa espacio; en ventanas estrechas el sistema puede mover controles
-/// al overflow ("»"), donde algunos pickers pueden volverse poco fiables.
+/// Below this window width, the toolbar uses a compact single-icon menu.
+/// The toolbar search field takes space; in narrow windows, the system may move controls
+/// into overflow, where some pickers can become unreliable.
 private let toolbarCompactThreshold: CGFloat = 600
-/// Por debajo de este ancho de ventana el selector Sounds/Mixes pasa a menú desplegable en lugar de segmentado.
+/// Below this window width, the Sounds/Mixes selector switches from segmented control to menu.
 private let toolbarMediumThreshold: CGFloat = 720
-/// Espacio extra para que el contenido no se solape con la barra de título cuando esta es transparente.
+/// Extra space so content does not overlap the transparent title bar.
 private let titlebarContentInset: CGFloat = 40
-/// Backdrop sutil para fundir controles con el contenido.
+/// Subtle backdrop that blends controls into the content.
 private let toolbarBackdropHeight: CGFloat = 56
 private let toolbarBackdropFadeHeight: CGFloat = 28
 private let toolbarSearchFieldYOffset: CGFloat = 0
-/// Rango de ancho donde el offset del toolbar se aplica gradualmente (evita solaparse con el search).
+/// Width range where toolbar offset is applied gradually to avoid overlapping search.
 private let toolbarOffsetMinWidth: CGFloat = 520
 private let toolbarOffsetMaxWidth: CGFloat = 760
-/// Mantener un mínimo de ancho útil para el contenido principal al calcular el máximo de sidebar.
+/// Minimum usable main-content width when calculating the maximum sidebar width.
 private let mainContentMinWidth: CGFloat = 520
 
 private struct ContentWidthKey: PreferenceKey {
@@ -44,7 +44,7 @@ private struct WindowWidthKey: PreferenceKey {
     }
 }
 
-/// Ancho del área de contenido para que las filas adapten espaciado y controles en ventanas estrechas.
+/// Content area width, used so rows can adapt spacing and controls in narrow windows.
 struct ContentAreaWidthEnvironmentKey: EnvironmentKey {
     static let defaultValue: CGFloat = 600
 }
@@ -55,7 +55,7 @@ extension EnvironmentValues {
     }
 }
 
-/// Indica si el usuario está desplazando activamente el ScrollView principal.
+/// Indicates whether the user is actively scrolling the main ScrollView.
 struct IsUserScrollingEnvironmentKey: EnvironmentKey {
     static let defaultValue: Bool = false
 }
@@ -77,14 +77,14 @@ struct ContentView: View {
     @State private var selectedSection: ContentSection = .sounds
     @AppStorage("MoodistMac.sidebarWidth") private var persistedSidebarWidth: Double =
         sidebarWidthDefault
-    /// Ancho en uso durante arrastre; solo se persiste al soltar para evitar lag.
+    /// Width used during dragging; persisted only on release to avoid lag.
     @State private var sidebarWidth: CGFloat = CGFloat(sidebarWidthDefault)
     @State private var sidebarResizeStartWidth: CGFloat = 0
-    /// Ancho del área de contenido; por debajo del umbral se usa la barra compacta (menú único).
+    /// Content area width; below the threshold, the compact single-menu toolbar is used.
     @State private var contentAreaWidth: CGFloat = 600
-    /// Estado expandido de cada categoría (por ID). Por defecto todas expandidas.
+    /// Expanded state for each category by ID. Defaults to all expanded.
     @State private var categoryExpandedStates: [String: Bool] = [:]
-    /// Estado expandido de cada categoría de mixes (por ID). Por defecto todas expandidas.
+    /// Expanded state for each mix category by ID. Defaults to all expanded.
     @State private var mixCategoryExpandedStates: [String: Bool] = [:]
     @State private var scrollState = ScrollStateStore()
     @State private var soundsScrollPosition: String? = ScrollStateStore.scrollTopAnchorId
@@ -102,7 +102,7 @@ struct ContentView: View {
     @State private var sidebarResizeStartPointerX: CGFloat?
     @State private var playingSoundsCache: [Sound] = []
 
-    /// La sidebar es siempre visible; el toggle fue eliminado para simplificar la navegación.
+    /// The sidebar is always visible; the toggle was removed to simplify navigation.
     private var isSidebarVisible: Bool { true }
 
     private var contentSidebarWidth: CGFloat { sidebarWidth }
@@ -172,11 +172,11 @@ struct ContentView: View {
     @ViewBuilder private var mainContent: some View {
         #if LIQUID_GLASS_SDK
             if #available(macOS 26.0, *) {
-                // GlassEffectContainer coordina el cristal del reproductor con el contenido:
-                // el contenido detrás se distorsiona/refracta según Liquid Glass.
+                // GlassEffectContainer coordinates player glass with the content:
+                // content behind it distorts and refracts according to Liquid Glass.
                 GlassEffectContainer {
                     ZStack(alignment: .bottom) {
-                        // Fondo con extensión para que el cristal pueda muestrear más allá del safe area (Liquid Glass).
+                        // Extended background so glass can sample beyond the safe area.
                         PlatformColor.windowBackground
                             .backgroundExtensionEffect()
                             .ignoresSafeArea(.container, edges: .top)
@@ -388,7 +388,7 @@ struct ContentView: View {
                 scrollState.didRestoreSounds = true
                 let context = scrollContext(for: .sounds, searchQuery: store.searchQuery)
                 if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    // En el primer arranque mostramos "Currently playing" en la parte superior.
+                    // On first launch, show "Currently playing" at the top.
                     setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
                     scheduleSoundsScrollRestore(for: context, scrollToTopFirst: true)
                     return
@@ -439,7 +439,7 @@ struct ContentView: View {
                 scrollState.didRestoreMixes = true
                 let context = scrollContext(for: .mixes, searchQuery: store.searchQuery)
                 if store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                    // En el primer arranque mostramos el inicio de la lista en Mixes.
+                    // On first launch, show the top of the Mixes list.
                     setStoredScrollAnchorId(Self.scrollTopAnchorId, for: context)
                     scheduleMixesScrollRestore(for: context, scrollToTopFirst: true)
                     return
@@ -533,9 +533,9 @@ struct ContentView: View {
         return !collapseCategoriesOnColdOpen
     }
 
-    /// Ajusta el ancho de la sidebar a su rango permitido para el ancho de ventana actual.
-    /// Fuera de drag: respeta el ancho deseado persistido.
-    /// Durante drag: solo mantiene la posición actual dentro de límites válidos.
+    /// Adjusts sidebar width to the allowed range for the current window width.
+    /// Outside dragging, it respects the persisted desired width.
+    /// During dragging, it only keeps the current position within valid limits.
     private func updateSidebarForWindowWidth(_ totalWidth: CGFloat) {
         sidebarWidth = SidebarLayout.adjustedSidebarWidth(
             currentWidth: sidebarWidth,
@@ -580,14 +580,14 @@ struct ContentView: View {
         )
     }
 
-    /// Backdrop superior: bloquea clics para que no lleguen al contenido (categorías/sonidos).
+    /// Top backdrop that blocks clicks before they reach content rows.
     private var topControlsBackdrop: some View {
         let height = toolbarBackdropHeight + toolbarBackdropFadeHeight
         return ZStack {
             PlatformColor.windowBackground
                 .frame(height: height)
                 .frame(maxWidth: .infinity)
-                // Fade out hacia el contenido para evitar una "barra" dura.
+                // Fade into the content to avoid a harsh bar edge.
                 .mask(
                     LinearGradient(
                         stops: [
@@ -601,7 +601,7 @@ struct ContentView: View {
                 )
                 .allowsHitTesting(false)
 
-            // Área de arrastre restringida a la zona superior (barra de título).
+            // Drag area restricted to the top title-bar region.
             TitlebarDragArea()
                 .frame(height: height)
                 .frame(maxWidth: .infinity)
@@ -663,7 +663,7 @@ struct ContentView: View {
         }
     }
 
-    /// Sección Mixes: categorías temáticas con mixes aplicables.
+    /// Mixes section with thematic categories and applicable mixes.
     private var mixesPlaceholderSection: some View {
         MixesPlaceholderSectionView(
             store: store,

@@ -2,7 +2,7 @@
 //  SoundRow.swift
 //  MoodistMac
 //
-//  Fila de un sonido: icono, nombre, favorito, volumen, selección.
+//  Sound row with icon, name, favorite state, volume, and selection.
 //
 
 import SwiftUI
@@ -18,7 +18,7 @@ struct SoundRow: View {
         store.sounds[sound.id] ?? .default
     }
 
-    /// Ventana estrecha: menos espaciado y slider más comprimible para que todo quepa.
+    /// Narrow window layout with tighter spacing and a more compressible slider.
     private var isNarrow: Bool { contentAreaWidth < 420 }
     private var isVeryNarrow: Bool { contentAreaWidth < 340 }
     private var isUltraNarrow: Bool { contentAreaWidth < 260 }
@@ -26,7 +26,7 @@ struct SoundRow: View {
     private var iconFrame: CGFloat { isNarrow ? 18 : 20 }
     private var horizontalPadding: CGFloat { isUltraNarrow ? 4 : (isVeryNarrow ? 6 : (isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)) }
     private var sliderHorizontalMaxWidth: CGFloat {
-        // La anchura reportada incluye padding del ScrollView; escalamos agresivo para evitar controles fuera de pantalla.
+        // Reported width includes ScrollView padding, so scale aggressively to keep controls on screen.
         let proposed = contentAreaWidth * (isUltraNarrow ? 0.12 : (isVeryNarrow ? 0.16 : 0.22))
         let minWidth: CGFloat = isUltraNarrow ? 28 : 44
         let maxWidth: CGFloat = isUltraNarrow ? 90 : 120
@@ -122,7 +122,7 @@ struct SoundRow: View {
             .foregroundStyle(state.isSelected ? Color.primary : Color.primary.opacity(0.9))
             .lineLimit(1)
             .truncationMode(.tail)
-            // Deja que el texto se recorte antes de empujar controles fuera de la pantalla.
+            // Let text truncate before pushing controls off screen.
             .layoutPriority(0)
     }
 
@@ -173,7 +173,7 @@ struct SoundRow: View {
             .accessibilityLabel(L10n.volumeForLabel(soundLabel))
             .accessibilityValue("\(Int(state.volume * 100)) percent")
         }
-        // Debe comprimirse antes que empujar el botón de favorito fuera de la pantalla.
+        // Compress before pushing the favorite button off screen.
         .layoutPriority(0)
         .transition(.opacity.combined(with: .scale(scale: 0.95)))
     }
@@ -197,7 +197,7 @@ struct SoundRow: View {
             .accessibilityLabel(L10n.volumeForLabel(soundLabel))
             .accessibilityValue("\(Int(state.volume * 100)) percent")
         }
-        // En ultra-estrecho no indentamos para maximizar ancho útil del slider.
+        // In ultra-narrow layout, avoid indentation to maximize useful slider width.
         .padding(.leading, isUltraNarrow ? 0 : (iconFrame + rowSpacing))
         .transition(.opacity.combined(with: .move(edge: .top)))
     }

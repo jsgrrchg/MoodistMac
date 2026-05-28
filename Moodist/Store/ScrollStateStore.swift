@@ -20,7 +20,7 @@ final class ScrollStateStore {
         case soundsSearch
         case mixesSearch
     }
-    // Identificador de ancla para el inicio de las listas (usado también como fallback).
+    // Anchor ID for the top of lists, also used as a fallback.
     static let scrollTopAnchorId = "mainScrollTop"
     static let persistenceKeySounds = "sounds"
     static let persistenceKeyMixes = "mixes"
@@ -48,7 +48,7 @@ final class ScrollStateStore {
         soundsRestoreTask?.cancel()
         mixesRestoreTask?.cancel()
     }
-    // Determina el contexto actual (sounds/mixes + search/no search) para usar el ancla de scroll apropiada.
+    // Determines the current context so the matching scroll anchor can be used.
     func context(for section: ContentSection, searchQuery: String) -> Context {
         let isSearching = !searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         if section == .mixes {
@@ -56,7 +56,7 @@ final class ScrollStateStore {
         }
         return isSearching ? .soundsSearch : .sounds
     }
-    // Obtiene el id de ancla de scroll almacenado para el contexto dado.
+    // Returns the stored scroll anchor ID for the given context.
     func storedScrollAnchorId(for context: Context) -> String {
         switch context {
         case .sounds:
@@ -69,7 +69,7 @@ final class ScrollStateStore {
             return mixesSearchScrollAnchorId
         }
     }
-    // Almacena el id de ancla de scroll para el contexto dado, para restaurarlo en el futuro.
+    // Stores the scroll anchor ID for a context so it can be restored later.
     func setStoredScrollAnchorId(_ id: String, for context: Context) {
         switch context {
         case .sounds:
@@ -82,7 +82,7 @@ final class ScrollStateStore {
             mixesSearchScrollAnchorId = id
         }
     }
-    // Determina si un id de ancla de scroll es relevante para el contexto actual, para evitar restaurar posiciones que no correspondan al tipo de contenido mostrado.
+    // Checks whether a scroll anchor belongs to the current context before restoring it.
     func isRelevantScrollAnchorId(_ id: String, for context: Context) -> Bool {
         if id == Self.scrollTopAnchorId { return true }
         switch context {
@@ -96,7 +96,7 @@ final class ScrollStateStore {
             return id.hasPrefix("mix-search-")
         }
     }
-    // Construye un diccionario con los ids de ancla de scroll para persistir, excluyendo los vacíos o irrelevantes.
+    // Builds the persisted scroll-anchor dictionary, excluding empty values.
     func persistedAnchorDictionary() -> [String: String] {
         var dict: [String: String] = [:]
         if !soundsScrollAnchorId.isEmpty { dict[Self.persistenceKeySounds] = soundsScrollAnchorId }
@@ -105,14 +105,14 @@ final class ScrollStateStore {
         if !mixesSearchScrollAnchorId.isEmpty { dict[Self.persistenceKeyMixesSearch] = mixesSearchScrollAnchorId }
         return dict
     }
-    // Carga los ids de ancla de scroll desde un diccionario persistido, aplicándolos a las propiedades correspondientes si son válidos.
+    // Loads scroll-anchor IDs from persisted storage into the matching properties.
     func loadPersistedAnchorDictionary(_ dict: [String: String]) {
         if let v = dict[Self.persistenceKeySounds], !v.isEmpty { soundsScrollAnchorId = v }
         if let v = dict[Self.persistenceKeyMixes], !v.isEmpty { mixesScrollAnchorId = v }
         if let v = dict[Self.persistenceKeySoundsSearch], !v.isEmpty { soundsSearchScrollAnchorId = v }
         if let v = dict[Self.persistenceKeyMixesSearch], !v.isEmpty { mixesSearchScrollAnchorId = v }
     }
-    // Programa la persistencia de los ids de ancla de scroll con un pequeño retraso para evitar escrituras excesivas durante el scroll, y cancela cualquier tarea pendiente si se programa una nueva persistencia antes de que se ejecute la anterior.
+    // Schedules scroll-anchor persistence with a short delay to avoid excessive writes during scrolling.
     func schedulePersistScrollAnchors(_ persist: @escaping ([String: String]) -> Void) {
         persistScrollTask?.cancel()
         persistScrollTask = Task { @MainActor in
@@ -124,7 +124,7 @@ final class ScrollStateStore {
             }
         }
     }
-    // Programa la restauración del scroll a la posición almacenada para el contexto dado, con la opción de desplazarse primero al inicio para evitar problemas de restauración en listas largas, y cancela cualquier tarea de restauración pendiente para el mismo contexto antes de programar una nueva.
+    // Schedules scroll restoration for the stored context, optionally jumping to the top first for long lists.
     func scheduleSoundsScrollRestore(
         for context: Context,
         scrollToTopFirst: Bool,

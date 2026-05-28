@@ -25,12 +25,12 @@ final class AudioService: ObservableObject {
         backend.load(sound: sound)
     }
 
-    // Ajusta el volumen de un sonido específico, aplicando también el volumen global. Si el sonido no está cargado, no hace nada.
+    // Sets a sound's volume together with global volume. Missing sounds are ignored.
     func setVolume(soundId: String, volume: Double, globalVolume: Double) {
         backend.setVolume(soundId: soundId, volume: volume, globalVolume: globalVolume)
     }
 
-    /// Ajusta volumen con transición suave (crossfade).
+    /// Sets volume with a smooth crossfade transition.
     func setVolume(soundId: String, volume: Double, globalVolume: Double, fadeDuration: TimeInterval) {
         backend.setVolume(soundId: soundId, volume: volume, globalVolume: globalVolume, fadeDuration: fadeDuration)
     }
@@ -43,13 +43,13 @@ final class AudioService: ObservableObject {
         backend.pause(soundId: soundId)
     }
 
-    /// Deja de reproducir y elimina el player del diccionario para liberar memoria.
-    /// Debe llamarse cuando un sonido se deselecciona.
+    /// Stops playback and removes the player to free memory.
+    /// Call this when a sound is deselected.
     func unload(soundId: String) {
         backend.unload(soundId: soundId)
     }
 
-    /// Elimina todos los players cargados (libera memoria). Útil tras unselectAll o reset.
+    /// Removes all loaded players to free memory, useful after unselectAll or reset.
     func unloadAll() {
         backend.unloadAll()
     }
@@ -68,17 +68,17 @@ final class AudioService: ObservableObject {
 
     // MARK: - Crossfade
 
-    /// Mueve un player activo a outgoing e inicia fade-out a volumen 0.
+    /// Moves an active player to outgoing and fades it out to volume 0.
     func fadeOutAndUnload(soundId: String, duration: TimeInterval) {
         backend.fadeOutAndUnload(soundId: soundId, duration: duration)
     }
 
-    /// Programa la limpieza de outgoing players tras la duración del fade.
+    /// Schedules outgoing player cleanup after the fade duration.
     func scheduleOutgoingCleanup(after duration: TimeInterval) {
         backend.scheduleOutgoingCleanup(after: duration)
     }
 
-    /// Cancela cualquier crossfade en curso y limpia outgoing players inmediatamente.
+    /// Cancels any in-progress crossfade and cleans outgoing players immediately.
     func cancelCrossfadeAndCleanup() {
         backend.cancelCrossfadeAndCleanup()
     }

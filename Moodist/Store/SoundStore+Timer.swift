@@ -3,14 +3,14 @@ import Foundation
 extension SoundStore {
     // MARK: - Auto Mix Timer
 
-    /// Intervalos disponibles para el cambio automático de mix.
+    /// Available intervals for automatic mix changes.
     static let autoMixIntervalPresets: [Int] = [5, 10, 15, 20, 30, 40, 50, 60].map { $0 * 60 }
 
     var hasActiveAutoMixTimer: Bool { autoMixIntervalSeconds != nil }
-    /// Fecha en que el timer disparará el siguiente cambio de mix.
+    /// Date when the timer will trigger the next mix change.
     var autoMixNextFireDate: Date? { autoMixTimerToken?.fireDate }
 
-    /// Inicia un timer repetitivo que cambia al siguiente mix aleatorio cada `intervalSeconds`.
+    /// Starts a repeating timer that switches to the next random mix every `intervalSeconds`.
     func startAutoMixTimer(intervalSeconds: Int) {
         autoMixTimerToken?.invalidate()
         autoMixIntervalSeconds = intervalSeconds
@@ -21,14 +21,14 @@ extension SoundStore {
         }
     }
 
-    /// Detiene el timer de cambio automático de mix.
+    /// Stops the automatic mix-change timer.
     func cancelAutoMixTimer() {
         autoMixTimerToken?.invalidate()
         autoMixTimerToken = nil
         autoMixIntervalSeconds = nil
     }
 
-    /// Etiqueta larga para el menú del Pomodoro ("5 minutes", "1 hour", etc.).
+    /// Long label for the Pomodoro menu ("5 minutes", "1 hour", etc.).
     func autoMixIntervalLabel(forSeconds seconds: Int) -> String {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .full
@@ -38,7 +38,7 @@ extension SoundStore {
 
     // MARK: - Timers (Sleep)
 
-    // Inicia timer de sueño, registra uso y programa callback de finalización.
+    // Starts a sleep timer, records usage, and schedules the completion callback.
     func startSleepTimer(durationSeconds: Int, name: String? = nil) {
         let safeDuration = max(1, durationSeconds)
         cancelSleepTimer()
@@ -59,26 +59,26 @@ extension SoundStore {
         NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
     }
 
-    // Cancela timer activo y notifica cambio de estado para refrescar menús/UI.
+    // Cancels the active timer and notifies menus/UI to refresh state.
     func cancelSleepTimer() {
         activeTimerToken?.invalidate()
         activeTimerToken = nil
         activeTimer = nil
         NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
     }
-    // Calcula tiempo restante del timer activo y formatea etiqueta
+    // Computes remaining time for the active timer and formats the menu label.
     var timerRemainingMenuTitle: String? {
         guard let activeTimer else { return nil }
         let remaining = activeTimer.remainingSeconds
         return L10n.timerRemaining(timerRemainingString(seconds: remaining))
     }
 
-    // Etiqueta usada para presets de timer en menús.
+    // Label used for timer presets in menus.
     func timerLabel(forSeconds seconds: Int) -> String {
         timerPresetString(seconds: seconds)
     }
 
-    // Formatea presets (minutos/horas) de forma compacta.
+    // Formats minute/hour presets compactly.
     private func timerPresetString(seconds: Int) -> String {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .abbreviated
@@ -90,7 +90,7 @@ extension SoundStore {
         return formatter.string(from: TimeInterval(seconds)) ?? "\(seconds)s"
     }
 
-    // Formatea el tiempo restante con más granularidad cerca del final.
+    // Formats remaining time with more granularity near the end.
     private func timerRemainingString(seconds: Int) -> String {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .abbreviated
@@ -105,7 +105,7 @@ extension SoundStore {
         return formatter.string(from: TimeInterval(seconds)) ?? "\(seconds)s"
     }
 
-    // Flujo de fin de timer: detiene audio, limpia estado y dispara notificación local.
+    // Timer completion flow: stops audio, clears state, and triggers a local notification.
     private func completeSleepTimer() {
         activeTimerToken?.invalidate()
         activeTimerToken = nil

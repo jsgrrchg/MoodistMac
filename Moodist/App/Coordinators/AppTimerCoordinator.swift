@@ -12,7 +12,7 @@ final class AppTimerCoordinator: NSObject {
     private var timerWindowCloseObserver: NSObjectProtocol?
 
     func stop() {
-        // Limpieza completa de recursos temporales del coordinador.
+        // Fully clean up the coordinator's temporary resources.
         stopTimerMenuUpdates()
         closeCustomTimerWindow()
         if let observer = timerWindowCloseObserver {
@@ -22,7 +22,7 @@ final class AppTimerCoordinator: NSObject {
     }
 
     func appendTimerSection(to menu: NSMenu, includeHeader: Bool) {
-        // Sección reusable para Dock/MenuBar con presets, custom y stop.
+        // Reusable Dock/MenuBar section with presets, custom timer, and stop.
         if includeHeader {
             let header = NSMenuItem(title: L10n.timer, action: nil, keyEquivalent: "")
             header.isEnabled = false
@@ -71,12 +71,12 @@ final class AppTimerCoordinator: NSObject {
     }
 
     func bindTimerRemainingMenuItem(_ item: NSMenuItem?) {
-        // Enlaza el item que muestra el tiempo restante para refresco por tick.
+        // Bind the item that shows remaining time for tick-based refresh.
         timerRemainingMenuItem = item
     }
 
     func startTimerMenuUpdates() {
-        // Ticker de 1s sólo cuando hay timer activo.
+        // One-second ticker only while a timer is active.
         timerMenuUpdate?.invalidate()
         guard soundStore?.hasActiveTimer == true else { return }
         timerMenuUpdate = Timer.scheduledTimer(
@@ -89,13 +89,13 @@ final class AppTimerCoordinator: NSObject {
     }
 
     func stopTimerMenuUpdates() {
-        // Evita updates de UI mientras el menú no está visible.
+        // Avoid UI updates while the menu is not visible.
         timerMenuUpdate?.invalidate()
         timerMenuUpdate = nil
     }
 
     func showCustomTimerWindow() {
-        // Reutiliza ventana existente para evitar crear múltiples instancias.
+        // Reuse the existing window to avoid creating multiple instances.
         guard let store = soundStore else { return }
 
         let rootView = TimerSetupView(store: store) { [weak self] in
@@ -108,7 +108,7 @@ final class AppTimerCoordinator: NSObject {
             let window = controller.window
         {
             if let host = window.contentViewController as? NSHostingController<AnyView> {
-                // Refresca estilo/acento por si cambió desde la última apertura.
+                // Refresh style and accent in case they changed since the last opening.
                 host.rootView = AnyView(rootView)
             }
             positionTimerWindow(window)
@@ -129,7 +129,7 @@ final class AppTimerCoordinator: NSObject {
 
         let controller = NSWindowController(window: window)
         timerWindowController = controller
-        // Libera referencias cuando la ventana se cierra desde AppKit.
+        // Release references when AppKit closes the window.
         timerWindowCloseObserver = NotificationCenter.default.addObserver(
             forName: NSWindow.willCloseNotification,
             object: window,
@@ -173,7 +173,7 @@ final class AppTimerCoordinator: NSObject {
     }
 
     private func refreshTimerRemainingMenuItem() {
-        // Mantiene sincronizado el contador visible en el menú.
+        // Keep the visible menu countdown synchronized.
         guard let item = timerRemainingMenuItem else { return }
         if let title = soundStore?.timerRemainingMenuTitle {
             item.isHidden = false
@@ -184,7 +184,7 @@ final class AppTimerCoordinator: NSObject {
     }
 
     private func positionTimerWindow(_ window: NSWindow) {
-        // Centra la ventana de timer sobre la ventana principal (o pantalla si no existe).
+        // Center the timer window over the main window, or the screen if unavailable.
         let anchorWindow = anchorWindowProvider?()
         guard let anchorWindow else {
             window.center()
@@ -203,7 +203,7 @@ final class AppTimerCoordinator: NSObject {
     }
 
     private func timerLabelFallback(seconds: Int) -> String {
-        // Formato defensivo si el store no está disponible.
+        // Defensive formatting when the store is unavailable.
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .abbreviated
         if seconds >= 3600 {
@@ -215,7 +215,7 @@ final class AppTimerCoordinator: NSObject {
     }
 
     private func currentPreferredColorScheme() -> ColorScheme? {
-        // Replica la preferencia de apariencia para consistencia visual.
+        // Mirror the appearance preference for visual consistency.
         let raw =
             UserDefaults.standard.string(forKey: PersistenceService.appearanceModeKey) ?? "system"
         switch raw {
@@ -229,7 +229,7 @@ final class AppTimerCoordinator: NSObject {
     }
 
     private func currentAccentColor() -> Color? {
-        // Toma el acento persistido para aplicar tema en la ventana de timer.
+        // Use the persisted accent to theme the timer window.
         let raw =
             UserDefaults.standard.string(forKey: PersistenceService.accentColorHexKey)
             ?? AccentColorChoice.graphite.rawValue

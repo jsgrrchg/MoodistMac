@@ -2,7 +2,7 @@
 //  OptionsView.swift
 //  MoodistMac
 //
-//  Menú de opciones: Reproducción, Datos, Acerca de.
+//  Options menu: Playback, Data, and About.
 //
 
 import AppKit

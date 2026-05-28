@@ -2,7 +2,7 @@
 //  TimerItem.swift
 //  MoodistMac
 //
-//  Temporizador: nombre, duración, estado (idle/running/paused).
+//  Timer: name, duration, and runtime state.
 //
 
 import Foundation
@@ -17,10 +17,10 @@ struct TimerItem: Identifiable, Codable, Equatable {
     var id: UUID
     var name: String
     var durationSeconds: Int
-    /// Estado en tiempo de ejecución (no se persiste).
+    /// Runtime state, not persisted.
     var state: TimerState = .idle
 
-    /// Calcula cuántos segundos quedan según el estado actual del temporizador.
+    /// Calculates remaining seconds from the current timer state.
     var remainingSeconds: Int {
         switch state {
         case .idle: return durationSeconds
@@ -29,7 +29,7 @@ struct TimerItem: Identifiable, Codable, Equatable {
         }
     }
 
-    /// Indica si el temporizador está activo.
+    /// Indicates whether the timer is running.
     var isRunning: Bool {
         if case .running = state { return true }
         return false
@@ -39,7 +39,7 @@ struct TimerItem: Identifiable, Codable, Equatable {
         case id, name, durationSeconds
     }
 
-    /// Inicializador principal que valida la duración mínima y permite definir el estado inicial en memoria.
+    /// Main initializer that validates minimum duration and accepts an initial in-memory state.
     init(id: UUID = UUID(), name: String, durationSeconds: Int, state: TimerState = .idle) {
         self.id = id
         self.name = name
@@ -47,7 +47,7 @@ struct TimerItem: Identifiable, Codable, Equatable {
         self.state = state
     }
 
-    /// Decodifica campos persistentes, siempre empezando en estado idle porque el estado no se guarda.
+    /// Decodes persisted fields and always starts idle because runtime state is not saved.
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decode(UUID.self, forKey: .id)
@@ -56,7 +56,7 @@ struct TimerItem: Identifiable, Codable, Equatable {
         state = .idle
     }
 
-    /// Codifica solo los metadatos persistentes (sin estado en memoria).
+    /// Encodes only persisted metadata, without runtime state.
     func encode(to encoder: Encoder) throws {
         var c = encoder.container(keyedBy: CodingKeys.self)
         try c.encode(id, forKey: .id)
@@ -64,7 +64,7 @@ struct TimerItem: Identifiable, Codable, Equatable {
         try c.encode(durationSeconds, forKey: .durationSeconds)
     }
 
-    /// La igualdad ignora el estado en memoria porque cada instancia puede llevar su propio estado.
+    /// Equality ignores runtime state because each instance may carry its own state.
     static func == (lhs: TimerItem, rhs: TimerItem) -> Bool {
         lhs.id == rhs.id && lhs.name == rhs.name && lhs.durationSeconds == rhs.durationSeconds
     }

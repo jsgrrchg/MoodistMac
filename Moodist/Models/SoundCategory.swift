@@ -2,7 +2,7 @@
 //  SoundCategory.swift
 //  MoodistMac
 //
-//  Categoría de sonidos: id, título, icono SF Symbol, lista de sonidos.
+//  Sound category: ID, title, SF Symbol icon, and sound list.
 //
 
 import Foundation

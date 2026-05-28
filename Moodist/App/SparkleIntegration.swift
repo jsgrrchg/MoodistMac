@@ -2,7 +2,7 @@ import SwiftUI
 import Combine
 import Sparkle
 
-/// View model que publica cuando se pueden comprobar actualizaciones
+/// View model that publishes whether update checks are available.
 final class CheckForUpdatesViewModel: ObservableObject {
     @Published var canCheckForUpdates = false
 
@@ -12,7 +12,7 @@ final class CheckForUpdatesViewModel: ObservableObject {
     }
 }
 
-/// Vista para el ítem de menú "Buscar actualizaciones..."
+/// View for the "Check for Updates..." menu item.
 struct CheckForUpdatesView: View {
     @ObservedObject private var viewModel: CheckForUpdatesViewModel
     private let updater: SPUUpdater
@@ -57,7 +57,7 @@ final class MoodistUpdaterCoordinator {
     }
 }
 
-// MARK: - Environment: Sparkle updater para OptionsView
+// MARK: - Environment: Sparkle Updater
 
 private struct SparkleUpdaterKey: EnvironmentKey {
     static let defaultValue: SPUUpdater? = nil

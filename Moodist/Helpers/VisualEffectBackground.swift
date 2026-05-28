@@ -2,8 +2,8 @@
 //  VisualEffectBackground.swift
 //  MoodistMac
 //
-//  Fondo con vibrancy/transparencia para macOS (NSVisualEffectView).
-//  En macOS 26+ se puede combinar con Liquid Glass; aquí se usa para versiones anteriores.
+//  Vibrancy and transparency background for macOS using NSVisualEffectView.
+//  On macOS 26+, it can be combined with Liquid Glass; here it supports earlier versions.
 //
 
 import SwiftUI

@@ -2,46 +2,46 @@
 //  FloatingPlayerPanelView.swift
 //  MoodistMac
 //
-//  Barra flotante del reproductor con Liquid Glass (macOS 26+) o NSVisualEffectView (versiones anteriores).
+//  Floating player bar using Liquid Glass on macOS 26+ or NSVisualEffectView on earlier versions.
 //
 
 import AppKit
 import SwiftUI
 
-/// Forma redondeada sutil para el reproductor
+/// Subtle rounded shape for the player.
 private let floatingBarShape = RoundedRectangle(
     cornerRadius: 12,
     style: .continuous
 )
 
-/// Ratio de ancho en ventanas grandes (tipo Apple Music)
+/// Width ratio for large windows, similar to Apple Music.
 private let floatingBarWidthRatioNormal: CGFloat = 0.88
-/// Ratio en ventanas angostas: la barra usa casi todo el ancho disponible
+/// Width ratio for narrow windows, where the bar uses most available width.
 private let floatingBarWidthRatioNarrow: CGFloat = 0.96
-/// Ancho de ventana por debajo del cual se usa ratio “narrow”
+/// Window width below which the narrow ratio is used.
 private let narrowWindowThreshold: CGFloat = 420
-/// Ancho mínimo de la barra para ventanas muy angostas (el contenido se comprime con minWidth en slider/título)
+/// Minimum bar width for very narrow windows, with content compressed by slider/title minWidth.
 private let floatingBarMinWidth: CGFloat = 220
 private let floatingBarMaxWidth: CGFloat = 900
-/// Margen inferior desde el borde de la ventana
+/// Bottom margin from the window edge.
 private let floatingBarBottomMargin: CGFloat = 12
-/// Margen horizontal; en ventanas angostas se reduce
+/// Horizontal margin, reduced in narrow windows.
 private let floatingBarHorizontalMarginNormal: CGFloat = 20
 private let floatingBarHorizontalMarginNarrow: CGFloat = 10
-/// Altura compacta de la barra (estilo reproductor mínimo)
+/// Compact bar height for the minimal player style.
 private let floatingBarHeight: CGFloat = 52
-/// Umbral por debajo del cual se usa layout compacto
+/// Threshold below which compact layout is used.
 private let compactLayoutThreshold: CGFloat = 380
-/// Umbral por debajo del cual se usa layout minimal (muy angosto)
+/// Threshold below which minimal layout is used.
 private let minimalLayoutThreshold: CGFloat = 300
-/// Ancho mínimo del slider de volumen para que se comprima en ventanas muy angostas
+/// Minimum volume slider width so it can compress in very narrow windows.
 private let sliderMinWidth: CGFloat = 32
-/// Espaciado entre zonas (icono+controles | título | volumen) para una disposición clara
+/// Spacing between zones: icon and controls, title, and volume.
 private let barZoneSpacing: CGFloat = 20
 
-/// Velocidad del marquesina (puntos por segundo)
+/// Marquee speed in points per second.
 private let marqueeSpeed: CGFloat = 25
-/// Intervalo de refresco para marquesina SwiftUI (fallback)
+/// Refresh interval for the SwiftUI marquee fallback.
 #if !os(macOS)
     private let marqueeTickInterval: TimeInterval = 0.06
 #endif
@@ -53,7 +53,7 @@ private struct TextWidthKey: PreferenceKey {
     }
 }
 
-/// Título que se desplaza en horizontal cuando no cabe (estilo reproductor clásico).
+/// Title that scrolls horizontally when it does not fit, like a classic player.
 private struct MarqueeLabel: View {
     let text: String
     let fontSize: CGFloat
@@ -169,7 +169,7 @@ struct BottomPlayerBarView: View {
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
 
-    /// En modo oscuro texto en blanco; en claro, texto secundario.
+    /// White text in dark mode; secondary text in light mode.
     private var playerBarTextColor: Color {
         colorScheme == .dark ? .white : MoodistTheme.Colors.secondaryText
     }
@@ -228,7 +228,7 @@ struct BottomPlayerBarView: View {
         return VStack(spacing: 0) {
             Spacer(minLength: 0)
             HStack(alignment: .center, spacing: zoneSpacing) {
-                // Zona izquierda: botón tipo “portada” (icono) + controles de reproducción
+                // Left zone: cover-style icon button plus playback controls.
                 HStack(alignment: .center, spacing: controlsInnerSpacing) {
                     Button(action: { store.shuffle() }) {
                         Image(systemName: "shuffle")
@@ -274,7 +274,7 @@ struct BottomPlayerBarView: View {
                     .help(L10n.nextMix)
                 }
 
-                // Zona central: título del mix (marquesina si no cabe)
+                // Center zone: mix title with marquee when it does not fit.
                 MarqueeLabel(
                     text: displayLabel,
                     fontSize: titleFontSize,
@@ -283,7 +283,7 @@ struct BottomPlayerBarView: View {
                 )
                 .layoutPriority(0)
 
-                // Zona derecha: volumen (altavoz + slider), fondo opaco para que la marquesina no se trasluzca
+                // Right zone: volume controls with an opaque background so the marquee does not show through.
                 HStack(alignment: .center, spacing: volumeSpacing) {
                     Image(systemName: store.isMuted ? "speaker.slash.fill" : "speaker.wave.2.fill")
                         .font(.system(size: isMinimal ? 8 : (isCompact ? 9 : 11)))
@@ -312,7 +312,7 @@ struct BottomPlayerBarView: View {
         #if LIQUID_GLASS_SDK
             if #available(macOS 26.0, *) {
                 if transparencyEnabled {
-                    // Liquid Glass: .glassEffect aplica el efecto de cristal real en macOS 26
+                    // Liquid Glass: .glassEffect applies the real glass effect on macOS 26.
                     barContent(availableWidth: availableWidth, barTextColor: .primary)
                         .glassEffect(in: .rect(cornerRadius: 12))
                         .contentShape(floatingBarShape)
