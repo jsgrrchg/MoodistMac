@@ -68,3 +68,16 @@ jobs:
             --release-notes-url https://raw.githubusercontent.com/jsgrrchg/MoodistMac/main/release-notes/v9.9.9.html \
             --asset-url https://github.com/jsgrrchg/MoodistMac/releases/download/v9.9.9/MoodistMac.zip
           xmllint --noout "$tmp_appcast"
+
+      - name: Build app
+        run: |
+          set -euo pipefail
+          xcodebuild -resolvePackageDependencies \
+            -project Moodist.xcodeproj \
+            -scheme MoodistMac
+          xcodebuild \
+            -project Moodist.xcodeproj \
+            -scheme MoodistMac \
+            -configuration Release \
+            -destination "generic/platform=macOS" \
+            build
