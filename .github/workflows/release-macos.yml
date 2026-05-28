@@ -568,7 +568,11 @@ jobs:
             --release-notes-url "$release_notes_url" \
             --asset-url "$asset_url"
 
-          xmllint --noout appcast.xml
+          python3 - <<'PY'
+          import xml.etree.ElementTree as ET
+
+          ET.parse("appcast.xml")
+          PY
 
       - name: Commit appcast update
         run: |
