@@ -204,6 +204,15 @@ jobs:
             -k "$keychain_password" \
             "$keychain_path"
           security find-identity -v -p codesigning "$keychain_path"
+          signing_identity="$(
+            security find-identity -v -p codesigning "$keychain_path" \
+              | sed -n 's/.*"\(Developer ID Application:.*\)".*/\1/p' \
+              | head -1
+          )"
+          if [[ -z "$signing_identity" ]]; then
+            echo "::error::Could not find Developer ID Application signing identity."
+            exit 1
+          fi
 
           xcodebuild archive \
             -project "$PROJECT" \
@@ -214,13 +223,36 @@ jobs:
             -derivedDataPath "$RUNNER_TEMP/DerivedData" \
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" \
-            CODE_SIGN_IDENTITY="Developer ID Application" \
+            CODE_SIGN_IDENTITY="$signing_identity" \
             CODE_SIGN_INJECT_BASE_ENTITLEMENTS=NO \
             OTHER_CODE_SIGN_FLAGS="--timestamp" \
             ONLY_ACTIVE_ARCH=NO
 
           mkdir -p "$export_dir"
           ditto "$archive_path/Products/Applications/${APP_NAME}.app" "$app_path"
+
+          sign_sparkle_path() {
+            local code_path="$1"
+            if [[ -e "$code_path" ]]; then
+              codesign --force --options runtime --timestamp --sign "$signing_identity" "$code_path"
+            fi
+          }
+
+          sparkle_framework="$app_path/Contents/Frameworks/Sparkle.framework"
+          sparkle_version_dir="$sparkle_framework/Versions/B"
+          if [[ -d "$sparkle_version_dir" ]]; then
+            sign_sparkle_path "$sparkle_version_dir/XPCServices/Downloader.xpc"
+            sign_sparkle_path "$sparkle_version_dir/XPCServices/Installer.xpc"
+            sign_sparkle_path "$sparkle_version_dir/Updater.app"
+            sign_sparkle_path "$sparkle_version_dir/Autoupdate"
+            sign_sparkle_path "$sparkle_framework"
+            codesign --force \
+              --options runtime \
+              --timestamp \
+              --entitlements Moodist/MoodistMac.entitlements \
+              --sign "$signing_identity" \
+              "$app_path"
+          fi
 
           actual_feed_url="$(plutil -extract SUFeedURL raw -o - "$app_path/Contents/Info.plist")"
           actual_public_key="$(plutil -extract SUPublicEDKey raw -o - "$app_path/Contents/Info.plist")"
