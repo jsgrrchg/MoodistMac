@@ -39,7 +39,13 @@ jobs:
           set -euo pipefail
           bash -n scripts/release/*.sh
           node --check scripts/release/build-release-notes.mjs
+          node --check scripts/release/test-release-tooling.mjs
           node --check scripts/release/update-appcast.mjs
+
+      - name: Test release tooling
+        run: |
+          set -euo pipefail
+          node scripts/release/test-release-tooling.mjs
 
       - name: Validate app metadata
         run: |
