@@ -2,7 +2,7 @@
 //  PlatformColor.swift
 //  MoodistMac
 //
-//  Colores para macOS (Big Sur+).
+//  macOS colors for Big Sur and later.
 //
 
 import SwiftUI

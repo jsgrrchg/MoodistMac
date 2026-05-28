@@ -11,20 +11,20 @@ final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
     private var players: [String: AVAudioPlayer] = [:]
     private let bundle: Bundle
 
-    /// Players en proceso de fade-out, pendientes de limpieza.
+    /// Players currently fading out and waiting for cleanup.
     private var outgoingPlayers: [String: AVAudioPlayer] = [:]
     private var outgoingCleanupTask: Task<Void, Never>?
 
     init(bundle: Bundle = .main) {
         self.bundle = bundle
-        // macOS no usa AVAudioSession; la reproduccion se mezcla con el sistema por defecto.
+        // macOS does not use AVAudioSession; playback mixes with the system by default.
     }
 
     @discardableResult
     func load(sound: Sound) -> Bool {
         if players[sound.id] != nil { return true }
 
-        // Si estaba en outgoing (fade-out en curso), rescatarlo al pool activo.
+        // If it was outgoing during fade-out, move it back to the active pool.
         if let outgoing = outgoingPlayers.removeValue(forKey: sound.id) {
             players[sound.id] = outgoing
             return true

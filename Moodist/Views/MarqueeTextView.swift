@@ -16,7 +16,7 @@ struct MarqueeTextView: NSViewRepresentable {
     let spacing: CGFloat
     let containerWidth: CGFloat
     let isEnabled: Bool
-    /// Dependencia explícita del esquema de color para que SwiftUI llame a updateNSView al cambiar claro/oscuro.
+    /// Explicit color-scheme dependency so SwiftUI calls updateNSView when light/dark mode changes.
     var colorScheme: ColorScheme
 
     func makeNSView(context: Context) -> MarqueeTextHostView {

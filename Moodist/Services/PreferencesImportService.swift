@@ -2,7 +2,7 @@
 //  PreferencesImportService.swift
 //  MoodistMac
 //
-//  Presenta NSOpenPanel, lee un JSON de preferencias exportadas y devuelve los datos para aplicar.
+//  Presents NSOpenPanel, reads exported preferences JSON, and returns the data to apply.
 //
 
 import Foundation
@@ -12,8 +12,8 @@ import AppKit
 #endif
 
 enum PreferencesImportService {
-    /// Presenta el panel de abrir, lee el archivo JSON y decodifica ExportedPreferences.
-    /// - Returns: Los datos importados si el usuario eligió un archivo válido; nil si canceló o hubo error.
+    /// Presents the open panel, reads the JSON file, and decodes ExportedPreferences.
+    /// - Returns: Imported data when the user chooses a valid file; nil when canceled or on error.
     @MainActor
     static func presentImportPanel() -> ExportedPreferences? {
 #if canImport(AppKit)

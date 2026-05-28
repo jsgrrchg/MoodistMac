@@ -2,7 +2,7 @@
 //  Color+Hex.swift
 //  MoodistMac
 //
-//  Persistencia de color de acento como hex en UserDefaults.
+//  Persists the accent color as a hex value in UserDefaults.
 //
 
 import SwiftUI
@@ -11,7 +11,7 @@ import AppKit
 #endif
 
 extension Color {
-    /// Devuelve el color en hex "#RRGGBB". En macOS usa NSColor para obtener componentes.
+    /// Returns the color as "#RRGGBB". On macOS, NSColor provides the components.
     var hexString: String {
         #if canImport(AppKit)
         let ns = NSColor(self)

@@ -20,7 +20,7 @@ struct TitlebarDragArea: NSViewRepresentable {
     }
 }
 
-/// Detecta scroll horizontal (trackpad/Magic Mouse) para cambiar de sección.
+/// Detects horizontal scrolling from a trackpad or Magic Mouse to switch sections.
 struct HorizontalSectionSwipeDetector: NSViewRepresentable {
     let onSwipeToMixes: () -> Void
     let onSwipeToSounds: () -> Void
@@ -104,7 +104,7 @@ struct HorizontalSectionSwipeDetector: NSViewRepresentable {
                 return event
             }
 
-            // Ignorar inercia y edición de texto para evitar cambios accidentales.
+            // Ignore inertia and text editing to avoid accidental section changes.
             if event.momentumPhase != [] {
                 resetAccumulation()
                 return event
@@ -129,7 +129,7 @@ struct HorizontalSectionSwipeDetector: NSViewRepresentable {
             guard now - lastTriggerUptime >= swipeCooldown else { return event }
             lastTriggerUptime = now
 
-            // Dirección invertida según preferencia: deltaX positiva -> Sounds, negativa -> Mixes.
+            // Inverted direction by preference: positive deltaX -> Sounds, negative -> Mixes.
             if accumulatedDeltaX > 0 {
                 onSwipeToSounds()
             } else {
@@ -157,7 +157,7 @@ struct HorizontalSectionSwipeDetector: NSViewRepresentable {
     }
 }
 
-/// Barra de búsqueda nativa de macOS (NSSearchField con estilo estándar de Apple).
+/// Native macOS search field using the standard Apple NSSearchField style.
 struct ToolbarSearchField: NSViewRepresentable {
     @Binding var text: String
     let placeholder: String

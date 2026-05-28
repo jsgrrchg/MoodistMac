@@ -2,7 +2,7 @@
 //  MixCategoryView.swift
 //  MoodistMac
 //
-//  Vista de una categoría de mixes: título, icono, lista de mixes. Tap en un mix aplica y reproduce.
+//  Mix category view with title, icon, and mix list. Tapping a mix applies and plays it.
 //
 
 import SwiftUI
@@ -11,11 +11,11 @@ struct MixCategoryView: View {
     let category: MixCategory
     @ObservedObject var store: SoundStore
     @Environment(\.contentAreaWidth) private var contentAreaWidth
-    /// Si no es nil, se muestran solo estos mixes (p. ej. resultados de búsqueda). Si es nil, se usan category.mixes.
+    /// When non-nil, shows only these mixes, for example search results. Otherwise uses category.mixes.
     var mixesToShow: [Mix]? = nil
-    /// Binding opcional para controlar el estado expandido desde fuera. Si es nil, usa estado interno.
+    /// Optional binding for controlling expanded state externally. Nil uses internal state.
     var isExpanded: Binding<Bool>? = nil
-    /// Vista opcional a la derecha del título en la cabecera (p. ej. botón "Expand all" en Custom Mixes).
+    /// Optional view on the right side of the header title, such as an "Expand all" button.
     var headerTrailing: AnyView? = nil
     @State private var internalIsExpanded = true
     
@@ -101,7 +101,7 @@ struct MixRowView: View {
     @Environment(\.isUserScrolling) private var isUserScrolling
     @State private var isHovered = false
     
-    // Cache estático para evitar recalcular soundsInMix en cada render (solo en main thread).
+    // Static cache to avoid recalculating soundsInMix on every render, main thread only.
     private static var soundsCache: [String: [Sound]] = [:]
 
     private var isCurrentMix: Bool {
@@ -112,7 +112,7 @@ struct MixRowView: View {
         store.favoriteMixIds.contains(mix.id)
     }
 
-    /// Nombre a mostrar: para mixes built-in usa L10n; para custom presets usa mix.name.
+    /// Display name: built-in mixes use L10n, while custom presets use mix.name.
     private var mixDisplayName: String {
         (L10n.mixName(mix.id) == mix.id) ? mix.name : L10n.mixName(mix.id)
     }

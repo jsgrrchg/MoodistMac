@@ -1,7 +1,7 @@
 import Foundation
 
 extension SoundStore {
-    // Alterna favorito de sonido y sincroniza el orden persistido de favoritos.
+    // Toggles a sound favorite and synchronizes the persisted favorite order.
     func toggleFavorite(_ id: String) {
         guard var item = sounds[id] else { return }
         item.isFavorite.toggle()
@@ -13,7 +13,7 @@ extension SoundStore {
         }
     }
 
-    /// Añade o quita un mix de favoritos por su id.
+    /// Adds or removes a mix favorite by ID.
     func toggleFavoriteMix(id: String) {
         if favoriteMixIds.contains(id) {
             favoriteMixIds.removeAll { $0 == id }
@@ -22,7 +22,7 @@ extension SoundStore {
         }
     }
 
-    // Inserta al inicio y recorta al límite configurado para recientes de mixes.
+    // Inserts at the front and trims to the configured recent mixes limit.
     func addToRecentMixes(mixId: String) {
         var ids = recentMixIds
         ids.removeAll { $0 == mixId }
@@ -31,7 +31,7 @@ extension SoundStore {
         recentMixIds = Array(ids.prefix(limit))
     }
 
-    // Inserta al inicio y recorta al límite configurado para recientes de sonidos.
+    // Inserts at the front and trims to the configured recent sounds limit.
     func addToRecentSounds(soundId: String) {
         var ids = recentSoundIds
         ids.removeAll { $0 == soundId }
@@ -40,7 +40,7 @@ extension SoundStore {
         recentSoundIds = Array(ids.prefix(limit))
     }
 
-    /// Recorta la lista de mixes recientes al límite configurado en Opciones (p. ej. al reducir el máximo).
+    /// Trims recent mixes to the limit configured in Options.
     func trimRecentMixIdsToLimit() {
         let limit = PersistenceService.loadMaxRecentMixesCount()
         if recentMixIds.count > limit {
@@ -48,7 +48,7 @@ extension SoundStore {
         }
     }
 
-    /// Recorta la lista de sonidos recientes al límite configurado en Opciones.
+    /// Trims recent sounds to the limit configured in Options.
     func trimRecentSoundIdsToLimit() {
         let limit = PersistenceService.loadMaxRecentSoundsCount()
         if recentSoundIds.count > limit {

@@ -21,7 +21,7 @@ enum PersistenceService {
     static let transparencyEnabledKey = "MoodistMac.transparencyEnabled"
     static let mediaKeyNextMixKey = "MoodistMac.mediaKeyNextMix"
     static let collapseCategoriesOnColdOpenKey = "MoodistMac.collapseCategoriesOnColdOpen"
-    /// Clave que usa AppKit para persistir el frame de la ventana principal.
+    /// Key AppKit uses to persist the main window frame.
     private static let appKitMainWindowFrameKey = "NSWindow Frame MoodistMainWindow"
     private static let sidebarSectionsCollapsedKey = "MoodistMac.sidebarSectionsCollapsed"
     private static let timerUsageCountsKey = "MoodistMac.timerUsageCounts"
@@ -53,8 +53,8 @@ enum PersistenceService {
             return presets
         }
 
-        // Fallback tolerante: recupera elementos válidos si el array contiene
-        // entradas legacy/corruptas que invalidan el decode completo.
+        // Tolerant fallback: recover valid elements when legacy or corrupt entries
+        // prevent the full array from decoding.
         guard let rawArray = (try? JSONSerialization.jsonObject(with: data, options: [])) as? [Any]
         else {
             NSLog("MoodistMac: failed to decode presets payload.")
@@ -82,12 +82,12 @@ enum PersistenceService {
         }
         return recovered
     }
-    // Guarda los presets codificados como JSON. Si el encode falla, no hace nada para evitar corromper datos existentes.
+    // Saves presets as encoded JSON. If encoding fails, keep existing data untouched.
     static func savePresets(_ presets: [Preset]) {
         guard let data = try? JSONEncoder().encode(presets) else { return }
         UserDefaults.standard.set(data, forKey: presetsKey)
     }
-    // Carga y guarda arrays de ids (recientes y favoritos) codificados como JSON. Si el decode falla, devuelve array vacío para evitar corromper datos existentes.
+    // Loads recent and favorite ID arrays from JSON, returning an empty array if decoding fails.
     static func loadRecentMixIds() -> [String] {
         guard let data = UserDefaults.standard.data(forKey: recentMixIdsKey),
             let ids = try? JSONDecoder().decode([String].self, from: data)
@@ -136,13 +136,13 @@ enum PersistenceService {
         UserDefaults.standard.set(data, forKey: favoriteSoundIdsKey)
     }
 
-    /// Máximo de mixes recientes en la barra lateral (5...15). Por defecto 10.
+    /// Maximum recent mixes in the sidebar (5...15). Defaults to 10.
     static func loadMaxRecentMixesCount() -> Int {
         let v = UserDefaults.standard.object(forKey: maxRecentMixesCountKey) as? Int ?? 10
         return min(15, max(5, v))
     }
 
-    /// Máximo de sonidos recientes en la barra lateral (5...15). Por defecto 12.
+    /// Maximum recent sounds in the sidebar (5...15). Defaults to 12.
     static func loadMaxRecentSoundsCount() -> Int {
         let v = UserDefaults.standard.object(forKey: maxRecentSoundsCountKey) as? Int ?? 12
         return min(15, max(5, v))
@@ -159,13 +159,13 @@ enum PersistenceService {
         UserDefaults.standard.set(enabled, forKey: transparencyEnabledKey)
     }
 
-    /// Si true, la tecla de medios "Siguiente" pasa al siguiente mix. Por defecto true.
+    /// When true, the "Next" media key advances to the next mix. Defaults to true.
     static func loadMediaKeyNextMix() -> Bool {
         guard UserDefaults.standard.object(forKey: mediaKeyNextMixKey) != nil else { return true }
         return UserDefaults.standard.bool(forKey: mediaKeyNextMixKey)
     }
 
-    /// Estado colapsado de secciones de la barra lateral (id -> true = colapsado). Por defecto todas expandidas.
+    /// Collapsed sidebar section state (ID -> true = collapsed). Defaults to all expanded.
     static func loadSidebarSectionsCollapsed() -> [String: Bool] {
         guard let data = UserDefaults.standard.data(forKey: sidebarSectionsCollapsedKey),
             let dict = try? JSONDecoder().decode([String: Bool].self, from: data)
@@ -178,7 +178,7 @@ enum PersistenceService {
         UserDefaults.standard.set(data, forKey: sidebarSectionsCollapsedKey)
     }
 
-    /// Uso de temporizadores (duración en segundos -> cantidad de uso).
+    /// Timer usage counts keyed by duration in seconds.
     static func loadTimerUsageCounts() -> [Int: Int] {
         guard
             let dict = UserDefaults.standard.dictionary(forKey: timerUsageCountsKey)
@@ -200,7 +200,7 @@ enum PersistenceService {
         UserDefaults.standard.set(dict, forKey: timerUsageCountsKey)
     }
 
-    /// Anchors de scroll por panel (sounds, mixes, soundsSearch, mixesSearch) para restaurar posición al cambiar de pestaña o reabrir la app.
+    /// Scroll anchors per panel, used to restore position when switching tabs or reopening the app.
     static func loadScrollAnchorIds() -> [String: String] {
         guard let data = UserDefaults.standard.data(forKey: scrollAnchorIdsKey),
             let dict = try? JSONDecoder().decode([String: String].self, from: data)
@@ -213,7 +213,7 @@ enum PersistenceService {
         UserDefaults.standard.set(data, forKey: scrollAnchorIdsKey)
     }
 
-    /// Borra todas las claves usadas por la app (sounds, globalVolume, presets, apariencia).
+    /// Removes all keys used by the app, including sounds, volume, presets, and appearance.
     static func resetAll() {
         UserDefaults.standard.removeObject(forKey: soundsKey)
         UserDefaults.standard.removeObject(forKey: globalVolumeKey)

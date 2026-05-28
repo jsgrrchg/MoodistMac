@@ -141,7 +141,7 @@ extension SaveMixIconCategory {
 
 // MARK: - Vertical-to-horizontal scroll interceptor
 
-/// Redirige el scroll vertical del mouse (rueda) a scroll horizontal en la vista padre.
+/// Redirects vertical mouse-wheel scrolling to horizontal scrolling in the parent view.
 private struct HScrollWheelInterceptorView: NSViewRepresentable {
     func makeNSView(context: Context) -> HScrollWheelNSView { HScrollWheelNSView() }
     func updateNSView(_ nsView: HScrollWheelNSView, context: Context) {}
@@ -171,7 +171,7 @@ private class HScrollWheelNSView: NSView {
             let pt = self.convert(event.locationInWindow, from: nil)
             guard self.bounds.contains(pt) else { return event }
             guard let cge = event.cgEvent?.copy() else { return event }
-            // Mueve el delta del eje vertical al eje horizontal
+            // Move the vertical-axis delta to the horizontal axis.
             let dy = cge.getDoubleValueField(.scrollWheelEventDeltaAxis1)
             let dypt = cge.getDoubleValueField(.scrollWheelEventPointDeltaAxis1)
             let dyfp = cge.getDoubleValueField(.scrollWheelEventFixedPtDeltaAxis1)
@@ -183,7 +183,7 @@ private class HScrollWheelNSView: NSView {
             cge.setDoubleValueField(.scrollWheelEventFixedPtDeltaAxis2, value: dyfp)
             guard let newEvent = NSEvent(cgEvent: cge) else { return event }
             NSApplication.shared.sendEvent(newEvent)
-            return nil  // Consume el evento original
+            return nil  // Consume the original event.
         }
     }
 }

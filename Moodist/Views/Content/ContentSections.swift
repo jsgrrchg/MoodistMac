@@ -23,7 +23,7 @@ struct CurrentlyPlayingSectionView: View {
     let onCancelTimer: () -> Void
 
     var body: some View {
-        // Título contextual: muestra nombre de mix cuando existe y el ancho lo permite.
+        // Contextual title: shows the mix name when it exists and width allows.
         let title: String = {
             guard let mixName = store.displayedMixName else { return L10n.currentlyPlaying }
             if contentAreaWidth < 420 { return mixName }
@@ -42,7 +42,7 @@ struct CurrentlyPlayingSectionView: View {
         let sectionHorizontalPadding: CGFloat =
             isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium
 
-        // Bloque principal: header de controles + lista de sonidos activos.
+        // Main block: controls header plus the active sound list.
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
             HStack(spacing: headerRowSpacing) {
                 Image(systemName: store.isPlaying ? "waveform" : "waveform.slash")
@@ -108,14 +108,14 @@ struct CurrentlyPlayingSectionView: View {
             }
             .padding(.vertical, headerVerticalPadding)
             if !playingSounds.isEmpty {
-                // Lista cacheada para no recalcular en cada tick de timer.
+                // Cached list to avoid recalculating on every timer tick.
                 LazyVStack(spacing: MoodistTheme.Spacing.small) {
                     ForEach(playingSounds, id: \.id) { sound in
                         SoundRow(sound: sound, store: store)
                     }
                 }
             } else {
-                // Estado vacío cuando no hay sonidos en reproducción.
+                // Empty state when no sounds are playing.
                 Text(L10n.noSoundsPlaying)
                     .font(MoodistTheme.Typography.subheadline)
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
@@ -246,7 +246,7 @@ struct CurrentlyPlayingSectionView: View {
 
     @ViewBuilder
     private func timerHeaderButton(isNarrow: Bool, isVeryNarrow: Bool) -> some View {
-        // Control de timer: abrir ventana + cancelación rápida.
+        // Timer control: open the window plus quick cancellation.
         HStack(spacing: 6) {
             Button(action: onOpenTimer) {
                 timerHeaderButtonLabel(isVeryNarrow: isVeryNarrow)
@@ -266,7 +266,7 @@ struct CurrentlyPlayingSectionView: View {
             .accessibilityLabel(store.hasActiveTimer ? L10n.timer : L10n.timerCustomTitle)
 
             if store.hasActiveTimer {
-                // Botón "x" para detener timer sin abrir la ventana de configuración.
+                // "X" button stops the timer without opening the setup window.
                 Button(action: onCancelTimer) {
                     Image(systemName: "xmark")
                         .font(.system(size: isNarrow ? 10 : 11, weight: .semibold))
@@ -304,7 +304,7 @@ struct CurrentlyPlayingSectionView: View {
     @ViewBuilder
     private func timerHeaderButtonLabel(isVeryNarrow: Bool) -> some View {
         if store.hasActiveTimer {
-            // Cuenta regresiva en vivo con dígitos monoespaciados para estabilidad visual.
+            // Live countdown with monospaced digits for visual stability.
             Label {
                 TimelineView(.periodic(from: Date(), by: 1.0)) { _ in
                     let secs = store.activeTimer?.remainingSeconds ?? 0
@@ -327,7 +327,7 @@ struct CurrentlyPlayingSectionView: View {
     }
 
     private func formatTimerRemaining(seconds: Int) -> String {
-        // Formato compacto: h:mm:ss o m:ss según duración restante.
+        // Compact format: h:mm:ss or m:ss depending on remaining duration.
         let s = max(0, seconds)
         let h = s / 3600
         let m = (s % 3600) / 60
@@ -351,7 +351,7 @@ struct CategoriesSectionView: View {
     var body: some View {
         let isNarrow = contentAreaWidth < 420
         let isVeryNarrow = contentAreaWidth < 340
-        // Sección de categorías de sonidos con acción global expandir/colapsar.
+        // Sound categories section with a global expand/collapse action.
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
             HStack(spacing: MoodistTheme.Spacing.small) {
                 Spacer(minLength: 0)
@@ -390,7 +390,7 @@ struct CategoriesSectionView: View {
                 .horizontal, isNarrow ? MoodistTheme.Spacing.small : MoodistTheme.Spacing.medium)
 
             VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
-                // Estado expandido por categoría usando diccionario por id.
+                // Expanded state per category using an ID-keyed dictionary.
                 ForEach(SoundsData.categories, id: \.id) { category in
                     CategoryView(
                         category: category,
@@ -405,7 +405,7 @@ struct CategoriesSectionView: View {
             }
         }
         .onAppear {
-            // Inicializa estados sólo en primera carga de la vista.
+            // Initialize states only during the first view load.
             if categoryExpandedStates.isEmpty {
                 for category in SoundsData.categories {
                     categoryExpandedStates[category.id] = defaultExpandedState
@@ -427,7 +427,7 @@ struct MixesPlaceholderSectionView: View {
     var body: some View {
         let isNarrow = contentAreaWidth < 420
         let isVeryNarrow = contentAreaWidth < 340
-        // Sección Mixes: bloque custom + categorías estándar con control global.
+        // Mixes section: custom block plus standard categories with a global control.
         return VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
             MixCategoryView(
                 category: MixesData.custom,
@@ -486,7 +486,7 @@ struct MixesPlaceholderSectionView: View {
                 )
 
                 VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
-                    // Excluye custom para no duplicar la categoría de presets del usuario.
+                    // Exclude custom to avoid duplicating the user's preset category.
                     ForEach(MixesData.categories.filter { $0.id != MixesData.custom.id }, id: \.id)
                     { category in
                         MixCategoryView(
@@ -507,7 +507,7 @@ struct MixesPlaceholderSectionView: View {
             }
         }
         .onAppear {
-            // Inicializa mapa de expansión de mixes una sola vez.
+            // Initialize the mix expansion map once.
             if mixCategoryExpandedStates.isEmpty {
                 for category in MixesData.categories {
                     mixCategoryExpandedStates[category.id] = defaultMixExpandedState(category.id)
@@ -523,7 +523,7 @@ struct MixesSearchResultsSectionView: View {
     var body: some View {
         let query = store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         let customMixes = store.presets.map { $0.toMix() }
-        // Filtra por nombre de mix o nombre de categoría; incluye mixes personalizados.
+        // Filter by mix or category name, including custom mixes.
         let filtered: [(MixCategory, [Mix])] = MixesData.categories.compactMap { category in
             let categoryTitle = L10n.mixCategoryTitle(category.id)
             let categoryMatches = categoryTitle.localizedStandardContains(query)
@@ -539,7 +539,7 @@ struct MixesSearchResultsSectionView: View {
 
         return Group {
             if filtered.isEmpty {
-                // Empty state cuando no hay resultados para la búsqueda.
+                // Empty state when the search has no results.
                 VStack(spacing: MoodistTheme.Spacing.medium) {
                     Image(systemName: "magnifyingglass")
                         .font(.largeTitle)
@@ -551,7 +551,7 @@ struct MixesSearchResultsSectionView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, MoodistTheme.Spacing.xLarge)
             } else {
-                // Resultados agrupados por categoría para mantener jerarquía visual.
+                // Results grouped by category to preserve visual hierarchy.
                 VStack(alignment: .leading, spacing: MoodistTheme.Spacing.xLarge) {
                     ForEach(filtered, id: \.0.id) { category, mixes in
                         MixCategoryView(category: category, store: store, mixesToShow: mixes)
@@ -569,7 +569,7 @@ struct SoundsSearchResultsSectionView: View {
 
     var body: some View {
         let query = store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        // Filtra sonidos por etiqueta o por coincidencia con el nombre de categoría.
+        // Filter sounds by label or matching category name.
         let filtered: [(SoundCategory, [Sound])] = SoundsData.categories.compactMap { category in
             let categoryTitle = L10n.categoryTitle(category.id)
             let categoryMatches = categoryTitle.localizedStandardContains(query)
@@ -583,7 +583,7 @@ struct SoundsSearchResultsSectionView: View {
 
         return Group {
             if filtered.isEmpty {
-                // Empty state de búsqueda para sonidos.
+                // Empty search state for sounds.
                 VStack(spacing: MoodistTheme.Spacing.medium) {
                     Image(systemName: "magnifyingglass")
                         .font(.largeTitle)
@@ -595,7 +595,7 @@ struct SoundsSearchResultsSectionView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, MoodistTheme.Spacing.xLarge)
             } else {
-                // Resultados de sonidos agrupados por categoría.
+                // Sound results grouped by category.
                 VStack(alignment: .leading, spacing: MoodistTheme.Spacing.large) {
                     ForEach(filtered, id: \.0.id) { category, sounds in
                         VStack(alignment: .leading, spacing: MoodistTheme.Spacing.small) {
@@ -646,7 +646,7 @@ struct ContentScrollPanelView<SectionContent: View>: View {
     @ViewBuilder let sections: () -> SectionContent
 
     var body: some View {
-        // Contenedor reusable de scroll con hooks de memoria de posición y búsqueda.
+        // Reusable scroll container with position memory and search hooks.
         ScrollView {
             LazyVStack(
                 alignment: .leading,
@@ -671,13 +671,13 @@ struct ContentScrollPanelView<SectionContent: View>: View {
         }
         .scrollPosition(id: $scrollPosition, anchor: .top)
         .onScrollPhaseChange { _, phase in
-            // Solo marca scrolling para la sección visible.
+            // Mark scrolling only for the visible section.
             guard selectedSection == section else { return }
             isUserScrolling = phase != .idle
         }
         .onChange(of: scrollPosition) { _, newValue in
             guard let newValue else { return }
-            // Delegación de persistencia/validación al caller (ContentView + ScrollStateStore).
+            // Delegate persistence and validation to the caller.
             onScrollAnchorChanged(newValue)
         }
         .onChange(of: searchQuery) { oldValue, newValue in
@@ -695,7 +695,7 @@ struct HeaderActionButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
 
     func makeBody(configuration: Configuration) -> some View {
-        // Estilo cápsula compartido para acciones en headers.
+        // Shared capsule style for header actions.
         configuration.label
             .font(.system(size: isCompact ? 12 : 13, weight: .medium))
             .padding(.horizontal, isCompact ? 8 : 10)
@@ -721,7 +721,7 @@ struct HeaderActionButtonStyle: ButtonStyle {
     }
 
     private func backgroundColor(isPressed: Bool) -> Color {
-        // Estados visuales: disabled, pressed, hover e idle.
+        // Visual states: disabled, pressed, hover, and idle.
         if !isEnabled {
             return MoodistTheme.Colors.cardBackground.opacity(0.25)
         }
@@ -735,7 +735,7 @@ struct HeaderActionButtonStyle: ButtonStyle {
     }
 
     private func borderColor(isPressed: Bool) -> Color {
-        // Refuerzo visual adicional para botones primarios.
+        // Additional visual emphasis for primary buttons.
         if !isEnabled {
             return Color.primary.opacity(0.08)
         }

@@ -45,7 +45,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
 
     init(bundle: Bundle = .main) {
         self.bundle = bundle
-        // macOS no usa AVAudioSession; AVAudioEngine se mezcla con el sistema por defecto.
+        // macOS does not use AVAudioSession; AVAudioEngine mixes with the system by default.
         configurationChangeObserver = NotificationCenter.default.addObserver(
             forName: .AVAudioEngineConfigurationChange,
             object: engine,

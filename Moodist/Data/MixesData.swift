@@ -2,7 +2,7 @@
 //  MixesData.swift
 //  MoodistMac
 //
-//  Mixes definidos desde Moodist_mixes.md. Volúmenes 0.0...1.0 (porcentaje/100).
+//  Mixes defined from Moodist_mixes.md. Volumes use 0.0...1.0 values.
 //
 
 import Foundation

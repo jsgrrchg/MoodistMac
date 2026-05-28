@@ -2,7 +2,7 @@
 //  SoundStateItem.swift
 //  MoodistMac
 //
-//  Estado por sonido: seleccionado, favorito, volumen.
+//  Per-sound state: selection, favorite status, and volume.
 //
 
 import Foundation

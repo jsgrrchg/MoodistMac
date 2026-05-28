@@ -19,12 +19,12 @@ final class AppWindowCoordinator {
     private var pendingFrameRestore: DispatchWorkItem?
 
     var anchorWindow: NSWindow? {
-        // Ventana de referencia para centrar auxiliares (p. ej. timer custom).
+        // Reference window for centering auxiliary windows, such as the custom timer.
         mainWindow ?? bestMainWindowCandidate(in: NSApplication.shared.windows)
     }
 
     func start() {
-        // Desactiva tabbing automático y engancha detección de ventanas relevantes.
+        // Disable automatic tabbing and attach relevant-window detection.
         NSWindow.allowsAutomaticWindowTabbing = false
 
         windowDidBecomeKeyObserver = NotificationCenter.default.addObserver(
@@ -47,7 +47,7 @@ final class AppWindowCoordinator {
     }
 
     func stop() {
-        // Desregistra observers y persiste frame final de la ventana principal.
+        // Unregister observers and persist the main window's final frame.
         if let o = windowDidBecomeKeyObserver {
             NotificationCenter.default.removeObserver(o)
             windowDidBecomeKeyObserver = nil
@@ -57,7 +57,7 @@ final class AppWindowCoordinator {
     }
 
     func applyAppearanceMode() {
-        // Traduce preferencia persistida a apariencia global de AppKit.
+        // Maps the persisted preference to AppKit's global appearance.
         let raw =
             UserDefaults.standard.string(forKey: PersistenceService.appearanceModeKey) ?? "system"
         switch raw {
@@ -76,7 +76,7 @@ final class AppWindowCoordinator {
 
     @discardableResult
     func handleReopen(hasVisibleWindows flag: Bool) -> Bool {
-        // Al reabrir desde Dock, muestra/restaura la principal aunque esté oculta.
+        // When reopening from the Dock, show or restore the main window even if hidden.
         if !flag {
             showMainWindowIfHidden()
             DispatchQueue.main.async { [weak self] in
@@ -94,7 +94,7 @@ final class AppWindowCoordinator {
     }
 
     func handleDidBecomeActive() {
-        // Reintentos escalonados para cubrir timing de ventanas creadas por SwiftUI.
+        // Staggered retries cover the timing of windows created by SwiftUI.
         showMainWindowIfHidden()
         configureExistingMainWindow()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [weak self] in
@@ -110,7 +110,7 @@ final class AppWindowCoordinator {
     }
 
     func openMainWindow() {
-        // Abre visible+key o recupera mejor candidata si no hay ninguna al frente.
+        // Open the visible key window or recover the best candidate if none is in front.
         NSApplication.shared.activate(ignoringOtherApps: true)
         if let w = NSApplication.shared.windows.first(where: { $0.isVisible && $0.canBecomeKey }) {
             w.makeKeyAndOrderFront(nil)
@@ -120,7 +120,7 @@ final class AppWindowCoordinator {
     }
 
     func windowShouldClose(_ sender: NSWindow) -> Bool {
-        // En ventana principal: ocultar en vez de cerrar para comportamiento tipo utility app.
+        // For the main window, hide instead of closing for utility-app behavior.
         if sender.title == L10n.optionsTitle { return true }
         if !isMainWindowCandidate(sender) { return true }
         persistFrameNow(for: sender)
@@ -164,7 +164,7 @@ final class AppWindowCoordinator {
     private func configureMainWindowIfNeeded(_ window: NSWindow) {
         guard isMainWindowCandidate(window) else { return }
         if mainWindow !== window {
-            // Al cambiar de instancia principal, reinicia ciclo de restore/observers.
+            // When the main instance changes, restart the restore/observer cycle.
             stopObservingMainWindow()
             pendingFrameRestore?.cancel()
             pendingFrameRestore = nil
@@ -179,7 +179,7 @@ final class AppWindowCoordinator {
     }
 
     private func scheduleMainWindowRestoreIfNeeded(for window: NSWindow) {
-        // Restore en siguiente runloop para evitar saltos visuales al crear ventana.
+        // Restore on the next run loop to avoid visual jumps while creating the window.
         guard !mainWindowHasRestoredFrame else { return }
         pendingFrameRestore?.cancel()
         let work = DispatchWorkItem { [weak self, weak window] in
@@ -214,7 +214,7 @@ final class AppWindowCoordinator {
     }
 
     private func configureMainWindow(_ window: NSWindow) {
-        // Configuración visual/funcional común de la ventana principal.
+        // Shared visual and functional configuration for the main window.
         let transparencyEnabled =
             UserDefaults.standard.object(forKey: PersistenceService.transparencyEnabledKey) == nil
             ? true
@@ -242,11 +242,11 @@ final class AppWindowCoordinator {
         window.delegate = windowDelegate
     }
 
-    /// Clave que usa AppKit en UserDefaults para el frame (véase Saving Window Position en Apple).
+    /// AppKit UserDefaults key for the frame; see Apple's Saving Window Position docs.
     private static var windowFrameDefaultsKey: String { "NSWindow Frame \(mainWindowFrameName)" }
 
     private func startObservingMainWindow(_ window: NSWindow) {
-        // Observa movimiento/resize/cierre para persistencia de frame robusta.
+        // Observe movement, resizing, and closing for robust frame persistence.
         window.delegate = windowDelegate
         let center = NotificationCenter.default
         mainWindowObservers = [
@@ -296,7 +296,7 @@ final class AppWindowCoordinator {
     }
 
     private func stopObservingMainWindow() {
-        // Cancela debounce y remueve todos los observers asociados a la ventana.
+        // Cancel debounce and remove all observers associated with the window.
         pendingFrameSave?.cancel()
         pendingFrameSave = nil
         pendingFrameRestore?.cancel()
@@ -308,7 +308,7 @@ final class AppWindowCoordinator {
     }
 
     private func scheduleMainWindowFrameSave() {
-        // Debounce de persistencia para evitar escribir defaults en cada pixel de resize.
+        // Debounce persistence to avoid writing defaults on every resize pixel.
         guard let window = mainWindow else { return }
         guard canPersistFrame(window.frame) else { return }
         if window.inLiveResize, pendingFrameRestore != nil {
@@ -345,7 +345,7 @@ final class AppWindowCoordinator {
     }
 
     private func applyRestoredFrame(to window: NSWindow) {
-        // Restaura, sanea y corrige frames inválidos persistidos históricamente.
+        // Restore, sanitize, and correct historically persisted invalid frames.
         let restored = window.setFrameUsingName(Self.mainWindowFrameName, force: true)
         let currentFrame = window.frame
         var frame = currentFrame
@@ -397,7 +397,7 @@ final class AppWindowCoordinator {
     }
 
     private func sanitizedMainWindowFrame(_ frame: NSRect) -> NSRect {
-        // Ajusta tamaño/posición a límites visibles de pantalla actual.
+        // Clamp size and position to the current screen's visible bounds.
         guard let screen = screenForFrame(frame) else { return frame }
         let visible = screen.visibleFrame
         var f = frame
@@ -412,7 +412,7 @@ final class AppWindowCoordinator {
     }
 
     private func screenForFrame(_ frame: NSRect) -> NSScreen? {
-        // Busca pantalla por centro; fallback por mayor intersección.
+        // Find the screen by center point, falling back to the largest intersection.
         let center = NSPoint(x: frame.midX, y: frame.midY)
         if let hit = NSScreen.screens.first(where: { $0.frame.contains(center) }) {
             return hit

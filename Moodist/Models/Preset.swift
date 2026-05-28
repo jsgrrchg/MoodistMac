@@ -2,7 +2,7 @@
 //  Preset.swift
 //  MoodistMac
 //
-//  Preset: combinación guardada de sonidos (ids + volúmenes).
+//  Preset: saved sound combination with IDs and volumes.
 //
 
 import Foundation
@@ -11,9 +11,9 @@ struct Preset: Identifiable, Codable, Equatable {
     let id: String
     var name: String
     var iconName: String
-    /// IDs de sonidos en orden
+    /// Ordered sound IDs.
     var soundIds: [String]
-    /// Volumen por soundId (opcional; si falta usa 0.5)
+    /// Volume by soundId. Missing values default to 0.5.
     var volumes: [String: Double]
 
     init(
@@ -34,7 +34,7 @@ struct Preset: Identifiable, Codable, Equatable {
         case soundIds
         case volumes
     }
-    // Personaliza codificación/decodificación para manejar valores por defecto y asegurar compatibilidad con versiones anteriores.
+    // Custom coding preserves default values and compatibility with older versions.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
@@ -57,7 +57,7 @@ struct Preset: Identifiable, Codable, Equatable {
         volumes[soundId] ?? 0.5
     }
 
-    /// Convierte el preset a Mix para mostrarlo en la sección Custom de Mixes.
+    /// Converts the preset to a Mix for display in the Custom section of Mixes.
     func toMix() -> Mix {
         Mix(id: id, name: name, iconName: iconName, soundIds: soundIds, volumes: volumes)
     }

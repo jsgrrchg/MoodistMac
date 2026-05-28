@@ -15,7 +15,7 @@ final class AppMenuBarCoordinator: NSObject, NSMenuDelegate {
     }
 
     func updateVisibility(show: Bool) {
-        // Crea o elimina el NSStatusItem según preferencia del usuario.
+        // Create or remove the NSStatusItem according to the user's preference.
         if show {
             if statusItem == nil { createStatusItem() }
         } else {
@@ -29,13 +29,13 @@ final class AppMenuBarCoordinator: NSObject, NSMenuDelegate {
     }
 
     func handleTimerStateDidChange() {
-        // Si el menú existe, se reconstruye para reflejar timer/acciones en caliente.
+        // If the menu exists, rebuild it so timer state and actions stay current.
         guard statusItem?.menu != nil else { return }
         statusItem?.menu = buildStatusMenu()
     }
 
     func stop() {
-        // Limpieza explícita al terminar la app o al desactivar menubar.
+        // Explicit cleanup when the app exits or the menu bar item is disabled.
         timerCoordinator.stopTimerMenuUpdates()
         if let item = statusItem {
             NSStatusBar.system.removeStatusItem(item)
@@ -66,7 +66,7 @@ final class AppMenuBarCoordinator: NSObject, NSMenuDelegate {
     }
 
     private func buildStatusMenu() -> NSMenu {
-        // Menú reconstruido por apertura para evitar estado stale en títulos/acciones.
+        // Rebuild the menu on open to avoid stale titles and actions.
         let menu = NSMenu()
         menu.delegate = self
 
@@ -117,14 +117,14 @@ final class AppMenuBarCoordinator: NSObject, NSMenuDelegate {
     }
 
     func menuWillOpen(_ menu: NSMenu) {
-        // Refresh completo al abrir y arranque de ticker para contador regresivo.
+        // Full refresh on open, then start the countdown ticker.
         guard menu.delegate === self else { return }
         statusItem?.menu = buildStatusMenu()
         timerCoordinator.startTimerMenuUpdates()
     }
 
     func menuDidClose(_ menu: NSMenu) {
-        // Detiene el ticker al cerrar para no consumir ciclos innecesarios.
+        // Stop the ticker on close to avoid unnecessary work.
         guard menu.delegate === self else { return }
         timerCoordinator.stopTimerMenuUpdates()
         timerCoordinator.bindTimerRemainingMenuItem(nil)

@@ -2,7 +2,7 @@
 //  TimerNotificationManager.swift
 //  MoodistMac
 //
-//  Notificación local cuando termina un temporizador.
+//  Local notification shown when a timer finishes.
 //
 
 import Foundation

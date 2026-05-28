@@ -2,7 +2,7 @@
 //  L10n.swift
 //  MoodistMac
 //
-//  Cadenas de UI (localizadas vía Localizable.strings).
+//  UI strings localized through Localizable.strings.
 //
 
 import Foundation

@@ -2,10 +2,10 @@ import Combine
 import Foundation
 
 extension SoundStore {
-    // Inicializa el estado en memoria combinando defaults + valores persistidos.
+    // Initializes in-memory state from defaults and persisted values.
     func bootstrapState() {
         SoundsData.categories.flatMap(\.sounds).forEach { sounds[$0.id] = .default }
-        // Restaura estado de sonidos sólo para ids aún válidos en el catálogo actual.
+        // Restore sound state only for IDs that still exist in the current catalog.
         if let saved = PersistenceService.loadSounds() {
             for (id, item) in saved where sounds[id] != nil {
                 sounds[id] = item
@@ -28,7 +28,7 @@ extension SoundStore {
         }
     }
 
-    // Conecta publishers de estado con persistencia reactiva (con debounce donde conviene).
+    // Connects state publishers to reactive persistence, using debounce where useful.
     func setupPersistence() {
         $sounds
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
@@ -62,8 +62,8 @@ extension SoundStore {
             .store(in: &cancellables)
     }
 
-    /// Presenta el panel de guardado y exporta preferencias (mixes personalizados, mixes favoritos, sonidos favoritos) a un JSON.
-    /// - Returns: true si el usuario guardó correctamente.
+    /// Presents the save panel and exports preferences to JSON.
+    /// - Returns: true when the user saved successfully.
     func exportPreferences() -> Bool {
         PreferencesExportService.presentExportPanel(
             presets: presets,
@@ -72,8 +72,8 @@ extension SoundStore {
         )
     }
 
-    /// Presenta el panel de abrir, lee un JSON de preferencias y aplica presets, mixes favoritos y sonidos favoritos.
-    /// - Returns: true si el usuario importó correctamente.
+    /// Presents the open panel, reads a preferences JSON file, and applies the imported values.
+    /// - Returns: true when the user imported successfully.
     func importPreferences() -> Bool {
         guard let payload = PreferencesImportService.presentImportPanel() else { return false }
         let validSoundIds = Set(sounds.keys)
@@ -85,12 +85,12 @@ extension SoundStore {
             return sanitizedPreset
         }
         let validMixIds = Set(MixesData.allMixesById.keys).union(sanitizedPresets.map(\.id))
-        // Rehidrata colecciones principales desde el payload importado.
+        // Rehydrate main collections from the imported payload.
         presets = sanitizedPresets
         favoriteMixIds = orderedUnique(payload.favoriteMixIds.filter { validMixIds.contains($0) })
         favoriteSoundIds = orderedUnique(
             payload.favoriteSoundIds.filter { validSoundIds.contains($0) })
-        // Sincroniza la bandera isFavorite dentro del diccionario de sonidos.
+        // Sync the isFavorite flag inside the sounds dictionary.
         let favoriteSet = Set(favoriteSoundIds)
         var next = sounds
         for (id, var item) in next {
@@ -101,7 +101,7 @@ extension SoundStore {
         return true
     }
 
-    // Restablece la app a estado "factory default" y limpia preferencias persistidas.
+    // Restores the app to factory defaults and clears persisted preferences.
     func resetAllToDefaults() {
         cancelSleepTimer()
         currentMixId = nil
@@ -135,7 +135,7 @@ extension SoundStore {
         var seen = Set<String>()
         return values.filter { seen.insert($0).inserted }
     }
-    // Valida y limpia un preset importado, asegurando que sólo contenga sonidos válidos y volúmenes en rango, y que su id sea único y no vacío.
+    // Validates and sanitizes an imported preset, keeping valid sounds, clamped volumes, and a non-empty unique ID.
     private func sanitizeImportedPreset(_ preset: Preset, validSoundIds: Set<String>) -> Preset? {
         let presetId = preset.id.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !presetId.isEmpty else { return nil }

@@ -2,13 +2,13 @@
 //  SoundIcons.swift
 //  MoodistMac
 //
-//  Fuente única de nombres de SF Symbols para sonidos y categorías. Evita redundancia y typos.
+//  Single source of SF Symbol names for sounds and categories.
 //
 
 import Foundation
 
 enum SoundIcons {
-    // MARK: - Naturaleza
+    // MARK: - Nature
     static let waterWaves = "water.waves"
     static let wind = "wind"
     static let leafFill = "leaf.fill"
@@ -20,7 +20,7 @@ enum SoundIcons {
     static let mountain2Fill = "mountain.2.fill"
     static let figureWalk = "figure.walk"
 
-    // MARK: - Lluvia / clima
+    // MARK: - Rain / Weather
     static let cloudRainFill = "cloud.rain.fill"
     static let cloudDrizzleFill = "cloud.drizzle.fill"
     static let cloudHeavyrainFill = "cloud.heavyrain.fill"
@@ -28,7 +28,7 @@ enum SoundIcons {
     static let umbrellaFill = "umbrella.fill"
     static let tentFill = "tent.fill"
 
-    // MARK: - Animales
+    // MARK: - Animals
     static let pawprintFill = "pawprint.fill"
     static let birdFill = "bird.fill"
     static let dogFill = "dog.fill"
@@ -38,7 +38,7 @@ enum SoundIcons {
     static let ladybugFill = "ladybug.fill"
     static let fishFill = "fish.fill"
 
-    // MARK: - Urbano / edificios
+    // MARK: - Urban / Buildings
     static let building2Fill = "building.2.fill"
     static let buildingFill = "building.fill"
     static let buildingColumnsFill = "building.columns.fill"
@@ -49,7 +49,7 @@ enum SoundIcons {
     static let crossCaseFill = "cross.case.fill"
     static let sparkles = "sparkles"
 
-    // MARK: - Lugares
+    // MARK: - Places
     static let mappinCircleFill = "mappin.circle.fill"
     static let cupSaucerFill = "cup.and.saucer.fill"
     static let airplane = "airplane"
@@ -65,13 +65,13 @@ enum SoundIcons {
     static let circleHexagonGridFill = "circle.hexagongrid.fill"
     static let chartLineUptrend = "chart.line.uptrend.xyaxis"
 
-    // MARK: - Transporte
+    // MARK: - Transport
     static let sailboatFill = "sailboat.fill"
     static let bicycle = "bicycle"
     static let truckBoxFill = "truck.box.fill"
     static let speakerFill = "speaker.fill"
 
-    // MARK: - Objetos / cosas
+    // MARK: - Objects / Things
     static let cubeFill = "cube.fill"
     static let keyboard = "keyboard"
     static let docFill = "doc.fill"
@@ -96,9 +96,9 @@ enum SoundIcons {
     static let waveform = "waveform"
     static let waveformCircleFill = "waveform.circle.fill"
 
-    // MARK: - Militar
+    // MARK: - Military
     static let shieldFill = "shield.fill"
 
-    // MARK: - Personas / ruido
+    // MARK: - People / Noise
     static let personFill = "person.fill"
 }
