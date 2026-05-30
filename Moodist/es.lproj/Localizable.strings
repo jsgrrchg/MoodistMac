@@ -51,7 +51,7 @@
 "stop" = "Detener";
 
 /* Sections */
-"sounds" = "Sounds";
+"sounds" = "Sonidos";
 "mixes" = "Mixes";
 "global_volume" = "Volumen global";
 "categories" = "Categorías";
@@ -97,11 +97,8 @@
 "text_size_medium" = "Mediano";
 "text_size_large" = "Grande";
 "text_size_extra_large" = "Muy grande";
-"player_transparency" = "Transparencia del reproductor";
 "disable_transparencies" = "Desactivar transparencias";
 "disable_transparencies_footer" = "Actívalo para que la interfaz sea sólida y reduzca el efecto vidrio.";
-"reduce_transparency" = "Reducir transparencia";
-"reduce_transparency_footer" = "Usar fondos opacos para mejor legibilidad y accesibilidad.";
 "max_recent_mixes" = "Mixes recientes en barra lateral";
 "max_recent_mixes_footer" = "Número máximo de mixes recientes mostrados en la barra lateral (5–15).";
 "max_recent_sounds" = "Sonidos recientes en barra lateral";
@@ -125,7 +122,7 @@
 "visit_web" = "Inspirado en Moodist en la web";
 "source_code" = "Código fuente (GitHub)";
 "buy_me_a_coffee" = "Invítame un café";
-"ask_for_new_sound" = "Do you want a new sound? Ask me for it!";
+"ask_for_new_sound" = "¿Quieres un sonido nuevo? ¡Pídemelo!";
 "reset_confirm_title" = "¿Restablecer selección?";
 "reset_confirm_message" = "Se quitarán todos los sonidos seleccionados y se borrarán los favoritos. El volumen global no cambiará.";
 "restore_confirm_title" = "¿Restaurar valores por defecto?";
@@ -145,7 +142,7 @@
 "timer" = "Temporizador";
 "timer_minutes" = "Minutos";
 "timer_hours" = "Horas";
-"timer_stop" = "Stop";
+"timer_stop" = "Detener";
 "timer_custom" = "Temporizador personalizado…";
 "timer_custom_title" = "Configurar temporizador";
 "timer_custom_message" = "Introduce el número de minutos para el temporizador.";
@@ -185,11 +182,11 @@
 "save_mix_icon_menu_hint" = "Elige un icono para el mix";
 "save_mix_icon_search_placeholder" = "Buscar SF Symbols…";
 "save_mix_icon_no_results" = "No se encontraron iconos para esa búsqueda.";
-"save_mix_icon_categories_hint" = "Explora categorias de iconos";
+"save_mix_icon_categories_hint" = "Explora categorías de iconos";
 "save_mix_icon_category_featured" = "Destacados";
 "save_mix_icon_category_nature" = "Naturaleza";
 "save_mix_icon_category_weather" = "Clima";
-"save_mix_icon_category_sleep" = "Sueno";
+"save_mix_icon_category_sleep" = "Sueño";
 "save_mix_icon_category_focus" = "Enfoque";
 "save_mix_icon_category_places" = "Lugares";
 "save_mix_icon_category_audio" = "Audio";
@@ -459,7 +456,7 @@
 "mix_penguin-coast" = "Costa de Pingüinos";
 "mix_sea-cave-swell" = "Oleaje en Cueva Marina";
 "mix_whale-under-cave" = "Ballena Bajo la Cueva";
-"mix_cabin-creaks-fire" = "Cabanya con Crujidos y Fuego";
+"mix_cabin-creaks-fire" = "Cabaña con crujidos y fuego";
 "mix_jungle-macaws-dawn" = "Amanecer de Guacamayos en la Jungla";
 "mix_rainforest-night-camp" = "Campamento Nocturno en la Selva";
 "mix_rockslide-camp" = "Campamento en Desprendimiento";
@@ -468,7 +465,6 @@
 "mix_subway-downpour" = "Aguacero en el Metro";
 "mix_umbrella-bells" = "Paraguas y Campanas";
 "mix_analog-writing" = "Escritura Analógica";
-"mix_focused-writing" = "Escritura Enfocada";
 "mix_printer-focus" = "Impresora y Concentración";
 "mix_trading-floor-terminal" = "Terminal de Sala de Operaciones";
 "mix_airplane-cruise" = "Crucero en Avión";
