@@ -360,9 +360,9 @@ struct SavePresetSheet: View {
             .animation(.spring(duration: 0.25, bounce: 0.3), value: selectedIconID)
 
             VStack(spacing: 4) {
-                Text(isEditingPreset ? "Edit Mix" : L10n.presetSaveDialogTitle)
+                Text(isEditingPreset ? L10n.editMixTitle : L10n.presetSaveDialogTitle)
                     .font(.system(size: 15, weight: .semibold))
-                Text(isEditingPreset ? "Update the mix name and icon." : L10n.saveMixSubtitle)
+                Text(isEditingPreset ? L10n.editMixSubtitle : L10n.saveMixSubtitle)
                     .font(.system(size: 12))
                     .foregroundStyle(MoodistTheme.Colors.secondaryText)
                     .multilineTextAlignment(.center)

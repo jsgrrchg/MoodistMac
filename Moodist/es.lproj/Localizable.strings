@@ -2,6 +2,7 @@
 "app_name" = "Moodist";
 "options" = "Opciones";
 "close" = "Cerrar";
+"about_app_format" = "Acerca de %@";
 "check_for_updates" = "Buscar actualizaciones…";
 "updates_section" = "Actualizaciones";
 "update_available_title" = "Nueva versión disponible";
@@ -31,8 +32,15 @@
 /* Playback */
 "play" = "Reproducir";
 "pause" = "Pausar";
+"playback_menu" = "Reproducción";
 "shuffle" = "Aleatorio";
 "next_mix" = "Siguiente mix";
+"automix_label" = "Pomodoro";
+"automix_rotate" = "Rotación";
+"automix_all_mixes" = "Todos los mixes";
+"automix_only_custom" = "Solo personalizados";
+"automix_help_idle" = "Pomodoro – mix automático";
+"automix_help_active_format" = "Pomodoro – %@";
 "media_key_next_mix" = "Usar la tecla multimedia \"Siguiente\" para el siguiente mix";
 "media_key_next_mix_footer" = "Cuando está activado, la tecla \"Siguiente pista\" del teclado o auriculares carga un nuevo mix aleatorio.";
 "unselect_all" = "Quitar todos";
@@ -166,6 +174,9 @@
 "preset_save_current" = "Guardar como mix";
 "preset_apply" = "Reproducir mix";
 "preset_delete" = "Eliminar mix";
+"edit_mix" = "Editar mix…";
+"edit_mix_title" = "Editar mix";
+"edit_mix_subtitle" = "Actualiza el nombre y el icono del mix.";
 "preset_save_dialog_title" = "Guardar Mix";
 "preset_name_placeholder" = "Nombre del mix";
 "preset_saved" = "Mix guardado";
