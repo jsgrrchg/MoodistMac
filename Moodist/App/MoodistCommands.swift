@@ -28,7 +28,7 @@ struct MoodistCommands: Commands {
     var body: some Commands {
         CommandGroup(replacing: .newItem) {}
         CommandGroup(replacing: .appInfo) {
-            Button("About \(L10n.appName)") {
+            Button(L10n.aboutApp(L10n.appName)) {
                 showAboutPanel()
             }
         }
@@ -48,7 +48,7 @@ struct MoodistCommands: Commands {
                 _ = soundStore.importPreferences()
             }
         }
-        CommandMenu("Playback") {
+        CommandMenu(L10n.playbackMenu) {
             Button(soundStore.isPlaying ? L10n.pause : L10n.play) {
                 soundStore.togglePlay()
             }

@@ -134,9 +134,9 @@ struct CurrentlyPlayingSectionView: View {
     private func pomodoroHeaderButton(isNarrow: Bool, isVeryNarrow: Bool) -> some View {
         HStack(spacing: 6) {
             Menu {
-                Picker("Rotate", selection: $store.autoMixCustomOnly) {
-                    Text("All Mixes").tag(false)
-                    Text("Only Custom").tag(true)
+                Picker(L10n.automixRotate, selection: $store.autoMixCustomOnly) {
+                    Text(L10n.automixAllMixes).tag(false)
+                    Text(L10n.automixOnlyCustom).tag(true)
                 }
                 Divider()
                 ForEach(SoundStore.autoMixIntervalPresets, id: \.self) { seconds in
@@ -186,10 +186,10 @@ struct CurrentlyPlayingSectionView: View {
                     }
                     .labelStyle(.titleAndIcon)
                 } else if isVeryNarrow {
-                    Label("Pomodoro", systemImage: "arrow.triangle.2.circlepath")
+                    Label(L10n.automixLabel, systemImage: "arrow.triangle.2.circlepath")
                         .labelStyle(.iconOnly)
                 } else {
-                    Label("Pomodoro", systemImage: "arrow.triangle.2.circlepath")
+                    Label(L10n.automixLabel, systemImage: "arrow.triangle.2.circlepath")
                         .labelStyle(.titleAndIcon)
                 }
             }
@@ -203,10 +203,11 @@ struct CurrentlyPlayingSectionView: View {
             .onHover { isPomodoroHovered = $0 }
             .help(
                 store.hasActiveAutoMixTimer
-                    ? "Pomodoro – \(store.timerLabel(forSeconds: store.autoMixIntervalSeconds ?? 0))"
-                    : "Pomodoro – auto mix"
+                    ? L10n.automixHelpActive(
+                        store.timerLabel(forSeconds: store.autoMixIntervalSeconds ?? 0))
+                    : L10n.automixHelpIdle
             )
-            .accessibilityLabel("Pomodoro")
+            .accessibilityLabel(L10n.automixLabel)
 
             if store.hasActiveAutoMixTimer {
                 Button(action: { store.cancelAutoMixTimer() }) {

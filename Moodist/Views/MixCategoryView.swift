@@ -219,7 +219,7 @@ struct MixRowView: View {
                 }
                 if store.presets.contains(where: { $0.id == mix.id }) {
                     Divider()
-                    Button("Edit mix…") {
+                    Button(L10n.editMix) {
                         store.beginEditingPreset(id: mix.id)
                     }
                     Button(L10n.presetDelete, role: .destructive) {

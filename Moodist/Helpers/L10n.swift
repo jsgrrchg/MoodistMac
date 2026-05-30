@@ -66,12 +66,24 @@ enum L10n {
     static var appName: String { tr("app_name", "Moodist") }
     static var options: String { tr("options", "Options") }
     static var close: String { tr("close", "Close") }
+    static func aboutApp(_ appName: String) -> String {
+        String(format: tr("about_app_format", "About %@"), appName)
+    }
 
     // MARK: - Playback
     static var play: String { tr("play", "Play") }
     static var pause: String { tr("pause", "Pause") }
+    static var playbackMenu: String { tr("playback_menu", "Playback") }
     static var shuffle: String { tr("shuffle", "Shuffle") }
     static var nextMix: String { tr("next_mix", "Next mix") }
+    static var automixLabel: String { tr("automix_label", "Pomodoro") }
+    static var automixRotate: String { tr("automix_rotate", "Rotate") }
+    static var automixAllMixes: String { tr("automix_all_mixes", "All Mixes") }
+    static var automixOnlyCustom: String { tr("automix_only_custom", "Only Custom") }
+    static var automixHelpIdle: String { tr("automix_help_idle", "Pomodoro – auto mix") }
+    static func automixHelpActive(_ interval: String) -> String {
+        String(format: tr("automix_help_active_format", "Pomodoro – %@"), interval)
+    }
     static var mediaKeyNextMix: String {
         tr("media_key_next_mix", "Use \"Next\" media key for next mix")
     }
@@ -297,6 +309,11 @@ enum L10n {
     static var presetSaveCurrent: String { tr("preset_save_current", "Save as mix") }
     static var presetApply: String { tr("preset_apply", "Play Mix") }
     static var presetDelete: String { tr("preset_delete", "Delete mix") }
+    static var editMix: String { tr("edit_mix", "Edit mix…") }
+    static var editMixTitle: String { tr("edit_mix_title", "Edit Mix") }
+    static var editMixSubtitle: String {
+        tr("edit_mix_subtitle", "Update the mix name and icon.")
+    }
     static var presetSaveDialogTitle: String { tr("preset_save_dialog_title", "Save Mix") }
     static var presetNamePlaceholder: String { tr("preset_name_placeholder", "Mix name") }
     static var saveMixSubtitle: String {
