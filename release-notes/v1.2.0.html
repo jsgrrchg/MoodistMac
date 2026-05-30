@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>MoodistMac 1.2.0 Release Notes</title>
+    </head>
+    <body>
+        <h2>1.2.0 (2026-05-30)</h2>
+        <h3>Added</h3>
+        <ul>
+            <li><strong>Spanish localization</strong>: Added complete Spanish localization coverage for the app interface, including settings, commands, sheets, category controls, custom mix flows, and remaining visible UI strings.</li>
+            <li><strong>Language selector</strong>: Added an in-app language setting with `System`, `English`, and `Spanish` options, persisted across launches and applied after restarting Moodist.</li>
+        </ul>
+        <h3>Changed</h3>
+        <ul>
+            <li><strong>Localization architecture</strong>: Routed remaining hardcoded UI labels through shared localization helpers and bundled `Localizable.strings` resources for English and Spanish.</li>
+            <li><strong>Spanish copy</strong>: Refined Spanish wording across sound names, mix names, category controls, settings descriptions, and action labels for a more natural localized experience.</li>
+        </ul>
+        <h3>Fixed</h3>
+        <ul>
+            <li><strong>Localization packaging</strong>: Registered localized string files in the Xcode project resources so English and Spanish strings are included in built app bundles.</li>
+            <li><strong>Release automation</strong>: Improved release validation and notarization reliability by signing Sparkle helper apps and using Python-based XML validation in release workflows.</li>
+            <li><strong>Sparkle updates</strong>: Updated the Sparkle appcast and v1.1.0 release notes so the updater presents the expected release information.</li>
+        </ul>
+
+        <p>
+            <a href="https://github.com/jsgrrchg/MoodistMac/releases/tag/v1.2.0">View this release on GitHub</a>
+        </p>
+    </body>
+</html>
