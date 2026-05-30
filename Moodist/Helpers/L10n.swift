@@ -346,6 +346,22 @@ enum L10n {
 
     // MARK: - Language
     static var language: String { tr("language", "Language") }
+    static var languageSystem: String { tr("language_system", "System") }
+    static var languageEnglish: String { tr("language_english", "English") }
+    static var languageSpanish: String { tr("language_spanish", "Spanish") }
+    static var languageFooter: String {
+        tr(
+            "language_footer",
+            "Changes take effect after restarting Moodist. System follows your macOS language preference.")
+    }
+    static var languageRestartRequiredTitle: String {
+        tr("language_restart_required_title", "Restart Required")
+    }
+    static var languageRestartRequiredMessage: String {
+        tr("language_restart_required_message", "Restart Moodist to apply the selected language.")
+    }
+    static var languageRestartQuit: String { tr("language_restart_quit", "Quit Moodist") }
+    static var languageRestartLater: String { tr("language_restart_later", "Later") }
 
     // MARK: - Dynamic content by id
     static func soundLabel(_ soundId: String) -> String {
