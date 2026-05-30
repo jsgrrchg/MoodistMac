@@ -103,8 +103,8 @@
 "max_recent_mixes_footer" = "Número máximo de mixes recientes mostrados en la barra lateral (5–15).";
 "max_recent_sounds" = "Sonidos recientes en barra lateral";
 "max_recent_sounds_footer" = "Número máximo de sonidos recientes mostrados en la barra lateral (5–15).";
-"collapse_categories_on_cold_open" = "Iniciar con categorías colapsadas";
-"collapse_categories_on_cold_open_footer" = "Al abrir la app en frío, las categorías de sonidos y mixes inician colapsadas (excepto Mixes personalizados).";
+"collapse_categories_on_cold_open" = "Iniciar con categorías contraídas";
+"collapse_categories_on_cold_open_footer" = "Al abrir la app en frío, las categorías de sonidos y mixes inician contraídas (excepto Mixes personalizados).";
 "data_section" = "Datos";
 "export_preferences" = "Exportar preferencias…";
 "export_preferences_hint" = "Guardar mixes personalizados, mixes favoritos y sonidos favoritos en un archivo";
@@ -121,7 +121,7 @@
 "restore_defaults" = "Restaurar todo por defecto";
 "visit_web" = "Inspirado en Moodist en la web";
 "source_code" = "Código fuente (GitHub)";
-"buy_me_a_coffee" = "Invítame un café";
+"buy_me_a_coffee" = "Invítame a un café";
 "ask_for_new_sound" = "¿Quieres un sonido nuevo? ¡Pídemelo!";
 "reset_confirm_title" = "¿Restablecer selección?";
 "reset_confirm_message" = "Se quitarán todos los sonidos seleccionados y se borrarán los favoritos. El volumen global no cambiará.";
@@ -174,7 +174,7 @@
 "edit_mix" = "Editar mix…";
 "edit_mix_title" = "Editar mix";
 "edit_mix_subtitle" = "Actualiza el nombre y el icono del mix.";
-"preset_save_dialog_title" = "Guardar Mix";
+"preset_save_dialog_title" = "Guardar mix";
 "preset_name_placeholder" = "Nombre del mix";
 "preset_saved" = "Mix guardado";
 "save_mix_subtitle" = "Ponle nombre a tu mix y elige un icono.";
@@ -405,7 +405,7 @@
 "mix_silent-reading" = "Lectura Silenciosa";
 "mix_clock-pomodoro" = "Reloj Pomodoro";
 "mix_cafe-by-the-sea" = "Café junto al Mar";
-"mix_pink-rain-focus" = "Concentración Rosa Lluviosa";
+"mix_pink-rain-focus" = "Concentración: Lluvia Rosa";
 "mix_train-journey" = "Viaje en Tren";
 "mix_night-train" = "Tren Nocturno";
 "mix_train-in-rain" = "Tren en la Lluvia";
@@ -450,13 +450,13 @@
 "mix_cave-drip-meditation" = "Meditación Goteo en Cueva";
 "mix_river-elephants" = "Río de Elefantes";
 "mix_rockfall-river" = "Río de Desprendimientos";
-"mix_rainforest-shrine" = "Santuario de Selva";
+"mix_rainforest-shrine" = "Santuario de la Selva";
 "mix_savanna-sunset" = "Atardecer en la Sabana";
 "mix_foghorn-bay" = "Bahía de Sirena de Niebla";
 "mix_penguin-coast" = "Costa de Pingüinos";
 "mix_sea-cave-swell" = "Oleaje en Cueva Marina";
 "mix_whale-under-cave" = "Ballena Bajo la Cueva";
-"mix_cabin-creaks-fire" = "Cabaña con crujidos y fuego";
+"mix_cabin-creaks-fire" = "Cabaña con Crujidos y Fuego";
 "mix_jungle-macaws-dawn" = "Amanecer de Guacamayos en la Jungla";
 "mix_rainforest-night-camp" = "Campamento Nocturno en la Selva";
 "mix_rockslide-camp" = "Campamento en Desprendimiento";
@@ -485,7 +485,7 @@
 "mix_winter-trail" = "Senda Invernal";
 "mix_heartbeat-blanket" = "Manta de Latidos";
 "mix_snore-brown-shield" = "Escudo Marrón contra Ronquidos";
-"mix_flea-market-morning" = "Mañana en el Rastro";
+"mix_flea-market-morning" = "Mañana en el Mercadillo";
 "mix_playground-library-afternoon" = "Tarde en Biblioteca y Patio";
 "mix_quiet-kitchen-night" = "Cocina Tranquila de Noche";
 "mix_wooden-laundromat" = "Lavandería de Madera";
@@ -502,11 +502,11 @@
 "mix_range-practice-distance" = "Práctica de Tiro a Distancia";
 "mix_signal-intercept" = "Interceptación de Señales";
 "mix_urban-blackout" = "Apagón Urbano";
-"mix_war-room-briefing" = "Briefing en Sala de Operaciones";
+"mix_war-room-briefing" = "Briefing en Sala de Mando";
 
 /* State and Accessibility */
 "state_expanded" = "expandido";
-"state_collapsed" = "colapsado";
+"state_collapsed" = "contraído";
 "state_selected" = "seleccionado";
 "state_not_selected" = "no seleccionado";
 "volume_for_label" = "Volumen para %@";
@@ -524,11 +524,11 @@
 "resize_sidebar_hint" = "Arrastra para cambiar el ancho de la barra lateral";
 "expand_section" = "Expandir sección";
 "collapse_section" = "Contraer sección";
-"collapse_all_categories" = "Colapsar todas las categorías";
+"collapse_all_categories" = "Contraer todas las categorías";
 "expand_all_categories" = "Expandir todas las categorías";
-"category_collapse_hint" = "Toca dos veces para colapsar la categoría";
+"category_collapse_hint" = "Toca dos veces para contraer la categoría";
 "category_expand_hint" = "Toca dos veces para expandir la categoría";
 "click_toggle_selection" = "Haz clic para alternar la selección";
 "click_apply_mix" = "Haz clic para reproducir el mix";
-"click_apply_preset" = "Haz clic para aplicar el preset";
+"click_apply_preset" = "Haz clic para reproducir el preset";
 "double_tap_play_mix" = "Toca dos veces para reproducir este mix";
