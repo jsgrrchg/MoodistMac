@@ -5,6 +5,24 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] – 2026-05-30
+
+### Added
+
+- **Spanish localization**: Added complete Spanish localization coverage for the app interface, including settings, commands, sheets, category controls, custom mix flows, and remaining visible UI strings.
+- **Language selector**: Added an in-app language setting with `System`, `English`, and `Spanish` options, persisted across launches and applied after restarting Moodist.
+
+### Changed
+
+- **Localization architecture**: Routed remaining hardcoded UI labels through shared localization helpers and bundled `Localizable.strings` resources for English and Spanish.
+- **Spanish copy**: Refined Spanish wording across sound names, mix names, category controls, settings descriptions, and action labels for a more natural localized experience.
+
+### Fixed
+
+- **Localization packaging**: Registered localized string files in the Xcode project resources so English and Spanish strings are included in built app bundles.
+- **Release automation**: Improved release validation and notarization reliability by signing Sparkle helper apps and using Python-based XML validation in release workflows.
+- **Sparkle updates**: Updated the Sparkle appcast and v1.1.0 release notes so the updater presents the expected release information.
+
 ## [1.1.0] – 2026-05-28
 
 ### Added
