@@ -21,6 +21,7 @@ enum PersistenceService {
     static let transparencyEnabledKey = "MoodistMac.transparencyEnabled"
     static let mediaKeyNextMixKey = "MoodistMac.mediaKeyNextMix"
     static let collapseCategoriesOnColdOpenKey = "MoodistMac.collapseCategoriesOnColdOpen"
+    static let appLanguageKey = "MoodistMac.appLanguage"
     /// Key AppKit uses to persist the main window frame.
     private static let appKitMainWindowFrameKey = "NSWindow Frame MoodistMainWindow"
     private static let sidebarSectionsCollapsedKey = "MoodistMac.sidebarSectionsCollapsed"
@@ -230,6 +231,8 @@ enum PersistenceService {
         UserDefaults.standard.removeObject(forKey: transparencyEnabledKey)
         UserDefaults.standard.removeObject(forKey: mediaKeyNextMixKey)
         UserDefaults.standard.removeObject(forKey: collapseCategoriesOnColdOpenKey)
+        UserDefaults.standard.removeObject(forKey: appLanguageKey)
+        UserDefaults.standard.removeObject(forKey: LanguageManager.appleLanguagesKey)
         UserDefaults.standard.removeObject(forKey: scrollAnchorIdsKey)
         UserDefaults.standard.removeObject(forKey: appKitMainWindowFrameKey)
         UserDefaults.standard.removeObject(forKey: sidebarSectionsCollapsedKey)

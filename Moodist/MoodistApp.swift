@@ -20,6 +20,8 @@ struct MoodistApp: App {
     private let updaterCoordinator: MoodistUpdaterCoordinator
 
     init() {
+        LanguageManager.applyPersistedLanguage()
+
         let audio = AudioService()
         _soundStore = StateObject(wrappedValue: SoundStore(audioService: audio))
 

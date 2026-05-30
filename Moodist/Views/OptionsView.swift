@@ -22,6 +22,8 @@ struct OptionsView: View {
     @AppStorage(PersistenceService.menuBarEnabledKey) private var menuBarEnabled = false
     @AppStorage(PersistenceService.appearanceModeKey) private var appearanceModeRaw = AppearanceMode
         .system.rawValue
+    @AppStorage(PersistenceService.appLanguageKey) private var appLanguageRaw = AppLanguage.system
+        .rawValue
     @AppStorage(PersistenceService.accentColorHexKey) private var accentColorRaw = AccentColorChoice
         .graphite.rawValue
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
@@ -33,6 +35,8 @@ struct OptionsView: View {
         var collapseCategoriesOnColdOpen = true
     @State private var showResetConfirmation = false
     @State private var showRestoreConfirmation = false
+    @State private var showLanguageRestartAlert = false
+    @State private var suppressNextLanguageAlert = false
     private let optionsWindowSize = CGSize(width: 510, height: 650)
 
     private var appearanceMode: AppearanceMode {
@@ -43,6 +47,10 @@ struct OptionsView: View {
     private var accentChoice: AccentColorChoice {
         get { AccentColorChoice(rawValue: accentColorRaw) ?? .graphite }
         nonmutating set { accentColorRaw = newValue.rawValue }
+    }
+
+    private var appLanguage: AppLanguage {
+        LanguageManager.language(for: appLanguageRaw)
     }
 
     var body: some View {
@@ -65,9 +73,18 @@ struct OptionsView: View {
             } message: {
                 Text(L10n.restoreConfirmMessage)
             }
+            .alert(L10n.languageRestartRequiredTitle, isPresented: $showLanguageRestartAlert) {
+                Button(L10n.languageRestartQuit) {
+                    NSApplication.shared.terminate(nil)
+                }
+                Button(L10n.languageRestartLater, role: .cancel) {}
+            } message: {
+                Text(L10n.languageRestartRequiredMessage)
+            }
             .onAppear { handleOnAppear() }
             .onChange(of: menuBarEnabled) { _, _ in handleMenuBarChange() }
             .onChange(of: appearanceModeRaw) { _, _ in handleAppearanceChange() }
+            .onChange(of: appLanguageRaw) { _, _ in handleLanguageChange() }
             .onChange(of: accentColorRaw) { _, _ in
                 NotificationCenter.default.post(name: .accentPreferenceDidChange, object: nil)
             }
@@ -118,6 +135,11 @@ struct OptionsView: View {
         if AccentColorChoice(rawValue: accentColorRaw) == nil {
             accentColorRaw = AccentColorChoice.graphite.rawValue
         }
+        if AppLanguage(rawValue: appLanguageRaw) == nil {
+            suppressNextLanguageAlert = true
+            appLanguageRaw = AppLanguage.system.rawValue
+            LanguageManager.apply(.system)
+        }
         if UserDefaults.standard.object(forKey: PersistenceService.transparencyEnabledKey) == nil {
             transparencyEnabled = PersistenceService.loadTransparencyEnabled()
         }
@@ -129,6 +151,24 @@ struct OptionsView: View {
 
     private func handleAppearanceChange() {
         NotificationCenter.default.post(name: .appearancePreferenceDidChange, object: nil)
+    }
+
+    private func handleLanguageChange() {
+        guard let language = AppLanguage(rawValue: appLanguageRaw) else {
+            suppressNextLanguageAlert = true
+            appLanguageRaw = AppLanguage.system.rawValue
+            LanguageManager.apply(.system)
+            return
+        }
+
+        LanguageManager.apply(language)
+
+        if suppressNextLanguageAlert {
+            suppressNextLanguageAlert = false
+            return
+        }
+
+        showLanguageRestartAlert = true
     }
 
     private func handleMaxRecentMixesChange() {
@@ -193,6 +233,19 @@ struct OptionsView: View {
             Text(L10n.disableTransparenciesFooter)
                 .font(.footnote)
                 .foregroundStyle(MoodistTheme.Colors.secondaryText)
+
+            Picker(selection: $appLanguageRaw, label: Text(L10n.language)) {
+                ForEach(AppLanguage.allCases) { language in
+                    Text(languageName(language)).tag(language.rawValue)
+                }
+            }
+            .pickerStyle(.menu)
+            .accessibilityLabel(L10n.language)
+            .accessibilityValue(appLanguageValue)
+
+            Text(L10n.languageFooter)
+                .font(.footnote)
+                .foregroundStyle(MoodistTheme.Colors.secondaryText)
         } header: {
             Text(L10n.appearanceSection)
         }
@@ -203,6 +256,18 @@ struct OptionsView: View {
         case .system: return L10n.appearanceAutomatic
         case .light: return L10n.appearanceLight
         case .dark: return L10n.appearanceDark
+        }
+    }
+
+    private var appLanguageValue: String {
+        languageName(appLanguage)
+    }
+
+    private func languageName(_ language: AppLanguage) -> String {
+        switch language {
+        case .system: return L10n.languageSystem
+        case .english: return L10n.languageEnglish
+        case .spanish: return L10n.languageSpanish
         }
     }
 

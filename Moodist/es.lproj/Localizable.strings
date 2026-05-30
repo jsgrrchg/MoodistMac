@@ -205,7 +205,11 @@
 "language_system" = "Sistema";
 "language_english" = "Inglés";
 "language_spanish" = "Español";
-"language_footer" = "Elige el idioma de la aplicación. Sistema usa la preferencia de idioma de macOS.";
+"language_footer" = "Los cambios se aplican al reiniciar Moodist. El sistema usa la preferencia de idioma de macOS.";
+"language_restart_required_title" = "Reinicio requerido";
+"language_restart_required_message" = "Reinicia Moodist para aplicar el idioma seleccionado.";
+"language_restart_quit" = "Salir de Moodist";
+"language_restart_later" = "Más tarde";
 
 /* Sound Categories */
 "category_nature" = "Naturaleza";
@@ -435,7 +439,7 @@
 "mix_projector-library-noir" = "Biblioteca Noir con Proyector";
 "mix_subway-umbrella-rush" = "Prisa en el Metro con Paraguas";
 "mix_airport-night-shift" = "Turno Nocturno en el Aeropuerto";
-"mix_sailboat-lullaby" = "Nana del Velero";
+"mix_sailboat-lullaby" = "Arrullo del Velero";
 "mix_submarine-drift" = "Deriva Submarina";
 "mix_rowing-at-dawn" = "Remando al Amanecer";
 "mix_gravel-miles" = "Millas de Grava";
@@ -524,8 +528,8 @@
 "resize_sidebar_hint" = "Arrastra para cambiar el ancho de la barra lateral";
 "expand_section" = "Expandir sección";
 "collapse_section" = "Contraer sección";
-"collapse_all_categories" = "Contraer todas las categorías";
-"expand_all_categories" = "Expandir todas las categorías";
+"collapse_all_categories" = "Contraer todas";
+"expand_all_categories" = "Expandir todas";
 "category_collapse_hint" = "Toca dos veces para contraer la categoría";
 "category_expand_hint" = "Toca dos veces para expandir la categoría";
 "click_toggle_selection" = "Haz clic para alternar la selección";
