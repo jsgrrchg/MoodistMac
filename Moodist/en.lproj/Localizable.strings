@@ -205,6 +205,7 @@
 "language_system" = "System";
 "language_english" = "English";
 "language_spanish" = "Spanish";
+"language_portuguese" = "Portuguese (Brazil)";
 "language_footer" = "Changes take effect after restarting Moodist. System follows your macOS language preference.";
 "language_restart_required_title" = "Restart Required";
 "language_restart_required_message" = "Restart Moodist to apply the selected language.";

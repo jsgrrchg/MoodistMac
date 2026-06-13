@@ -9,6 +9,7 @@ enum AppLanguage: String, CaseIterable, Identifiable {
     case system
     case english = "en"
     case spanish = "es"
+    case portuguese = "pt-BR"
 
     var id: String { rawValue }
 }
@@ -31,7 +32,7 @@ enum LanguageManager {
         switch language {
         case .system:
             UserDefaults.standard.removeObject(forKey: appleLanguagesKey)
-        case .english, .spanish:
+        case .english, .spanish, .portuguese:
             // AppleLanguages is scoped to this app's defaults domain here.
             UserDefaults.standard.set([language.rawValue], forKey: appleLanguagesKey)
         }
