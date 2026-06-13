@@ -268,6 +268,7 @@ struct OptionsView: View {
         case .system: return L10n.languageSystem
         case .english: return L10n.languageEnglish
         case .spanish: return L10n.languageSpanish
+        case .portuguese: return L10n.languagePortuguese
         }
     }
 

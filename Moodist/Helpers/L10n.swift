@@ -349,6 +349,7 @@ enum L10n {
     static var languageSystem: String { tr("language_system", "System") }
     static var languageEnglish: String { tr("language_english", "English") }
     static var languageSpanish: String { tr("language_spanish", "Spanish") }
+    static var languagePortuguese: String { tr("language_portuguese", "Portuguese (Brazil)") }
     static var languageFooter: String {
         tr(
             "language_footer",

@@ -143,6 +143,7 @@
 		A20000000000000100000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C10000000000000100000002 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000003 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		C10000000000000100000005 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -352,6 +353,7 @@
 				en,
 				Base,
 				es,
+				"pt-BR",
 			);
 			mainGroup = A50000000000000100000001;
 			packageReferences = (
@@ -385,6 +387,7 @@
 			children = (
 				C10000000000000100000002 /* en */,
 				C10000000000000100000003 /* es */,
+				C10000000000000100000005 /* pt-BR */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -594,7 +597,7 @@
 					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 					CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_TEAM = 9WD82WQ56W;
 			DEVELOPMENT_ASSET_PATHS = "";
@@ -608,7 +611,7 @@
 				"@executable_path/../Frameworks",
 			);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.2.0";
+						MARKETING_VERSION = "1.3.0";
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
@@ -628,7 +631,7 @@
 					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
 					CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 13;
+				CURRENT_PROJECT_VERSION = 14;
 			DEAD_CODE_STRIPPING = YES;
 			DEVELOPMENT_TEAM = 9WD82WQ56W;
 			DEVELOPMENT_ASSET_PATHS = "";
@@ -642,7 +645,7 @@
 				"@executable_path/../Frameworks",
 			);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.2.0";
+						MARKETING_VERSION = "1.3.0";
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
