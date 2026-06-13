@@ -5,12 +5,13 @@ All notable changes to Moodist (macOS) are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.3.0] – 2026-06-03
+## [1.3.0] – 2026-06-13
 
 ### Added
 
 - **Brazilian Portuguese localization**: Added complete pt-BR localization coverage for the app interface, including settings, commands, sheets, category controls, custom mix flows, and sound and mix names.
 - **Language selector**: Added "Português (Brasil)" as a new option in the in-app language setting, alongside `System`, `English`, and `Spanish`.
+- Thanks to @vhbsouza for contributing this localization.
 
 ### Changed
 
