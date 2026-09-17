@@ -16,6 +16,7 @@
 		278D038A5C4B82659658DC6E /* CatalogViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C308DE14DDB29EBB328056 /* CatalogViews.swift */; };
 		45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */; };
 		4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
+		5304B14ADD5BFCDA07C0AB42 /* PreferencesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45170C52752A2043EDB6C0C /* PreferencesDocument.swift */; };
 		60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
 		6860F77C489C8574024DA7A3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416CECF2187A5FF4733A23CE /* RootView.swift */; };
@@ -27,6 +28,7 @@
 		A69849D902734385C33E4E48 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */; };
 		A7C61F445439798261F410DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
+		A91ABDE2BC0F1FF4918545EC /* PreferenceFilesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA904694222A1D42C3006942 /* PreferenceFilesSection.swift */; };
 		A98064D6018143941D690D8D /* AutoMixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640A927C531949DFBF37F0E8 /* AutoMixView.swift */; };
 		ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */; };
 		AD32FA639FB8DDFB23E36BC9 /* IOSAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C86C051A3713055BCAC087 /* IOSAppModel.swift */; };
@@ -77,6 +79,7 @@
 		D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */; };
 		E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */; };
 		E774E2FF283741A0242C5C15 /* SleepNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */; };
+		EDCBD2B7D99CC0B6D52C3BB8 /* InteroperabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971CD0125508B224724A6B69 /* InteroperabilityTests.swift */; };
 		FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEDCC51785EADFC16815432 /* StoreTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -111,6 +114,7 @@
 		64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioSessionTests.swift; path = MoodistIOSTests/AudioSessionTests.swift; sourceTree = "<group>"; };
 		90C86C051A3713055BCAC087 /* IOSAppModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAppModel.swift; path = MoodistIOS/App/IOSAppModel.swift; sourceTree = "<group>"; };
 		94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SleepNotificationController.swift; path = MoodistIOS/Platform/SleepNotificationController.swift; sourceTree = "<group>"; };
+		971CD0125508B224724A6B69 /* InteroperabilityTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InteroperabilityTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/InteroperabilityTests.swift; sourceTree = "<group>"; };
 		973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlatformIntegrationTests.swift; path = MoodistMacTests/PlatformIntegrationTests.swift; sourceTree = "<group>"; };
 		9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoodistIOSApp.swift; path = MoodistIOS/App/MoodistIOSApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000001 /* MoodistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistApp.swift; sourceTree = "<group>"; };
@@ -178,11 +182,13 @@
 		A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/LegacyAudioPlayerBackend.swift; sourceTree = "<group>"; };
 		A2000000000000010000004F /* EngineAudioBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/EngineAudioBackend.swift; sourceTree = "<group>"; };
 		A20000000000000100000050 /* AudioSpatialTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioSpatialTypes.swift; sourceTree = "<group>"; };
+		AA904694222A1D42C3006942 /* PreferenceFilesSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferenceFilesSection.swift; path = MoodistIOS/Views/PreferenceFilesSection.swift; sourceTree = "<group>"; };
 		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0F795AE4C26062392303CBD /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = MoodistIOS/Views/SettingsView.swift; sourceTree = "<group>"; };
 		C10000000000000100000002 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000003 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000005 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		C45170C52752A2043EDB6C0C /* PreferencesDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesDocument.swift; path = MoodistIOS/Platform/PreferencesDocument.swift; sourceTree = "<group>"; };
 		CA40054351B4B42C0AEC73BC /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/CatalogTests.swift; sourceTree = "<group>"; };
 		CB071736532288DF59FD9AE3 /* IOSDesign.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSDesign.swift; path = MoodistIOS/Design/IOSDesign.swift; sourceTree = "<group>"; };
 		CC90F2AE61A13F28AEA37605 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = MoodistMacTests/StoreTests.swift; sourceTree = "<group>"; };
@@ -290,6 +296,9 @@
 				203330A592D4C63A8F14A402 /* SleepTimerView.swift */,
 				640A927C531949DFBF37F0E8 /* AutoMixView.swift */,
 				C0F795AE4C26062392303CBD /* SettingsView.swift */,
+				C45170C52752A2043EDB6C0C /* PreferencesDocument.swift */,
+				AA904694222A1D42C3006942 /* PreferenceFilesSection.swift */,
+				971CD0125508B224724A6B69 /* InteroperabilityTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -616,6 +625,8 @@
 				257CEDB556E8CED5195BD0F7 /* SleepTimerView.swift in Sources */,
 				A98064D6018143941D690D8D /* AutoMixView.swift in Sources */,
 				0C4F495F4E4E392B0C00DF7F /* SettingsView.swift in Sources */,
+				5304B14ADD5BFCDA07C0AB42 /* PreferencesDocument.swift in Sources */,
+				A91ABDE2BC0F1FF4918545EC /* PreferenceFilesSection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -683,6 +694,7 @@
 				FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */,
 				ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */,
 				1C337B5A586DE7D154244DD0 /* TimerTests.swift in Sources */,
+				EDCBD2B7D99CC0B6D52C3BB8 /* InteroperabilityTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

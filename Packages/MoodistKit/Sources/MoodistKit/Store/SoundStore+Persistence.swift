@@ -102,6 +102,10 @@ public extension SoundStore {
             next[id] = item
         }
         sounds = next
+        if let id = currentMixId, !validMixIds.contains(id) {
+            currentMixId = nil
+            currentMixIconName = nil
+        }
         return true
     }
 

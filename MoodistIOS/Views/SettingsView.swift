@@ -49,6 +49,7 @@ struct SettingsView: View {
                     Text(L10n.languagePortuguese).tag("pt-BR")
                 }
             }
+            PreferenceFilesSection()
             Section(L10n.dataSection) {
                 Button(L10n.resetSelectionAndFavorites, role: .destructive) { resetRequested = true }
                 Button(L10n.restoreAllDefaults, role: .destructive) { restoreRequested = true }

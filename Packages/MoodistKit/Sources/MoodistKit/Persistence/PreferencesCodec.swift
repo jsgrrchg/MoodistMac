@@ -1,7 +1,7 @@
 import Foundation
 
 public enum PreferencesCodec {
-    enum Failure: Error { case unsupportedVersion(Int) }
+    public enum Failure: Error { case unsupportedVersion(Int) }
     public static func decode(_ data: Data) throws -> ExportedPreferences {
         let payload = try JSONDecoder().decode(ExportedPreferences.self, from: data)
         guard payload.version == ExportedPreferences.currentVersion else {
