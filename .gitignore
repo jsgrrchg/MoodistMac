@@ -19,6 +19,7 @@ xcuserdata/
 
 # Local derived data
 .derived/
+.derived-mac/
 
 # macOS
 .DS_Store
