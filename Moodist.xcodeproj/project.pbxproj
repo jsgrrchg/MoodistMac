@@ -70,6 +70,7 @@
 		C6532473DD2647F032AC22C7 /* AudioInterruptionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */; };
 		D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */; };
 		D392BBB0BE7606B5701F37A8 /* IOSDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB071736532288DF59FD9AE3 /* IOSDesign.swift */; };
+		D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */; };
 		E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */; };
 		E774E2FF283741A0242C5C15 /* SleepNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */; };
 		FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEDCC51785EADFC16815432 /* StoreTests.swift */; };
@@ -177,6 +178,7 @@
 		CA40054351B4B42C0AEC73BC /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/CatalogTests.swift; sourceTree = "<group>"; };
 		CB071736532288DF59FD9AE3 /* IOSDesign.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSDesign.swift; path = MoodistIOS/Design/IOSDesign.swift; sourceTree = "<group>"; };
 		CC90F2AE61A13F28AEA37605 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = MoodistMacTests/StoreTests.swift; sourceTree = "<group>"; };
+		D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LibraryView.swift; path = MoodistIOS/Views/LibraryView.swift; sourceTree = "<group>"; };
 		D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TimerTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/TimerTests.swift; sourceTree = "<group>"; };
 		F6559F2DC5AEBCA767A042BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
@@ -275,6 +277,7 @@
 				416CECF2187A5FF4733A23CE /* RootView.swift */,
 				42C308DE14DDB29EBB328056 /* CatalogViews.swift */,
 				63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */,
+				D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -596,6 +599,7 @@
 				6860F77C489C8574024DA7A3 /* RootView.swift in Sources */,
 				278D038A5C4B82659658DC6E /* CatalogViews.swift in Sources */,
 				A69849D902734385C33E4E48 /* PlayerView.swift in Sources */,
+				D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

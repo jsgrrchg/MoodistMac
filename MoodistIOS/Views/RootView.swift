@@ -15,7 +15,7 @@ struct RootView: View {
                 NavigationStack { MixBrowser().toolbar { settingsButton } }
             }
             Tab(T("library", "Library"), systemImage: "books.vertical") {
-                NavigationStack { Text(L10n.favorites).navigationTitle(T("library", "Library")).toolbar { settingsButton } }
+                NavigationStack { LibraryView().toolbar { settingsButton } }
             }
         }
         .tabViewBottomAccessory { MiniPlayer { playerPresented = true } }
