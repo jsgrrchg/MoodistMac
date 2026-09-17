@@ -1,0 +1,27 @@
+//
+//  Sound.swift
+//  MoodistMac
+//
+//  Individual sound: ID, label, bundle path, and SF Symbol icon.
+//
+
+import Foundation
+
+public struct Sound: Identifiable, Hashable {
+    public let id: String
+    public let label: String
+    /// File name, for example "river.mp3".
+    public let fileName: String
+    /// Bundle subfolder, for example "nature".
+    public let categoryFolder: String
+    /// SF Symbol name for the icon.
+    public let iconName: String
+
+    public init(id: String, label: String, fileName: String, categoryFolder: String, iconName: String) {
+        self.id = id
+        self.label = label
+        self.fileName = fileName
+        self.categoryFolder = categoryFolder
+        self.iconName = iconName
+    }
+}

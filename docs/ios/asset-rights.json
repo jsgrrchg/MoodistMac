@@ -1,0 +1,1315 @@
+{
+  "note": "Existing README names BBC, Pixabay and CC0 globally; no per-file attribution evidence was present at implementation time. Do not infer rights from these names.",
+  "assets": [
+    {
+      "id": "campfire",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/campfire.mp3",
+      "sha256": "9625b15c7f6a4a2d16db937f0e1042762421f9a3ab74f60235bd63654bba13db",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "droplets",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/droplets.mp3",
+      "sha256": "d21f0af60663a03b477739a425ddc59be394ff60ddd1a877bff280b352a57d77",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "howling-wind",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/howling-wind.mp3",
+      "sha256": "dd00c875c58c033d2f3b94e247d2b5a366ed529a659cc2d19e00dd84ad0e464d",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "jungle",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/jungle.mp3",
+      "sha256": "a0ac0b48a8e28d3dde17203e386a722afafe057d1b5d1fb5d13918175a440335",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rainforest",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/rainforest.mp3",
+      "sha256": "74f319ad7e847f7f3f663aea2f47dff65fe546dd010cdf0976fb7b780e4cea8e",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "river",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/river.mp3",
+      "sha256": "b0360cd39425a23f7957a152ec61113226f423a9e2e08071d5f37200357e6289",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rocks-falling",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/rocks-falling.mp3",
+      "sha256": "6064fad12652d1adf69b13d849a190cad5c1f708abc8afd0307d3b7ebd8993ca",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "sea-cave",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/sea-cave.mp3",
+      "sha256": "d52a7ec7eb842cdf9535ed9a043fb7fba2dfd70c89e51832383bdfbd8a87c795",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "walk-in-snow",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/walk-in-snow.mp3",
+      "sha256": "11d89616a1fff14d3c8c57efd88d8d1f66189a2105b13b22b63d886e10e8308c",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "walk-on-gravel",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/walk-on-gravel.mp3",
+      "sha256": "0029d593b2803f035912a4695b499df60d23333e2781f848b243a0b35f5dc16e",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "walk-on-leaves",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/walk-on-leaves.mp3",
+      "sha256": "a7f49dc2253c7ce58399865d518f947e377fcf6e78e0d53b270c3497d4021c52",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "walking-on-wood",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/walking-on-wood.mp3",
+      "sha256": "2ae9df76de40f8357c1a76dcf9a089fb2633e999951ade5b3e3059285ada1aa6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "waterfall",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/waterfall.mp3",
+      "sha256": "46d0848f5876d0f461e8439f812464742710f5f6d236baa977f382d794c60b0a",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "waves",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/waves.mp3",
+      "sha256": "40c670e678b5ee19ff67a8c322490b1f7d2d53124cf9e8b07efd329138aaa8f8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "wind",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/wind.mp3",
+      "sha256": "556ec1d90038aa92f754de84d58e8973693836b1e0358834536ca7824f40c973",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "wind-in-trees",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/nature/wind-in-trees.mp3",
+      "sha256": "b29f775dda9789004aaceee392e124eaa35c0386d27f99b93a639185d98f6b4b",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "heavy-rain",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/heavy-rain.mp3",
+      "sha256": "6910161b347a4f616bc42d0b3118982c243d149fe45e55fef74c9a9e1aa08560",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "light-rain",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/light-rain.mp3",
+      "sha256": "967eab5ddc2b84808a05fea757460d51461e9dc56e72a3d1490bbb58e7bc6578",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rain-on-car-roof",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/rain-on-car-roof.mp3",
+      "sha256": "5e16d3e97c97a3a130d13a1300d5ccdd3ed8b7788dc9f76262ead0e4eb8a07d7",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rain-on-leaves",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/rain-on-leaves.mp3",
+      "sha256": "66669f1e4f90b94016cd3287f7c3b18fd5b76dff7939617b3ba5ec7c92b587ac",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rain-on-tent",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/rain-on-tent.mp3",
+      "sha256": "427d0a06042c5154345ed95de49b2aebf465716766f64891e49f87c3e7cde787",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rain-on-umbrella",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/rain-on-umbrella.mp3",
+      "sha256": "f31a565bdf853fbf6baba8495fdfed91f161c55756540819ee13dbbca98ab8c0",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rain-on-window",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/rain-on-window.mp3",
+      "sha256": "781add053a83a0a9ac2a6ee2ccc937fed24872d479830c0c98cd70ed03689fe9",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "thunder",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/rain/thunder.mp3",
+      "sha256": "c96dde1068d5c96a40ad47cccc767a88d907b3d3fdcb84819e18b81dcd6bd2bd",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "beehive",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/beehive.mp3",
+      "sha256": "97a42f09b8b4bf2bb2b6eceb7f1f67a7cde599d16252140102fcf4c3af41c6a8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "birds",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/birds.mp3",
+      "sha256": "f9b022ed2df9f727a8e84e614b25965112dfe2bbb30cdf8c3db0442ae1eed489",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "blackbird",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/blackbird.mp3",
+      "sha256": "d9ecb297347ee5672328ce59011fe4f7ef111b738c8a16645be2d08922bfb56c",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "cat-meow",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/cat-meow.mp3",
+      "sha256": "6d9450d7b74c853abc4997c772d5e9117c9aa2e1ee8bec9b43d0da8d6859ac51",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "cat-purring",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/cat-purring.mp3",
+      "sha256": "a779a2a3fe77b08722517e2e1a4f8ecbfb59a6282a74e46f0e9244d6cfdf230e",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "chickens",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/chickens.mp3",
+      "sha256": "c869f4c5e046d7fefca787363fbec4f466fbf2be5493954eca9ee11a67397d38",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "cows",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/cows.mp3",
+      "sha256": "a1675bfe879d428e9e0079c1ca40ab583774489c1b26894e3e0c25bd0f8516d8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "crickets",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/crickets.mp3",
+      "sha256": "126bf1620193fa43a711d3cf6658a06f9fef5bd4eb42bf2ae48da0da1b73605c",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "crows",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/crows.mp3",
+      "sha256": "d39e6732f7713152f697de53053feffe10fc911aa6b7494e01bdca2731edabf1",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "dog-barking",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/dog-barking.mp3",
+      "sha256": "470bd3edaf2e37f3f0c78f0779d773ae59466e4965494875f1c0f4de6bfe0604",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "ducks",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/ducks.mp3",
+      "sha256": "e09fbe4b1b98422faa46ad6a29557ed16cbc64cf32b88759fa34a1a7cf4f6675",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "elephant",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/elephant.mp3",
+      "sha256": "ecb22402ad1cc893f6cf808c1e6cc27b78df012100db68a9d74ece0370360044",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "frog",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/frog.mp3",
+      "sha256": "c41fbbbfbe896a11fd19c0f8dc9185a000462239ff971625ac8eaedd05480b8c",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "horse-gallop",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/horse-gallop.mp3",
+      "sha256": "60d455c6d45732b21fdc3fdfc3c517a37d5f0248e3b7b3274939ab2177e633e6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "lion",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/lion.mp3",
+      "sha256": "8d713f3e0f96aa53fd9b5d333b6cc7716c88a109e2d26efee507fdfe1f6f14e7",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "macaws",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/macaws.mp3",
+      "sha256": "614789d3c47f6339f31662a7f9b6d33d0977cf6b5d37ea66985e33a3c90d55ef",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "mandrill-baboon",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/mandrill-baboon.mp3",
+      "sha256": "94343f0a954dd3379d356e455648b0f04d26d5ee3a72ad2be6b868f289bc3825",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "owl",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/owl.mp3",
+      "sha256": "7fcd61d5953f564930220bc2579d6071068977f92c7bf5ed6117a57112c55a82",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "penguin",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/penguin.mp3",
+      "sha256": "78ebd53028226ee420d4e6132cae3ab0592ca1b85979771d8a17a6d0440ba616",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "peregrine-falcon",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/peregrine-falcon.mp3",
+      "sha256": "f8b9cc3963291faaeb7096c5b6389ffb39d5a6d840496f13bbf9b2e424f875c9",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "pipit-bird",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/pipit-bird.mp3",
+      "sha256": "dd9d8901545cf3b27270ec9e56f2ae0f52fa9f1a401b6bfbf5d6b00d8576ad52",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "seagulls",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/seagulls.mp3",
+      "sha256": "ceae3d3a3c57e6c383c86e4a427b538379299133ba595e3b4f40e051886c13a8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "sheep",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/sheep.mp3",
+      "sha256": "e1f144b6cbbaf736c83372edbeee7aba65eba215e4789d0670eaa7dc6ad135fa",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "whale",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/whale.mp3",
+      "sha256": "e88047b74a6566e07994454d5d6c5ab5ca400485d61d0ee74a5218184187dc17",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "wolf",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/wolf.mp3",
+      "sha256": "b87652f48a9e24bd47a0bcf18b3e8f61368521148bdb384c908677a460ae56c6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "woodpecker",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/woodpecker.mp3",
+      "sha256": "b2c66c84d6d9ef6d9cc6d064d2da7b9068f994d1e18080f6a62deaa786b18eaf",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "wren-bird",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/animals/wren-bird.mp3",
+      "sha256": "b8107e7b1d9d7e37539065ff72777857b373291316f4ac194a4eb1c9cb5c35ab",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "ambulance-siren",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/urban/ambulance-siren.mp3",
+      "sha256": "5ba2cefd6677e97be596117771a8394ebdb51905530b72578b5913675033e2a4",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "busy-street",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/urban/busy-street.mp3",
+      "sha256": "3f819591a58f280683ab934e9c6a1b90c58531ec5920826e9d887668a0f757e2",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "crowd",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/urban/crowd.mp3",
+      "sha256": "720313446ff6dd117f271bcb5082d3d78a038dd284fe9d3e3a4ceb158bcaeafa",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "fireworks",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/urban/fireworks.mp3",
+      "sha256": "5436e6e89037d5ccf10a27fdb9164566bf68d4628c3537bcac32e8853989e514",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "highway",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/urban/highway.mp3",
+      "sha256": "3de274910ddffa6b1ebfce67875aff87b4b7a4c662e49fbb822e5e39458006b5",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "road",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/urban/road.mp3",
+      "sha256": "df23f3692a02823fe000966d9d0a38c76094958ab26f11e76448c09d41875cd8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "traffic",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/urban/traffic.mp3",
+      "sha256": "3fa2fe742335124d0226f4ba4a9cb86bbc08e1d82d9b3ef6971cff74035cd61f",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "air-defense-alarm",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/air-defense-alarm.mp3",
+      "sha256": "836f6c299dfdd047ae9c30dad99d0484a85a8322bd51be165793b92d8fc2f46f",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "army-drill",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/army-drill.mp3",
+      "sha256": "546f6dbc30f64d2ed9f27d32a00b5e8bd4624791fc5e42e0f057ac9dac342e00",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "battlefield",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/battlefield.mp3",
+      "sha256": "28770ae817b194dc65d955876bca6ab0f722a095ef067545a12abb051d11332a",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "city-bombing",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/city-bombing.mp3",
+      "sha256": "423405647bb3820ff5cf3c22e6d4f2565b4098031a1b5ee3c1acbd7ede49c3d6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "distant-battlefield",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/distant-battlefield.mp3",
+      "sha256": "544e8320e957a98b26efa00bcf7a915024b9a88abbfa43e55bc06cff8626ffb2",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "fighter-jet",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/fighter-jet.mp3",
+      "sha256": "76a432acda643c1f6fde4c7ed0f8e691973c4891f8f787ac088d9a2b8b8ec921",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "futuristic-battle",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/futuristic-battle.mp3",
+      "sha256": "30d3029cccc7202d5aac3a82e6cf9dab344876b57732296ae4258acb68f0312a",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "machine-gun",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/machine-gun.mp3",
+      "sha256": "21f9d20e5649e5457213f7df529337485314923036ab9640df63f26df9903be6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "military-march",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/military-march.mp3",
+      "sha256": "a224b08b93d7992361d051348376bb892895812a8a51b3a90503498aed322335",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "soldiers-marching",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/military/soldiers-marching.mp3",
+      "sha256": "c24ab3e78fd971b70874fb33817089b2cbc57f3b467c877cb6519e721066d41b",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "airport",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/airport.mp3",
+      "sha256": "9bb9a5d0426c1d865ea9a66d06bc81d63ef40bb418b48bc3819850b95000c9c0",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "cafe",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/cafe.mp3",
+      "sha256": "04b818f9e7c31d57c7f0d522bcf7d9f708c728f046d009953e4fbc18723a0300",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "carousel",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/carousel.mp3",
+      "sha256": "cd1d17f381c10b3a9adb966e34786f150241c424cf279d2c98d0bba6df16e750",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "children-playing",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/children-playing.mp3",
+      "sha256": "15a6d9e98cfbdac0ca9566b13f55eca36b35142c3ef0b617742e698028fbe423",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "chinese-kitchen",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/chinese-kitchen.mp3",
+      "sha256": "0ca90f1d708da06a2e8a257d86267958cfdff9d1a4caacb8c530c504c3953ee3",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "church",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/church.mp3",
+      "sha256": "c71217c3b55113b057ee1d82e57b173be184d68b1e3cf53b3fcc17b8792f69ec",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "construction-site",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/construction-site.mp3",
+      "sha256": "51309aadc58e78d0fdba194cfbeb7dfe84fbfba430899e5df4d8b884aadf18eb",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "crowded-bar",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/crowded-bar.mp3",
+      "sha256": "3afbd498ed30d84b5050878ed1656eebb378e69b4d9c62b15615a42ffb8fd5ab",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "flea-market",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/flea-market.mp3",
+      "sha256": "ae288e60333b2c213f84c8d8dcddcfbc53cb105f6e2d12ff9f444adfb7e0141c",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "laboratory",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/laboratory.mp3",
+      "sha256": "bc07a653b11b7bd43959124aa5d946613735f2ad130856b43535b305a3ff09af",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "laundry-room",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/laundry-room.mp3",
+      "sha256": "b24f418d7d1b931312944f2383fcca0f56fe5c397b8e8571cc3ab1b27f701da4",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "library",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/library.mp3",
+      "sha256": "95095ef77ed7f1d1c2550b6f39d95cde31f72b37d8023c1dfd7c22931d84fe05",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "night-village",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/night-village.mp3",
+      "sha256": "9f012d72f5923208c223065d727a01afecc7d3253064c2e868dc658c33369f8a",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "office",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/office.mp3",
+      "sha256": "32691ad3d1f0cd6175a4e648ad15c5fd354ad0e59a3ce0b246fd7cf89d9a4169",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "restaurant",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/restaurant.mp3",
+      "sha256": "e4e7c25aa81c25bcae0ef010b3fecbdf08371b8af675ecd29972d7a561ddecaa",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "subway-station",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/subway-station.mp3",
+      "sha256": "4b749d4c6d9f9a9b09744325bc358eca80440ba98debdd1ca69a8fcc3cc6dade",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "supermarket",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/supermarket.mp3",
+      "sha256": "a33a739ef44a4794d5c0b58b93057312f85d628eac19e45fcb57c70a420f8b66",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "temple",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/temple.mp3",
+      "sha256": "680ffbb188ac4068ab775d9da505b0dc6a1fac2e424b9f1ed6d857574f36c44c",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "trading-floor",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/trading-floor.mp3",
+      "sha256": "10fab4b6e258f9802ceee32be76301df6743f2ed0a0fc616fb4fb4670f88daa6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "underwater",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/places/underwater.mp3",
+      "sha256": "addd91f799f3b77d8032c32745a0c039804502eb1c65039790dae66428e27164",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "airplane",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/airplane.mp3",
+      "sha256": "170fcd68d60ebe89ac26425a0c38c437b70071cc4919419bbb0cbc92a3cb5af8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "bike-ride",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/bike-ride.mp3",
+      "sha256": "994bd8c7e42e5dac4a3ff84dcd5c84b6564ce5dcf5c6c966401f365599d3a2a2",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "diesel-fork-lift",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/diesel-fork-lift.mp3",
+      "sha256": "d4f172a21710801f83ac5ad973bac885bc6c9c15317bff578b0d55851258c643",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "dumper-truck",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/dumper-truck.mp3",
+      "sha256": "4efcafee7fc4410e320883b8da3b6107be83e58c32c61abec4a90da29c2ff345",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "fog-horn",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/fog-horn.mp3",
+      "sha256": "b015658697c995825c03e557f04b2c1b4663d36023c40cb2f3b71e695b3194f0",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "inside-a-train",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/inside-a-train.mp3",
+      "sha256": "8689c8f151910752fd94fce9c78ce6d48a4d6653c25f966f056f34e6ef448459",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "rowing-boat",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/rowing-boat.mp3",
+      "sha256": "c4347ae2fa806079198c96c13937e17be7a084c976d566846e322aeefece84d1",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "sailboat",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/sailboat.mp3",
+      "sha256": "8701ec1f21561d53c006cf2af4dd540a1b952ed56da4315d382c70a8c01d120f",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "submarine",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/submarine.mp3",
+      "sha256": "739e7ae10aa770522b0007482813f8961567fda8cf2941fce46acfe00fdd18e8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "train",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/transport/train.mp3",
+      "sha256": "ee81ed9e0ce6bfc14ce21209615e6f7156384c8213f8c80b5fae3665005ef788",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "bells",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/bells.mp3",
+      "sha256": "f237684b68e70ea3f63a020c819b48f8f31bcc6ed1029a35cbb92001fcfe4f93",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "boiling-water",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/boiling-water.mp3",
+      "sha256": "9c2e35cbd002c0b13aa82301781878654c6fe651325de8be971721ccb95128a1",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "bubbles",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/bubbles.mp3",
+      "sha256": "96f743156f8f9402f1fa7341415d3d9a4bc09316fe94e27c07ce45d211a18c5b",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "cash-register",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/cash-register.mp3",
+      "sha256": "bcf9f83c2d4c7fc926b60221d0ad6f9e0c5e861aa4ceec6b26736270a4be407c",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "ceiling-fan",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/ceiling-fan.mp3",
+      "sha256": "c2c009912df561236cc3ca2fb428384ae63f5f869d5178b0a62aabe856df86fb",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "clock",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/clock.mp3",
+      "sha256": "45283d30ccc1ccebab2ddb84dbaaaedf5265275c33cb7c4c8defce9451059160",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "dryer",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/dryer.mp3",
+      "sha256": "6d666dd1936172ac237915f5dc035d242deddd8ff1a78a765073eda18f8e3e2f",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "fetal-heartbeat",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/fetal-heartbeat.mp3",
+      "sha256": "63d76c808d87565ad400146dfe4e230b18616af300c501408030b10067d7f01e",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "heart-pulse-monitor",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/heart-pulse-monitor.mp3",
+      "sha256": "1559b9c10bacb1593100aaf1b90a8852800ac79e1fb98bfac16f7d3b19e023bd",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "keyboard",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/keyboard.mp3",
+      "sha256": "2499954ba838ce1b32b79560a2ab273209ae350bb9988490738ed2e2b23f82ae",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "mouse-clicking",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/mouse-clicking.mp3",
+      "sha256": "4cc2916ec35881c34d4ddaaec0c023c90351b66b3b2a51fc337888d7ce188ef2",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "morse-code",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/morse-code.mp3",
+      "sha256": "a00a81bbbcafdcdb2196054941827ecf9d2075ff7459f5794e6b6acabc979b10",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "paper",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/paper.mp3",
+      "sha256": "6aecf96cbcb2403188c010bcdae37de74b604c494dda3097b5cc0a206f686741",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "printer",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/printer.mp3",
+      "sha256": "6d19eebe3f80231ff513853122afcfb72c165727b14359ff4e76909f150d31d4",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "singing-bowl",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/singing-bowl.mp3",
+      "sha256": "9b86534b01679a113a26da201f6160d604c9408ddd6effb00e38c5be78f0192e",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "slide-projector",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/slide-projector.mp3",
+      "sha256": "f87b98c4d5f1d5979679a870928700baa03c78a52785eaa25941373c16f0f5f2",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "tuning-radio",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/tuning-radio.mp3",
+      "sha256": "2ed7619d3a98c5298728a7e3fc60971cadf0a573b7f1ce46d11a8d69e53becd6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "typewriter",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/typewriter.mp3",
+      "sha256": "0d56f3a9482e7edad9a6e58130d733883c89f36f51e1c8dd9fde7a3b5cf276b8",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "vinyl-effect",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/vinyl-effect.mp3",
+      "sha256": "037f7a6ac2a78c1378381048b40049b4960801a4f1e2a209991a64f8744fa46d",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "washing-machine",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/washing-machine.mp3",
+      "sha256": "f468aaf120141cb618085d33aba190e81f8e85ba6efe5f292ff0a920edabf955",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "wind-chimes",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/wind-chimes.mp3",
+      "sha256": "212558c58fdb5b8f490b9c1d9b6f3c7469d025b4feff4df4014bff60d0422cf9",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "windshield-wipers",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/windshield-wipers.mp3",
+      "sha256": "858490d7480c62728d976b2aee26193c282f5f0aace7a1bf3001994b7f02d93f",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "wood-creak",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/things/wood-creak.mp3",
+      "sha256": "7fa6183e22c3cff2a79e0f5bef98bad6072f2955260808427d75fd6d57d3738b",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "baby-crying",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/noise/baby-crying.mp3",
+      "sha256": "e2aa21b5a87ea32710fa666f8c0438d54e58d02e0cbe21cfa1fe91cc804b991e",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "brown-noise",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/noise/brown-noise.wav",
+      "sha256": "b7e4209f2bb4c2ca37e7cf0b21393e2264703d43bea36b4b5c837b8496bbe578",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "men-snoring",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/noise/men-snoring.mp3",
+      "sha256": "72af6b42daee5c29e167f2fe29c6d850c5888cf2c8f99f4c64e742d4b687182b",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "pink-noise",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/noise/pink-noise.wav",
+      "sha256": "075eecefd60c4103da3ec8672db1c96ba54f073f8a5bc4e7cc1b587c96854fb4",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "white-noise",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/noise/white-noise.wav",
+      "sha256": "02ccb2013118b57c76607f7e3e5d9d479e5a9aaa7868e1a07194cde77c0ea6dd",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "binaural-alpha",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/binaural/binaural-alpha.wav",
+      "sha256": "4f4fd98a2a0e8dde09820428ec9767b0137b517fc8f16c267166c797272c5ce6",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "binaural-beta",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/binaural/binaural-beta.wav",
+      "sha256": "e6a7b7ad6cf115aa07aa4f26686ef822b905c6daf9f4825ef2f7ad3c053058af",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "binaural-delta",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/binaural/binaural-delta.wav",
+      "sha256": "c784ebc461c36e372a31fac0318faf7fe82301c668185086a98d2de55214a0aa",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "binaural-gamma",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/binaural/binaural-gamma.wav",
+      "sha256": "7e92631c38aea00d9d876045893916603482bc1304dc1f34c82ec15735f0d0ca",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    },
+    {
+      "id": "binaural-theta",
+      "path": "Packages/MoodistKit/Sources/MoodistKit/Resources/sounds/binaural/binaural-theta.wav",
+      "sha256": "c297968156f52eeed3f8eb552bde66b9b2e845df79748d793bc7a84d1fdb7b67",
+      "sourceURL": null,
+      "author": null,
+      "license": null,
+      "redistributionEvidence": null,
+      "status": "needs-provenance"
+    }
+  ]
+}

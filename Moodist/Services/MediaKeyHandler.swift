@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  MediaKeyHandler.swift
 //  MoodistMac

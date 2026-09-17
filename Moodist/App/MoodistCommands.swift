@@ -1,8 +1,9 @@
+import MoodistKit
 import Sparkle
 import SwiftUI
 
 struct MoodistCommands: Commands {
-    @ObservedObject private var soundStore: SoundStore
+    @ObservedObject private var soundStore: MacSoundStore
     @ObservedObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
     private let updater: SPUUpdater
     private let showCustomTimerWindow: () -> Void
@@ -10,7 +11,7 @@ struct MoodistCommands: Commands {
     private let openBuyMeACoffee: () -> Void
 
     init(
-        soundStore: SoundStore,
+        soundStore: MacSoundStore,
         updater: SPUUpdater,
         checkForUpdatesViewModel: CheckForUpdatesViewModel,
         showCustomTimerWindow: @escaping () -> Void,
@@ -79,14 +80,14 @@ struct MoodistCommands: Commands {
                 Divider()
             }
             Menu(L10n.timerMinutes) {
-                ForEach(SoundStore.timerMenuMinutesPresets, id: \.self) { seconds in
+                ForEach(MacSoundStore.timerMenuMinutesPresets, id: \.self) { seconds in
                     Button(soundStore.timerLabel(forSeconds: seconds)) {
                         soundStore.startSleepTimer(durationSeconds: seconds)
                     }
                 }
             }
             Menu(L10n.timerHours) {
-                ForEach(SoundStore.timerMenuHoursPresets, id: \.self) { seconds in
+                ForEach(MacSoundStore.timerMenuHoursPresets, id: \.self) { seconds in
                     Button(soundStore.timerLabel(forSeconds: seconds)) {
                         soundStore.startSleepTimer(durationSeconds: seconds)
                     }

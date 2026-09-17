@@ -1,10 +1,11 @@
+import MoodistKit
 import AppKit
 
 @MainActor
 final class MacOSAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     private static let menuBarKey = PersistenceService.menuBarEnabledKey
 
-    weak var soundStore: SoundStore? {
+    weak var soundStore: MacSoundStore? {
         didSet {
             timerCoordinator.soundStore = soundStore
             menuBarCoordinator.soundStore = soundStore

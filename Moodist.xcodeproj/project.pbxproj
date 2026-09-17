@@ -7,42 +7,53 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040883339C433A00BF733834 /* MoodistFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F89439B3CF206BBDB91559 /* MoodistFlowTests.swift */; };
+		04E9DB81250D2A82098248A7 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 86EC0C1CD9E2A1B81C19B50B /* MoodistKit */; };
+		0C4F495F4E4E392B0C00DF7F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F795AE4C26062392303CBD /* SettingsView.swift */; };
+		0E6755547A6C1FDC30F37142 /* PlatformIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */; };
+		163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
+		1C337B5A586DE7D154244DD0 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */; };
+		257CEDB556E8CED5195BD0F7 /* SleepTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203330A592D4C63A8F14A402 /* SleepTimerView.swift */; };
+		278D038A5C4B82659658DC6E /* CatalogViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C308DE14DDB29EBB328056 /* CatalogViews.swift */; };
+		45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */; };
+		4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
+		5304B14ADD5BFCDA07C0AB42 /* PreferencesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45170C52752A2043EDB6C0C /* PreferencesDocument.swift */; };
+		60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */; };
+		625A9A50DC829A66A3C0297E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
+		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
+		6698DC504AB25032CE32C80E /* EngineIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6862B038D5FF106820D794D /* EngineIntegrationTests.swift */; };
+		6860F77C489C8574024DA7A3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416CECF2187A5FF4733A23CE /* RootView.swift */; };
+		6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA40054351B4B42C0AEC73BC /* CatalogTests.swift */; };
+		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
+		7F075296D7F2601154B705EB /* IOSAudioSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */; };
+		8CD3A726852262FE4DADCC9C /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 042A3F51971C835C3956BEF8 /* MoodistKit */; };
+		8E79279326B2DCA374AB2549 /* CustomMixEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */; };
+		A69849D902734385C33E4E48 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */; };
+		A7C61F445439798261F410DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
+		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
+		A91ABDE2BC0F1FF4918545EC /* PreferenceFilesSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA904694222A1D42C3006942 /* PreferenceFilesSection.swift */; };
+		A98064D6018143941D690D8D /* AutoMixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640A927C531949DFBF37F0E8 /* AutoMixView.swift */; };
+		ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */; };
+		AD32FA639FB8DDFB23E36BC9 /* IOSAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C86C051A3713055BCAC087 /* IOSAppModel.swift */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
 		B175D2182F310AB600907398 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000002 /* ContentView.swift */; };
 		B175D2192F310AB600907398 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000003 /* CategoryView.swift */; };
 		B175D21A2F310AB600907398 /* SoundRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000004 /* SoundRow.swift */; };
-		B175D21B2F310AB600907398 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000005 /* Sound.swift */; };
-		B175D21C2F310AB600907398 /* SoundCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000006 /* SoundCategory.swift */; };
-		B175D21D2F310AB600907398 /* SoundStateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000007 /* SoundStateItem.swift */; };
-		B175D21E2F310AB600907398 /* SoundsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000008 /* SoundsData.swift */; };
-		B175D21F2F310AB600907398 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000009 /* AudioService.swift */; };
-		B175D2202F310AB600907398 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000A /* PersistenceService.swift */; };
-		B175D2212F310AB600907398 /* SoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000B /* SoundStore.swift */; };
 		B175D2222F310AB600907398 /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000C /* PlatformColor.swift */; };
 		B175D2232F310AB600907398 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000D /* Assets.xcassets */; };
-		B175D2242F310AB600907398 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000E /* sounds */; };
-		C10000000000000100000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000004 /* Localizable.strings */; };
 		B175D2252F310AB600907398 /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000F /* OptionsView.swift */; };
 		B175D2262F310AB600907398 /* MoodistTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000010 /* MoodistTheme.swift */; };
-		B175D2272F310AB600907398 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000011 /* L10n.swift */; };
 		B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000012 /* VisualEffectBackground.swift */; };
 		B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000013 /* MediaKeyHandler.swift */; };
-		B175D22D2F310AB600907398 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000016 /* Preset.swift */; };
 		B175D22E2F310AB600907398 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000017 /* SidebarView.swift */; };
-		B175D2302F310AB600907398 /* SoundIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000019 /* SoundIcons.swift */; };
-		B175D2312F310AB600907398 /* Mix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001A /* Mix.swift */; };
-		B175D2322F310AB600907398 /* MixesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001B /* MixesData.swift */; };
 		B175D2332F310AB600907398 /* MixCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001C /* MixCategoryView.swift */; };
 		B175D2342F310AB600907398 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001D /* Color+Hex.swift */; };
-		B175D2352F310AB600907398 /* TimerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001E /* TimerItem.swift */; };
 		B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001F /* TimerNotificationManager.swift */; };
 		B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000020 /* FloatingPlayerPanelView.swift */; };
-		B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000033 /* MarqueeTextView.swift */; };
-		B175D2382F310AB600907398 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000021 /* LanguageManager.swift */; };
 		B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000022 /* AccentColorChoice.swift */; };
-		B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000023 /* ExportedPreferences.swift */; };
 		B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000024 /* PreferencesExportService.swift */; };
 		B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000025 /* PreferencesImportService.swift */; };
+		B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000033 /* MarqueeTextView.swift */; };
 		B175D2412F310AB600907398 /* UpdateWindowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000034 /* UpdateWindowPresenter.swift */; };
 		B175D2422F310AB600907398 /* UpdateWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000035 /* UpdateWindowView.swift */; };
 		B175D2432F310AB600907398 /* TimerSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000036 /* TimerSetupView.swift */; };
@@ -50,32 +61,78 @@
 		B175D2452F310AB600907398 /* ContentSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000038 /* ContentSections.swift */; };
 		B175D2462F310AB600907398 /* ToolbarBridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000039 /* ToolbarBridges.swift */; };
 		B175D2472F310AB600907398 /* ContentToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003A /* ContentToolbar.swift */; };
-			B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003B /* ScrollStateStore.swift */; };
-			B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003C /* SidebarLayout.swift */; };
-			B175D24A2F310AB600907398 /* MixIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003D /* MixIcon.swift */; };
-			B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003E /* MoodistCommands.swift */; };
-			B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003F /* MoodistAppActions.swift */; };
-			B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000040 /* SwiftUI+AppAccent.swift */; };
-			B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000041 /* SparkleIntegration.swift */; };
-			B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
-			B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000043 /* MacOSAppDelegate.swift */; };
-			B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000044 /* AppWindowCoordinator.swift */; };
-			B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000045 /* AppDockCoordinator.swift */; };
-			B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000046 /* AppMenuBarCoordinator.swift */; };
-			B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000047 /* AppTimerCoordinator.swift */; };
-			B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000048 /* SoundStore+Playback.swift */; };
-			B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000049 /* SoundStore+Timer.swift */; };
-			B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004A /* SoundStore+Presets.swift */; };
-		B175D2582F310AB600907398 /* SoundStore+RecentsFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */; };
-		B175D2592F310AB600907398 /* SoundStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004C /* SoundStore+Persistence.swift */; };
-		B175D2602F310AB600907398 /* AudioPlaybackBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004D /* AudioPlaybackBackend.swift */; };
-		B175D2612F310AB600907398 /* LegacyAudioPlayerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */; };
-		B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004F /* EngineAudioBackend.swift */; };
-		B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000050 /* AudioSpatialTypes.swift */; };
-			B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
+		B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003B /* ScrollStateStore.swift */; };
+		B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003C /* SidebarLayout.swift */; };
+		B175D24A2F310AB600907398 /* MixIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003D /* MixIcon.swift */; };
+		B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003E /* MoodistCommands.swift */; };
+		B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003F /* MoodistAppActions.swift */; };
+		B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000040 /* SwiftUI+AppAccent.swift */; };
+		B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000041 /* SparkleIntegration.swift */; };
+		B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
+		B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000043 /* MacOSAppDelegate.swift */; };
+		B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000044 /* AppWindowCoordinator.swift */; };
+		B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000045 /* AppDockCoordinator.swift */; };
+		B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000046 /* AppMenuBarCoordinator.swift */; };
+		B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000047 /* AppTimerCoordinator.swift */; };
+		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
+		B3E7B9E8B435424C32CCB3E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000D /* Assets.xcassets */; };
+		BCF5442A8BE0EB763D0A3899 /* AudioRoutePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */; };
+		C6532473DD2647F032AC22C7 /* AudioInterruptionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */; };
+		D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */; };
+		D392BBB0BE7606B5701F37A8 /* IOSDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB071736532288DF59FD9AE3 /* IOSDesign.swift */; };
+		D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */; };
+		E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */; };
+		E774E2FF283741A0242C5C15 /* SleepNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */; };
+		EDCBD2B7D99CC0B6D52C3BB8 /* InteroperabilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971CD0125508B224724A6B69 /* InteroperabilityTests.swift */; };
+		F9D4255EE867ADB4EE2F73BF /* PrivacyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F4553BACFB2BB83BF348F79 /* PrivacyView.swift */; };
+		FCD62C33192CBC29203FDF91 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 48A427ADF099FCE1D2F4F6FE /* PrivacyInfo.xcprivacy */; };
+		FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEDCC51785EADFC16815432 /* StoreTests.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		8515EED5602DCCD4E6A4FDF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A90000000000000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68A87AED7542DB7CC5B99D82;
+			remoteInfo = MoodistIOS;
+		};
+		96118B366C0672BA5A96C735 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A90000000000000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68A87AED7542DB7CC5B99D82;
+			remoteInfo = MoodistIOS;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		01492C0D51934629A2D23700 /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = MoodistMacTests/CatalogTests.swift; sourceTree = "<group>"; };
+		0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacSoundStore.swift; path = Moodist/App/MacSoundStore.swift; sourceTree = "<group>"; };
+		0D83F535D744EF2735742912 /* MoodistMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		203330A592D4C63A8F14A402 /* SleepTimerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SleepTimerView.swift; path = MoodistIOS/Views/SleepTimerView.swift; sourceTree = "<group>"; };
+		241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioInterruptionObserver.swift; path = MoodistIOS/Platform/AudioInterruptionObserver.swift; sourceTree = "<group>"; };
+		29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResourceTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/ResourceTests.swift; sourceTree = "<group>"; };
+		3F4553BACFB2BB83BF348F79 /* PrivacyView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PrivacyView.swift; path = MoodistIOS/Views/PrivacyView.swift; sourceTree = "<group>"; };
+		416CECF2187A5FF4733A23CE /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = MoodistIOS/Views/RootView.swift; sourceTree = "<group>"; };
+		42C308DE14DDB29EBB328056 /* CatalogViews.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogViews.swift; path = MoodistIOS/Views/CatalogViews.swift; sourceTree = "<group>"; };
+		45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomMixEditor.swift; path = MoodistIOS/Views/CustomMixEditor.swift; sourceTree = "<group>"; };
+		4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NowPlayingController.swift; path = MoodistIOS/Platform/NowPlayingController.swift; sourceTree = "<group>"; };
+		483E1E1FC2202F428ED131D6 /* MoodistIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		48A427ADF099FCE1D2F4F6FE /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = MoodistIOS/Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		4DEDCC51785EADFC16815432 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/StoreTests.swift; sourceTree = "<group>"; };
+		4E3D258DE9D86424EFF659E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesCodec.swift; path = Moodist/Services/PreferencesCodec.swift; sourceTree = "<group>"; };
+		6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioRoutePicker.swift; path = MoodistIOS/Platform/AudioRoutePicker.swift; sourceTree = "<group>"; };
+		63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlayerView.swift; path = MoodistIOS/Views/PlayerView.swift; sourceTree = "<group>"; };
+		640A927C531949DFBF37F0E8 /* AutoMixView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutoMixView.swift; path = MoodistIOS/Views/AutoMixView.swift; sourceTree = "<group>"; };
+		64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioSessionTests.swift; path = MoodistIOSTests/AudioSessionTests.swift; sourceTree = "<group>"; };
+		77F89439B3CF206BBDB91559 /* MoodistFlowTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoodistFlowTests.swift; path = MoodistIOSUITests/MoodistFlowTests.swift; sourceTree = "<group>"; };
+		90C86C051A3713055BCAC087 /* IOSAppModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAppModel.swift; path = MoodistIOS/App/IOSAppModel.swift; sourceTree = "<group>"; };
+		94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SleepNotificationController.swift; path = MoodistIOS/Platform/SleepNotificationController.swift; sourceTree = "<group>"; };
+		971CD0125508B224724A6B69 /* InteroperabilityTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InteroperabilityTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/InteroperabilityTests.swift; sourceTree = "<group>"; };
+		973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlatformIntegrationTests.swift; path = MoodistMacTests/PlatformIntegrationTests.swift; sourceTree = "<group>"; };
+		9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoodistIOSApp.swift; path = MoodistIOS/App/MoodistIOSApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000001 /* MoodistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A20000000000000100000003 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
@@ -105,12 +162,13 @@
 		A2000000000000010000001E /* TimerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerItem.swift; sourceTree = "<group>"; };
 		A2000000000000010000001F /* TimerNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerNotificationManager.swift; sourceTree = "<group>"; };
 		A20000000000000100000020 /* FloatingPlayerPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPlayerPanelView.swift; sourceTree = "<group>"; };
-		A20000000000000100000033 /* MarqueeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeTextView.swift; sourceTree = "<group>"; };
 		A20000000000000100000021 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		A20000000000000100000022 /* AccentColorChoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorChoice.swift; sourceTree = "<group>"; };
 		A20000000000000100000023 /* ExportedPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportedPreferences.swift; sourceTree = "<group>"; };
 		A20000000000000100000024 /* PreferencesExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesExportService.swift; sourceTree = "<group>"; };
 		A20000000000000100000025 /* PreferencesImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesImportService.swift; sourceTree = "<group>"; };
+		A20000000000000100000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000000000000100000033 /* MarqueeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeTextView.swift; sourceTree = "<group>"; };
 		A20000000000000100000034 /* UpdateWindowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWindowPresenter.swift; sourceTree = "<group>"; };
 		A20000000000000100000035 /* UpdateWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWindowView.swift; sourceTree = "<group>"; };
 		A20000000000000100000036 /* TimerSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSetupView.swift; sourceTree = "<group>"; };
@@ -118,64 +176,171 @@
 		A20000000000000100000038 /* ContentSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content/ContentSections.swift; sourceTree = "<group>"; };
 		A20000000000000100000039 /* ToolbarBridges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar/ToolbarBridges.swift; sourceTree = "<group>"; };
 		A2000000000000010000003A /* ContentToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar/ContentToolbar.swift; sourceTree = "<group>"; };
-			A2000000000000010000003B /* ScrollStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollStateStore.swift; sourceTree = "<group>"; };
-			A2000000000000010000003C /* SidebarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLayout.swift; sourceTree = "<group>"; };
-			A2000000000000010000003D /* MixIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixIcon.swift; sourceTree = "<group>"; };
-			A2000000000000010000003E /* MoodistCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistCommands.swift; sourceTree = "<group>"; };
-			A2000000000000010000003F /* MoodistAppActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistAppActions.swift; sourceTree = "<group>"; };
-			A20000000000000100000040 /* SwiftUI+AppAccent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI+AppAccent.swift"; sourceTree = "<group>"; };
-			A20000000000000100000041 /* SparkleIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleIntegration.swift; sourceTree = "<group>"; };
-			A20000000000000100000042 /* AppNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotifications.swift; sourceTree = "<group>"; };
-			A20000000000000100000043 /* MacOSAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSAppDelegate.swift; sourceTree = "<group>"; };
-			A20000000000000100000044 /* AppWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWindowCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000045 /* AppDockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDockCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000046 /* AppMenuBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenuBarCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000047 /* AppTimerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTimerCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000048 /* SoundStore+Playback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Playback.swift"; sourceTree = "<group>"; };
-			A20000000000000100000049 /* SoundStore+Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Timer.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004A /* SoundStore+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Presets.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+RecentsFavorites.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004C /* SoundStore+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Persistence.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004D /* AudioPlaybackBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioPlaybackBackend.swift; sourceTree = "<group>"; };
-			A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/LegacyAudioPlayerBackend.swift; sourceTree = "<group>"; };
+		A2000000000000010000003B /* ScrollStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollStateStore.swift; sourceTree = "<group>"; };
+		A2000000000000010000003C /* SidebarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLayout.swift; sourceTree = "<group>"; };
+		A2000000000000010000003D /* MixIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixIcon.swift; sourceTree = "<group>"; };
+		A2000000000000010000003E /* MoodistCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistCommands.swift; sourceTree = "<group>"; };
+		A2000000000000010000003F /* MoodistAppActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistAppActions.swift; sourceTree = "<group>"; };
+		A20000000000000100000040 /* SwiftUI+AppAccent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI+AppAccent.swift"; sourceTree = "<group>"; };
+		A20000000000000100000041 /* SparkleIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleIntegration.swift; sourceTree = "<group>"; };
+		A20000000000000100000042 /* AppNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotifications.swift; sourceTree = "<group>"; };
+		A20000000000000100000043 /* MacOSAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSAppDelegate.swift; sourceTree = "<group>"; };
+		A20000000000000100000044 /* AppWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWindowCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000045 /* AppDockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDockCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000046 /* AppMenuBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenuBarCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000047 /* AppTimerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTimerCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000048 /* SoundStore+Playback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Playback.swift"; sourceTree = "<group>"; };
+		A20000000000000100000049 /* SoundStore+Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Timer.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004A /* SoundStore+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Presets.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+RecentsFavorites.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004C /* SoundStore+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Persistence.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004D /* AudioPlaybackBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioPlaybackBackend.swift; sourceTree = "<group>"; };
+		A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/LegacyAudioPlayerBackend.swift; sourceTree = "<group>"; };
 		A2000000000000010000004F /* EngineAudioBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/EngineAudioBackend.swift; sourceTree = "<group>"; };
 		A20000000000000100000050 /* AudioSpatialTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioSpatialTypes.swift; sourceTree = "<group>"; };
-		A20000000000000100000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA904694222A1D42C3006942 /* PreferenceFilesSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferenceFilesSection.swift; path = MoodistIOS/Views/PreferenceFilesSection.swift; sourceTree = "<group>"; };
+		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6862B038D5FF106820D794D /* EngineIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EngineIntegrationTests.swift; path = MoodistIOSTests/EngineIntegrationTests.swift; sourceTree = "<group>"; };
+		C0F795AE4C26062392303CBD /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = MoodistIOS/Views/SettingsView.swift; sourceTree = "<group>"; };
 		C10000000000000100000002 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000003 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000005 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C45170C52752A2043EDB6C0C /* PreferencesDocument.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesDocument.swift; path = MoodistIOS/Platform/PreferencesDocument.swift; sourceTree = "<group>"; };
+		CA40054351B4B42C0AEC73BC /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/CatalogTests.swift; sourceTree = "<group>"; };
+		CB071736532288DF59FD9AE3 /* IOSDesign.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSDesign.swift; path = MoodistIOS/Design/IOSDesign.swift; sourceTree = "<group>"; };
+		CC90F2AE61A13F28AEA37605 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = MoodistMacTests/StoreTests.swift; sourceTree = "<group>"; };
+		D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LibraryView.swift; path = MoodistIOS/Views/LibraryView.swift; sourceTree = "<group>"; };
+		D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TimerTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/TimerTests.swift; sourceTree = "<group>"; };
+		F6559F2DC5AEBCA767A042BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAudioSessionController.swift; path = MoodistIOS/Platform/IOSAudioSessionController.swift; sourceTree = "<group>"; };
+		FEAB06EB5D1027BE10EB0246 /* MoodistIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		80BD5CA24AC34728ED4A9491 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7C61F445439798261F410DB /* Foundation.framework in Frameworks */,
+				04E9DB81250D2A82098248A7 /* MoodistKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		81EE41A30F52EEE8F9E09DB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */,
+				6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A40000000000000100000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				B20000000000000100000003 /* Sparkle in Frameworks */,
+				45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B8E541AD5701900AD323E36E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				625A9A50DC829A66A3C0297E /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E3C6CFE15D602AEC78D549A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */,
+				8CD3A726852262FE4DADCC9C /* MoodistKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1CB7D13CD71B5D0062830276 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				F6559F2DC5AEBCA767A042BC /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		23F7DA1146180D7A80AB8CF7 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				4E3D258DE9D86424EFF659E7 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		3E871DC2193D54A6141251C6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1CB7D13CD71B5D0062830276 /* OS X */,
+				23F7DA1146180D7A80AB8CF7 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A50000000000000100000001 = {
 			isa = PBXGroup;
 			children = (
 				A50000000000000100000002 /* Moodist */,
 				A50000000000000100000003 /* Products */,
+				3E871DC2193D54A6141251C6 /* Frameworks */,
+				01492C0D51934629A2D23700 /* CatalogTests.swift */,
+				0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */,
+				5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */,
+				CC90F2AE61A13F28AEA37605 /* StoreTests.swift */,
+				973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */,
+				9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */,
+				29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */,
+				CA40054351B4B42C0AEC73BC /* CatalogTests.swift */,
+				4DEDCC51785EADFC16815432 /* StoreTests.swift */,
+				90C86C051A3713055BCAC087 /* IOSAppModel.swift */,
+				FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */,
+				64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */,
+				241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */,
+				4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */,
+				6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */,
+				94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */,
+				E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */,
+				CB071736532288DF59FD9AE3 /* IOSDesign.swift */,
+				416CECF2187A5FF4733A23CE /* RootView.swift */,
+				42C308DE14DDB29EBB328056 /* CatalogViews.swift */,
+				63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */,
+				D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */,
+				45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */,
+				203330A592D4C63A8F14A402 /* SleepTimerView.swift */,
+				640A927C531949DFBF37F0E8 /* AutoMixView.swift */,
+				C0F795AE4C26062392303CBD /* SettingsView.swift */,
+				C45170C52752A2043EDB6C0C /* PreferencesDocument.swift */,
+				AA904694222A1D42C3006942 /* PreferenceFilesSection.swift */,
+				971CD0125508B224724A6B69 /* InteroperabilityTests.swift */,
+				3F4553BACFB2BB83BF348F79 /* PrivacyView.swift */,
+				48A427ADF099FCE1D2F4F6FE /* PrivacyInfo.xcprivacy */,
+				B6862B038D5FF106820D794D /* EngineIntegrationTests.swift */,
+				77F89439B3CF206BBDB91559 /* MoodistFlowTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
-			A50000000000000100000002 /* Moodist */ = {
-				isa = PBXGroup;
-				children = (
-					A20000000000000100000001 /* MoodistApp.swift */,
-					A5000000000000010000000A /* App */,
-					A50000000000000100000004 /* Views */,
-					A50000000000000100000005 /* Models */,
-					A50000000000000100000006 /* Data */,
-					A50000000000000100000007 /* Services */,
+		A50000000000000100000002 /* Moodist */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000100000001 /* MoodistApp.swift */,
+				A5000000000000010000000A /* App */,
+				A50000000000000100000004 /* Views */,
+				A50000000000000100000005 /* Models */,
+				A50000000000000100000006 /* Data */,
+				A50000000000000100000007 /* Services */,
 				A50000000000000100000008 /* Store */,
 				A50000000000000100000009 /* Helpers */,
 				C10000000000000100000004 /* Localizable.strings */,
@@ -190,6 +355,10 @@
 			isa = PBXGroup;
 			children = (
 				B175D22B2F310AB600907398 /* MoodistMac.app */,
+				0D83F535D744EF2735742912 /* MoodistMacTests.xctest */,
+				483E1E1FC2202F428ED131D6 /* MoodistIOS.app */,
+				D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */,
+				FEAB06EB5D1027BE10EB0246 /* MoodistIOSUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,24 +426,24 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-			A50000000000000100000008 /* Store */ = {
-				isa = PBXGroup;
-				children = (
-					A2000000000000010000000B /* SoundStore.swift */,
-					A2000000000000010000003B /* ScrollStateStore.swift */,
-					A20000000000000100000048 /* SoundStore+Playback.swift */,
-					A20000000000000100000049 /* SoundStore+Timer.swift */,
-					A2000000000000010000004A /* SoundStore+Presets.swift */,
-					A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */,
-					A2000000000000010000004C /* SoundStore+Persistence.swift */,
-				);
-				path = Store;
-				sourceTree = "<group>";
-			};
-			A50000000000000100000009 /* Helpers */ = {
-				isa = PBXGroup;
-				children = (
-					A2000000000000010000000C /* PlatformColor.swift */,
+		A50000000000000100000008 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000010000000B /* SoundStore.swift */,
+				A2000000000000010000003B /* ScrollStateStore.swift */,
+				A20000000000000100000048 /* SoundStore+Playback.swift */,
+				A20000000000000100000049 /* SoundStore+Timer.swift */,
+				A2000000000000010000004A /* SoundStore+Presets.swift */,
+				A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */,
+				A2000000000000010000004C /* SoundStore+Persistence.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		A50000000000000100000009 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000010000000C /* PlatformColor.swift */,
 				A20000000000000100000010 /* MoodistTheme.swift */,
 				A20000000000000100000011 /* L10n.swift */,
 				A20000000000000100000012 /* VisualEffectBackground.swift */,
@@ -284,37 +453,78 @@
 				A20000000000000100000022 /* AccentColorChoice.swift */,
 				A20000000000000100000021 /* LanguageManager.swift */,
 			);
-				path = Helpers;
-				sourceTree = "<group>";
-			};
-			A5000000000000010000000A /* App */ = {
-				isa = PBXGroup;
-				children = (
-					A2000000000000010000003E /* MoodistCommands.swift */,
-					A2000000000000010000003F /* MoodistAppActions.swift */,
-					A20000000000000100000040 /* SwiftUI+AppAccent.swift */,
-					A20000000000000100000041 /* SparkleIntegration.swift */,
-					A20000000000000100000042 /* AppNotifications.swift */,
-					A20000000000000100000043 /* MacOSAppDelegate.swift */,
-					A5000000000000010000000B /* Coordinators */,
-				);
-				path = App;
-				sourceTree = "<group>";
-			};
-			A5000000000000010000000B /* Coordinators */ = {
-				isa = PBXGroup;
-				children = (
-					A20000000000000100000044 /* AppWindowCoordinator.swift */,
-					A20000000000000100000045 /* AppDockCoordinator.swift */,
-					A20000000000000100000046 /* AppMenuBarCoordinator.swift */,
-					A20000000000000100000047 /* AppTimerCoordinator.swift */,
-				);
-				path = Coordinators;
-				sourceTree = "<group>";
-			};
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A5000000000000010000000A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000010000003E /* MoodistCommands.swift */,
+				A2000000000000010000003F /* MoodistAppActions.swift */,
+				A20000000000000100000040 /* SwiftUI+AppAccent.swift */,
+				A20000000000000100000041 /* SparkleIntegration.swift */,
+				A20000000000000100000042 /* AppNotifications.swift */,
+				A20000000000000100000043 /* MacOSAppDelegate.swift */,
+				A5000000000000010000000B /* Coordinators */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A5000000000000010000000B /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000100000044 /* AppWindowCoordinator.swift */,
+				A20000000000000100000045 /* AppDockCoordinator.swift */,
+				A20000000000000100000046 /* AppMenuBarCoordinator.swift */,
+				A20000000000000100000047 /* AppTimerCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3A8242ECD55A1909CA0BD04C /* MoodistIOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BDC1CE8E793AE545DF6E5266 /* Build configuration list for PBXNativeTarget "MoodistIOSTests" */;
+			buildPhases = (
+				F6A127979B51EAA2600E5C81 /* Sources */,
+				E3C6CFE15D602AEC78D549A1 /* Frameworks */,
+				ED78FF4EB2E5C7B44447EC2D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0C150052F0C8CE8AC7894F00 /* PBXTargetDependency */,
+			);
+			name = MoodistIOSTests;
+			packageProductDependencies = (
+				042A3F51971C835C3956BEF8 /* MoodistKit */,
+			);
+			productName = MoodistIOSTests;
+			productReference = D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		68A87AED7542DB7CC5B99D82 /* MoodistIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F9A9206788A37FD96D98C94F /* Build configuration list for PBXNativeTarget "MoodistIOS" */;
+			buildPhases = (
+				3D014AE2D1F1441FF135B405 /* Sources */,
+				80BD5CA24AC34728ED4A9491 /* Frameworks */,
+				93AF3FA14EB3D503A8D884BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MoodistIOS;
+			packageProductDependencies = (
+				86EC0C1CD9E2A1B81C19B50B /* MoodistKit */,
+			);
+			productName = MoodistIOS;
+			productReference = 483E1E1FC2202F428ED131D6 /* MoodistIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 		A60000000000000100000002 /* MoodistMac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A80000000000000100000003 /* Build configuration list for PBXNativeTarget "MoodistMac" */;
@@ -330,10 +540,49 @@
 			name = MoodistMac;
 			packageProductDependencies = (
 				B20000000000000100000002 /* Sparkle */,
+				1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */,
 			);
 			productName = MoodistMac;
 			productReference = B175D22B2F310AB600907398 /* MoodistMac.app */;
 			productType = "com.apple.product-type.application";
+		};
+		E576CD29FE0EF4E1B2E94A6E /* MoodistIOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E69CBD39A50226F03AE3FF6 /* Build configuration list for PBXNativeTarget "MoodistIOSUITests" */;
+			buildPhases = (
+				4610CD0DB8FE8063F1B8119F /* Sources */,
+				B8E541AD5701900AD323E36E /* Frameworks */,
+				9E20AFA7DA9A74B5D2DE1869 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				327D741A32F405349968ED65 /* PBXTargetDependency */,
+			);
+			name = MoodistIOSUITests;
+			productName = MoodistIOSUITests;
+			productReference = FEAB06EB5D1027BE10EB0246 /* MoodistIOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		EC950EE44EC6F33EB3CD8022 /* MoodistMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E4867B92259100B2038B80F /* Build configuration list for PBXNativeTarget "MoodistMacTests" */;
+			buildPhases = (
+				F18A88837E7276C7BC27E9F3 /* Sources */,
+				81EE41A30F52EEE8F9E09DB1 /* Frameworks */,
+				1C93E532DEB517E149A24507 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MoodistMacTests;
+			packageProductDependencies = (
+				8BAA6BEF23F0AD094A671FE0 /* MoodistKit */,
+			);
+			productName = MoodistMacTests;
+			productReference = 0D83F535D744EF2735742912 /* MoodistMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -345,7 +594,7 @@
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 2620;
 			};
-			buildConfigurationList = A80000000000000100000001 /* Build configuration list for PBXProject "MoodistMac" */;
+			buildConfigurationList = A80000000000000100000001 /* Build configuration list for PBXProject "Moodist" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -358,28 +607,182 @@
 			mainGroup = A50000000000000100000001;
 			packageReferences = (
 				B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */,
 			);
 			productRefGroup = A50000000000000100000003 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				A60000000000000100000002 /* MoodistMac */,
+				EC950EE44EC6F33EB3CD8022 /* MoodistMacTests */,
+				68A87AED7542DB7CC5B99D82 /* MoodistIOS */,
+				3A8242ECD55A1909CA0BD04C /* MoodistIOSTests */,
+				E576CD29FE0EF4E1B2E94A6E /* MoodistIOSUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1C93E532DEB517E149A24507 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93AF3FA14EB3D503A8D884BB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B3E7B9E8B435424C32CCB3E9 /* Assets.xcassets in Resources */,
+				FCD62C33192CBC29203FDF91 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E20AFA7DA9A74B5D2DE1869 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A70000000000000100000004 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				B175D2232F310AB600907398 /* Assets.xcassets in Resources */,
-				B175D2242F310AB600907398 /* sounds in Resources */,
-				C10000000000000100000001 /* Localizable.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ED78FF4EB2E5C7B44447EC2D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3D014AE2D1F1441FF135B405 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */,
+				AD32FA639FB8DDFB23E36BC9 /* IOSAppModel.swift in Sources */,
+				7F075296D7F2601154B705EB /* IOSAudioSessionController.swift in Sources */,
+				C6532473DD2647F032AC22C7 /* AudioInterruptionObserver.swift in Sources */,
+				60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */,
+				BCF5442A8BE0EB763D0A3899 /* AudioRoutePicker.swift in Sources */,
+				E774E2FF283741A0242C5C15 /* SleepNotificationController.swift in Sources */,
+				D392BBB0BE7606B5701F37A8 /* IOSDesign.swift in Sources */,
+				6860F77C489C8574024DA7A3 /* RootView.swift in Sources */,
+				278D038A5C4B82659658DC6E /* CatalogViews.swift in Sources */,
+				A69849D902734385C33E4E48 /* PlayerView.swift in Sources */,
+				D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */,
+				8E79279326B2DCA374AB2549 /* CustomMixEditor.swift in Sources */,
+				257CEDB556E8CED5195BD0F7 /* SleepTimerView.swift in Sources */,
+				A98064D6018143941D690D8D /* AutoMixView.swift in Sources */,
+				0C4F495F4E4E392B0C00DF7F /* SettingsView.swift in Sources */,
+				5304B14ADD5BFCDA07C0AB42 /* PreferencesDocument.swift in Sources */,
+				A91ABDE2BC0F1FF4918545EC /* PreferenceFilesSection.swift in Sources */,
+				F9D4255EE867ADB4EE2F73BF /* PrivacyView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4610CD0DB8FE8063F1B8119F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				040883339C433A00BF733834 /* MoodistFlowTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A70000000000000100000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B175D2172F310AB600907398 /* MoodistApp.swift in Sources */,
+				B175D2182F310AB600907398 /* ContentView.swift in Sources */,
+				B175D2192F310AB600907398 /* CategoryView.swift in Sources */,
+				B175D21A2F310AB600907398 /* SoundRow.swift in Sources */,
+				B175D2222F310AB600907398 /* PlatformColor.swift in Sources */,
+				B175D2252F310AB600907398 /* OptionsView.swift in Sources */,
+				B175D2262F310AB600907398 /* MoodistTheme.swift in Sources */,
+				B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */,
+				B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */,
+				B175D22E2F310AB600907398 /* SidebarView.swift in Sources */,
+				B175D2332F310AB600907398 /* MixCategoryView.swift in Sources */,
+				B175D2342F310AB600907398 /* Color+Hex.swift in Sources */,
+				B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */,
+				B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */,
+				B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */,
+				B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */,
+				B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */,
+				B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */,
+				B175D2412F310AB600907398 /* UpdateWindowPresenter.swift in Sources */,
+				B175D2422F310AB600907398 /* UpdateWindowView.swift in Sources */,
+				B175D2432F310AB600907398 /* TimerSetupView.swift in Sources */,
+				B175D2442F310AB600907398 /* SavePresetSheet.swift in Sources */,
+				B175D2452F310AB600907398 /* ContentSections.swift in Sources */,
+				B175D2462F310AB600907398 /* ToolbarBridges.swift in Sources */,
+				B175D2472F310AB600907398 /* ContentToolbar.swift in Sources */,
+				B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */,
+				B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */,
+				B175D24A2F310AB600907398 /* MixIcon.swift in Sources */,
+				B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */,
+				B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */,
+				B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */,
+				B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */,
+				B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */,
+				B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */,
+				B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */,
+				B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */,
+				B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */,
+				B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */,
+				640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F18A88837E7276C7BC27E9F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */,
+				0E6755547A6C1FDC30F37142 /* PlatformIntegrationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F6A127979B51EAA2600E5C81 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */,
+				6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */,
+				FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */,
+				ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */,
+				1C337B5A586DE7D154244DD0 /* TimerTests.swift in Sources */,
+				EDCBD2B7D99CC0B6D52C3BB8 /* InteroperabilityTests.swift in Sources */,
+				6698DC504AB25032CE32C80E /* EngineIntegrationTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0C150052F0C8CE8AC7894F00 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MoodistIOS;
+			target = 68A87AED7542DB7CC5B99D82 /* MoodistIOS */;
+			targetProxy = 96118B366C0672BA5A96C735 /* PBXContainerItemProxy */;
+		};
+		327D741A32F405349968ED65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MoodistIOS;
+			target = 68A87AED7542DB7CC5B99D82 /* MoodistIOS */;
+			targetProxy = 8515EED5602DCCD4E6A4FDF8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C10000000000000100000004 /* Localizable.strings */ = {
@@ -394,79 +797,117 @@
 		};
 /* End PBXVariantGroup section */
 
-/* Begin PBXSourcesBuildPhase section */
-		A70000000000000100000003 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B175D2172F310AB600907398 /* MoodistApp.swift in Sources */,
-				B175D2182F310AB600907398 /* ContentView.swift in Sources */,
-				B175D2192F310AB600907398 /* CategoryView.swift in Sources */,
-				B175D21A2F310AB600907398 /* SoundRow.swift in Sources */,
-				B175D21B2F310AB600907398 /* Sound.swift in Sources */,
-				B175D21C2F310AB600907398 /* SoundCategory.swift in Sources */,
-				B175D21D2F310AB600907398 /* SoundStateItem.swift in Sources */,
-				B175D21E2F310AB600907398 /* SoundsData.swift in Sources */,
-				B175D21F2F310AB600907398 /* AudioService.swift in Sources */,
-				B175D2202F310AB600907398 /* PersistenceService.swift in Sources */,
-				B175D2212F310AB600907398 /* SoundStore.swift in Sources */,
-				B175D2222F310AB600907398 /* PlatformColor.swift in Sources */,
-				B175D2252F310AB600907398 /* OptionsView.swift in Sources */,
-				B175D2262F310AB600907398 /* MoodistTheme.swift in Sources */,
-				B175D2272F310AB600907398 /* L10n.swift in Sources */,
-				B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */,
-				B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */,
-				B175D22D2F310AB600907398 /* Preset.swift in Sources */,
-				B175D22E2F310AB600907398 /* SidebarView.swift in Sources */,
-				B175D2302F310AB600907398 /* SoundIcons.swift in Sources */,
-				B175D2312F310AB600907398 /* Mix.swift in Sources */,
-				B175D2322F310AB600907398 /* MixesData.swift in Sources */,
-				B175D2332F310AB600907398 /* MixCategoryView.swift in Sources */,
-				B175D2342F310AB600907398 /* Color+Hex.swift in Sources */,
-				B175D2352F310AB600907398 /* TimerItem.swift in Sources */,
-				B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */,
-				B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */,
-				B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */,
-				B175D2382F310AB600907398 /* LanguageManager.swift in Sources */,
-				B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */,
-				B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */,
-				B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */,
-				B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */,
-				B175D2412F310AB600907398 /* UpdateWindowPresenter.swift in Sources */,
-				B175D2422F310AB600907398 /* UpdateWindowView.swift in Sources */,
-				B175D2432F310AB600907398 /* TimerSetupView.swift in Sources */,
-				B175D2442F310AB600907398 /* SavePresetSheet.swift in Sources */,
-				B175D2452F310AB600907398 /* ContentSections.swift in Sources */,
-				B175D2462F310AB600907398 /* ToolbarBridges.swift in Sources */,
-				B175D2472F310AB600907398 /* ContentToolbar.swift in Sources */,
-					B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */,
-					B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */,
-					B175D24A2F310AB600907398 /* MixIcon.swift in Sources */,
-					B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */,
-					B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */,
-					B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */,
-					B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */,
-					B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */,
-					B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */,
-					B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */,
-					B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */,
-					B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */,
-					B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */,
-					B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */,
-					B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */,
-					B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */,
-					B175D2582F310AB600907398 /* SoundStore+RecentsFavorites.swift in Sources */,
-					B175D2592F310AB600907398 /* SoundStore+Persistence.swift in Sources */,
-					B175D2602F310AB600907398 /* AudioPlaybackBackend.swift in Sources */,
-					B175D2612F310AB600907398 /* LegacyAudioPlayerBackend.swift in Sources */,
-					B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */,
-					B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */,
-				);
-				runOnlyForDeploymentPostprocessing = 0;
-			};
-/* End PBXSourcesBuildPhase section */
-
 /* Begin XCBuildConfiguration section */
+		0B711F6D378E72BF42C076CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MoodistIOS/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOS;
+				PRODUCT_MODULE_NAME = MoodistIOS;
+				PRODUCT_NAME = MoodistIOS;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		2198EDDE3301A0FE275552EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSUITests;
+				PRODUCT_MODULE_NAME = MoodistIOSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = MoodistIOS;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		44540F892850DC59EEFD443E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSTests;
+				PRODUCT_MODULE_NAME = MoodistIOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoodistIOS.app/MoodistIOS";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4BB1EC5A4F4D677FF383058E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSTests;
+				PRODUCT_MODULE_NAME = MoodistIOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoodistIOS.app/MoodistIOS";
+			};
+			name = Debug;
+		};
+		6A1A1D70F001235DD4373C4A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSUITests;
+				PRODUCT_MODULE_NAME = MoodistIOSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = MoodistIOS;
+			};
+			name = Debug;
+		};
+		6A59977E299BD20A5A8F98EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMacTests;
+				PRODUCT_MODULE_NAME = MoodistMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		AA0000000000000100000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -588,30 +1029,64 @@
 			};
 			name = Release;
 		};
-			AA0000000000000100000005 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					ARCHS = "$(ARCHS_STANDARD)";
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
-					CODE_SIGN_STYLE = Automatic;
+		AA0000000000000100000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 14;
-			DEAD_CODE_STRIPPING = YES;
-			DEVELOPMENT_TEAM = 9WD82WQ56W;
-			DEVELOPMENT_ASSET_PATHS = "";
-			ENABLE_HARDENED_RUNTIME = YES;
-			ENABLE_PREVIEWS = YES;
-			GENERATE_INFOPLIST_FILE = YES;
-			INFOPLIST_FILE = Moodist/Info.plist;
-			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-			LD_RUNPATH_SEARCH_PATHS = (
-				"$(inherited)",
-				"@executable_path/../Frameworks",
-			);
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Moodist/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.3.0";
+				MARKETING_VERSION = 1.3.0;
+				NSPrincipalClass = NSApplication;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
+				PRODUCT_NAME = MoodistMac;
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AA0000000000000100000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 14;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Moodist/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.3.0;
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
@@ -619,47 +1094,74 @@
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
 		};
-		name = Debug;
-		};
-			AA0000000000000100000006 /* Release */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					ARCHS = "$(ARCHS_STANDARD)";
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
-					CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 14;
-			DEAD_CODE_STRIPPING = YES;
-			DEVELOPMENT_TEAM = 9WD82WQ56W;
-			DEVELOPMENT_ASSET_PATHS = "";
-			ENABLE_HARDENED_RUNTIME = YES;
-			ENABLE_PREVIEWS = YES;
-			GENERATE_INFOPLIST_FILE = YES;
-			INFOPLIST_FILE = Moodist/Info.plist;
-			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-			LD_RUNPATH_SEARCH_PATHS = (
-				"$(inherited)",
-				"@executable_path/../Frameworks",
-			);
+		C6D117844F838856F4EED3A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.3.0";
-				NSPrincipalClass = NSApplication;
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
-				PRODUCT_NAME = MoodistMac;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMacTests;
+				PRODUCT_MODULE_NAME = MoodistMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
 		};
-		name = Release;
+		EFFE1B20C7CDCF2FE23952DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MoodistIOS/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOS;
+				PRODUCT_MODULE_NAME = MoodistIOS;
+				PRODUCT_NAME = MoodistIOS;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A80000000000000100000001 /* Build configuration list for PBXProject "MoodistMac" */ = {
+		8E69CBD39A50226F03AE3FF6 /* Build configuration list for PBXNativeTarget "MoodistIOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2198EDDE3301A0FE275552EF /* Release */,
+				6A1A1D70F001235DD4373C4A /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9E4867B92259100B2038B80F /* Build configuration list for PBXNativeTarget "MoodistMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A59977E299BD20A5A8F98EB /* Release */,
+				C6D117844F838856F4EED3A6 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000100000001 /* Build configuration list for PBXProject "Moodist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA0000000000000100000001 /* Debug */,
@@ -677,7 +1179,32 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		BDC1CE8E793AE545DF6E5266 /* Build configuration list for PBXNativeTarget "MoodistIOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44540F892850DC59EEFD443E /* Release */,
+				4BB1EC5A4F4D677FF383058E /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F9A9206788A37FD96D98C94F /* Build configuration list for PBXNativeTarget "MoodistIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EFFE1B20C7CDCF2FE23952DE /* Release */,
+				0B711F6D378E72BF42C076CD /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MoodistKit;
+		};
+/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
@@ -691,6 +1218,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		042A3F51971C835C3956BEF8 /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
+		1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
+		86EC0C1CD9E2A1B81C19B50B /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
+		8BAA6BEF23F0AD094A671FE0 /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
 		B20000000000000100000002 /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */;

@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  MarqueeTextView.swift
 //  MoodistMac

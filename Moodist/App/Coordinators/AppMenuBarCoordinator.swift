@@ -1,8 +1,9 @@
+import MoodistKit
 import AppKit
 
 @MainActor
 final class AppMenuBarCoordinator: NSObject, NSMenuDelegate {
-    weak var soundStore: SoundStore?
+    weak var soundStore: MacSoundStore?
 
     private let windowCoordinator: AppWindowCoordinator
     private let timerCoordinator: AppTimerCoordinator

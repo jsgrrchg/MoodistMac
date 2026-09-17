@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  TimerNotificationManager.swift
 //  MoodistMac

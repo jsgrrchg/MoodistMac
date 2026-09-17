@@ -1,0 +1,1 @@
+{"version":1,"exportDate":"2026-09-16T12:00:00Z","presets":[{"id":"fixture-rain","name":"Rain","iconName":"cloud.rain","soundIds":["river","light-rain"],"volumes":{"river":0.25,"light-rain":0.75}}],"favoriteMixIds":["fixture-rain"],"favoriteSoundIds":["river"]}

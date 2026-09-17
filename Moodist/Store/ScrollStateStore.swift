@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  ScrollStateStore.swift
 //  MoodistMac

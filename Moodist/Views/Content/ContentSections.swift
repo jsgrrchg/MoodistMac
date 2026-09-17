@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  ContentSections.swift
 //  MoodistMac
@@ -8,7 +9,7 @@
 import SwiftUI
 
 struct CurrentlyPlayingSectionView: View {
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     let contentAreaWidth: CGFloat
     let playingSounds: [Sound]
     @Binding var isSaveMixHovered: Bool
@@ -139,7 +140,7 @@ struct CurrentlyPlayingSectionView: View {
                     Text(L10n.automixOnlyCustom).tag(true)
                 }
                 Divider()
-                ForEach(SoundStore.autoMixIntervalPresets, id: \.self) { seconds in
+                ForEach(MacSoundStore.autoMixIntervalPresets, id: \.self) { seconds in
                     Button(store.autoMixIntervalLabel(forSeconds: seconds)) {
                         store.startAutoMixTimer(intervalSeconds: seconds)
                     }
@@ -341,7 +342,7 @@ struct CurrentlyPlayingSectionView: View {
 }
 
 struct CategoriesSectionView: View {
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     let contentAreaWidth: CGFloat
     @Binding var categoryExpandedStates: [String: Bool]
     let defaultExpandedState: Bool
@@ -417,7 +418,7 @@ struct CategoriesSectionView: View {
 }
 
 struct MixesPlaceholderSectionView: View {
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     let contentAreaWidth: CGFloat
     @Binding var mixCategoryExpandedStates: [String: Bool]
     let defaultMixExpandedState: (String) -> Bool
@@ -519,7 +520,7 @@ struct MixesPlaceholderSectionView: View {
 }
 
 struct MixesSearchResultsSectionView: View {
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
 
     var body: some View {
         let query = store.searchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
@@ -565,7 +566,7 @@ struct MixesSearchResultsSectionView: View {
 }
 
 struct SoundsSearchResultsSectionView: View {
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     let contentAreaWidth: CGFloat
 
     var body: some View {

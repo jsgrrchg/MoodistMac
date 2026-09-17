@@ -1,3 +1,4 @@
+import MoodistKit
 import SwiftUI
 
 // MARK: - Drum Column Picker
@@ -77,7 +78,7 @@ private struct ColonSeparator: View {
 // MARK: - Timer Setup View
 
 struct TimerSetupView: View {
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     var onDismiss: () -> Void
 
     @State private var selectedHours: Int = 0

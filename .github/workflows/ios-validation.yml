@@ -1,0 +1,73 @@
+name: iOS and shared core
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.2'
+      - name: Verify catalogs, translations and platform boundaries
+        run: |
+          python3 scripts/ios/catalog-inventory.py --check
+          python3 scripts/ios/check-localizations.py
+          python3 scripts/ios/check-asset-rights.py
+          python3 scripts/ios/validate-project.py
+      - name: Shared core and release tooling tests
+        run: |
+          swift test --package-path Packages/MoodistKit
+          node --test scripts/release/test-release-tooling.mjs
+          python3 scripts/ios/test-release.py
+          ruby -c scripts/ios/wait-for-processing.rb
+          ruby scripts/ios/test-apple-access.rb
+      - name: Mac integration tests
+        run: xcodebuild -project Moodist.xcodeproj -scheme MoodistMac -derivedDataPath .derived -destination 'platform=macOS,arch=arm64' -resultBundlePath .derived/MacTests.xcresult test CODE_SIGNING_ALLOWED=NO
+      - name: iOS 26 unit and user-flow tests
+        run: |
+          destination="$(python3 scripts/ios/simulator-destination.py)"
+          xcodebuild -project Moodist.xcodeproj -scheme MoodistIOS -derivedDataPath .derived -destination "$destination" -resultBundlePath .derived/IOSTests.xcresult test CODE_SIGNING_ALLOWED=NO
+          python3 scripts/ios/validate-built-app.py .derived/Build/Products/Debug-iphonesimulator/MoodistIOS.app
+      - name: Preserve test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: .derived/*.xcresult
+          if-no-files-found: ignore
+  newer-runtime:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - name: Discover additional installed runtime
+        id: simulator
+        run: |
+          if destination="$(python3 scripts/ios/simulator-destination.py --newer-than 26.2)"; then
+            echo "destination=$destination" >> "$GITHUB_OUTPUT"
+          else
+            status=$?
+            test "$status" = 3 || exit "$status"
+            echo '::notice::No runtime newer than iOS 26.2 installed; additional coverage skipped.'
+          fi
+      - name: Additional iOS runtime tests
+        if: steps.simulator.outputs.destination != ''
+        env:
+          DESTINATION: ${{ steps.simulator.outputs.destination }}
+        run: xcodebuild -project Moodist.xcodeproj -scheme MoodistIOS -derivedDataPath .derived -destination "$DESTINATION" -resultBundlePath .derived/NewerIOSTests.xcresult test CODE_SIGNING_ALLOWED=NO
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: newer-runtime-results
+          path: .derived/*.xcresult
+          if-no-files-found: ignore

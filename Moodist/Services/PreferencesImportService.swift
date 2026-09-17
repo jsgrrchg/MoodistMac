@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  PreferencesImportService.swift
 //  MoodistMac
@@ -26,7 +27,7 @@ enum PreferencesImportService {
         guard panel.runModal() == .OK, let url = panel.url else { return nil }
         do {
             let data = try Data(contentsOf: url)
-            let payload = try JSONDecoder().decode(ExportedPreferences.self, from: data)
+            let payload = try PreferencesCodec.decode(data)
             return payload
         } catch {
             let alert = NSAlert()

@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  MoodistApp.swift
 //  MoodistMac
@@ -10,7 +11,7 @@ import Sparkle
 
 @main
 struct MoodistApp: App {
-    @StateObject private var soundStore: SoundStore
+    @StateObject private var soundStore: MacSoundStore
     @StateObject private var updatePresenter: UpdateWindowPresenter
     @StateObject private var checkForUpdatesViewModel: CheckForUpdatesViewModel
     @NSApplicationDelegateAdaptor(MacOSAppDelegate.self) var appDelegate
@@ -23,7 +24,7 @@ struct MoodistApp: App {
         LanguageManager.applyPersistedLanguage()
 
         let audio = AudioService()
-        _soundStore = StateObject(wrappedValue: SoundStore(audioService: audio))
+        _soundStore = StateObject(wrappedValue: MacSoundStore(audioService: audio))
 
         let updaterCoordinator = MoodistUpdaterCoordinator()
         self.updaterCoordinator = updaterCoordinator

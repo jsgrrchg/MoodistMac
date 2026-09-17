@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  MixIcon.swift
 //  MoodistMac
@@ -49,7 +50,7 @@ struct MixIconImage: View {
     var body: some View {
         Group {
             if iconName == MixIcon.palmTreeID {
-                Image(MixIcon.palmTreeAssetName)
+                Image(MixIcon.palmTreeAssetName, bundle: MoodistResources.bundle)
                     .renderingMode(.template)
                     .resizable()
                     .scaledToFit()
