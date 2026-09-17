@@ -44,7 +44,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     private var outgoingCleanupTask: Task<Void, Never>?
     private var configurationChangeObserver: NSObjectProtocol?
 
-    init(bundle: Bundle = .main) {
+    init(bundle: Bundle = MoodistResources.bundle) {
         self.bundle = bundle
         // macOS does not use AVAudioSession; AVAudioEngine mixes with the system by default.
         configurationChangeObserver = NotificationCenter.default.addObserver(

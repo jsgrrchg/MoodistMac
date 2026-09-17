@@ -17,7 +17,6 @@
 		63BAC95FC311705BE321908B /* SoundStore+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004A /* SoundStore+Presets.swift */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
-		7F30B879BB7E06DC1B25CE7A /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000011 /* L10n.swift */; };
 		82EF4997F259222DBF5E6A4C /* SoundStore+RecentsFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
@@ -28,10 +27,8 @@
 		B175D2212F310AB600907398 /* SoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000B /* SoundStore.swift */; };
 		B175D2222F310AB600907398 /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000C /* PlatformColor.swift */; };
 		B175D2232F310AB600907398 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000D /* Assets.xcassets */; };
-		B175D2242F310AB600907398 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000E /* sounds */; };
 		B175D2252F310AB600907398 /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000F /* OptionsView.swift */; };
 		B175D2262F310AB600907398 /* MoodistTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000010 /* MoodistTheme.swift */; };
-		B175D2272F310AB600907398 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000011 /* L10n.swift */; };
 		B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000012 /* VisualEffectBackground.swift */; };
 		B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000013 /* MediaKeyHandler.swift */; };
 		B175D22E2F310AB600907398 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000017 /* SidebarView.swift */; };
@@ -39,7 +36,6 @@
 		B175D2342F310AB600907398 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001D /* Color+Hex.swift */; };
 		B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001F /* TimerNotificationManager.swift */; };
 		B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000020 /* FloatingPlayerPanelView.swift */; };
-		B175D2382F310AB600907398 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000021 /* LanguageManager.swift */; };
 		B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000022 /* AccentColorChoice.swift */; };
 		B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000024 /* PreferencesExportService.swift */; };
 		B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000025 /* PreferencesImportService.swift */; };
@@ -74,8 +70,6 @@
 		B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004F /* EngineAudioBackend.swift */; };
 		B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000050 /* AudioSpatialTypes.swift */; };
 		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
-		C10000000000000100000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000004 /* Localizable.strings */; };
-		C110EA289E829A22D297531F /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000021 /* LanguageManager.swift */; };
 		C2D24C9A1B033C84AA50AE48 /* LegacyAudioPlayerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */; };
 		C90A96F6F53A2F43EFD5DF44 /* AudioPlaybackBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004D /* AudioPlaybackBackend.swift */; };
 		D48B9EFB34878ED37A4BA64C /* SoundStore+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000049 /* SoundStore+Timer.swift */; };
@@ -450,8 +444,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B175D2232F310AB600907398 /* Assets.xcassets in Resources */,
-				B175D2242F310AB600907398 /* sounds in Resources */,
-				C10000000000000100000001 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,7 +463,6 @@
 				B175D2222F310AB600907398 /* PlatformColor.swift in Sources */,
 				B175D2252F310AB600907398 /* OptionsView.swift in Sources */,
 				B175D2262F310AB600907398 /* MoodistTheme.swift in Sources */,
-				B175D2272F310AB600907398 /* L10n.swift in Sources */,
 				B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */,
 				B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */,
 				B175D22E2F310AB600907398 /* SidebarView.swift in Sources */,
@@ -480,7 +471,6 @@
 				B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */,
 				B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */,
 				B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */,
-				B175D2382F310AB600907398 /* LanguageManager.swift in Sources */,
 				B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */,
 				B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */,
 				B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */,
@@ -533,8 +523,6 @@
 				20930FE69DBF11B0CB8C6710 /* EngineAudioBackend.swift in Sources */,
 				C90A96F6F53A2F43EFD5DF44 /* AudioPlaybackBackend.swift in Sources */,
 				5B6E6C72EFD4A80CE293A613 /* AudioService.swift in Sources */,
-				7F30B879BB7E06DC1B25CE7A /* L10n.swift in Sources */,
-				C110EA289E829A22D297531F /* LanguageManager.swift in Sources */,
 				163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

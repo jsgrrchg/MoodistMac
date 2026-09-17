@@ -16,7 +16,7 @@ final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
     private var outgoingPlayers: [String: AVAudioPlayer] = [:]
     private var outgoingCleanupTask: Task<Void, Never>?
 
-    init(bundle: Bundle = .main) {
+    init(bundle: Bundle = MoodistResources.bundle) {
         self.bundle = bundle
         // macOS does not use AVAudioSession; playback mixes with the system by default.
     }

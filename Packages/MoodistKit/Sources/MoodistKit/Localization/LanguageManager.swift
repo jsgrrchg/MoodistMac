@@ -1,4 +1,3 @@
-import MoodistKit
 //
 //  LanguageManager.swift
 //  MoodistMac
@@ -6,30 +5,30 @@ import MoodistKit
 
 import Foundation
 
-enum AppLanguage: String, CaseIterable, Identifiable {
+public enum AppLanguage: String, CaseIterable, Identifiable {
     case system
     case english = "en"
     case spanish = "es"
     case portuguese = "pt-BR"
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 }
 
-enum LanguageManager {
-    static let appleLanguagesKey = "AppleLanguages"
+public enum LanguageManager {
+    public static let appleLanguagesKey = "AppleLanguages"
 
-    static func language(for rawValue: String) -> AppLanguage {
+    public static func language(for rawValue: String) -> AppLanguage {
         AppLanguage(rawValue: rawValue) ?? .system
     }
 
-    static func applyPersistedLanguage() {
+    public static func applyPersistedLanguage() {
         let rawValue =
             UserDefaults.standard.string(forKey: PersistenceService.appLanguageKey)
             ?? AppLanguage.system.rawValue
         apply(language(for: rawValue))
     }
 
-    static func apply(_ language: AppLanguage) {
+    public static func apply(_ language: AppLanguage) {
         switch language {
         case .system:
             UserDefaults.standard.removeObject(forKey: appleLanguagesKey)
