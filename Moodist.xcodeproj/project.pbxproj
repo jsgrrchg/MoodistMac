@@ -21,6 +21,7 @@
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
 		7F075296D7F2601154B705EB /* IOSAudioSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */; };
 		8CD3A726852262FE4DADCC9C /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 042A3F51971C835C3956BEF8 /* MoodistKit */; };
+		8E79279326B2DCA374AB2549 /* CustomMixEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */; };
 		A69849D902734385C33E4E48 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */; };
 		A7C61F445439798261F410DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
@@ -94,6 +95,7 @@
 		29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResourceTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/ResourceTests.swift; sourceTree = "<group>"; };
 		416CECF2187A5FF4733A23CE /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = MoodistIOS/Views/RootView.swift; sourceTree = "<group>"; };
 		42C308DE14DDB29EBB328056 /* CatalogViews.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogViews.swift; path = MoodistIOS/Views/CatalogViews.swift; sourceTree = "<group>"; };
+		45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CustomMixEditor.swift; path = MoodistIOS/Views/CustomMixEditor.swift; sourceTree = "<group>"; };
 		4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NowPlayingController.swift; path = MoodistIOS/Platform/NowPlayingController.swift; sourceTree = "<group>"; };
 		483E1E1FC2202F428ED131D6 /* MoodistIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DEDCC51785EADFC16815432 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/StoreTests.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				42C308DE14DDB29EBB328056 /* CatalogViews.swift */,
 				63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */,
 				D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */,
+				45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -600,6 +603,7 @@
 				278D038A5C4B82659658DC6E /* CatalogViews.swift in Sources */,
 				A69849D902734385C33E4E48 /* PlayerView.swift in Sources */,
 				D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */,
+				8E79279326B2DCA374AB2549 /* CustomMixEditor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

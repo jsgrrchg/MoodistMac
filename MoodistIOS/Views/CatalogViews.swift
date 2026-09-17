@@ -82,6 +82,7 @@ struct CategoryHeader: View {
 struct SoundCell: View {
     @EnvironmentObject private var store: SoundStore
     let sound: Sound
+    @State private var createPresented = false
     var body: some View {
         HStack(spacing: 12) {
             Button {
@@ -100,6 +101,17 @@ struct SoundCell: View {
                     .frame(width: 44, height: 44)
             }.buttonStyle(.borderless).accessibilityLabel("\(L10n.favorites): \(L10n.soundLabel(sound.id))")
         }
+        .contextMenu {
+            Menu(L10n.addToMix) {
+                ForEach(store.presets) { preset in
+                    Button(preset.name) { store.addSound(sound.id, toPreset: preset.id) }
+                }
+            }.disabled(store.presets.isEmpty)
+            Button(L10n.createNewMix) {
+                store.unselectAll(); store.select(sound.id); createPresented = true
+            }
+        }
+        .sheet(isPresented: $createPresented) { CustomMixEditor() }
     }
 }
 
@@ -151,6 +163,8 @@ struct MixBrowser: View {
 struct MixCell: View {
     @EnvironmentObject private var store: SoundStore
     let mix: Mix
+    @State private var editing = false
+    @State private var deleting = false
     private var name: String { store.presetsById[mix.id]?.name ?? L10n.mixName(mix.id) }
     var body: some View {
         HStack {
@@ -169,5 +183,16 @@ struct MixCell: View {
                 Image(systemName: store.favoriteMixIds.contains(mix.id) ? "star.fill" : "star").frame(width: 44, height: 44)
             }.buttonStyle(.borderless).accessibilityLabel("\(L10n.favorites): \(name)")
         }
+        .contextMenu {
+            if store.presetsById[mix.id] != nil {
+                Button(L10n.editMix, systemImage: "pencil") { editing = true }
+                Button(L10n.presetDelete, systemImage: "trash", role: .destructive) { deleting = true }
+            }
+        }
+        .sheet(isPresented: $editing) { CustomMixEditor(presetID: mix.id) }
+        .confirmationDialog(L10n.presetDelete, isPresented: $deleting, titleVisibility: .visible) {
+            Button(L10n.presetDelete, role: .destructive) { store.deletePreset(id: mix.id) }
+            Button(L10n.cancel, role: .cancel) {}
+        } message: { Text(name) }
     }
 }

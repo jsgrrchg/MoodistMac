@@ -3,6 +3,7 @@ import MoodistKit
 
 struct PlayerView: View {
     @EnvironmentObject private var store: SoundStore
+    @State private var savePresented = false
     @Environment(\.dismiss) private var dismiss
     var body: some View {
         List {
@@ -25,6 +26,10 @@ struct PlayerView: View {
                 }
                 .frame(maxWidth: .infinity).padding(.vertical)
             }
+            Section {
+                Button(L10n.presetSaveCurrent, systemImage: "square.and.arrow.down") { savePresented = true }
+                    .disabled(!store.canSaveCustomMix)
+            }
             Section(L10n.currentlyPlaying) {
                 if !store.hasSelection {
                     ContentUnavailableView(T("choose_sounds", "Choose your sounds"), systemImage: "waveform")
@@ -44,6 +49,7 @@ struct PlayerView: View {
                 Button(L10n.unselectAll, role: .destructive) { store.unselectAll() }.disabled(!store.hasSelection)
             }
         }
+        .sheet(isPresented: $savePresented) { CustomMixEditor() }
         .navigationTitle(T("player", "Player"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .confirmationAction) { Button(L10n.close) { dismiss() } } }
