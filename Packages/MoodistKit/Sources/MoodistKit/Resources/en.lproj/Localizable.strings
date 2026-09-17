@@ -574,3 +574,6 @@
 "ios_start_rotation" = "Start rotation";
 "ios_support" = "Support";
 "ios_transparency_hint" = "Custom surfaces become solid. System bars follow your iPhone’s accessibility and Liquid Glass settings.";
+
+"ios_privacy" = "Privacy";
+"ios_privacy_body" = "Moodist does not collect listening history or personal data. Your mixes and preferences are stored on this device and may be included in your device backups. Preference files are shared only when you export them. Notifications are optional and used for timers. You can delete your local data in Settings. External websites and apps you share with have their own privacy policies.";

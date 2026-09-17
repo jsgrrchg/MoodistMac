@@ -87,6 +87,7 @@ struct AboutView: View {
                 Text(T("about_description", "Ambient sounds for focus and relaxation. Your mixes stay on this device unless you export them."))
             }
             Section(L10n.aboutSection) {
+                NavigationLink(T("privacy", "Privacy")) { PrivacyView() }
                 Link(L10n.sourceCode, destination: URL(string: "https://github.com/jsgrrchg/MoodistMac")!)
                 Link(T("support", "Support"), destination: URL(string: "https://github.com/jsgrrchg/MoodistMac/issues")!)
                 Text(T("credits", "Inspired by Moodist by remvze. Audio includes third-party resources credited in the project."))

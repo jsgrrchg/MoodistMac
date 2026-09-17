@@ -574,3 +574,6 @@
 "ios_start_rotation" = "Iniciar rotación";
 "ios_support" = "Soporte";
 "ios_transparency_hint" = "Las superficies propias se vuelven opacas. Las barras del sistema siguen los ajustes de accesibilidad y Liquid Glass del iPhone.";
+
+"ios_privacy" = "Privacidad";
+"ios_privacy_body" = "Moodist no recopila historial de escucha ni datos personales. Tus mezclas y preferencias se guardan en este dispositivo y pueden incluirse en sus copias de seguridad. Los archivos de preferencias solo se comparten cuando los exportas. Las notificaciones son opcionales y se usan para los temporizadores. Puedes borrar tus datos locales en Ajustes. Los sitios externos y las apps con las que compartes tienen sus propias políticas de privacidad.";

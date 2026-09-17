@@ -7,7 +7,7 @@ let package = Package(
     platforms: [.macOS(.v15), .iOS("26.0")],
     products: [.library(name: "MoodistKit", targets: ["MoodistKit"])],
     targets: [
-        .target(name: "MoodistKit", resources: [.copy("Resources/sounds"), .process("Resources/en.lproj"), .process("Resources/es.lproj"), .process("Resources/pt-BR.lproj"), .process("Resources/SharedAssets.xcassets")]),
+        .target(name: "MoodistKit", resources: [.copy("Resources/sounds"), .process("Resources/PrivacyInfo.xcprivacy"), .process("Resources/en.lproj"), .process("Resources/es.lproj"), .process("Resources/pt-BR.lproj"), .process("Resources/SharedAssets.xcassets")]),
         .testTarget(name: "MoodistKitTests", dependencies: ["MoodistKit"])
     ],
     swiftLanguageModes: [.v5]

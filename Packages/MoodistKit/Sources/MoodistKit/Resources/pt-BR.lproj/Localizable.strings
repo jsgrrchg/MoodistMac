@@ -574,3 +574,6 @@
 "ios_start_rotation" = "Iniciar alternância";
 "ios_support" = "Suporte";
 "ios_transparency_hint" = "As superfícies personalizadas ficam opacas. As barras do sistema seguem os ajustes de acessibilidade e Liquid Glass do iPhone.";
+
+"ios_privacy" = "Privacidade";
+"ios_privacy_body" = "O Moodist não coleta histórico de reprodução nem dados pessoais. Suas mixagens e preferências ficam neste dispositivo e podem ser incluídas nos backups. Os arquivos de preferências só são compartilhados quando você os exporta. As notificações são opcionais e usadas para temporizadores. Você pode apagar seus dados locais nos Ajustes. Sites externos e apps com os quais você compartilha têm suas próprias políticas de privacidade.";
