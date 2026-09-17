@@ -68,6 +68,40 @@ final class MoodistFlowTests: XCTestCase {
         XCTAssertFalse(campfire.exists)
         XCTAssertFalse(app.buttons["player-toggle"].isEnabled)
     }
+    func testLongPressAdjustsOnlyThatSoundsVolumeWithoutTogglingSelection() {
+        let app = launch()
+        let river = app.buttons["sound-river"]
+        river.tap()
+        river.press(forDuration: 0.7)
+        let volume = app.sliders["sound-volume-river"]
+        XCTAssertTrue(volume.waitForExistence(timeout: 5))
+        volume.adjust(toNormalizedSliderPosition: 0.25)
+        capture("sound-volume-popover", app)
+        let changedVolume = volume.value as? String
+        XCTAssertNotNil(changedVolume)
+        XCTAssertNotEqual(changedVolume, "50%")
+        app.buttons["close-sound-volume"].tap()
+        XCTAssertEqual(river.value as? String, "selected")
+        river.press(forDuration: 0.7)
+        XCTAssertTrue(volume.waitForExistence(timeout: 5))
+        XCTAssertEqual(volume.value as? String, changedVolume)
+        app.buttons["close-sound-volume"].tap()
+        let campfire = app.buttons["sound-campfire"]
+        campfire.press(forDuration: 0.7)
+        let otherVolume = app.sliders["sound-volume-campfire"]
+        XCTAssertTrue(otherVolume.waitForExistence(timeout: 5))
+        XCTAssertEqual(otherVolume.value as? String, "50%")
+        app.buttons["close-sound-volume"].tap()
+        XCTAssertEqual(campfire.value as? String, "not selected")
+        // A normal tap must still select a sound after dismissing the popover.
+        campfire.tap()
+        XCTAssertEqual(campfire.value as? String, "selected")
+        app.buttons["open-player"].tap()
+        let globalVolume = app.sliders["Global volume"]
+        XCTAssertTrue(globalVolume.waitForExistence(timeout: 5))
+        XCTAssertEqual(globalVolume.value as? String, "100%")
+        XCTAssertEqual(app.sliders["Volume for River"].value as? String, changedVolume)
+    }
     func testSettingsAndTimerNavigation() {
         let app = launch()
         app.buttons["open-settings"].tap()

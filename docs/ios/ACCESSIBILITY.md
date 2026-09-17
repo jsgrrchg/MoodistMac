@@ -7,3 +7,5 @@ Implemented: semantic selection/favorite values, labeled volume sliders, accessi
 Verified locally: iOS 26.2 simulator launches and renders the sound catalog, tab bar and persistent player; see `screenshots/catalog-ios26.png`. Additional UI-test evidence is recorded in QA.md as those checks run.
 
 Still requires a person/device: full VoiceOver navigation, hardware keyboard, real display contrast, calls/Siri and headphone controls. A screenshot is not proof of those behaviors.
+
+Sound rows offer a Volume accessibility action equivalent to the long press. The volume control uses an interactive SwiftUI popover, with [compact adaptation](https://developer.apple.com/documentation/swiftui/presentationadaptation/popover) requested on iPhone; it is not a context-menu preview. The slider is labeled with the sound name and a Close button dismisses the popover.

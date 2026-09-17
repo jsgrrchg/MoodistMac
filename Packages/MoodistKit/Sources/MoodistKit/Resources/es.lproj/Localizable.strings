@@ -580,3 +580,5 @@
 
 "ios_current_mix" = "Mezcla actual";
 "ios_selected_sounds" = "Sonidos seleccionados";
+
+"ios_sound_volume" = "Volumen";

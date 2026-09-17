@@ -1,6 +1,6 @@
 # Using Moodist on iPhone
 
-**Sounds** contains the complete offline catalog. Tap a sound to add/remove it from the running selection; use its favorite button or context menu to organize it. Search uses localized names. Categories can be collapsed individually or together; the app remembers navigation anchors.
+**Sounds** contains the complete offline catalog. Tap a sound to add/remove it from the running selection; use its favorite button to organize it. Long-press a sound to open its individual volume slider. Adjustments apply immediately without changing selection or the global volume, including a stored level for an unselected sound. The popover’s secondary menu retains add-to-mix/create-mix actions. VoiceOver exposes a Volume action on each sound. Search uses localized names. Categories can be collapsed individually or together; the app remembers navigation anchors.
 
 **Mixes** contains curated combinations. Selecting a mix applies its tracks and volumes. **Library** contains custom mixes, ordered favorites and separate recent lists. Use Edit/reorder actions for favorites. A custom mix can be saved from the player, edited via its menu or created by adding a sound from its context menu.
 

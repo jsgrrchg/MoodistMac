@@ -11,3 +11,5 @@ Captured from iPhone 17 Pro on iOS 26.2 with Xcode UI tests on 2026-09-16. Files
 The test source is `MoodistIOSUITests/MoodistFlowTests.swift`; CI attaches screenshots to xcresult files. These are QA evidence. Final App Store captures, other screen sizes, all localizations and physical contrast/accessibility review remain pending.
 
 `player-selected-sounds.png` (2026-09-17): expanded player with two selected tracks immediately visible, before pausing/removing them in the regression test.
+
+`sound-volume-popover.png` (2026-09-17): long-press volume control anchored to River, with the mix continuing to play.

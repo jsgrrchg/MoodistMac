@@ -50,3 +50,9 @@ Both application schemes also built successfully from a clean export of the C25 
 The player opens expanded with a compact header and selected tracks before save/timer actions. The selection UI test opens a two-sound mix, checks both rows are visible immediately, pauses without losing selection, removes each track and verifies playback is disabled when empty. Localizations now validate 545 keys, including 39 iPhone keys.
 
 Validation: all four iOS UI flows passed in `PlayerSelection.xcresult`; the selected-track screenshot was inspected.
+
+## Sound volume popover — 2026-09-17
+
+Long-pressing a sound opens an interactive volume popover anchored to its row. It preserves selection, updates that track through SoundStore.setVolume and offers VoiceOver an equivalent Volume action. Existing mix actions remain under the secondary menu. The five UI flows pass; the regression covers changing/reopening the volume, preserving selection for active and inactive sounds, and normal tap behavior. The screenshot was inspected. Localizations validate 546 keys (40 iPhone keys).
+
+The strengthened regression also passed separately: the level changes from its initial value, the player reads the same changed level, global volume stays at 100%, and the other sound remains at 50%.

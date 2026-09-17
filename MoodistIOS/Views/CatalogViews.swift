@@ -84,9 +84,8 @@ struct CategoryHeader: View {
 
 struct SoundCell: View {
     @EnvironmentObject private var store: SoundStore
-    @EnvironmentObject private var model: IOSAppModel
     let sound: Sound
-    @State private var createPresented = false
+    @State private var volumePresented = false
     var body: some View {
         HStack(spacing: 12) {
             Button {
@@ -100,22 +99,66 @@ struct SoundCell: View {
             }.buttonStyle(.plain)
                 .accessibilityIdentifier("sound-\(sound.id)")
                 .accessibilityValue(store.sounds[sound.id]?.isSelected == true ? L10n.stateSelected : L10n.stateNotSelected)
+                .highPriorityGesture(LongPressGesture(minimumDuration: 0.45).onEnded { _ in
+                    volumePresented = true
+                })
+                .accessibilityAction(named: T("sound_volume", "Volume")) { volumePresented = true }
+                .popover(isPresented: $volumePresented) {
+                    SoundVolumePopover(sound: sound)
+                        .presentationCompactAdaptation(.popover)
+                }
             Button { store.toggleFavorite(sound.id) } label: {
                 Image(systemName: store.sounds[sound.id]?.isFavorite == true ? "star.fill" : "star")
                     .frame(width: 44, height: 44)
             }.buttonStyle(.borderless).accessibilityLabel("\(L10n.favorites): \(L10n.soundLabel(sound.id))")
                 .accessibilityValue(store.sounds[sound.id]?.isFavorite == true ? L10n.stateSelected : L10n.stateNotSelected)
         }
-        .contextMenu {
-            Menu(L10n.addToMix) {
-                ForEach(store.presets) { preset in
-                    Button(preset.name) { store.addSound(sound.id, toPreset: preset.id) }
+    }
+}
+
+struct SoundVolumePopover: View {
+    @EnvironmentObject private var store: SoundStore
+    @Environment(\.dismiss) private var dismiss
+    @State private var createPresented = false
+    let sound: Sound
+
+    var body: some View {
+        VStack(spacing: 12) {
+            HStack(spacing: 8) {
+                SoundSymbol(name: sound.iconName).frame(width: 24, height: 24)
+                Text(L10n.soundLabel(sound.id))
+                    .font(.headline).fixedSize(horizontal: false, vertical: true)
+                Spacer(minLength: 0)
+                Menu(L10n.playbackMenu, systemImage: "ellipsis") {
+                    Menu(L10n.addToMix) {
+                        ForEach(store.presets) { preset in
+                            Button(preset.name) { store.addSound(sound.id, toPreset: preset.id) }
+                        }
+                    }.disabled(store.presets.isEmpty)
+                    Button(L10n.createNewMix) {
+                        store.unselectAll(); store.select(sound.id); createPresented = true
+                    }
+                }.labelStyle(.iconOnly).frame(width: 44, height: 44)
+                Button { dismiss() } label: {
+                    Image(systemName: "xmark").frame(width: 44, height: 44).contentShape(Rectangle())
                 }
-            }.disabled(store.presets.isEmpty)
-            Button(L10n.createNewMix) {
-                store.unselectAll(); store.select(sound.id); createPresented = true
+                .accessibilityLabel(L10n.close)
+                .accessibilityIdentifier("close-sound-volume")
             }
+            HStack {
+                Text(T("sound_volume", "Volume")).foregroundStyle(.secondary)
+                Spacer()
+                Text(store.sounds[sound.id]?.volume ?? 0.5, format: .percent.precision(.fractionLength(0)))
+                    .monospacedDigit()
+            }
+            Slider(value: Binding(
+                get: { store.sounds[sound.id]?.volume ?? 0.5 },
+                set: { store.setVolume(sound.id, $0) }
+            ), in: 0...1)
+            .accessibilityLabel(L10n.volumeForLabel(L10n.soundLabel(sound.id)))
+            .accessibilityIdentifier("sound-volume-" + sound.id)
         }
+        .padding(16).frame(width: 312)
         .sheet(isPresented: $createPresented) { CustomMixEditor() }
     }
 }
