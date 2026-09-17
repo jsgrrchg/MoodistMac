@@ -68,6 +68,27 @@ final class StoreTests: XCTestCase {
         }
     }
 
+    func testInterruptionHonorsManualPauseAndFailure() async {
+        await MainActor.run {
+            let (store, spy, _) = makeStore()
+            store.select("river")
+            store.pauseForInterruption()
+            XCTAssertFalse(store.isPlaying)
+            store.stopPlayback()
+            store.recoverFromInterruption(allowed: true)
+            XCTAssertFalse(store.isPlaying)
+            store.togglePlay()
+            store.pauseForInterruption()
+            store.recoverFromInterruption(allowed: true)
+            XCTAssertTrue(store.isPlaying)
+            store.unselectAll()
+            spy.failLoading = true
+            store.select("river")
+            XCTAssertFalse(store.isPlaying)
+            XCTAssertFalse(store.hasSelection)
+        }
+    }
+
     func testPresetDeletionAndRecents() async {
         await MainActor.run {
             let (store, _, defaults) = makeStore()

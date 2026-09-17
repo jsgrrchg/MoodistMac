@@ -61,12 +61,14 @@ public final class AudioService: ObservableObject {
 
     public func pause(soundId: String) {
         backend.pause(soundId: soundId)
+        if !backend.isPlaying { playbackDidStop?() }
     }
 
     /// Stops playback and removes the player to free memory.
     /// Call this when a sound is deselected.
     public func unload(soundId: String) {
         backend.unload(soundId: soundId)
+        if !backend.isPlaying { playbackDidStop?() }
     }
 
     /// Removes all loaded players to free memory, useful after unselectAll or reset.

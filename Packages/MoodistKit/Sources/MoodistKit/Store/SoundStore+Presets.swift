@@ -6,6 +6,7 @@ public extension SoundStore {
     /// Applies a preset with a smooth crossfade: removed sounds fade out, new sounds fade in,
     /// and shared sounds transition volume without reloading.
     func applyPreset(_ preset: Preset, startPlaying: Bool = true) {
+        resumeAfterInterruption = false
         let fadeDuration = AudioService.crossfadeDuration
 
         // 1. Split sounds into three categories.

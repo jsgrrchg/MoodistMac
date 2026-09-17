@@ -43,6 +43,7 @@ open class SoundStore: ObservableObject {
 
     // Internal to support organizing SoundStore behavior across extension files.
     let audioService: AudioService
+    var resumeAfterInterruption = false
     var activeTimerToken: Timer?
     var autoMixTimerToken: Timer?
     var timerUsageCounts: [Int: Int] = [:]
@@ -133,7 +134,7 @@ open class SoundStore: ObservableObject {
         self.audioService = audioService
         audioService.onFailure = { [weak self] message in
             self?.playbackError = message
-            self?.isPlaying = false
+            self?.stopPlayback()
         }
         bootstrapState()
         setupPersistence()

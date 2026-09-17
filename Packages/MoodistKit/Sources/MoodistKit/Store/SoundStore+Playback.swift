@@ -3,6 +3,7 @@ import Foundation
 public extension SoundStore {
     // Selects a sound, loads it into audio, and starts playback immediately.
     func select(_ id: String) {
+        resumeAfterInterruption = false
         currentMixId = nil
         currentMixIconName = nil
         guard var item = sounds[id] else { return }
@@ -10,7 +11,10 @@ public extension SoundStore {
         sounds[id] = item
         addToRecentSounds(soundId: id)
         if let sound = SoundsData.allSoundsById[id] {
-            guard audioService.load(sound: sound) else { return }
+            guard audioService.load(sound: sound) else {
+                sounds[id]?.isSelected = false
+                return
+            }
             audioService.setVolume(soundId: id, volume: 0, globalVolume: 1.0)
             audioService.playAll(ids: selectedIds)
             isPlaying = audioService.isPlaying
@@ -22,6 +26,7 @@ public extension SoundStore {
 
     // Deselects a sound and releases its associated player.
     func unselect(_ id: String) {
+        resumeAfterInterruption = false
         currentMixId = nil
         currentMixIconName = nil
         guard var item = sounds[id] else { return }
@@ -36,6 +41,7 @@ public extension SoundStore {
 
     // Clears the whole selection in one batch to reduce re-renders.
     func unselectAll() {
+        resumeAfterInterruption = false
         currentMixId = nil
         currentMixIconName = nil
         guard hasSelection else { return }
@@ -73,6 +79,7 @@ public extension SoundStore {
 
     // Pauses active playback without changing the selection.
     func stopPlayback() {
+        resumeAfterInterruption = false
         guard isPlaying else { return }
         isPlaying = false
         audioService.cancelCrossfadeAndCleanup()
@@ -81,6 +88,7 @@ public extension SoundStore {
 
     // Toggles play/pause while respecting whether a selection exists.
     func togglePlay() {
+        resumeAfterInterruption = false
         guard hasSelection else {
             if isPlaying { isPlaying = false }
             return
