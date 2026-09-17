@@ -9,10 +9,10 @@ struct RootView: View {
     var body: some View {
         TabView {
             Tab(L10n.sounds, systemImage: "waveform") {
-                NavigationStack { Text(L10n.sounds).navigationTitle(L10n.sounds).toolbar { settingsButton } }
+                NavigationStack { SoundBrowser().toolbar { settingsButton } }
             }
             Tab(L10n.mixes, systemImage: "square.stack") {
-                NavigationStack { Text(L10n.mixes).navigationTitle(L10n.mixes).toolbar { settingsButton } }
+                NavigationStack { MixBrowser().toolbar { settingsButton } }
             }
             Tab(T("library", "Library"), systemImage: "books.vertical") {
                 NavigationStack { Text(L10n.favorites).navigationTitle(T("library", "Library")).toolbar { settingsButton } }
