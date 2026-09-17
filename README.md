@@ -11,7 +11,7 @@
 
 **Ambient sounds for focus and relaxation.**
 
-Moodist is a native macOS app that lets you mix and play ambient sounds—rain, nature, cafés, white noise, binaural tones, and more—to help you focus, relax, or sleep. Combine individual sounds, use curated mixes, save presets, export and import preferences, and control everything from the menu bar or keyboard.
+Moodist is a native macOS and iPhone app that lets you mix and play ambient sounds—rain, nature, cafés, white noise, binaural tones, and more—to help you focus, relax, or sleep. Combine individual sounds, use curated mixes, save presets, export and import preferences, and control everything from the menu bar or keyboard.
 
 For non technical users, you can download the latest release from the releases page, you will find a MoodistMac.app inside a zip file of the same name, simply extract and move the binary to your Applications folder.
 
@@ -20,7 +20,8 @@ Inspired by the original Moodist web app [remvze/moodist](https://github.com/rem
 [Support Moodist for MacOS – Buy me a coffee ☕️](https://buymeacoffee.com/jsgrrchg)
 
 ![macOS](https://img.shields.io/badge/macOS-15.0+-black?style=flat-square&logo=apple)
-![Swift](https://img.shields.io/badge/Swift-5.0-orange?style=flat-square&logo=swift)
+![iOS](https://img.shields.io/badge/iOS-26.0+-black?style=flat-square&logo=apple)
+![Swift](https://img.shields.io/badge/Swift-6_toolchain-orange?style=flat-square&logo=swift)
 ![SwiftUI](https://img.shields.io/badge/SwiftUI-Native-blue?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
 
@@ -35,18 +36,18 @@ Inspired by the original Moodist web app [remvze/moodist](https://github.com/rem
 - **Collapse / Expand all** — one-tap button to collapse or expand all sound or mix categories in the list
 - **Custom mixes and presets** — create combinations, save them as presets (with icon selector), and recall them anytime
 - **Favorites** — star sounds and mixes for quick access from the sidebar and menu; reorder favorites by drag and drop
-- **Recent** — sidebar shows recent mixes and recent sounds (each configurable between 5 and 15)
+- **Recent** — separate recent mixes and sounds (each configurable between 5 and 15)
 
 ### Playback and control
 - **Global and per-sound volume** — master volume plus individual sliders for each active sound
 - **Sleep timer** — duration with presets or custom minutes; playback stops and a notification appears when time is up
 - **Optional media key** — the “Next” key on your keyboard or headphones can load a random mix
 
-### Interface and windows
+### macOS interface and windows
 - **Menu bar** — optional menu bar icon with quick access to playback, timer, sounds, and mixes
 - **Floating player** — compact always-on-top window with stop (unselect all), play, shuffle, next mix, volume, and scrolling mix name (marquee)
 - **Search** — find sounds by name (⌘F)
-- **Sidebar** — always visible; favorites and recent mixes/sounds with configurable list sizes (10–15)
+- **Sidebar** — always visible; favorites and recent mixes/sounds with configurable list sizes (5–15)
 
 ### Appearance
 - **Theme** — light, dark, or automatic based on system
@@ -68,8 +69,9 @@ Inspired by the original Moodist web app [remvze/moodist](https://github.com/rem
 ## Requirements
 
 - **macOS** 15.0 (Sequoia) or later
-- **Xcode** 14.0 or later (for building from source)
-- **Swift** 5.0
+- **Xcode** 26.2 or later (stable recommended; includes Swift 6)
+- **iPhone** iOS 26.0 or later; iPad is not a supported target
+- **Tests** require an installed iOS 26 simulator runtime
 
 ---
 
@@ -84,35 +86,37 @@ Inspired by the original Moodist web app [remvze/moodist](https://github.com/rem
    ```bash
    open Moodist.xcodeproj
    ```
-3. Select the **MoodistMac** scheme and build (⌘B).
+3. Select **MoodistMac** for desktop, or **MoodistIOS** with an iPhone simulator, and build (⌘B).
 4. Run the app (⌘R) or use **Product → Archive** to create a distributable build.
 
-No external dependencies; the project uses only system frameworks (SwiftUI, AppKit, AVFoundation, etc.).
+Both apps consume the local Swift package **MoodistKit**. macOS also uses **Sparkle** for updates; iOS uses system frameworks and excludes Sparkle/AppKit. Audio files and translations live in the package and are bundled for offline use.
+
+iOS is implemented but not published. Physical-device endurance, routes, accessibility, asset redistribution evidence and signing remain open gates. See [iOS development and validation](docs/ios/README.md), [parity](docs/ios/PARITY.md) and [release readiness](docs/ios/RELEASE.md).
 
 ---
 
 ## Project structure
 
-```
-MoodistMac/
-├── Moodist/
-│   ├── MoodistApp.swift          # App entry, scenes, menu commands
-│   ├── Data/                     # Sounds and mixes data
-│   ├── Models/                   # Sound, Mix, Preset, TimerItem, ExportedPreferences, etc.
-│   ├── Store/                    # SoundStore (playback state)
-│   ├── Services/                 # Audio, persistence, timer, preference export/import
-│   ├── Views/                    # SwiftUI views (sidebar, content, options, player)
-│   ├── Helpers/                  # L10n, theme, colors, modifiers
-│   ├── sounds/                   # Audio assets (MP3/WAV)
-│   ├── Assets.xcassets/          # App icon and accent color
-│   └── en.lproj / es.lproj/      # Localized strings
-├── Moodist.xcodeproj/
-└── README.md
+```text
+Moodist/                         macOS app, windows, menus and adapters
+MoodistIOS/                      iPhone app, Liquid Glass UI and iOS adapters
+Packages/MoodistKit/              shared catalog, audio, state, persistence and timers
+  Sources/MoodistKit/Resources/   131 audio files, shared images, en/es/pt-BR strings
+MoodistTests/                    macOS app integration tests
+MoodistIOSTests/                 iOS session and real-engine integration tests
+MoodistIOSUITests/               iPhone user-flow tests
+Moodist.xcodeproj/               MoodistMac and MoodistIOS shared schemes
+scripts/ios/                     catalog, bundle, platform and iOS release validation
+docs/ios/                        usage, parity, QA, asset inventory and releases
 ```
 
 ---
 
-## Usage (quick reference)
+## iPhone usage
+
+Use **Sounds**, **Mixes** and **Library** to select audio and organize favorites. Tap the persistent mini-player to open volume controls, selected tracks, sleep and automatic mix timers. Settings provides appearance, languages and interoperable preference files. The iPhone UI uses native Liquid Glass with reduced-transparency adaptations. Read the [mobile guide](docs/ios/USAGE.md) for audio policies and background limits.
+
+## macOS usage (quick reference)
 
 | Action        | Shortcut   |
 |---------------|------------|
@@ -131,7 +135,9 @@ Timer presets and custom duration are in the **Timer** menu and (if enabled) the
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-⚠️ Third-Party Assets
+### Third-party assets
+
+The code license does not grant rights to bundled third-party audio. The [per-file rights inventory](docs/ios/ASSET_RIGHTS.md) currently requires provenance for all 131 sounds before iOS distribution.
 Some sounds used in this project are sourced from third-party providers and are subject to different licenses:
 
 Sounds licensed under the Pixabay Content License: Pixabay Content License

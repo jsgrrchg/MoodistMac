@@ -1,6 +1,6 @@
 # iOS parity tracking
 
-Status: implementation in progress. No physical-device validation yet.
+Status: implementation available for all P01–P26. Full parity acceptance remains open: physical-device, desktop-runtime, accessibility and distribution evidence is still required. Automated checks are not proof of every manual interaction.
 
 | ID | Función del escritorio | Implementación/equivalente iPhone | Commits |
 | --- | --- | --- | --- |
@@ -33,3 +33,27 @@ Status: implementation in progress. No physical-device validation yet.
 
 No existe una copia literal en iPhone de ventanas siempre encima, icono de barra de menús, tamaño/posición de ventanas ni gestos de trackpad. Sus ajustes exclusivos no deben aparecer como interruptores sin efecto. Widgets y Live Activities podrían ampliar los accesos rápidos después; no son necesarios para reproducir o cambiar mezclas desde la app.
 
+
+## Evidence by feature
+
+| IDs | Implementation / automated evidence | Remaining acceptance |
+| --- | --- | --- |
+| P01, P05 | CatalogTests, ResourceTests: 131 sounds/123 mixes, every file opens; catalog audit | Visual categories in all locales |
+| P02–P04, P06–P07 | StoreTests selection/playback/shuffle; real-engine integration; UI select/save/recall/pause | Actual perceived volume, routes and edge-state interaction |
+| P08 | Shared engine crossfade retained; engine rebuild tested | Audible 1.5-second transitions and rapid changes on hardware |
+| P09 | UI test creates/recalls a custom mix; StoreTests preset deletion | Manual editing, deletion confirmation and add-to-existing flows |
+| P10–P11 | UI favorite flow; store recent/deletion tests; LibraryView ordering | Drag/accessibility reorder and persistence across real upgrades |
+| P12–P13 | CatalogViews search/collapse and repository-backed anchors | Screen sizes, navigation restoration and localized search |
+| P14–P15 | TimerTests: deadlines, missed ticks, sleep dominance, 96 simulated rotations; UI sleep navigation | 30-minute/eight-hour hardware run and notification permissions |
+| P16–P17, P26 | AudioSessionTests, EngineIntegrationTests, interruption intent tests; native mini-player and Now Playing adapter | Lock screen, calls/Siri, headphones, Bluetooth/AirPlay and other players |
+| P18 | Touch/contextual controls and supported command shortcuts; UI navigation | External keyboard and VoiceOver audit |
+| P19–P20 | Dark/large-text UI flow; native glass and explicit opaque fallback | Real contrast, Reduce Transparency/Motion and every accent |
+| P21 | Localization script verifies 543 keys/format placeholders in en/es/pt-BR | Full manual language switch and system-language flows |
+| P22 | InteroperabilityTests and StoreTests malformed/future/unknown data; FileDocument adapter | Files providers, share destinations and real Mac/iPhone file exchange |
+| P23 | Shared reset actions and Settings confirmations | Both reset scopes through actual UI |
+| P24 | Settings About/Privacy, resource credits inventory and app version | Hosted support/privacy, final credits and legal provenance |
+| P25 | Independent release-tag/metadata tests and unsigned archive validation | Signed archive, Apple processing, TestFlight install/update |
+
+Platform equivalences are intentional: app-owned player plus iOS media controls replaces Mac windows/menu-bar/Dock surfaces; App Store/TestFlight replaces Sparkle. iOS cannot guarantee exact timer callbacks while suspended/terminated. The mini-player uses a native Liquid Glass safe-area inset after repeated tap failures in the iOS 26 tab accessory; it remains persistent above navigation tabs.
+
+See [QA](QA.md) for the environment, measured scope and open sign-offs. No physical or store requirement is marked complete based only on source review.

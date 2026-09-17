@@ -29,3 +29,18 @@ UI tests exposed unreliable presentation from the tab accessory; the app now own
 | Signed release, install/update through TestFlight | Pending | Valid signature/profile, processed version/build and physical installation |
 
 A registered physical iPhone was unavailable during this run. Simulator audio tests cannot replace route, background, endurance or energy checks. Store acceptance also requires the audio provenance recorded in ASSET_RIGHTS.md and an opaque, validated App Store icon. See RELEASE.md for distribution gates.
+
+## Final local evidence and limitations
+
+- Package test run: 13 passing tests. Mac app integration: 1 passing test on the current host; this is not a macOS 15 runtime check.
+- iOS unit/integration suite: 15 tests. UI suite: three flows also passed in two consecutive iterations after changing the mini-player to a safe-area inset.
+- Release-tooling checks: original Mac Node suite and four iOS metadata/tag tests pass. Workflow YAML parses locally. No GitHub Actions run was triggered, because the branch was not pushed.
+- A controlled temporary bundle with minimum OS 27.0 was rejected by the built-app validator; the fixture was removed. The real unsigned iOS archive passed the same validator with minimum 26.0, one resource bundle, all sounds/locales and no Sparkle.
+- A newer iOS simulator runtime is not installed locally. CI's additional-runtime job records an explicit skip when unavailable; its iOS 26 job remains required.
+- Xcode 27 beta stalled collecting simulator sysdiagnostics after the real-engine test emitted a Thread Performance Checker priority-inversion warning during system audio startup. Sampling the runner showed it waiting in `simctl diagnose`. The stalled invocations were stopped; the final run uses `-collect-test-diagnostics never`, retaining assertions, normal test logs and screenshots. This disables verbose sysdiagnose collection only. CI retains default diagnostics with stable Xcode 26.2. The startup warning needs device/Instruments review and is not considered resolved by disabling diagnostic collection.
+
+Local working evidence is under the ignored `.PERSONAL/logs` and `.derived` directories. Tracked screenshots provide selected UI evidence; remote CI will retain xcresult artifacts when actually run.
+
+Final combined iOS run completed with **TEST SUCCEEDED**: 15 unit/integration tests and three UI flows, with verbose diagnostic collection disabled as described above. Final accessibility screenshot review also led to a stacked volume label/value and bounded icon scaling at the largest text sizes.
+
+Both application schemes also built successfully from a clean export of the C25 tracked source, using independent derived-data directories; the iOS bundle audit passed there. This verifies the committed project does not depend on ignored helper scripts or local resource copies.

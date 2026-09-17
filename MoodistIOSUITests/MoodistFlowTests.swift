@@ -63,7 +63,10 @@ final class MoodistFlowTests: XCTestCase {
         let app = launch(["-MoodistMac.appearanceMode", "dark", "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL"])
         XCTAssertTrue(app.buttons["open-player"].isHittable)
         app.buttons["open-player"].tap()
+        let shuffle = app.buttons["player-shuffle"]
+        XCTAssertTrue(shuffle.waitForExistence(timeout: 5))
+        reveal(shuffle, in: app)
+        XCTAssertTrue(shuffle.isHittable)
         capture("large-text-dark-player", app)
-        XCTAssertTrue(app.buttons["player-shuffle"].exists)
     }
 }

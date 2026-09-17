@@ -40,3 +40,6 @@ AGENTS.md
 # Swift package build products
 .build/
 .swiftpm/
+
+# Python tooling cache
+__pycache__/

@@ -19,7 +19,7 @@ struct PlayerView: View {
                                 .font(.title).disabled(!store.hasSelection).accessibilityIdentifier("player-toggle")
                             Button(L10n.nextMix, systemImage: "forward.end.fill") { store.playNextRandomMix() }
                         }
-                        .labelStyle(.iconOnly).modifier(PlaybackControlsStyle())
+                        .labelStyle(.iconOnly).dynamicTypeSize(...DynamicTypeSize.xxxLarge).modifier(PlaybackControlsStyle())
                     }
                     VolumeControl(label: L10n.globalVolume, value: Binding(get: { store.globalVolume }, set: { store.setGlobalVolume($0) }))
                     AudioRoutePicker().frame(width: 44, height: 44).accessibilityLabel(T("audio_output", "Audio output"))
@@ -68,10 +68,18 @@ struct VolumeControl: View {
     let label: String
     @Binding var value: Double
     var showLabel = true
+    @Environment(\.dynamicTypeSize) private var typeSize
     var body: some View {
         VStack {
             if showLabel {
-                HStack { Text(label); Spacer(); Text(value, format: .percent.precision(.fractionLength(0))).monospacedDigit() }
+                if typeSize.isAccessibilitySize {
+                    VStack(alignment: .leading) {
+                        Text(label).fixedSize(horizontal: false, vertical: true)
+                        Text(value, format: .percent.precision(.fractionLength(0))).monospacedDigit()
+                    }.frame(maxWidth: .infinity, alignment: .leading)
+                } else {
+                    HStack { Text(label); Spacer(); Text(value, format: .percent.precision(.fractionLength(0))).monospacedDigit() }
+                }
             }
             Slider(value: $value, in: 0...1)
                 .accessibilityLabel(label)
