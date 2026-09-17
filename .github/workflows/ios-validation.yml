@@ -25,6 +25,8 @@ jobs:
         run: |
           swift test --package-path Packages/MoodistKit
           node --test scripts/release/test-release-tooling.mjs
+          python3 scripts/ios/test-release.py
+          ruby -c scripts/ios/wait-for-processing.rb
       - name: Mac integration tests
         run: xcodebuild -project Moodist.xcodeproj -scheme MoodistMac -derivedDataPath .derived -destination 'platform=macOS,arch=arm64' -resultBundlePath .derived/MacTests.xcresult test CODE_SIGNING_ALLOWED=NO
       - name: iOS 26 unit and user-flow tests

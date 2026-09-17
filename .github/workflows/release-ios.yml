@@ -1,0 +1,85 @@
+name: Release iOS
+on:
+  push:
+    tags:
+      - 'ios/v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing iOS tag, e.g. ios/v1.0'
+        required: true
+        type: string
+      upload:
+        description: 'Sign and upload to App Store Connect (otherwise unsigned archive only)'
+        default: false
+        type: boolean
+permissions:
+  contents: read
+concurrency:
+  group: release-ios-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  archive:
+    runs-on: macos-26
+    timeout-minutes: 60
+    environment: ios-release
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+      UPLOAD: ${{ github.event_name == 'push' || inputs.upload }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref_name }}
+          fetch-depth: 0
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '26.2'
+      - name: Validate iOS tag, target and main ancestry
+        run: |
+          python3 scripts/ios/release-metadata.py --tag "$RELEASE_TAG"
+          git show-ref --verify "refs/tags/$RELEASE_TAG"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "refs/tags/$RELEASE_TAG^{commit}")"
+          git merge-base --is-ancestor HEAD refs/remotes/origin/main
+          python3 scripts/ios/validate-project.py
+          python3 scripts/ios/catalog-inventory.py --check
+          python3 scripts/ios/check-localizations.py
+          python3 scripts/ios/test-release.py
+      - name: Shared and iOS tests
+        run: |
+          swift test --package-path Packages/MoodistKit
+          destination="$(python3 scripts/ios/simulator-destination.py)"
+          xcodebuild -project Moodist.xcodeproj -scheme MoodistIOS -derivedDataPath .derived -destination "$destination" -resultBundlePath .derived/ReleaseTests.xcresult test CODE_SIGNING_ALLOWED=NO
+      - name: Check distribution readiness
+        if: env.UPLOAD == 'true'
+        env:
+          IOS_RELEASE_READY: ${{ vars.IOS_RELEASE_READY }}
+        run: |
+          test "$IOS_RELEASE_READY" = 'true' || { echo 'Complete the physical QA, icon and store checklist in docs/ios/RELEASE.md first.'; exit 1; }
+          python3 scripts/ios/check-asset-rights.py --release
+      - name: Unsigned archive rehearsal
+        if: env.UPLOAD != 'true'
+        run: |
+          xcodebuild -project Moodist.xcodeproj -scheme MoodistIOS -configuration Release -destination 'generic/platform=iOS' -archivePath .derived/MoodistIOS.xcarchive archive CODE_SIGNING_ALLOWED=NO
+          python3 scripts/ios/validate-built-app.py .derived/MoodistIOS.xcarchive/Products/Applications/MoodistIOS.app
+      - name: Signed archive, upload and processing verification
+        if: env.UPLOAD == 'true'
+        env:
+          IOS_DISTRIBUTION_P12_BASE64: ${{ secrets.IOS_DISTRIBUTION_P12_BASE64 }}
+          IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
+          IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_PRIVATE_KEY_BASE64: ${{ secrets.ASC_PRIVATE_KEY_BASE64 }}
+          IOS_TEAM_ID: ${{ vars.IOS_TEAM_ID }}
+          ASC_APP_ID: ${{ vars.ASC_APP_ID }}
+        run: python3 scripts/ios/signed-release.py
+      - name: Preserve archive and test evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: moodist-ios-release
+          path: |
+            .derived/MoodistIOS.xcarchive
+            .derived/*.xcresult
+          if-no-files-found: ignore
+          retention-days: 14
