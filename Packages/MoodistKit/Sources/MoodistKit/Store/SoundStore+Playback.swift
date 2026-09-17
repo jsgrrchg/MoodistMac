@@ -1,7 +1,6 @@
-import MoodistKit
 import Foundation
 
-extension SoundStore {
+public extension SoundStore {
     // Selects a sound, loads it into audio, and starts playback immediately.
     func select(_ id: String) {
         currentMixId = nil
@@ -11,10 +10,10 @@ extension SoundStore {
         sounds[id] = item
         addToRecentSounds(soundId: id)
         if let sound = SoundsData.allSoundsById[id] {
-            _ = audioService.load(sound: sound)
+            guard audioService.load(sound: sound) else { return }
             audioService.setVolume(soundId: id, volume: 0, globalVolume: 1.0)
-            isPlaying = true
             audioService.playAll(ids: selectedIds)
+            isPlaying = audioService.isPlaying
             audioService.setVolume(
                 soundId: id, volume: item.volume, globalVolume: globalVolume,
                 fadeDuration: AudioService.crossfadeDuration)
@@ -58,6 +57,7 @@ extension SoundStore {
 
     // Adjusts the individual volume in both state and the audio engine.
     func setVolume(_ id: String, _ volume: Double) {
+        let volume = volume.isFinite ? min(1, max(0, volume)) : 0
         guard var item = sounds[id] else { return }
         item.volume = volume
         sounds[id] = item
@@ -66,6 +66,7 @@ extension SoundStore {
 
     // Adjusts global volume and recomputes the effective audio mix.
     func setGlobalVolume(_ volume: Double) {
+        let volume = volume.isFinite ? min(1, max(0, volume)) : 0
         globalVolume = volume
         audioService.updateVolumes(state: sounds, globalVolume: globalVolume)
     }
@@ -88,11 +89,12 @@ extension SoundStore {
         if isPlaying {
             for sound in SoundsData.categories.flatMap(\.sounds) {
                 if sounds[sound.id]?.isSelected == true {
-                    _ = audioService.load(sound: sound)
+                    guard audioService.load(sound: sound) else { return }
                 }
             }
             audioService.updateVolumes(state: sounds, globalVolume: globalVolume)
             audioService.playAll(ids: selectedIds)
+            isPlaying = audioService.isPlaying
         } else {
             audioService.cancelCrossfadeAndCleanup()
             audioService.pauseAll(ids: selectedIds)
@@ -118,7 +120,7 @@ extension SoundStore {
     func updatePlaybackForSelection() {
         for sound in SoundsData.categories.flatMap(\.sounds) {
             if sounds[sound.id]?.isSelected == true {
-                _ = audioService.load(sound: sound)
+                guard audioService.load(sound: sound) else { return }
             }
         }
         audioService.updateVolumes(state: sounds, globalVolume: globalVolume)

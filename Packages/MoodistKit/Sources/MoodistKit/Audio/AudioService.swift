@@ -1,4 +1,3 @@
-import MoodistKit
 //
 //  AudioService.swift
 //  MoodistMac
@@ -8,79 +7,102 @@ import Combine
 import Foundation
 
 @MainActor
-final class AudioService: ObservableObject {
-    static let crossfadeDuration: TimeInterval = 1.5
+public final class AudioService: ObservableObject {
+    @Published public private(set) var lastError: String?
+    public var onFailure: ((String) -> Void)?
+    public var preparePlayback: (() throws -> Void)?
+    public var playbackDidStop: (() -> Void)?
+    public var isPlaying: Bool { backend.isPlaying }
 
-    private let backend: AudioPlaybackBackend
+    private func observeFailures() {
+        backend.onFailure = { [weak self] message in
+            self?.lastError = message
+            self?.onFailure?(message)
+        }
+    }
+    private func prepare() -> Bool {
+        do { try preparePlayback?(); lastError = nil; return true }
+        catch { lastError = error.localizedDescription; onFailure?(error.localizedDescription); return false }
+    }
+    public func rebuild() { backend.unloadAll() }
+    public static let crossfadeDuration: TimeInterval = 1.5
 
-    init() {
+    private var backend: AudioPlaybackBackend
+
+    public init() {
         self.backend = Self.makeDefaultBackend()
+        observeFailures()
     }
 
-    init(backend: AudioPlaybackBackend) {
+    public init(backend: AudioPlaybackBackend) {
         self.backend = backend
+        observeFailures()
     }
 
     @discardableResult
-    func load(sound: Sound) -> Bool {
+    public func load(sound: Sound) -> Bool {
         backend.load(sound: sound)
     }
 
     // Sets a sound's volume together with global volume. Missing sounds are ignored.
-    func setVolume(soundId: String, volume: Double, globalVolume: Double) {
+    public func setVolume(soundId: String, volume: Double, globalVolume: Double) {
         backend.setVolume(soundId: soundId, volume: volume, globalVolume: globalVolume)
     }
 
     /// Sets volume with a smooth crossfade transition.
-    func setVolume(soundId: String, volume: Double, globalVolume: Double, fadeDuration: TimeInterval) {
+    public func setVolume(soundId: String, volume: Double, globalVolume: Double, fadeDuration: TimeInterval) {
         backend.setVolume(soundId: soundId, volume: volume, globalVolume: globalVolume, fadeDuration: fadeDuration)
     }
 
-    func play(soundId: String) {
+    public func play(soundId: String) {
+        guard prepare() else { return }
         backend.play(soundId: soundId)
     }
 
-    func pause(soundId: String) {
+    public func pause(soundId: String) {
         backend.pause(soundId: soundId)
     }
 
     /// Stops playback and removes the player to free memory.
     /// Call this when a sound is deselected.
-    func unload(soundId: String) {
+    public func unload(soundId: String) {
         backend.unload(soundId: soundId)
     }
 
     /// Removes all loaded players to free memory, useful after unselectAll or reset.
-    func unloadAll() {
+    public func unloadAll() {
         backend.unloadAll()
+        playbackDidStop?()
     }
 
-    func playAll(ids: [String]) {
+    public func playAll(ids: [String]) {
+        guard !ids.isEmpty, prepare() else { return }
         backend.playAll(ids: ids)
     }
 
-    func pauseAll(ids: [String]) {
+    public func pauseAll(ids: [String]) {
         backend.pauseAll(ids: ids)
+        if !backend.isPlaying { playbackDidStop?() }
     }
 
-    func updateVolumes(state: [String: SoundStateItem], globalVolume: Double) {
+    public func updateVolumes(state: [String: SoundStateItem], globalVolume: Double) {
         backend.updateVolumes(state: state, globalVolume: globalVolume)
     }
 
     // MARK: - Crossfade
 
     /// Moves an active player to outgoing and fades it out to volume 0.
-    func fadeOutAndUnload(soundId: String, duration: TimeInterval) {
+    public func fadeOutAndUnload(soundId: String, duration: TimeInterval) {
         backend.fadeOutAndUnload(soundId: soundId, duration: duration)
     }
 
     /// Schedules outgoing player cleanup after the fade duration.
-    func scheduleOutgoingCleanup(after duration: TimeInterval) {
+    public func scheduleOutgoingCleanup(after duration: TimeInterval) {
         backend.scheduleOutgoingCleanup(after: duration)
     }
 
     /// Cancels any in-progress crossfade and cleans outgoing players immediately.
-    func cancelCrossfadeAndCleanup() {
+    public func cancelCrossfadeAndCleanup() {
         backend.cancelCrossfadeAndCleanup()
     }
 

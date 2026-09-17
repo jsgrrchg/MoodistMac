@@ -1,7 +1,6 @@
-import MoodistKit
 import Foundation
 
-extension SoundStore {
+public extension SoundStore {
     // MARK: - Presets
 
     /// Applies a preset with a smooth crossfade: removed sounds fade out, new sounds fade in,
@@ -75,7 +74,10 @@ extension SoundStore {
         for soundId in preset.soundIds.reversed() {
             addToRecentSounds(soundId: soundId)
         }
-        if startPlaying { isPlaying = true }
+        if shouldPlay {
+            audioService.playAll(ids: selectedIds)
+            isPlaying = audioService.isPlaying
+        }
 
         // 8. Schedule cleanup for outgoing players.
         audioService.scheduleOutgoingCleanup(after: fadeDuration)

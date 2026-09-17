@@ -1,7 +1,6 @@
-import MoodistKit
 import Foundation
 
-extension SoundStore {
+public extension SoundStore {
     // Toggles a sound favorite and synchronizes the persisted favorite order.
     func toggleFavorite(_ id: String) {
         guard var item = sounds[id] else { return }

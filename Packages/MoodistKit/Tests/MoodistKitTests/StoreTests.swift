@@ -3,6 +3,8 @@ import XCTest
 
 @MainActor
 final class AudioSpy: AudioPlaybackBackend {
+    var isPlaying: Bool { !playing.isEmpty }
+    var onFailure: ((String) -> Void)?
     var loaded = Set<String>()
     var playing = Set<String>()
     var volumes: [String: Double] = [:]

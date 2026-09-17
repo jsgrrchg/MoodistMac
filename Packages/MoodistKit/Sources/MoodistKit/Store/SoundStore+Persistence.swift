@@ -1,8 +1,7 @@
-import MoodistKit
 import Combine
 import Foundation
 
-extension SoundStore {
+public extension SoundStore {
     // Initializes in-memory state from defaults and persisted values.
     func bootstrapState() {
         SoundsData.categories.flatMap(\.sounds).forEach { sounds[$0.id] = .default }

@@ -1,4 +1,3 @@
-import MoodistKit
 //
 //  LegacyAudioPlayerBackend.swift
 //  MoodistMac
@@ -8,7 +7,9 @@ import AVFoundation
 import Foundation
 
 @MainActor
-final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
+public final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
+    public var isPlaying: Bool { players.values.contains { $0.isPlaying } }
+    public var onFailure: ((String) -> Void)?
     private var players: [String: AVAudioPlayer] = [:]
     private let bundle: Bundle
 
@@ -16,13 +17,13 @@ final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
     private var outgoingPlayers: [String: AVAudioPlayer] = [:]
     private var outgoingCleanupTask: Task<Void, Never>?
 
-    init(bundle: Bundle = MoodistResources.bundle) {
+    public init(bundle: Bundle = MoodistResources.bundle) {
         self.bundle = bundle
         // macOS does not use AVAudioSession; playback mixes with the system by default.
     }
 
     @discardableResult
-    func load(sound: Sound) -> Bool {
+    public func load(sound: Sound) -> Bool {
         if players[sound.id] != nil { return true }
 
         // If it was outgoing during fade-out, move it back to the active pool.
@@ -35,6 +36,7 @@ final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
         let ext = (sound.fileName as NSString).pathExtension
         let subdir = "sounds/\(sound.categoryFolder)"
         guard let url = bundle.url(forResource: name, withExtension: ext, subdirectory: subdir) else {
+            onFailure?("Missing audio: \(sound.id)")
             NSLog("MoodistMac: sound resource not found: %@/%@.%@", subdir, name, ext)
             return false
         }
@@ -46,35 +48,36 @@ final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
             players[sound.id] = player
             return true
         } catch {
+            onFailure?(error.localizedDescription)
             NSLog("MoodistMac: failed to load sound '%@' from %@: %@", sound.id, url.path, String(describing: error))
             return false
         }
     }
 
-    func setVolume(soundId: String, volume: Double, globalVolume: Double) {
+    public func setVolume(soundId: String, volume: Double, globalVolume: Double) {
         guard let player = players[soundId] else { return }
         player.volume = Float(volume * globalVolume)
     }
 
-    func setVolume(soundId: String, volume: Double, globalVolume: Double, fadeDuration: TimeInterval) {
+    public func setVolume(soundId: String, volume: Double, globalVolume: Double, fadeDuration: TimeInterval) {
         guard let player = players[soundId] else { return }
         player.setVolume(Float(volume * globalVolume), fadeDuration: fadeDuration)
     }
 
-    func play(soundId: String) {
+    public func play(soundId: String) {
         players[soundId]?.play()
     }
 
-    func pause(soundId: String) {
+    public func pause(soundId: String) {
         players[soundId]?.pause()
     }
 
-    func unload(soundId: String) {
+    public func unload(soundId: String) {
         players[soundId]?.stop()
         players.removeValue(forKey: soundId)
     }
 
-    func unloadAll() {
+    public func unloadAll() {
         cancelCrossfadeAndCleanup()
         for (_, player) in players {
             player.stop()
@@ -82,27 +85,27 @@ final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
         players.removeAll()
     }
 
-    func playAll(ids: [String]) {
+    public func playAll(ids: [String]) {
         for id in ids { players[id]?.play() }
     }
 
-    func pauseAll(ids: [String]) {
+    public func pauseAll(ids: [String]) {
         for id in ids { players[id]?.pause() }
     }
 
-    func updateVolumes(state: [String: SoundStateItem], globalVolume: Double) {
+    public func updateVolumes(state: [String: SoundStateItem], globalVolume: Double) {
         for (id, item) in state where item.isSelected {
             setVolume(soundId: id, volume: item.volume, globalVolume: globalVolume)
         }
     }
 
-    func fadeOutAndUnload(soundId: String, duration: TimeInterval) {
+    public func fadeOutAndUnload(soundId: String, duration: TimeInterval) {
         guard let player = players.removeValue(forKey: soundId) else { return }
         player.setVolume(0, fadeDuration: duration)
         outgoingPlayers[soundId] = player
     }
 
-    func scheduleOutgoingCleanup(after duration: TimeInterval) {
+    public func scheduleOutgoingCleanup(after duration: TimeInterval) {
         outgoingCleanupTask?.cancel()
         outgoingCleanupTask = Task { @MainActor [weak self] in
             try? await Task.sleep(nanoseconds: UInt64((duration + 0.1) * 1_000_000_000))
@@ -111,7 +114,7 @@ final class LegacyAudioPlayerBackend: AudioPlaybackBackend {
         }
     }
 
-    func cancelCrossfadeAndCleanup() {
+    public func cancelCrossfadeAndCleanup() {
         outgoingCleanupTask?.cancel()
         outgoingCleanupTask = nil
         cleanupOutgoingPlayers()

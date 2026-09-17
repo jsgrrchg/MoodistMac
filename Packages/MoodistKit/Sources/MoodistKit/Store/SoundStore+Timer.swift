@@ -1,7 +1,6 @@
-import MoodistKit
 import Foundation
 
-extension SoundStore {
+public extension SoundStore {
     // MARK: - Auto Mix Timer
 
     /// Available intervals for automatic mix changes.

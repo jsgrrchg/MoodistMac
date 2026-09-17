@@ -7,24 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0921104FDED78DB3FC3E628D /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC90F2AE61A13F28AEA37605 /* StoreTests.swift */; };
-		0CE5803D5D3826F49CC2968F /* SoundStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004C /* SoundStore+Persistence.swift */; };
+		0E6755547A6C1FDC30F37142 /* PlatformIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */; };
 		163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
-		17D19EE3E4010D3310DDEC85 /* SoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000B /* SoundStore.swift */; };
-		20930FE69DBF11B0CB8C6710 /* EngineAudioBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004F /* EngineAudioBackend.swift */; };
 		45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */; };
-		5B6E6C72EFD4A80CE293A613 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000009 /* AudioService.swift */; };
-		63BAC95FC311705BE321908B /* SoundStore+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004A /* SoundStore+Presets.swift */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
-		82EF4997F259222DBF5E6A4C /* SoundStore+RecentsFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
 		B175D2182F310AB600907398 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000002 /* ContentView.swift */; };
 		B175D2192F310AB600907398 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000003 /* CategoryView.swift */; };
 		B175D21A2F310AB600907398 /* SoundRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000004 /* SoundRow.swift */; };
-		B175D21F2F310AB600907398 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000009 /* AudioService.swift */; };
-		B175D2212F310AB600907398 /* SoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000B /* SoundStore.swift */; };
 		B175D2222F310AB600907398 /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000C /* PlatformColor.swift */; };
 		B175D2232F310AB600907398 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000D /* Assets.xcassets */; };
 		B175D2252F310AB600907398 /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000F /* OptionsView.swift */; };
@@ -60,21 +52,7 @@
 		B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000045 /* AppDockCoordinator.swift */; };
 		B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000046 /* AppMenuBarCoordinator.swift */; };
 		B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000047 /* AppTimerCoordinator.swift */; };
-		B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000048 /* SoundStore+Playback.swift */; };
-		B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000049 /* SoundStore+Timer.swift */; };
-		B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004A /* SoundStore+Presets.swift */; };
-		B175D2582F310AB600907398 /* SoundStore+RecentsFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */; };
-		B175D2592F310AB600907398 /* SoundStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004C /* SoundStore+Persistence.swift */; };
-		B175D2602F310AB600907398 /* AudioPlaybackBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004D /* AudioPlaybackBackend.swift */; };
-		B175D2612F310AB600907398 /* LegacyAudioPlayerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */; };
-		B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004F /* EngineAudioBackend.swift */; };
-		B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000050 /* AudioSpatialTypes.swift */; };
 		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
-		C2D24C9A1B033C84AA50AE48 /* LegacyAudioPlayerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */; };
-		C90A96F6F53A2F43EFD5DF44 /* AudioPlaybackBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004D /* AudioPlaybackBackend.swift */; };
-		D48B9EFB34878ED37A4BA64C /* SoundStore+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000049 /* SoundStore+Timer.swift */; };
-		F187B14F643BF7F210CB58CA /* SoundStore+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000048 /* SoundStore+Playback.swift */; };
-		FC774A4A5D508CFACE618AEC /* AudioSpatialTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000050 /* AudioSpatialTypes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -82,6 +60,7 @@
 		0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacSoundStore.swift; path = Moodist/App/MacSoundStore.swift; sourceTree = "<group>"; };
 		0D83F535D744EF2735742912 /* MoodistMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesCodec.swift; path = Moodist/Services/PreferencesCodec.swift; sourceTree = "<group>"; };
+		973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlatformIntegrationTests.swift; path = MoodistMacTests/PlatformIntegrationTests.swift; sourceTree = "<group>"; };
 		A20000000000000100000001 /* MoodistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A20000000000000100000003 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
@@ -203,6 +182,7 @@
 				0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */,
 				5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */,
 				CC90F2AE61A13F28AEA37605 /* StoreTests.swift */,
+				973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -458,8 +438,6 @@
 				B175D2182F310AB600907398 /* ContentView.swift in Sources */,
 				B175D2192F310AB600907398 /* CategoryView.swift in Sources */,
 				B175D21A2F310AB600907398 /* SoundRow.swift in Sources */,
-				B175D21F2F310AB600907398 /* AudioService.swift in Sources */,
-				B175D2212F310AB600907398 /* SoundStore.swift in Sources */,
 				B175D2222F310AB600907398 /* PlatformColor.swift in Sources */,
 				B175D2252F310AB600907398 /* OptionsView.swift in Sources */,
 				B175D2262F310AB600907398 /* MoodistTheme.swift in Sources */,
@@ -494,15 +472,6 @@
 				B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */,
 				B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */,
 				B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */,
-				B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */,
-				B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */,
-				B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */,
-				B175D2582F310AB600907398 /* SoundStore+RecentsFavorites.swift in Sources */,
-				B175D2592F310AB600907398 /* SoundStore+Persistence.swift in Sources */,
-				B175D2602F310AB600907398 /* AudioPlaybackBackend.swift in Sources */,
-				B175D2612F310AB600907398 /* LegacyAudioPlayerBackend.swift in Sources */,
-				B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */,
-				B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */,
 				640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -511,19 +480,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0921104FDED78DB3FC3E628D /* StoreTests.swift in Sources */,
-				D48B9EFB34878ED37A4BA64C /* SoundStore+Timer.swift in Sources */,
-				63BAC95FC311705BE321908B /* SoundStore+Presets.swift in Sources */,
-				0CE5803D5D3826F49CC2968F /* SoundStore+Persistence.swift in Sources */,
-				F187B14F643BF7F210CB58CA /* SoundStore+Playback.swift in Sources */,
-				82EF4997F259222DBF5E6A4C /* SoundStore+RecentsFavorites.swift in Sources */,
-				17D19EE3E4010D3310DDEC85 /* SoundStore.swift in Sources */,
-				FC774A4A5D508CFACE618AEC /* AudioSpatialTypes.swift in Sources */,
-				C2D24C9A1B033C84AA50AE48 /* LegacyAudioPlayerBackend.swift in Sources */,
-				20930FE69DBF11B0CB8C6710 /* EngineAudioBackend.swift in Sources */,
-				C90A96F6F53A2F43EFD5DF44 /* AudioPlaybackBackend.swift in Sources */,
-				5B6E6C72EFD4A80CE293A613 /* AudioService.swift in Sources */,
 				163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */,
+				0E6755547A6C1FDC30F37142 /* PlatformIntegrationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

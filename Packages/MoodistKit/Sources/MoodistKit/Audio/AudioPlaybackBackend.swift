@@ -1,4 +1,3 @@
-import MoodistKit
 //
 //  AudioPlaybackBackend.swift
 //  MoodistMac
@@ -7,7 +6,9 @@ import MoodistKit
 import Foundation
 
 @MainActor
-protocol AudioPlaybackBackend {
+public protocol AudioPlaybackBackend {
+    var isPlaying: Bool { get }
+    var onFailure: ((String) -> Void)? { get set }
     @discardableResult
     func load(sound: Sound) -> Bool
     func setVolume(soundId: String, volume: Double, globalVolume: Double)

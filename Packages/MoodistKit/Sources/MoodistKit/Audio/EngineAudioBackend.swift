@@ -1,4 +1,3 @@
-import MoodistKit
 //
 //  EngineAudioBackend.swift
 //  MoodistMac
@@ -8,7 +7,9 @@ import AVFoundation
 import Foundation
 
 @MainActor
-final class EngineAudioBackend: AudioPlaybackBackend {
+public final class EngineAudioBackend: AudioPlaybackBackend {
+    public var isPlaying: Bool { engine.isRunning && sounds.values.contains { $0.playerNode.isPlaying } }
+    public var onFailure: ((String) -> Void)?
     private final class SoundPlayback {
         let id: String
         let playerNode: AVAudioPlayerNode
@@ -44,7 +45,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     private var outgoingCleanupTask: Task<Void, Never>?
     private var configurationChangeObserver: NSObjectProtocol?
 
-    init(bundle: Bundle = MoodistResources.bundle) {
+    public init(bundle: Bundle = MoodistResources.bundle) {
         self.bundle = bundle
         // macOS does not use AVAudioSession; AVAudioEngine mixes with the system by default.
         configurationChangeObserver = NotificationCenter.default.addObserver(
@@ -65,7 +66,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
     }
 
     @discardableResult
-    func load(sound: Sound) -> Bool {
+    public func load(sound: Sound) -> Bool {
         if sounds[sound.id] != nil { return true }
 
         if let outgoing = outgoingSounds.removeValue(forKey: sound.id) {
@@ -79,6 +80,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         let ext = (sound.fileName as NSString).pathExtension
         let subdir = "sounds/\(sound.categoryFolder)"
         guard let url = bundle.url(forResource: name, withExtension: ext, subdirectory: subdir) else {
+            onFailure?("Missing audio: \(sound.id)")
             NSLog("MoodistMac: sound resource not found: %@/%@.%@", subdir, name, ext)
             return false
         }
@@ -90,24 +92,25 @@ final class EngineAudioBackend: AudioPlaybackBackend {
             sounds[sound.id] = playback
             return true
         } catch {
+            onFailure?(error.localizedDescription)
             NSLog("MoodistMac: failed to load sound '%@' from %@: %@", sound.id, url.path, String(describing: error))
             return false
         }
     }
 
-    func setVolume(soundId: String, volume: Double, globalVolume: Double) {
+    public func setVolume(soundId: String, volume: Double, globalVolume: Double) {
         guard let playback = sounds[soundId] else { return }
         fadeTasks[soundId]?.cancel()
         fadeTasks[soundId] = nil
         playback.mixerNode.outputVolume = Float(volume * globalVolume)
     }
 
-    func setVolume(soundId: String, volume: Double, globalVolume: Double, fadeDuration: TimeInterval) {
+    public func setVolume(soundId: String, volume: Double, globalVolume: Double, fadeDuration: TimeInterval) {
         guard let playback = sounds[soundId] else { return }
         fade(soundId: soundId, mixerNode: playback.mixerNode, targetVolume: Float(volume * globalVolume), duration: fadeDuration)
     }
 
-    func play(soundId: String) {
+    public func play(soundId: String) {
         guard let playback = sounds[soundId] else { return }
         guard ensureEngineIsRunning() else { return }
         playback.shouldBePlaying = true
@@ -117,14 +120,14 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         }
     }
 
-    func pause(soundId: String) {
+    public func pause(soundId: String) {
         guard let playback = sounds[soundId] else { return }
         playback.shouldBePlaying = false
         playback.playerNode.pause()
         stopEngineIfIdle()
     }
 
-    func unload(soundId: String) {
+    public func unload(soundId: String) {
         guard let playback = sounds.removeValue(forKey: soundId) else { return }
         fadeTasks[soundId]?.cancel()
         fadeTasks[soundId] = nil
@@ -132,7 +135,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         stopEngineIfIdle()
     }
 
-    func unloadAll() {
+    public func unloadAll() {
         cancelCrossfadeAndCleanup()
         fadeTasks.values.forEach { $0.cancel() }
         fadeTasks.removeAll()
@@ -144,7 +147,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         engine.stop()
     }
 
-    func playAll(ids: [String]) {
+    public func playAll(ids: [String]) {
         let playbacks = ids.compactMap { sounds[$0] }
         guard !playbacks.isEmpty else { return }
         guard ensureEngineIsRunning() else { return }
@@ -158,7 +161,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         }
     }
 
-    func pauseAll(ids: [String]) {
+    public func pauseAll(ids: [String]) {
         for id in ids {
             guard let playback = sounds[id] else { continue }
             playback.shouldBePlaying = false
@@ -167,20 +170,20 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         stopEngineIfIdle()
     }
 
-    func updateVolumes(state: [String: SoundStateItem], globalVolume: Double) {
+    public func updateVolumes(state: [String: SoundStateItem], globalVolume: Double) {
         for (id, item) in state where item.isSelected {
             setVolume(soundId: id, volume: item.volume, globalVolume: globalVolume)
         }
     }
 
-    func fadeOutAndUnload(soundId: String, duration: TimeInterval) {
+    public func fadeOutAndUnload(soundId: String, duration: TimeInterval) {
         guard let playback = sounds.removeValue(forKey: soundId) else { return }
         outgoingSounds[soundId] = playback
         fade(soundId: soundId, mixerNode: playback.mixerNode, targetVolume: 0, duration: duration)
         stopEngineIfIdle()
     }
 
-    func scheduleOutgoingCleanup(after duration: TimeInterval) {
+    public func scheduleOutgoingCleanup(after duration: TimeInterval) {
         outgoingCleanupTask?.cancel()
         outgoingCleanupTask = Task { @MainActor [weak self] in
             try? await Task.sleep(nanoseconds: UInt64((duration + 0.1) * 1_000_000_000))
@@ -189,7 +192,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
         }
     }
 
-    func cancelCrossfadeAndCleanup() {
+    public func cancelCrossfadeAndCleanup() {
         outgoingCleanupTask?.cancel()
         outgoingCleanupTask = nil
         cleanupOutgoingSounds()
@@ -284,6 +287,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
                     }
                 }
             } catch {
+            onFailure?(error.localizedDescription)
                 NSLog(
                     "MoodistMac: failed to schedule sound '%@' from %@: %@",
                     playback.id, playback.url.path, String(describing: error)
@@ -344,6 +348,7 @@ final class EngineAudioBackend: AudioPlaybackBackend {
             try engine.start()
             return true
         } catch {
+            onFailure?(error.localizedDescription)
             NSLog("MoodistMac: failed to start AVAudioEngine: %@", String(describing: error))
             return false
         }
