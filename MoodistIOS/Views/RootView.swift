@@ -20,7 +20,7 @@ struct RootView: View {
         }
         .tabViewBottomAccessory { MiniPlayer { playerPresented = true } }
         .sheet(isPresented: $playerPresented) {
-            NavigationStack { Text(store.displayedMixName ?? L10n.currentlyPlaying).navigationTitle(T("player", "Player")) }
+            NavigationStack { PlayerView() }
                 .presentationDetents([.medium, .large])
                 .presentationDragIndicator(.visible)
         }
