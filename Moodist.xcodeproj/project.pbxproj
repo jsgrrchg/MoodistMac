@@ -15,6 +15,7 @@
 		4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
+		6860F77C489C8574024DA7A3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416CECF2187A5FF4733A23CE /* RootView.swift */; };
 		6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA40054351B4B42C0AEC73BC /* CatalogTests.swift */; };
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
 		7F075296D7F2601154B705EB /* IOSAudioSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */; };
@@ -66,6 +67,7 @@
 		BCF5442A8BE0EB763D0A3899 /* AudioRoutePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */; };
 		C6532473DD2647F032AC22C7 /* AudioInterruptionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */; };
 		D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */; };
+		D392BBB0BE7606B5701F37A8 /* IOSDesign.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB071736532288DF59FD9AE3 /* IOSDesign.swift */; };
 		E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */; };
 		E774E2FF283741A0242C5C15 /* SleepNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */; };
 		FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEDCC51785EADFC16815432 /* StoreTests.swift */; };
@@ -87,6 +89,7 @@
 		0D83F535D744EF2735742912 /* MoodistMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioInterruptionObserver.swift; path = MoodistIOS/Platform/AudioInterruptionObserver.swift; sourceTree = "<group>"; };
 		29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResourceTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/ResourceTests.swift; sourceTree = "<group>"; };
+		416CECF2187A5FF4733A23CE /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = MoodistIOS/Views/RootView.swift; sourceTree = "<group>"; };
 		4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NowPlayingController.swift; path = MoodistIOS/Platform/NowPlayingController.swift; sourceTree = "<group>"; };
 		483E1E1FC2202F428ED131D6 /* MoodistIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DEDCC51785EADFC16815432 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/StoreTests.swift; sourceTree = "<group>"; };
@@ -168,6 +171,7 @@
 		C10000000000000100000003 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000005 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		CA40054351B4B42C0AEC73BC /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/CatalogTests.swift; sourceTree = "<group>"; };
+		CB071736532288DF59FD9AE3 /* IOSDesign.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSDesign.swift; path = MoodistIOS/Design/IOSDesign.swift; sourceTree = "<group>"; };
 		CC90F2AE61A13F28AEA37605 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = MoodistMacTests/StoreTests.swift; sourceTree = "<group>"; };
 		D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TimerTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/TimerTests.swift; sourceTree = "<group>"; };
@@ -263,6 +267,8 @@
 				6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */,
 				94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */,
 				E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */,
+				CB071736532288DF59FD9AE3 /* IOSDesign.swift */,
+				416CECF2187A5FF4733A23CE /* RootView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -580,6 +586,8 @@
 				60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */,
 				BCF5442A8BE0EB763D0A3899 /* AudioRoutePicker.swift in Sources */,
 				E774E2FF283741A0242C5C15 /* SleepNotificationController.swift in Sources */,
+				D392BBB0BE7606B5701F37A8 /* IOSDesign.swift in Sources */,
+				6860F77C489C8574024DA7A3 /* RootView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

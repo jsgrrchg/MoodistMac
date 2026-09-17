@@ -5,22 +5,19 @@ import MoodistKit
 struct MoodistIOSApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @StateObject private var model = IOSAppModel()
-    private var store: SoundStore { model.store }
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                List {
-                    Button(store.isPlaying ? L10n.pause : L10n.play) { store.togglePlay() }
-                    ForEach(SoundsData.categories.flatMap(\.sounds)) { sound in
-                        Button(L10n.soundLabel(sound.id)) { store.select(sound.id) }
-                    }
-                }
-                .navigationTitle("Moodist")
+            RootView()
+                .environmentObject(model)
+                .environmentObject(model.store)
+                .environmentObject(model.session)
                 .onChange(of: scenePhase) { _, phase in
-                    store.persistTimers()
-                    if phase == .active { store.reconcileTimers() }
+                    model.store.persistTimers()
+                    if phase == .active { model.store.reconcileTimers() }
                 }
-            }
+                .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in
+                    model.store.reconcileTimers()
+                }
         }
     }
 }
