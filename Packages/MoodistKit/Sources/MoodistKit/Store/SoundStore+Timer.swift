@@ -1,119 +1,125 @@
 import Foundation
 
+private struct SavedTimers: Codable {
+    var sleep: Date?
+    var sleepName: String?
+    var duration: Int?
+    var nextMix: Date?
+    var interval: Int?
+    var customOnly: Bool
+}
+
 public extension SoundStore {
-    // MARK: - Auto Mix Timer
-
-    /// Available intervals for automatic mix changes.
-    static let autoMixIntervalPresets: [Int] = [5, 10, 15, 20, 30, 40, 50, 60].map { $0 * 60 }
-
+    static let autoMixIntervalPresets = [5, 10, 15, 20, 30, 40, 50, 60].map { $0 * 60 }
     var hasActiveAutoMixTimer: Bool { autoMixIntervalSeconds != nil }
-    /// Date when the timer will trigger the next mix change.
-    var autoMixNextFireDate: Date? { autoMixTimerToken?.fireDate }
-
-    /// Starts a repeating timer that switches to the next random mix every `intervalSeconds`.
-    func startAutoMixTimer(intervalSeconds: Int) {
-        autoMixTimerToken?.invalidate()
-        autoMixIntervalSeconds = intervalSeconds
-        autoMixTimerToken = Timer.scheduledTimer(
-            withTimeInterval: TimeInterval(intervalSeconds), repeats: true
-        ) { [weak self] _ in
-            Task { @MainActor in self?.playNextRandomMix() }
-        }
+    var autoMixNextFireDate: Date? { nextAutoMixDate }
+    var sleepDeadline: Date? {
+        if case .running(let end) = activeTimer?.state { return end }
+        return nil
     }
+    var sleepRemainingSeconds: Int { sleepDeadline.map { max(0, Int(ceil($0.timeIntervalSince(now())))) } ?? 0 }
 
-    /// Stops the automatic mix-change timer.
+    func startAutoMixTimer(intervalSeconds: Int) {
+        guard intervalSeconds > 0 else { return }
+        autoMixTimerToken?.cancel()
+        autoMixIntervalSeconds = intervalSeconds
+        nextAutoMixDate = now().addingTimeInterval(Double(intervalSeconds))
+        persistTimers()
+        scheduleTimers()
+    }
     func cancelAutoMixTimer() {
-        autoMixTimerToken?.invalidate()
+        autoMixTimerToken?.cancel()
         autoMixTimerToken = nil
         autoMixIntervalSeconds = nil
+        nextAutoMixDate = nil
+        persistTimers()
     }
-
-    /// Long label for the Pomodoro menu ("5 minutes", "1 hour", etc.).
+    func startSleepTimer(durationSeconds: Int, name: String? = nil) {
+        cancelSleepTimer()
+        let duration = max(1, durationSeconds)
+        let label = name ?? timerLabel(forSeconds: duration)
+        let end = now().addingTimeInterval(Double(duration))
+        activeTimer = TimerItem(name: label, durationSeconds: duration, state: .running(endDate: end))
+        timerUsageCounts[duration, default: 0] += 1
+        preferences.saveTimerUsageCounts(timerUsageCounts)
+        persistTimers()
+        onTimerScheduled?(label, end)
+        scheduleTimers()
+        NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
+    }
+    func cancelSleepTimer() {
+        activeTimerToken?.cancel()
+        activeTimerToken = nil
+        activeTimer = nil
+        onTimerCancelled?()
+        persistTimers()
+        NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
+    }
+    /// Reconciles wall-clock deadlines once, never replaying a backlog of rotations.
+    func reconcileTimers() {
+        let instant = now()
+        if let end = sleepDeadline, end <= instant {
+            let name = activeTimer?.name ?? L10n.timer
+            activeTimerToken?.cancel()
+            activeTimerToken = nil
+            activeTimer = nil
+            cancelAutoMixTimer()
+            stopPlayback()
+            persistTimers()
+            onTimerFinished?(name)
+            NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
+            return
+        }
+        if let next = nextAutoMixDate, let interval = autoMixIntervalSeconds, next <= instant {
+            nextAutoMixDate = instant.addingTimeInterval(Double(interval))
+            if isPlaying { playNextRandomMix() }
+            persistTimers()
+        }
+        scheduleTimers()
+    }
+    func persistTimers() {
+        let saved = SavedTimers(sleep: sleepDeadline, sleepName: activeTimer?.name,
+            duration: activeTimer?.durationSeconds, nextMix: nextAutoMixDate,
+            interval: autoMixIntervalSeconds, customOnly: autoMixCustomOnly)
+        if let data = try? JSONEncoder().encode(saved) { preferences.defaults.set(data, forKey: "Moodist.timerState") }
+    }
+    func restoreTimers() {
+        guard let data = preferences.defaults.data(forKey: "Moodist.timerState"),
+              let saved = try? JSONDecoder().decode(SavedTimers.self, from: data) else { return }
+        if let end = saved.sleep {
+            activeTimer = TimerItem(name: saved.sleepName ?? L10n.timer, durationSeconds: saved.duration ?? 1, state: .running(endDate: end))
+        }
+        if let interval = saved.interval, interval > 0 {
+            autoMixIntervalSeconds = interval
+            nextAutoMixDate = saved.nextMix ?? now().addingTimeInterval(Double(interval))
+        }
+        autoMixCustomOnly = saved.customOnly
+        reconcileTimers()
+    }
+    var timerRemainingMenuTitle: String? {
+        guard activeTimer != nil else { return nil }
+        return L10n.timerRemaining(timerLabel(forSeconds: sleepRemainingSeconds))
+    }
+    func timerLabel(forSeconds seconds: Int) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.allowedUnits = [.hour, .minute, .second]
+        return formatter.string(from: Double(seconds)) ?? "\(seconds)s"
+    }
     func autoMixIntervalLabel(forSeconds seconds: Int) -> String {
         let formatter = DateComponentsFormatter()
         formatter.unitsStyle = .full
-        formatter.allowedUnits = seconds >= 3600 ? [.hour] : [.minute]
-        return formatter.string(from: TimeInterval(seconds)) ?? timerLabel(forSeconds: seconds)
+        formatter.allowedUnits = seconds >= 3600 ? [.hour, .minute] : [.minute]
+        return formatter.string(from: Double(seconds)) ?? timerLabel(forSeconds: seconds)
     }
-
-    // MARK: - Timers (Sleep)
-
-    // Starts a sleep timer, records usage, and schedules the completion callback.
-    func startSleepTimer(durationSeconds: Int, name: String? = nil) {
-        let safeDuration = max(1, durationSeconds)
-        cancelSleepTimer()
-        let displayName = name ?? timerLabel(forSeconds: safeDuration)
-        let endDate = Date().addingTimeInterval(TimeInterval(safeDuration))
-        activeTimer = TimerItem(
-            name: displayName, durationSeconds: safeDuration, state: .running(endDate: endDate))
-        timerUsageCounts[safeDuration, default: 0] += 1
-        preferences.saveTimerUsageCounts(timerUsageCounts)
-        onTimerScheduled?(displayName, endDate)
-        activeTimerToken = Timer.scheduledTimer(
-            withTimeInterval: TimeInterval(safeDuration), repeats: false
-        ) { [weak self] _ in
-            Task { @MainActor in
-                self?.completeSleepTimer()
-            }
+    private func scheduleTimers() {
+        activeTimerToken?.cancel()
+        autoMixTimerToken?.cancel()
+        activeTimerToken = sleepDeadline.map { date in
+            scheduler.schedule(at: date) { [weak self] in self?.reconcileTimers() }
         }
-        NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
-    }
-
-    // Cancels the active timer and notifies menus/UI to refresh state.
-    func cancelSleepTimer() {
-        onTimerCancelled?()
-        activeTimerToken?.invalidate()
-        activeTimerToken = nil
-        activeTimer = nil
-        NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
-    }
-    // Computes remaining time for the active timer and formats the menu label.
-    var timerRemainingMenuTitle: String? {
-        guard let activeTimer else { return nil }
-        let remaining = activeTimer.remainingSeconds
-        return L10n.timerRemaining(timerRemainingString(seconds: remaining))
-    }
-
-    // Label used for timer presets in menus.
-    func timerLabel(forSeconds seconds: Int) -> String {
-        timerPresetString(seconds: seconds)
-    }
-
-    // Formats minute/hour presets compactly.
-    private func timerPresetString(seconds: Int) -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .abbreviated
-        if seconds >= 3600 {
-            formatter.allowedUnits = [.hour, .minute]
-        } else {
-            formatter.allowedUnits = [.minute]
+        autoMixTimerToken = nextAutoMixDate.map { date in
+            scheduler.schedule(at: date) { [weak self] in self?.reconcileTimers() }
         }
-        return formatter.string(from: TimeInterval(seconds)) ?? "\(seconds)s"
-    }
-
-    // Formats remaining time with more granularity near the end.
-    private func timerRemainingString(seconds: Int) -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .abbreviated
-        if seconds >= 3600 {
-            formatter.allowedUnits = [.hour, .minute]
-        } else if seconds >= 60 {
-            formatter.allowedUnits = [.minute, .second]
-            formatter.zeroFormattingBehavior = .pad
-        } else {
-            formatter.allowedUnits = [.second]
-        }
-        return formatter.string(from: TimeInterval(seconds)) ?? "\(seconds)s"
-    }
-
-    // Timer completion flow: stops audio, clears state, and triggers a local notification.
-    private func completeSleepTimer() {
-        activeTimerToken?.invalidate()
-        activeTimerToken = nil
-        let timerName = activeTimer?.name ?? L10n.timer
-        activeTimer = nil
-        stopPlayback()
-        onTimerFinished?(timerName)
-        NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
     }
 }

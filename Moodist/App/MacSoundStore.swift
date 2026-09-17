@@ -9,8 +9,8 @@ final class MacSoundStore: SoundStore {
     @Published var editingPresetId: String?
     @Published var requestSearchFocus = false
 
-    override init(audioService: AudioService, preferences: PreferencesRepository = PreferencesRepository()) {
-        super.init(audioService: audioService, preferences: preferences)
+    override init(audioService: AudioService, preferences: PreferencesRepository = PreferencesRepository(), now: @escaping () -> Date = Date.init, scheduler: TimerScheduling? = nil) {
+        super.init(audioService: audioService, preferences: preferences, now: now, scheduler: scheduler)
         onTimerScheduled = { _, _ in TimerNotificationManager.shared.requestAuthorizationIfNeeded() }
         onTimerFinished = { TimerNotificationManager.shared.scheduleFinishedNotification(name: $0) }
     }

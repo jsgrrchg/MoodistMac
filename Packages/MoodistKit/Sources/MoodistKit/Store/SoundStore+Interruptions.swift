@@ -8,6 +8,7 @@ public extension SoundStore {
     }
 
     func recoverFromInterruption(allowed: Bool) {
+        reconcileTimers()
         let resume = resumeAfterInterruption && allowed
         resumeAfterInterruption = false
         guard resume, hasSelection else { return }

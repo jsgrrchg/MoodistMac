@@ -97,6 +97,7 @@ public extension SoundStore {
 
     // Restores the app to factory defaults and clears persisted preferences.
     func resetAllToDefaults() {
+        cancelAutoMixTimer()
         cancelSleepTimer()
         currentMixId = nil
         currentMixIconName = nil
@@ -123,6 +124,7 @@ public extension SoundStore {
         favoriteSoundIds = []
         timerUsageCounts = [:]
         preferences.resetAll()
+        preferences.defaults.removeObject(forKey: "Moodist.timerState")
     }
 
     private func orderedUnique(_ values: [String]) -> [String] {

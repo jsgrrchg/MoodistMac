@@ -3,6 +3,7 @@ import MoodistKit
 
 @main
 struct MoodistIOSApp: App {
+    @Environment(\.scenePhase) private var scenePhase
     @StateObject private var model = IOSAppModel()
     private var store: SoundStore { model.store }
     var body: some Scene {
@@ -15,6 +16,10 @@ struct MoodistIOSApp: App {
                     }
                 }
                 .navigationTitle("Moodist")
+                .onChange(of: scenePhase) { _, phase in
+                    store.persistTimers()
+                    if phase == .active { store.reconcileTimers() }
+                }
             }
         }
     }

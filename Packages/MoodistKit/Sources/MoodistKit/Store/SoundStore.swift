@@ -44,8 +44,11 @@ open class SoundStore: ObservableObject {
     // Internal to support organizing SoundStore behavior across extension files.
     let audioService: AudioService
     var resumeAfterInterruption = false
-    var activeTimerToken: Timer?
-    var autoMixTimerToken: Timer?
+    var activeTimerToken: TimerCancellation?
+    var autoMixTimerToken: TimerCancellation?
+    @Published var nextAutoMixDate: Date?
+    let now: () -> Date
+    let scheduler: TimerScheduling
     var timerUsageCounts: [Int: Int] = [:]
     let preferences: PreferencesRepository
     public var onTimerScheduled: ((String, Date) -> Void)?
@@ -128,7 +131,9 @@ open class SoundStore: ObservableObject {
         return nil
     }
 
-    public init(audioService: AudioService, preferences: PreferencesRepository = PreferencesRepository()) {
+    public init(audioService: AudioService, preferences: PreferencesRepository = PreferencesRepository(), now: @escaping () -> Date = Date.init, scheduler: TimerScheduling? = nil) {
+        self.now = now
+        self.scheduler = scheduler ?? SystemTimerScheduler()
         self.preferences = preferences
         self.timerUsageCounts = preferences.loadTimerUsageCounts()
         self.audioService = audioService
@@ -138,5 +143,6 @@ open class SoundStore: ObservableObject {
         }
         bootstrapState()
         setupPersistence()
+        restoreTimers()
     }
 }
