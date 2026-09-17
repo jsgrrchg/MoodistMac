@@ -6,10 +6,12 @@ struct MoodistIOSApp: App {
     @Environment(\.scenePhase) private var scenePhase
     @AppStorage(PersistenceService.appearanceModeKey) private var appearance = "system"
     @AppStorage(PersistenceService.accentColorHexKey) private var accent = "graphite"
+    @AppStorage(PersistenceService.appLanguageKey) private var language = "system"
     @StateObject private var model = IOSAppModel()
     var body: some Scene {
         WindowGroup {
             RootView()
+                .environment(\.locale, language == "system" ? .autoupdatingCurrent : Locale(identifier: language))
                 .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
                 .tint(IOSAccent.color(accent))
                 .environmentObject(model)
