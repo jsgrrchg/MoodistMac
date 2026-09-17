@@ -57,3 +57,15 @@ enum IOSAccent {
         }
     }
 }
+
+struct PlayerSurfaceStyle: ViewModifier {
+    @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
+    @AppStorage(PersistenceService.transparencyEnabledKey) private var transparency = true
+    func body(content: Content) -> some View {
+        if reduceTransparency || !transparency {
+            content.background(Color(uiColor: .secondarySystemBackground), in: Capsule())
+        } else {
+            content.glassEffect(.regular, in: .capsule)
+        }
+    }
+}

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		040883339C433A00BF733834 /* MoodistFlowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F89439B3CF206BBDB91559 /* MoodistFlowTests.swift */; };
 		04E9DB81250D2A82098248A7 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 86EC0C1CD9E2A1B81C19B50B /* MoodistKit */; };
 		0C4F495F4E4E392B0C00DF7F /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F795AE4C26062392303CBD /* SettingsView.swift */; };
 		0E6755547A6C1FDC30F37142 /* PlatformIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */; };
@@ -18,7 +19,9 @@
 		4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		5304B14ADD5BFCDA07C0AB42 /* PreferencesDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45170C52752A2043EDB6C0C /* PreferencesDocument.swift */; };
 		60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */; };
+		625A9A50DC829A66A3C0297E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
+		6698DC504AB25032CE32C80E /* EngineIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6862B038D5FF106820D794D /* EngineIntegrationTests.swift */; };
 		6860F77C489C8574024DA7A3 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 416CECF2187A5FF4733A23CE /* RootView.swift */; };
 		6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA40054351B4B42C0AEC73BC /* CatalogTests.swift */; };
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
@@ -87,6 +90,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		8515EED5602DCCD4E6A4FDF8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A90000000000000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68A87AED7542DB7CC5B99D82;
+			remoteInfo = MoodistIOS;
+		};
 		96118B366C0672BA5A96C735 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A90000000000000100000001 /* Project object */;
@@ -117,6 +127,7 @@
 		63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlayerView.swift; path = MoodistIOS/Views/PlayerView.swift; sourceTree = "<group>"; };
 		640A927C531949DFBF37F0E8 /* AutoMixView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutoMixView.swift; path = MoodistIOS/Views/AutoMixView.swift; sourceTree = "<group>"; };
 		64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioSessionTests.swift; path = MoodistIOSTests/AudioSessionTests.swift; sourceTree = "<group>"; };
+		77F89439B3CF206BBDB91559 /* MoodistFlowTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoodistFlowTests.swift; path = MoodistIOSUITests/MoodistFlowTests.swift; sourceTree = "<group>"; };
 		90C86C051A3713055BCAC087 /* IOSAppModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAppModel.swift; path = MoodistIOS/App/IOSAppModel.swift; sourceTree = "<group>"; };
 		94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SleepNotificationController.swift; path = MoodistIOS/Platform/SleepNotificationController.swift; sourceTree = "<group>"; };
 		971CD0125508B224724A6B69 /* InteroperabilityTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InteroperabilityTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/InteroperabilityTests.swift; sourceTree = "<group>"; };
@@ -189,6 +200,7 @@
 		A20000000000000100000050 /* AudioSpatialTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioSpatialTypes.swift; sourceTree = "<group>"; };
 		AA904694222A1D42C3006942 /* PreferenceFilesSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferenceFilesSection.swift; path = MoodistIOS/Views/PreferenceFilesSection.swift; sourceTree = "<group>"; };
 		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6862B038D5FF106820D794D /* EngineIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EngineIntegrationTests.swift; path = MoodistIOSTests/EngineIntegrationTests.swift; sourceTree = "<group>"; };
 		C0F795AE4C26062392303CBD /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = MoodistIOS/Views/SettingsView.swift; sourceTree = "<group>"; };
 		C10000000000000100000002 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000003 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -202,6 +214,7 @@
 		E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = TimerTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/TimerTests.swift; sourceTree = "<group>"; };
 		F6559F2DC5AEBCA767A042BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAudioSessionController.swift; path = MoodistIOS/Platform/IOSAudioSessionController.swift; sourceTree = "<group>"; };
+		FEAB06EB5D1027BE10EB0246 /* MoodistIOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistIOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,6 +242,14 @@
 			files = (
 				B20000000000000100000003 /* Sparkle in Frameworks */,
 				45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B8E541AD5701900AD323E36E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				625A9A50DC829A66A3C0297E /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,6 +327,8 @@
 				971CD0125508B224724A6B69 /* InteroperabilityTests.swift */,
 				3F4553BACFB2BB83BF348F79 /* PrivacyView.swift */,
 				48A427ADF099FCE1D2F4F6FE /* PrivacyInfo.xcprivacy */,
+				B6862B038D5FF106820D794D /* EngineIntegrationTests.swift */,
+				77F89439B3CF206BBDB91559 /* MoodistFlowTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -335,6 +358,7 @@
 				0D83F535D744EF2735742912 /* MoodistMacTests.xctest */,
 				483E1E1FC2202F428ED131D6 /* MoodistIOS.app */,
 				D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */,
+				FEAB06EB5D1027BE10EB0246 /* MoodistIOSUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -522,6 +546,24 @@
 			productReference = B175D22B2F310AB600907398 /* MoodistMac.app */;
 			productType = "com.apple.product-type.application";
 		};
+		E576CD29FE0EF4E1B2E94A6E /* MoodistIOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8E69CBD39A50226F03AE3FF6 /* Build configuration list for PBXNativeTarget "MoodistIOSUITests" */;
+			buildPhases = (
+				4610CD0DB8FE8063F1B8119F /* Sources */,
+				B8E541AD5701900AD323E36E /* Frameworks */,
+				9E20AFA7DA9A74B5D2DE1869 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				327D741A32F405349968ED65 /* PBXTargetDependency */,
+			);
+			name = MoodistIOSUITests;
+			productName = MoodistIOSUITests;
+			productReference = FEAB06EB5D1027BE10EB0246 /* MoodistIOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		EC950EE44EC6F33EB3CD8022 /* MoodistMacTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9E4867B92259100B2038B80F /* Build configuration list for PBXNativeTarget "MoodistMacTests" */;
@@ -575,6 +617,7 @@
 				EC950EE44EC6F33EB3CD8022 /* MoodistMacTests */,
 				68A87AED7542DB7CC5B99D82 /* MoodistIOS */,
 				3A8242ECD55A1909CA0BD04C /* MoodistIOSTests */,
+				E576CD29FE0EF4E1B2E94A6E /* MoodistIOSUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -593,6 +636,13 @@
 			files = (
 				B3E7B9E8B435424C32CCB3E9 /* Assets.xcassets in Resources */,
 				FCD62C33192CBC29203FDF91 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9E20AFA7DA9A74B5D2DE1869 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -637,6 +687,14 @@
 				5304B14ADD5BFCDA07C0AB42 /* PreferencesDocument.swift in Sources */,
 				A91ABDE2BC0F1FF4918545EC /* PreferenceFilesSection.swift in Sources */,
 				F9D4255EE867ADB4EE2F73BF /* PrivacyView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4610CD0DB8FE8063F1B8119F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				040883339C433A00BF733834 /* MoodistFlowTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -705,6 +763,7 @@
 				ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */,
 				1C337B5A586DE7D154244DD0 /* TimerTests.swift in Sources */,
 				EDCBD2B7D99CC0B6D52C3BB8 /* InteroperabilityTests.swift in Sources */,
+				6698DC504AB25032CE32C80E /* EngineIntegrationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -716,6 +775,12 @@
 			name = MoodistIOS;
 			target = 68A87AED7542DB7CC5B99D82 /* MoodistIOS */;
 			targetProxy = 96118B366C0672BA5A96C735 /* PBXContainerItemProxy */;
+		};
+		327D741A32F405349968ED65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MoodistIOS;
+			target = 68A87AED7542DB7CC5B99D82 /* MoodistIOS */;
+			targetProxy = 8515EED5602DCCD4E6A4FDF8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -762,6 +827,23 @@
 			};
 			name = Debug;
 		};
+		2198EDDE3301A0FE275552EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSUITests;
+				PRODUCT_MODULE_NAME = MoodistIOSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = MoodistIOS;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		44540F892850DC59EEFD443E /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -794,6 +876,22 @@
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoodistIOS.app/MoodistIOS";
+			};
+			name = Debug;
+		};
+		6A1A1D70F001235DD4373C4A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSUITests;
+				PRODUCT_MODULE_NAME = MoodistIOSUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_TARGET_NAME = MoodistIOS;
 			};
 			name = Debug;
 		};
@@ -1045,6 +1143,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		8E69CBD39A50226F03AE3FF6 /* Build configuration list for PBXNativeTarget "MoodistIOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2198EDDE3301A0FE275552EF /* Release */,
+				6A1A1D70F001235DD4373C4A /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		9E4867B92259100B2038B80F /* Build configuration list for PBXNativeTarget "MoodistMacTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

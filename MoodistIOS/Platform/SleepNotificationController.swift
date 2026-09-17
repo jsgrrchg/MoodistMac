@@ -7,8 +7,11 @@ final class SleepNotificationController {
     private let identifier = "Moodist.sleep"
     private var requestTask: Task<Void, Never>?
     func schedule(name: String, at date: Date) {
+        let previous = requestTask
         cancel()
         requestTask = Task { [identifier] in
+            await previous?.value
+            guard !Task.isCancelled else { return }
             let center = UNUserNotificationCenter.current()
             guard (try? await center.requestAuthorization(options: [.alert, .sound])) == true,
                   !Task.isCancelled, date > Date() else { return }

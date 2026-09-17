@@ -11,6 +11,7 @@ struct MoodistIOSApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                .defaultAppStorage(model.defaults)
                 .environment(\.locale, language == "system" ? .autoupdatingCurrent : Locale(identifier: language))
                 .preferredColorScheme(appearance == "dark" ? .dark : appearance == "light" ? .light : nil)
                 .tint(IOSAccent.color(accent))

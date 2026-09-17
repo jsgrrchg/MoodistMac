@@ -4,6 +4,7 @@ import Foundation
 
 @MainActor
 final class MacSoundStore: SoundStore {
+    private var platformSubscriptions = Set<AnyCancellable>()
     @Published var showOptionsPanel = false
     @Published var showSavePresetSheet = false
     @Published var editingPresetId: String?
@@ -11,6 +12,10 @@ final class MacSoundStore: SoundStore {
 
     override init(audioService: AudioService, preferences: PreferencesRepository = PreferencesRepository(), now: @escaping () -> Date = Date.init, scheduler: TimerScheduling? = nil) {
         super.init(audioService: audioService, preferences: preferences, now: now, scheduler: scheduler)
+        $presets.sink { [weak self] presets in
+            guard let self, let id = self.editingPresetId, !presets.contains(where: { $0.id == id }) else { return }
+            self.closeSavePresetSheet()
+        }.store(in: &platformSubscriptions)
         onTimerScheduled = { _, _ in TimerNotificationManager.shared.requestAuthorizationIfNeeded() }
         onTimerFinished = { TimerNotificationManager.shared.scheduleFinishedNotification(name: $0) }
     }

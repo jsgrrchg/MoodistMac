@@ -3,11 +3,12 @@ import MoodistKit
 
 struct SoundBrowser: View {
     @EnvironmentObject private var store: SoundStore
+    @EnvironmentObject private var model: IOSAppModel
     @SceneStorage("MoodistIOS.soundSearch") private var query = ""
     @State private var collapsed = Set<String>()
     @State private var initialized = false
     @State private var anchor: String?
-    @State private var anchors = PersistenceService.loadScrollAnchorIds()
+    @State private var anchors: [String: String] = [:]
     private var context: String { "ios.sounds.\(query.lowercased())" }
     private func visible(_ category: SoundCategory) -> [Sound] {
         category.sounds.filter {
@@ -50,13 +51,15 @@ struct SoundBrowser: View {
         .onAppear {
             guard !initialized else { return }
             initialized = true
-            if UserDefaults.standard.bool(forKey: PersistenceService.collapseCategoriesOnColdOpenKey) { collapsed = Set(SoundsData.categories.map(\.id)) }
+            if model.defaults.bool(forKey: PersistenceService.collapseCategoriesOnColdOpenKey) { collapsed = Set(SoundsData.categories.map(\.id)) }
+            anchors = PreferencesRepository(defaults: model.defaults).loadScrollAnchorIds()
             anchor = anchors[context]
         }
         .onChange(of: anchor) { _, id in
             guard let id else { return }
+            anchors = PreferencesRepository(defaults: model.defaults).loadScrollAnchorIds()
             anchors[context] = id
-            PersistenceService.saveScrollAnchorIds(anchors)
+            PreferencesRepository(defaults: model.defaults).saveScrollAnchorIds(anchors)
         }
         .onChange(of: query) { _, _ in anchor = anchors[context] }
     }
@@ -81,6 +84,7 @@ struct CategoryHeader: View {
 
 struct SoundCell: View {
     @EnvironmentObject private var store: SoundStore
+    @EnvironmentObject private var model: IOSAppModel
     let sound: Sound
     @State private var createPresented = false
     var body: some View {
@@ -118,6 +122,7 @@ struct SoundCell: View {
 
 struct MixBrowser: View {
     @EnvironmentObject private var store: SoundStore
+    @EnvironmentObject private var model: IOSAppModel
     @State private var collapsed = Set<String>()
     @State private var initialized = false
     @State private var anchor: String?
@@ -150,19 +155,20 @@ struct MixBrowser: View {
         }
         .onAppear {
             guard !initialized else { return }; initialized = true
-            if UserDefaults.standard.bool(forKey: PersistenceService.collapseCategoriesOnColdOpenKey) { collapsed = Set(MixesData.categories.map(\.id)) }
-            anchor = PersistenceService.loadScrollAnchorIds()["ios.mixes"]
+            if model.defaults.bool(forKey: PersistenceService.collapseCategoriesOnColdOpenKey) { collapsed = Set(MixesData.categories.map(\.id)) }
+            anchor = PreferencesRepository(defaults: model.defaults).loadScrollAnchorIds()["ios.mixes"]
         }
         .onChange(of: anchor) { _, id in
             guard let id else { return }
-            var saved = PersistenceService.loadScrollAnchorIds(); saved["ios.mixes"] = id
-            PersistenceService.saveScrollAnchorIds(saved)
+            var saved = PreferencesRepository(defaults: model.defaults).loadScrollAnchorIds(); saved["ios.mixes"] = id
+            PreferencesRepository(defaults: model.defaults).saveScrollAnchorIds(saved)
         }
     }
 }
 
 struct MixCell: View {
     @EnvironmentObject private var store: SoundStore
+    @EnvironmentObject private var model: IOSAppModel
     let mix: Mix
     @State private var editing = false
     @State private var deleting = false

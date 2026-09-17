@@ -1,6 +1,6 @@
 # Accessibility and iOS design
 
-The iPhone interface uses the iOS 26 tab accessory, native glass controls and system navigation surfaces. Custom playback controls switch to a bordered style when Reduce Transparency or the in-app transparency preference requests it. No custom motion is required to access actions.
+The iPhone interface uses an inset mini-player with native Liquid Glass, native glass controls and system navigation surfaces. Custom playback controls switch to a bordered style when Reduce Transparency or the in-app transparency preference requests it. No custom motion is required to access actions.
 
 Implemented: semantic selection/favorite values, labeled volume sliders, accessible reorder actions, 44-point row actions, Dynamic Type layouts, scrollable forms, localized errors and keyboard shortcuts (Command-R/S/N/U/comma). Search uses the system searchable control.
 

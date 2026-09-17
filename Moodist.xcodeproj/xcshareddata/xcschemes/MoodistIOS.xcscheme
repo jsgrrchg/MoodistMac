@@ -47,6 +47,16 @@
                ReferencedContainer = "container:Moodist.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E576CD29FE0EF4E1B2E94A6E"
+               BuildableName = "MoodistIOSUITests.xctest"
+               BlueprintName = "MoodistIOSUITests"
+               ReferencedContainer = "container:Moodist.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -24,17 +24,23 @@ public final class AudioService: ObservableObject {
         do { try preparePlayback?(); lastError = nil; return true }
         catch { lastError = error.localizedDescription; onFailure?(error.localizedDescription); return false }
     }
-    public func rebuild() { backend.unloadAll() }
+    public func rebuild() {
+        backend.unloadAll()
+        if let backendFactory { backend = backendFactory(); observeFailures() }
+    }
     public static let crossfadeDuration: TimeInterval = 1.5
 
+    private let backendFactory: (() -> AudioPlaybackBackend)?
     private var backend: AudioPlaybackBackend
 
     public init() {
+        self.backendFactory = Self.makeDefaultBackend
         self.backend = Self.makeDefaultBackend()
         observeFailures()
     }
 
     public init(backend: AudioPlaybackBackend) {
+        self.backendFactory = nil
         self.backend = backend
         observeFailures()
     }

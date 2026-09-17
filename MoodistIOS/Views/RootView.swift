@@ -3,35 +3,44 @@ import MoodistKit
 
 struct RootView: View {
     @EnvironmentObject private var store: SoundStore
+    @EnvironmentObject private var model: IOSAppModel
+    @Environment(\.dynamicTypeSize) private var typeSize
     @AppStorage(PersistenceService.appLanguageKey) private var language = "system"
-    @State private var playerPresented = false
-    @State private var settingsPresented = false
 
     var body: some View {
+        ZStack {
         TabView {
             Tab(L10n.sounds, systemImage: "waveform") {
-                NavigationStack { SoundBrowser().toolbar { settingsButton } }
+                NavigationStack { SoundBrowser().toolbar { settingsButton }.safeAreaInset(edge: .bottom) { playerInset } }
             }
             Tab(L10n.mixes, systemImage: "square.stack") {
-                NavigationStack { MixBrowser().toolbar { settingsButton } }
+                NavigationStack { MixBrowser().toolbar { settingsButton }.safeAreaInset(edge: .bottom) { playerInset } }
             }
             Tab(T("library", "Library"), systemImage: "books.vertical") {
-                NavigationStack { LibraryView().toolbar { settingsButton } }
+                NavigationStack { LibraryView().toolbar { settingsButton }.safeAreaInset(edge: .bottom) { playerInset } }
             }
         }
         .id(language)
-        .tabViewBottomAccessory { MiniPlayer { playerPresented = true } }
-        .sheet(isPresented: $playerPresented) {
-            NavigationStack { PlayerView() }
-                .presentationDetents([.medium, .large])
-                .presentationDragIndicator(.visible)
         }
-        .sheet(isPresented: $settingsPresented) {
-            NavigationStack { SettingsView() }
+        .sheet(item: $model.presentedSheet) { destination in
+            switch destination {
+            case .player:
+                NavigationStack { PlayerView() }
+                    .presentationDetents(typeSize.isAccessibilitySize ? [.large] : [.medium, .large])
+                    .presentationDragIndicator(.visible)
+            case .settings:
+                NavigationStack { SettingsView() }
+            }
         }
         .alert(T("playback_error", "Unable to play audio"), isPresented: Binding(get: { store.playbackError != nil }, set: { if !$0 { store.playbackError = nil } })) {
             Button(L10n.close) { store.playbackError = nil }
         } message: { Text(store.playbackError ?? "") }
+    }
+    private var playerInset: some View {
+        MiniPlayer()
+            .padding(.vertical, 4)
+            .modifier(PlayerSurfaceStyle())
+            .padding(.horizontal).padding(.bottom, 8)
     }
     @ToolbarContentBuilder private var settingsButton: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
@@ -41,18 +50,17 @@ struct RootView: View {
             }
         }
         ToolbarItem(placement: .topBarTrailing) {
-            Button(L10n.options, systemImage: "gearshape") { settingsPresented = true }.keyboardShortcut(",")
+            Button(L10n.options, systemImage: "gearshape") { model.presentedSheet = .settings }.keyboardShortcut(",").accessibilityIdentifier("open-settings")
         }
     }
 }
 
 struct MiniPlayer: View {
     @EnvironmentObject private var store: SoundStore
-    @Environment(\.tabViewBottomAccessoryPlacement) private var placement
-    let open: () -> Void
+    @EnvironmentObject private var model: IOSAppModel
     var body: some View {
         HStack(spacing: 12) {
-            Button(action: open) {
+            Button { model.presentedSheet = .player } label: {
                 HStack {
                     SoundSymbol(name: store.displayedMixIconName ?? "waveform").frame(width: 24, height: 24)
                     Text(store.displayedMixName ?? (store.hasSelection ? L10n.currentlyPlaying : T("choose_sounds", "Choose your sounds")))
@@ -63,11 +71,16 @@ struct MiniPlayer: View {
                 .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
-            Button(store.isPlaying ? L10n.pause : L10n.play, systemImage: store.isPlaying ? "pause.fill" : "play.fill") { store.togglePlay() }
-                .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44).disabled(!store.hasSelection).keyboardShortcut("r")
-            if placement != .inline {
-                Button(L10n.nextMix, systemImage: "forward.end.fill") { store.playNextRandomMix() }
-                    .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44).keyboardShortcut("n")
+            .accessibilityIdentifier("open-player")
+            Button { store.togglePlay() } label: {
+                Image(systemName: store.isPlaying ? "pause.fill" : "play.fill").frame(width: 44, height: 44).contentShape(Rectangle())
+            }
+                .accessibilityLabel(store.isPlaying ? L10n.pause : L10n.play).disabled(!store.hasSelection).keyboardShortcut("r")
+            Group {
+                Button { store.playNextRandomMix() } label: {
+                    Image(systemName: "forward.end.fill").frame(width: 44, height: 44).contentShape(Rectangle())
+                }
+                    .accessibilityLabel(L10n.nextMix).keyboardShortcut("n")
             }
         }
         .padding(.horizontal)

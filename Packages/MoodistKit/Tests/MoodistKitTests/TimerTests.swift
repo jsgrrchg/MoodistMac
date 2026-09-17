@@ -22,6 +22,25 @@ final class TimerTests: XCTestCase {
             XCTAssertEqual(store.selectedIds, ["river"])
         }
     }
+    func testEightHourDeadlineWithRepeatedRotations() async {
+        await MainActor.run {
+            var date = Date(timeIntervalSince1970: 1000)
+            let spy = AudioSpy()
+            let store = SoundStore(audioService: AudioService(backend: spy), preferences: PreferencesRepository(defaults: UserDefaults(suiteName: UUID().uuidString)!), now: { date }, scheduler: ManualScheduler())
+            store.select("river")
+            store.startAutoMixTimer(intervalSeconds: 300)
+            store.startSleepTimer(durationSeconds: 8 * 3600)
+            let maximum = MixesData.categories.flatMap(\.mixes).map { $0.soundIds.count }.max()!
+            for _ in 0..<96 {
+                date += 300
+                store.reconcileTimers()
+                XCTAssertLessThanOrEqual(spy.loaded.count, maximum)
+            }
+            XCTAssertFalse(store.isPlaying)
+            XCTAssertFalse(store.hasActiveAutoMixTimer)
+        }
+    }
+
     func testPausedRotationNeverStartsAudioAndSkipsMissedTicks() async {
         await MainActor.run {
             var date = Date(timeIntervalSince1970: 1000)
