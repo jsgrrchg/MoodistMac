@@ -23,7 +23,7 @@ enum PreferencesExportService {
             favoriteMixIds: favoriteMixIds,
             favoriteSoundIds: favoriteSoundIds
         )
-        guard let data = try? JSONEncoder().encode(payload) else { return false }
+        guard let data = try? PreferencesCodec.encode(payload) else { return false }
 #if canImport(AppKit)
         let panel = NSSavePanel()
         panel.title = L10n.exportPreferences

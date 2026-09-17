@@ -6,23 +6,23 @@ extension SoundStore {
     func bootstrapState() {
         SoundsData.categories.flatMap(\.sounds).forEach { sounds[$0.id] = .default }
         // Restore sound state only for IDs that still exist in the current catalog.
-        if let saved = PersistenceService.loadSounds() {
+        if let saved = preferences.loadSounds() {
             for (id, item) in saved where sounds[id] != nil {
                 sounds[id] = item
             }
         }
-        if let g = PersistenceService.loadGlobalVolume() {
+        if let g = preferences.loadGlobalVolume() {
             globalVolume = g
         }
-        presets = PersistenceService.loadPresets()
-        recentMixIds = PersistenceService.loadRecentMixIds()
-        recentSoundIds = PersistenceService.loadRecentSoundIds()
-        let soundLimit = PersistenceService.loadMaxRecentSoundsCount()
+        presets = preferences.loadPresets()
+        recentMixIds = preferences.loadRecentMixIds()
+        recentSoundIds = preferences.loadRecentSoundIds()
+        let soundLimit = preferences.loadMaxRecentSoundsCount()
         if recentSoundIds.count > soundLimit {
             recentSoundIds = Array(recentSoundIds.prefix(soundLimit))
         }
-        favoriteMixIds = PersistenceService.loadFavoriteMixIds()
-        favoriteSoundIds = PersistenceService.loadFavoriteSoundIds()
+        favoriteMixIds = preferences.loadFavoriteMixIds()
+        favoriteSoundIds = preferences.loadFavoriteSoundIds()
         if favoriteSoundIds.isEmpty, !favoriteIds.isEmpty {
             favoriteSoundIds = favoriteIds.sorted()
         }
@@ -32,50 +32,44 @@ extension SoundStore {
     func setupPersistence() {
         $sounds
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
-            .sink { PersistenceService.saveSounds($0) }
+            .sink { [preferences] in preferences.saveSounds($0) }
             .store(in: &cancellables)
         $globalVolume
             .dropFirst()
-            .sink { PersistenceService.saveGlobalVolume($0) }
+            .sink { [preferences] in preferences.saveGlobalVolume($0) }
             .store(in: &cancellables)
         $presets
             .dropFirst()
-            .sink { PersistenceService.savePresets($0) }
+            .sink { [preferences] in preferences.savePresets($0) }
             .store(in: &cancellables)
         $recentMixIds
             .dropFirst()
-            .sink { PersistenceService.saveRecentMixIds($0) }
+            .sink { [preferences] in preferences.saveRecentMixIds($0) }
             .store(in: &cancellables)
         $recentSoundIds
             .dropFirst()
-            .sink { PersistenceService.saveRecentSoundIds($0) }
+            .sink { [preferences] in preferences.saveRecentSoundIds($0) }
             .store(in: &cancellables)
         $favoriteMixIds
             .dropFirst()
             .debounce(for: .milliseconds(200), scheduler: RunLoop.main)
-            .sink { PersistenceService.saveFavoriteMixIds($0) }
+            .sink { [preferences] in preferences.saveFavoriteMixIds($0) }
             .store(in: &cancellables)
         $favoriteSoundIds
             .dropFirst()
             .debounce(for: .milliseconds(200), scheduler: RunLoop.main)
-            .sink { PersistenceService.saveFavoriteSoundIds($0) }
+            .sink { [preferences] in preferences.saveFavoriteSoundIds($0) }
             .store(in: &cancellables)
     }
 
-    /// Presents the save panel and exports preferences to JSON.
-    /// - Returns: true when the user saved successfully.
-    func exportPreferences() -> Bool {
-        PreferencesExportService.presentExportPanel(
-            presets: presets,
-            favoriteMixIds: favoriteMixIds,
-            favoriteSoundIds: favoriteSoundIds
-        )
+    func exportedPreferences() -> ExportedPreferences {
+        ExportedPreferences(exportDate: ExportedPreferences.exportDateString(), presets: presets,
+                            favoriteMixIds: favoriteMixIds, favoriteSoundIds: favoriteSoundIds)
     }
 
-    /// Presents the open panel, reads a preferences JSON file, and applies the imported values.
-    /// - Returns: true when the user imported successfully.
-    func importPreferences() -> Bool {
-        guard let payload = PreferencesImportService.presentImportPanel() else { return false }
+    @discardableResult
+    func applyImportedPreferences(_ payload: ExportedPreferences) -> Bool {
+        guard payload.version == ExportedPreferences.currentVersion else { return false }
         let validSoundIds = Set(sounds.keys)
         var seenPresetIds = Set<String>()
         let sanitizedPresets = payload.presets.compactMap { preset -> Preset? in
@@ -128,7 +122,7 @@ extension SoundStore {
         favoriteMixIds = []
         favoriteSoundIds = []
         timerUsageCounts = [:]
-        PersistenceService.resetAll()
+        preferences.resetAll()
     }
 
     private func orderedUnique(_ values: [String]) -> [String] {

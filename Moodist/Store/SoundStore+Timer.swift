@@ -47,8 +47,8 @@ extension SoundStore {
         activeTimer = TimerItem(
             name: displayName, durationSeconds: safeDuration, state: .running(endDate: endDate))
         timerUsageCounts[safeDuration, default: 0] += 1
-        PersistenceService.saveTimerUsageCounts(timerUsageCounts)
-        TimerNotificationManager.shared.requestAuthorizationIfNeeded()
+        preferences.saveTimerUsageCounts(timerUsageCounts)
+        onTimerScheduled?(displayName, endDate)
         activeTimerToken = Timer.scheduledTimer(
             withTimeInterval: TimeInterval(safeDuration), repeats: false
         ) { [weak self] _ in
@@ -61,6 +61,7 @@ extension SoundStore {
 
     // Cancels the active timer and notifies menus/UI to refresh state.
     func cancelSleepTimer() {
+        onTimerCancelled?()
         activeTimerToken?.invalidate()
         activeTimerToken = nil
         activeTimer = nil
@@ -112,7 +113,7 @@ extension SoundStore {
         let timerName = activeTimer?.name ?? L10n.timer
         activeTimer = nil
         stopPlayback()
-        TimerNotificationManager.shared.scheduleFinishedNotification(name: timerName)
+        onTimerFinished?(timerName)
         NotificationCenter.default.post(name: .timerStateDidChange, object: nil)
     }
 }

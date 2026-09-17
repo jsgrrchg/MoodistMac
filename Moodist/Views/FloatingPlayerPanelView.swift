@@ -165,7 +165,7 @@ extension Font.Weight {
 }
 
 struct BottomPlayerBarView: View {
-    @EnvironmentObject var store: SoundStore
+    @EnvironmentObject var store: MacSoundStore
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
 
@@ -443,6 +443,6 @@ private struct ModernVolumeSlider: View {
 
 #Preview {
     BottomPlayerBarView()
-        .environmentObject(SoundStore(audioService: AudioService()))
+        .environmentObject(MacSoundStore(audioService: AudioService()))
         .padding()
 }

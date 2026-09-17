@@ -232,7 +232,7 @@ private struct SaveMixCategoryPill: View {
 // MARK: - Save Mix sheet
 
 struct SavePresetSheet: View {
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     var onDismiss: () -> Void
 
     @State private var mixName = ""

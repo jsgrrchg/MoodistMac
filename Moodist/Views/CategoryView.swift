@@ -9,11 +9,11 @@ import SwiftUI
 
 struct CategoryView: View {
     let category: SoundCategory
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     @Binding var isExpanded: Bool
     @Environment(\.contentAreaWidth) private var contentAreaWidth
 
-    init(category: SoundCategory, store: SoundStore, isExpanded: Binding<Bool>) {
+    init(category: SoundCategory, store: MacSoundStore, isExpanded: Binding<Bool>) {
         self.category = category
         self.store = store
         _isExpanded = isExpanded
@@ -65,7 +65,7 @@ struct CategoryView: View {
 #Preview {
     CategoryView(
         category: SoundsData.nature,
-        store: SoundStore(audioService: AudioService()),
+        store: MacSoundStore(audioService: AudioService()),
         isExpanded: .constant(true)
     )
     .padding()

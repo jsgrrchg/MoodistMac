@@ -3,7 +3,7 @@ import Combine
 
 @MainActor
 final class AppDockCoordinator: NSObject {
-    private weak var soundStore: SoundStore?
+    private weak var soundStore: MacSoundStore?
     private let timerCoordinator: AppTimerCoordinator
     private var dockCancellables = Set<AnyCancellable>()
 
@@ -12,7 +12,7 @@ final class AppDockCoordinator: NSObject {
         super.init()
     }
 
-    func updateSoundStore(_ store: SoundStore?) {
+    func updateSoundStore(_ store: MacSoundStore?) {
         // Rebind the state source and restart observers to avoid orphaned subscriptions.
         soundStore = store
         configureDockObservers()

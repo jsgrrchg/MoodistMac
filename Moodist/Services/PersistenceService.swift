@@ -1,18 +1,13 @@
-//
-//  PersistenceService.swift
-//  MoodistMac
-//
-
 import Foundation
 
 enum PersistenceService {
-    private static let soundsKey = "moodist.sounds"
-    private static let globalVolumeKey = "moodist.globalVolume"
-    private static let presetsKey = "moodist.presets"
-    private static let recentMixIdsKey = "moodist.recentMixIds"
-    private static let recentSoundIdsKey = "moodist.recentSoundIds"
-    private static let favoriteMixIdsKey = "moodist.favoriteMixIds"
-    private static let favoriteSoundIdsKey = "moodist.favoriteSoundIds"
+    static let soundsKey = "moodist.sounds"
+    static let globalVolumeKey = "moodist.globalVolume"
+    static let presetsKey = "moodist.presets"
+    static let recentMixIdsKey = "moodist.recentMixIds"
+    static let recentSoundIdsKey = "moodist.recentSoundIds"
+    static let favoriteMixIdsKey = "moodist.favoriteMixIds"
+    static let favoriteSoundIdsKey = "moodist.favoriteSoundIds"
     static let maxRecentMixesCountKey = "MoodistMac.maxRecentMixesCount"
     static let maxRecentSoundsCountKey = "MoodistMac.maxRecentSoundsCount"
     static let menuBarEnabledKey = "MoodistMac.menuBarEnabled"
@@ -22,33 +17,62 @@ enum PersistenceService {
     static let mediaKeyNextMixKey = "MoodistMac.mediaKeyNextMix"
     static let collapseCategoriesOnColdOpenKey = "MoodistMac.collapseCategoriesOnColdOpen"
     static let appLanguageKey = "MoodistMac.appLanguage"
-    /// Key AppKit uses to persist the main window frame.
-    private static let appKitMainWindowFrameKey = "NSWindow Frame MoodistMainWindow"
-    private static let sidebarSectionsCollapsedKey = "MoodistMac.sidebarSectionsCollapsed"
-    private static let timerUsageCountsKey = "MoodistMac.timerUsageCounts"
-    private static let scrollAnchorIdsKey = "MoodistMac.scrollAnchorIds"
+    static let appKitMainWindowFrameKey = "NSWindow Frame MoodistMainWindow"
+    static let sidebarSectionsCollapsedKey = "MoodistMac.sidebarSectionsCollapsed"
+    static let timerUsageCountsKey = "MoodistMac.timerUsageCounts"
+    static let scrollAnchorIdsKey = "MoodistMac.scrollAnchorIds"
+    static func loadSounds() -> [String: SoundStateItem]? { PreferencesRepository().loadSounds() }
+    static func saveSounds(_ state: [String: SoundStateItem]) { PreferencesRepository().saveSounds(state) }
+    static func loadGlobalVolume() -> Double? { PreferencesRepository().loadGlobalVolume() }
+    static func saveGlobalVolume(_ volume: Double) { PreferencesRepository().saveGlobalVolume(volume) }
+    static func loadPresets() -> [Preset] { PreferencesRepository().loadPresets() }
+    static func savePresets(_ presets: [Preset]) { PreferencesRepository().savePresets(presets) }
+    static func loadRecentMixIds() -> [String] { PreferencesRepository().loadRecentMixIds() }
+    static func saveRecentMixIds(_ ids: [String]) { PreferencesRepository().saveRecentMixIds(ids) }
+    static func loadRecentSoundIds() -> [String] { PreferencesRepository().loadRecentSoundIds() }
+    static func saveRecentSoundIds(_ ids: [String]) { PreferencesRepository().saveRecentSoundIds(ids) }
+    static func loadFavoriteMixIds() -> [String] { PreferencesRepository().loadFavoriteMixIds() }
+    static func saveFavoriteMixIds(_ ids: [String]) { PreferencesRepository().saveFavoriteMixIds(ids) }
+    static func loadFavoriteSoundIds() -> [String] { PreferencesRepository().loadFavoriteSoundIds() }
+    static func saveFavoriteSoundIds(_ ids: [String]) { PreferencesRepository().saveFavoriteSoundIds(ids) }
+    static func loadMaxRecentMixesCount() -> Int { PreferencesRepository().loadMaxRecentMixesCount() }
+    static func loadMaxRecentSoundsCount() -> Int { PreferencesRepository().loadMaxRecentSoundsCount() }
+    static func loadTransparencyEnabled() -> Bool { PreferencesRepository().loadTransparencyEnabled() }
+    static func saveTransparencyEnabled(_ enabled: Bool) { PreferencesRepository().saveTransparencyEnabled(enabled) }
+    static func loadMediaKeyNextMix() -> Bool { PreferencesRepository().loadMediaKeyNextMix() }
+    static func loadSidebarSectionsCollapsed() -> [String: Bool] { PreferencesRepository().loadSidebarSectionsCollapsed() }
+    static func saveSidebarSectionsCollapsed(_ value: [String: Bool]) { PreferencesRepository().saveSidebarSectionsCollapsed(value) }
+    static func loadTimerUsageCounts() -> [Int: Int] { PreferencesRepository().loadTimerUsageCounts() }
+    static func saveTimerUsageCounts(_ counts: [Int: Int]) { PreferencesRepository().saveTimerUsageCounts(counts) }
+    static func loadScrollAnchorIds() -> [String: String] { PreferencesRepository().loadScrollAnchorIds() }
+    static func saveScrollAnchorIds(_ value: [String: String]) { PreferencesRepository().saveScrollAnchorIds(value) }
+    static func resetAll() { PreferencesRepository().resetAll() }
+}
 
-    static func loadSounds() -> [String: SoundStateItem]? {
-        guard let data = UserDefaults.standard.data(forKey: soundsKey) else { return nil }
+struct PreferencesRepository {
+    let defaults: UserDefaults
+    init(defaults: UserDefaults = .standard) { self.defaults = defaults }
+    func loadSounds() -> [String: SoundStateItem]? {
+        guard let data = defaults.data(forKey: PersistenceService.soundsKey) else { return nil }
         return try? JSONDecoder().decode([String: SoundStateItem].self, from: data)
     }
 
-    static func saveSounds(_ state: [String: SoundStateItem]) {
+    func saveSounds(_ state: [String: SoundStateItem]) {
         guard let data = try? JSONEncoder().encode(state) else { return }
-        UserDefaults.standard.set(data, forKey: soundsKey)
+        defaults.set(data, forKey: PersistenceService.soundsKey)
     }
 
-    static func loadGlobalVolume() -> Double? {
-        guard UserDefaults.standard.object(forKey: globalVolumeKey) != nil else { return nil }
-        return max(0, min(1, UserDefaults.standard.double(forKey: globalVolumeKey)))
+    func loadGlobalVolume() -> Double? {
+        guard defaults.object(forKey: PersistenceService.globalVolumeKey) != nil else { return nil }
+        return max(0, min(1, defaults.double(forKey: PersistenceService.globalVolumeKey)))
     }
 
-    static func saveGlobalVolume(_ volume: Double) {
-        UserDefaults.standard.set(volume, forKey: globalVolumeKey)
+    func saveGlobalVolume(_ volume: Double) {
+        defaults.set(volume, forKey: PersistenceService.globalVolumeKey)
     }
 
-    static func loadPresets() -> [Preset] {
-        guard let data = UserDefaults.standard.data(forKey: presetsKey) else { return [] }
+    func loadPresets() -> [Preset] {
+        guard let data = defaults.data(forKey: PersistenceService.presetsKey) else { return [] }
         let decoder = JSONDecoder()
         if let presets = try? decoder.decode([Preset].self, from: data) {
             return presets
@@ -84,105 +108,105 @@ enum PersistenceService {
         return recovered
     }
     // Saves presets as encoded JSON. If encoding fails, keep existing data untouched.
-    static func savePresets(_ presets: [Preset]) {
+    func savePresets(_ presets: [Preset]) {
         guard let data = try? JSONEncoder().encode(presets) else { return }
-        UserDefaults.standard.set(data, forKey: presetsKey)
+        defaults.set(data, forKey: PersistenceService.presetsKey)
     }
     // Loads recent and favorite ID arrays from JSON, returning an empty array if decoding fails.
-    static func loadRecentMixIds() -> [String] {
-        guard let data = UserDefaults.standard.data(forKey: recentMixIdsKey),
+    func loadRecentMixIds() -> [String] {
+        guard let data = defaults.data(forKey: PersistenceService.recentMixIdsKey),
             let ids = try? JSONDecoder().decode([String].self, from: data)
         else { return [] }
         return ids
     }
 
-    static func saveRecentMixIds(_ ids: [String]) {
+    func saveRecentMixIds(_ ids: [String]) {
         guard let data = try? JSONEncoder().encode(ids) else { return }
-        UserDefaults.standard.set(data, forKey: recentMixIdsKey)
+        defaults.set(data, forKey: PersistenceService.recentMixIdsKey)
     }
 
-    static func loadRecentSoundIds() -> [String] {
-        guard let data = UserDefaults.standard.data(forKey: recentSoundIdsKey),
+    func loadRecentSoundIds() -> [String] {
+        guard let data = defaults.data(forKey: PersistenceService.recentSoundIdsKey),
             let ids = try? JSONDecoder().decode([String].self, from: data)
         else { return [] }
         return ids
     }
 
-    static func saveRecentSoundIds(_ ids: [String]) {
+    func saveRecentSoundIds(_ ids: [String]) {
         guard let data = try? JSONEncoder().encode(ids) else { return }
-        UserDefaults.standard.set(data, forKey: recentSoundIdsKey)
+        defaults.set(data, forKey: PersistenceService.recentSoundIdsKey)
     }
 
-    static func loadFavoriteMixIds() -> [String] {
-        guard let data = UserDefaults.standard.data(forKey: favoriteMixIdsKey),
+    func loadFavoriteMixIds() -> [String] {
+        guard let data = defaults.data(forKey: PersistenceService.favoriteMixIdsKey),
             let ids = try? JSONDecoder().decode([String].self, from: data)
         else { return [] }
         return ids
     }
 
-    static func saveFavoriteMixIds(_ ids: [String]) {
+    func saveFavoriteMixIds(_ ids: [String]) {
         guard let data = try? JSONEncoder().encode(ids) else { return }
-        UserDefaults.standard.set(data, forKey: favoriteMixIdsKey)
+        defaults.set(data, forKey: PersistenceService.favoriteMixIdsKey)
     }
 
-    static func loadFavoriteSoundIds() -> [String] {
-        guard let data = UserDefaults.standard.data(forKey: favoriteSoundIdsKey),
+    func loadFavoriteSoundIds() -> [String] {
+        guard let data = defaults.data(forKey: PersistenceService.favoriteSoundIdsKey),
             let ids = try? JSONDecoder().decode([String].self, from: data)
         else { return [] }
         return ids
     }
 
-    static func saveFavoriteSoundIds(_ ids: [String]) {
+    func saveFavoriteSoundIds(_ ids: [String]) {
         guard let data = try? JSONEncoder().encode(ids) else { return }
-        UserDefaults.standard.set(data, forKey: favoriteSoundIdsKey)
+        defaults.set(data, forKey: PersistenceService.favoriteSoundIdsKey)
     }
 
     /// Maximum recent mixes in the sidebar (5...15). Defaults to 10.
-    static func loadMaxRecentMixesCount() -> Int {
-        let v = UserDefaults.standard.object(forKey: maxRecentMixesCountKey) as? Int ?? 10
+    func loadMaxRecentMixesCount() -> Int {
+        let v = defaults.object(forKey: PersistenceService.maxRecentMixesCountKey) as? Int ?? 10
         return min(15, max(5, v))
     }
 
     /// Maximum recent sounds in the sidebar (5...15). Defaults to 12.
-    static func loadMaxRecentSoundsCount() -> Int {
-        let v = UserDefaults.standard.object(forKey: maxRecentSoundsCountKey) as? Int ?? 12
+    func loadMaxRecentSoundsCount() -> Int {
+        let v = defaults.object(forKey: PersistenceService.maxRecentSoundsCountKey) as? Int ?? 12
         return min(15, max(5, v))
     }
 
-    static func loadTransparencyEnabled() -> Bool {
-        guard UserDefaults.standard.object(forKey: transparencyEnabledKey) != nil else {
+    func loadTransparencyEnabled() -> Bool {
+        guard defaults.object(forKey: PersistenceService.transparencyEnabledKey) != nil else {
             return true
         }
-        return UserDefaults.standard.bool(forKey: transparencyEnabledKey)
+        return defaults.bool(forKey: PersistenceService.transparencyEnabledKey)
     }
 
-    static func saveTransparencyEnabled(_ enabled: Bool) {
-        UserDefaults.standard.set(enabled, forKey: transparencyEnabledKey)
+    func saveTransparencyEnabled(_ enabled: Bool) {
+        defaults.set(enabled, forKey: PersistenceService.transparencyEnabledKey)
     }
 
     /// When true, the "Next" media key advances to the next mix. Defaults to true.
-    static func loadMediaKeyNextMix() -> Bool {
-        guard UserDefaults.standard.object(forKey: mediaKeyNextMixKey) != nil else { return true }
-        return UserDefaults.standard.bool(forKey: mediaKeyNextMixKey)
+    func loadMediaKeyNextMix() -> Bool {
+        guard defaults.object(forKey: PersistenceService.mediaKeyNextMixKey) != nil else { return true }
+        return defaults.bool(forKey: PersistenceService.mediaKeyNextMixKey)
     }
 
     /// Collapsed sidebar section state (ID -> true = collapsed). Defaults to all expanded.
-    static func loadSidebarSectionsCollapsed() -> [String: Bool] {
-        guard let data = UserDefaults.standard.data(forKey: sidebarSectionsCollapsedKey),
+    func loadSidebarSectionsCollapsed() -> [String: Bool] {
+        guard let data = defaults.data(forKey: PersistenceService.sidebarSectionsCollapsedKey),
             let dict = try? JSONDecoder().decode([String: Bool].self, from: data)
         else { return [:] }
         return dict
     }
 
-    static func saveSidebarSectionsCollapsed(_ value: [String: Bool]) {
+    func saveSidebarSectionsCollapsed(_ value: [String: Bool]) {
         guard let data = try? JSONEncoder().encode(value) else { return }
-        UserDefaults.standard.set(data, forKey: sidebarSectionsCollapsedKey)
+        defaults.set(data, forKey: PersistenceService.sidebarSectionsCollapsedKey)
     }
 
     /// Timer usage counts keyed by duration in seconds.
-    static func loadTimerUsageCounts() -> [Int: Int] {
+    func loadTimerUsageCounts() -> [Int: Int] {
         guard
-            let dict = UserDefaults.standard.dictionary(forKey: timerUsageCountsKey)
+            let dict = defaults.dictionary(forKey: PersistenceService.timerUsageCountsKey)
                 as? [String: Int]
         else {
             return [:]
@@ -196,46 +220,46 @@ enum PersistenceService {
         return result
     }
 
-    static func saveTimerUsageCounts(_ counts: [Int: Int]) {
+    func saveTimerUsageCounts(_ counts: [Int: Int]) {
         let dict = Dictionary(uniqueKeysWithValues: counts.map { (String($0.key), $0.value) })
-        UserDefaults.standard.set(dict, forKey: timerUsageCountsKey)
+        defaults.set(dict, forKey: PersistenceService.timerUsageCountsKey)
     }
 
     /// Scroll anchors per panel, used to restore position when switching tabs or reopening the app.
-    static func loadScrollAnchorIds() -> [String: String] {
-        guard let data = UserDefaults.standard.data(forKey: scrollAnchorIdsKey),
+    func loadScrollAnchorIds() -> [String: String] {
+        guard let data = defaults.data(forKey: PersistenceService.scrollAnchorIdsKey),
             let dict = try? JSONDecoder().decode([String: String].self, from: data)
         else { return [:] }
         return dict
     }
 
-    static func saveScrollAnchorIds(_ value: [String: String]) {
+    func saveScrollAnchorIds(_ value: [String: String]) {
         guard let data = try? JSONEncoder().encode(value) else { return }
-        UserDefaults.standard.set(data, forKey: scrollAnchorIdsKey)
+        defaults.set(data, forKey: PersistenceService.scrollAnchorIdsKey)
     }
 
     /// Removes all keys used by the app, including sounds, volume, presets, and appearance.
-    static func resetAll() {
-        UserDefaults.standard.removeObject(forKey: soundsKey)
-        UserDefaults.standard.removeObject(forKey: globalVolumeKey)
-        UserDefaults.standard.removeObject(forKey: presetsKey)
-        UserDefaults.standard.removeObject(forKey: recentMixIdsKey)
-        UserDefaults.standard.removeObject(forKey: recentSoundIdsKey)
-        UserDefaults.standard.removeObject(forKey: favoriteMixIdsKey)
-        UserDefaults.standard.removeObject(forKey: favoriteSoundIdsKey)
-        UserDefaults.standard.removeObject(forKey: maxRecentMixesCountKey)
-        UserDefaults.standard.removeObject(forKey: maxRecentSoundsCountKey)
-        UserDefaults.standard.removeObject(forKey: menuBarEnabledKey)
-        UserDefaults.standard.removeObject(forKey: accentColorHexKey)
-        UserDefaults.standard.removeObject(forKey: appearanceModeKey)
-        UserDefaults.standard.removeObject(forKey: transparencyEnabledKey)
-        UserDefaults.standard.removeObject(forKey: mediaKeyNextMixKey)
-        UserDefaults.standard.removeObject(forKey: collapseCategoriesOnColdOpenKey)
-        UserDefaults.standard.removeObject(forKey: appLanguageKey)
-        UserDefaults.standard.removeObject(forKey: LanguageManager.appleLanguagesKey)
-        UserDefaults.standard.removeObject(forKey: scrollAnchorIdsKey)
-        UserDefaults.standard.removeObject(forKey: appKitMainWindowFrameKey)
-        UserDefaults.standard.removeObject(forKey: sidebarSectionsCollapsedKey)
-        UserDefaults.standard.removeObject(forKey: timerUsageCountsKey)
+    func resetAll() {
+        defaults.removeObject(forKey: PersistenceService.soundsKey)
+        defaults.removeObject(forKey: PersistenceService.globalVolumeKey)
+        defaults.removeObject(forKey: PersistenceService.presetsKey)
+        defaults.removeObject(forKey: PersistenceService.recentMixIdsKey)
+        defaults.removeObject(forKey: PersistenceService.recentSoundIdsKey)
+        defaults.removeObject(forKey: PersistenceService.favoriteMixIdsKey)
+        defaults.removeObject(forKey: PersistenceService.favoriteSoundIdsKey)
+        defaults.removeObject(forKey: PersistenceService.maxRecentMixesCountKey)
+        defaults.removeObject(forKey: PersistenceService.maxRecentSoundsCountKey)
+        defaults.removeObject(forKey: PersistenceService.menuBarEnabledKey)
+        defaults.removeObject(forKey: PersistenceService.accentColorHexKey)
+        defaults.removeObject(forKey: PersistenceService.appearanceModeKey)
+        defaults.removeObject(forKey: PersistenceService.transparencyEnabledKey)
+        defaults.removeObject(forKey: PersistenceService.mediaKeyNextMixKey)
+        defaults.removeObject(forKey: PersistenceService.collapseCategoriesOnColdOpenKey)
+        defaults.removeObject(forKey: PersistenceService.appLanguageKey)
+        defaults.removeObject(forKey: "AppleLanguages")
+        defaults.removeObject(forKey: PersistenceService.scrollAnchorIdsKey)
+        defaults.removeObject(forKey: PersistenceService.appKitMainWindowFrameKey)
+        defaults.removeObject(forKey: PersistenceService.sidebarSectionsCollapsedKey)
+        defaults.removeObject(forKey: PersistenceService.timerUsageCountsKey)
     }
 }

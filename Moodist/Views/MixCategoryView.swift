@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MixCategoryView: View {
     let category: MixCategory
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     @Environment(\.contentAreaWidth) private var contentAreaWidth
     /// When non-nil, shows only these mixes, for example search results. Otherwise uses category.mixes.
     var mixesToShow: [Mix]? = nil
@@ -96,7 +96,7 @@ struct MixCategoryView: View {
 
 struct MixRowView: View {
     let mix: Mix
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     @Environment(\.contentAreaWidth) private var contentAreaWidth
     @Environment(\.isUserScrolling) private var isUserScrolling
     @State private var isHovered = false
@@ -257,6 +257,6 @@ struct MixRowView: View {
 }
 
 #Preview {
-    MixCategoryView(category: MixesData.natureRelaxation, store: SoundStore(audioService: AudioService()))
+    MixCategoryView(category: MixesData.natureRelaxation, store: MacSoundStore(audioService: AudioService()))
         .padding()
 }

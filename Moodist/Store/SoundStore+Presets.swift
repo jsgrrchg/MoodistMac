@@ -3,13 +3,6 @@ import Foundation
 extension SoundStore {
     // MARK: - Presets
 
-    /// Requests the sheet for saving the current preset, avoiding NSAlert stalls.
-    func promptSaveCurrentPreset() {
-        guard canSaveCustomMix else { return }
-        editingPresetId = nil
-        showSavePresetSheet = true
-    }
-
     /// Applies a preset with a smooth crossfade: removed sounds fade out, new sounds fade in,
     /// and shared sounds transition volume without reloading.
     func applyPreset(_ preset: Preset, startPlaying: Bool = true) {
@@ -130,13 +123,6 @@ extension SoundStore {
         )
         presets.append(preset)
     }
-    // Starts editing an existing preset so the save sheet knows this is an edit, not a new preset.
-    func beginEditingPreset(id: String) {
-        // Reuse the same save sheet in edit mode.
-        guard presets.contains(where: { $0.id == id }) else { return }
-        editingPresetId = id
-        showSavePresetSheet = true
-    }
     // Updates the edited preset metadata and refreshes the displayed icon when it is the active mix.
     func updatePresetMetadata(id: String, name: String, iconName: String) {
         let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -149,11 +135,6 @@ extension SoundStore {
             currentMixIconName = iconName
         }
     }
-    // Closes the save sheet without saving and clears edit state.
-    func closeSavePresetSheet() {
-        showSavePresetSheet = false
-        editingPresetId = nil
-    }
     // Deletes a preset and clears references from favorites, recents, and current selection.
     func deletePreset(id: String) {
         presets.removeAll { $0.id == id }
@@ -162,9 +143,6 @@ extension SoundStore {
         if currentMixId == id {
             currentMixId = nil
             currentMixIconName = nil
-        }
-        if editingPresetId == id {
-            editingPresetId = nil
         }
     }
     // Adds an existing sound to a preset without duplicates and with an assigned volume.
@@ -182,12 +160,4 @@ extension SoundStore {
         presets[index] = preset
     }
 
-    /// Selects only this sound and shows the sheet for saving it as a new custom mix.
-    func createNewPresetWithSound(_ soundId: String) {
-        guard sounds[soundId] != nil else { return }
-        unselectAll()
-        select(soundId)
-        editingPresetId = nil
-        showSavePresetSheet = true
-    }
 }

@@ -30,7 +30,7 @@ private let sidebarSectionIds = (
 )
 
 struct SidebarView: View {
-    @EnvironmentObject var store: SoundStore
+    @EnvironmentObject var store: MacSoundStore
     @State private var sectionsCollapsed: [String: Bool] =
         PersistenceService.loadSidebarSectionsCollapsed()
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
@@ -356,7 +356,7 @@ private func sidebarRowLabel(title: String, systemImage: String, isSelected: Boo
 
 private struct SidebarSoundRow: View {
     let sound: Sound
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
 
     private var state: SoundStateItem {
         store.sounds[sound.id] ?? .default
@@ -418,7 +418,7 @@ private struct SidebarSoundRow: View {
 
 private struct SidebarMixRow: View {
     let mix: Mix
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     private var isPlaying: Bool { store.isPlaying && store.displayedMixId == mix.id }
     private var mixDisplayName: String {
         (L10n.mixName(mix.id) == mix.id) ? mix.name : L10n.mixName(mix.id)
@@ -472,6 +472,6 @@ private struct SidebarMixRow: View {
 
 #Preview {
     SidebarView()
-        .environmentObject(SoundStore(audioService: AudioService()))
+        .environmentObject(MacSoundStore(audioService: AudioService()))
         .frame(width: 220, height: 400)
 }

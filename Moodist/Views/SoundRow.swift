@@ -9,7 +9,7 @@ import SwiftUI
   
 struct SoundRow: View {
     let sound: Sound
-    @ObservedObject var store: SoundStore
+    @ObservedObject var store: MacSoundStore
     @Environment(\.contentAreaWidth) private var contentAreaWidth
     @Environment(\.isUserScrolling) private var isUserScrolling
     @State private var isHovered = false
@@ -271,7 +271,7 @@ struct SoundRow: View {
 #Preview {
     SoundRow(
         sound: SoundsData.nature.sounds[0],
-        store: SoundStore(audioService: AudioService())
+        store: MacSoundStore(audioService: AudioService())
     )
     .padding()
 }

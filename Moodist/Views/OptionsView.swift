@@ -16,7 +16,7 @@ private enum AppearanceMode: String, CaseIterable {
 }
 
 struct OptionsView: View {
-    @EnvironmentObject var store: SoundStore
+    @EnvironmentObject var store: MacSoundStore
     @Environment(\.dismissWindow) private var dismissWindow
     @Environment(\.sparkleUpdater) private var sparkleUpdater
     @AppStorage(PersistenceService.menuBarEnabledKey) private var menuBarEnabled = false
@@ -732,6 +732,6 @@ private struct AccentColorPicker: View {
 #Preview {
     NavigationStack {
         OptionsView()
-            .environmentObject(SoundStore(audioService: AudioService()))
+            .environmentObject(MacSoundStore(audioService: AudioService()))
     }
 }

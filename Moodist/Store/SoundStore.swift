@@ -13,21 +13,14 @@ extension Collection {
 }
 
 @MainActor
-final class SoundStore: ObservableObject {
+class SoundStore: ObservableObject {
     @Published var sounds: [String: SoundStateItem] = [:]
     @Published var globalVolume: Double = 1.0
     @Published var isPlaying: Bool = false
-    @Published var showOptionsPanel = false
-    /// When true, the main view shows the sheet for saving the current preset, avoiding NSAlert stalls.
-    @Published var showSavePresetSheet = false
-    /// Preset ID being edited when the Save Mix sheet is reused to rename or change the icon.
-    @Published var editingPresetId: String?
     /// Saved presets, each containing a combination of sounds.
     @Published var presets: [Preset] = []
     /// Search text used to filter by sound or category name.
     @Published var searchQuery = ""
-    /// When true, the main view should focus the search field, for example after Command-F.
-    @Published var requestSearchFocus = false
     /// Applied mix ID from Mixes, used to show the localized name. Nil when the selection is manual.
     @Published var currentMixId: String?
     /// Applied mix icon as an SF Symbol, shown in the playback bar. Nil when the selection is manual.
@@ -51,7 +44,11 @@ final class SoundStore: ObservableObject {
     let audioService: AudioService
     var activeTimerToken: Timer?
     var autoMixTimerToken: Timer?
-    var timerUsageCounts: [Int: Int] = PersistenceService.loadTimerUsageCounts()
+    var timerUsageCounts: [Int: Int] = [:]
+    let preferences: PreferencesRepository
+    var onTimerScheduled: ((String, Date) -> Void)?
+    var onTimerCancelled: (() -> Void)?
+    var onTimerFinished: ((String) -> Void)?
 
     /// Minute presets for the Timer menu: 5m, 10m, 15m, 30m, 45m.
     static let timerMenuMinutesPresets: [Int] = [5, 10, 15, 30, 45].map { $0 * 60 }
@@ -129,7 +126,9 @@ final class SoundStore: ObservableObject {
         return nil
     }
 
-    init(audioService: AudioService) {
+    init(audioService: AudioService, preferences: PreferencesRepository = PreferencesRepository()) {
+        self.preferences = preferences
+        self.timerUsageCounts = preferences.loadTimerUsageCounts()
         self.audioService = audioService
         bootstrapState()
         setupPersistence()

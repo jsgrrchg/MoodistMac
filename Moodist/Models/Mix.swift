@@ -14,7 +14,7 @@ struct Mix: Identifiable {
     let soundIds: [String]
     let volumes: [String: Double]
 
-    /// Converts to Preset so SoundStore.applyPreset can be used.
+    /// Converts to Preset so MacSoundStore.applyPreset can be used.
     func toPreset() -> Preset {
         Preset(id: id, name: name, iconName: iconName, soundIds: soundIds, volumes: volumes)
     }

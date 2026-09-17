@@ -3,7 +3,7 @@ import SwiftUI
 
 @MainActor
 final class AppTimerCoordinator: NSObject {
-    weak var soundStore: SoundStore?
+    weak var soundStore: MacSoundStore?
     var anchorWindowProvider: (() -> NSWindow?)?
 
     private var timerMenuUpdate: Timer?
@@ -30,7 +30,7 @@ final class AppTimerCoordinator: NSObject {
         }
 
         let minutesSubmenu = NSMenu()
-        for seconds in SoundStore.timerMenuMinutesPresets {
+        for seconds in MacSoundStore.timerMenuMinutesPresets {
             let title =
                 soundStore?.timerLabel(forSeconds: seconds) ?? timerLabelFallback(seconds: seconds)
             let item = NSMenuItem(
@@ -44,7 +44,7 @@ final class AppTimerCoordinator: NSObject {
         menu.addItem(minutesItem)
 
         let hoursSubmenu = NSMenu()
-        for seconds in SoundStore.timerMenuHoursPresets {
+        for seconds in MacSoundStore.timerMenuHoursPresets {
             let title =
                 soundStore?.timerLabel(forSeconds: seconds) ?? timerLabelFallback(seconds: seconds)
             let item = NSMenuItem(

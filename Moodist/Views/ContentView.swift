@@ -67,7 +67,7 @@ extension EnvironmentValues {
 }
 
 struct ContentView: View {
-    @EnvironmentObject var store: SoundStore
+    @EnvironmentObject var store: MacSoundStore
     @Environment(\.openWindow) private var openWindow
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparencyEnabled = true
     @AppStorage(PersistenceService.collapseCategoriesOnColdOpenKey) private
@@ -751,6 +751,6 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environmentObject(SoundStore(audioService: AudioService()))
+        .environmentObject(MacSoundStore(audioService: AudioService()))
         .frame(width: 400, height: 600)
 }

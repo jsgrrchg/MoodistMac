@@ -27,7 +27,7 @@ extension SoundStore {
         var ids = recentMixIds
         ids.removeAll { $0 == mixId }
         ids.insert(mixId, at: 0)
-        let limit = PersistenceService.loadMaxRecentMixesCount()
+        let limit = preferences.loadMaxRecentMixesCount()
         recentMixIds = Array(ids.prefix(limit))
     }
 
@@ -36,13 +36,13 @@ extension SoundStore {
         var ids = recentSoundIds
         ids.removeAll { $0 == soundId }
         ids.insert(soundId, at: 0)
-        let limit = PersistenceService.loadMaxRecentSoundsCount()
+        let limit = preferences.loadMaxRecentSoundsCount()
         recentSoundIds = Array(ids.prefix(limit))
     }
 
     /// Trims recent mixes to the limit configured in Options.
     func trimRecentMixIdsToLimit() {
-        let limit = PersistenceService.loadMaxRecentMixesCount()
+        let limit = preferences.loadMaxRecentMixesCount()
         if recentMixIds.count > limit {
             recentMixIds = Array(recentMixIds.prefix(limit))
         }
@@ -50,7 +50,7 @@ extension SoundStore {
 
     /// Trims recent sounds to the limit configured in Options.
     func trimRecentSoundIdsToLimit() {
-        let limit = PersistenceService.loadMaxRecentSoundsCount()
+        let limit = preferences.loadMaxRecentSoundsCount()
         if recentSoundIds.count > limit {
             recentSoundIds = Array(recentSoundIds.prefix(limit))
         }
