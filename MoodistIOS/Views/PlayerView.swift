@@ -30,6 +30,12 @@ struct PlayerView: View {
                 Button(L10n.presetSaveCurrent, systemImage: "square.and.arrow.down") { savePresented = true }
                     .disabled(!store.canSaveCustomMix)
             }
+            Section {
+                NavigationLink { SleepTimerView() } label: {
+                    Label(L10n.timer, systemImage: "moon.zzz")
+                }
+                if store.hasActiveTimer { TimerStatusView() }
+            }
             Section(L10n.currentlyPlaying) {
                 if !store.hasSelection {
                     ContentUnavailableView(T("choose_sounds", "Choose your sounds"), systemImage: "waveform")

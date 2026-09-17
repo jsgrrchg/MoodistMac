@@ -11,6 +11,7 @@
 		0E6755547A6C1FDC30F37142 /* PlatformIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */; };
 		163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
 		1C337B5A586DE7D154244DD0 /* TimerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1EAEDB48A50FE7DCDBC6528 /* TimerTests.swift */; };
+		257CEDB556E8CED5195BD0F7 /* SleepTimerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 203330A592D4C63A8F14A402 /* SleepTimerView.swift */; };
 		278D038A5C4B82659658DC6E /* CatalogViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C308DE14DDB29EBB328056 /* CatalogViews.swift */; };
 		45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */; };
 		4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
@@ -91,6 +92,7 @@
 		01492C0D51934629A2D23700 /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = MoodistMacTests/CatalogTests.swift; sourceTree = "<group>"; };
 		0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacSoundStore.swift; path = Moodist/App/MacSoundStore.swift; sourceTree = "<group>"; };
 		0D83F535D744EF2735742912 /* MoodistMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		203330A592D4C63A8F14A402 /* SleepTimerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SleepTimerView.swift; path = MoodistIOS/Views/SleepTimerView.swift; sourceTree = "<group>"; };
 		241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioInterruptionObserver.swift; path = MoodistIOS/Platform/AudioInterruptionObserver.swift; sourceTree = "<group>"; };
 		29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResourceTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/ResourceTests.swift; sourceTree = "<group>"; };
 		416CECF2187A5FF4733A23CE /* RootView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RootView.swift; path = MoodistIOS/Views/RootView.swift; sourceTree = "<group>"; };
@@ -281,6 +283,7 @@
 				63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */,
 				D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */,
 				45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */,
+				203330A592D4C63A8F14A402 /* SleepTimerView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -604,6 +607,7 @@
 				A69849D902734385C33E4E48 /* PlayerView.swift in Sources */,
 				D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */,
 				8E79279326B2DCA374AB2549 /* CustomMixEditor.swift in Sources */,
+				257CEDB556E8CED5195BD0F7 /* SleepTimerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
