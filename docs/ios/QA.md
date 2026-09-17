@@ -44,3 +44,9 @@ Local working evidence is under the ignored `.PERSONAL/logs` and `.derived` dire
 Final combined iOS run completed with **TEST SUCCEEDED**: 15 unit/integration tests and three UI flows, with verbose diagnostic collection disabled as described above. Final accessibility screenshot review also led to a stacked volume label/value and bounded icon scaling at the largest text sizes.
 
 Both application schemes also built successfully from a clean export of the C25 tracked source, using independent derived-data directories; the iOS bundle audit passed there. This verifies the committed project does not depend on ignored helper scripts or local resource copies.
+
+## Player selection follow-up — 2026-09-17
+
+The player opens expanded with a compact header and selected tracks before save/timer actions. The selection UI test opens a two-sound mix, checks both rows are visible immediately, pauses without losing selection, removes each track and verifies playback is disabled when empty. Localizations now validate 545 keys, including 39 iPhone keys.
+
+Validation: all four iOS UI flows passed in `PlayerSelection.xcresult`; the selected-track screenshot was inspected.

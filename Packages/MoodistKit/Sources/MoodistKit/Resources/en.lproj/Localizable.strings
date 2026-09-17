@@ -577,3 +577,6 @@
 
 "ios_privacy" = "Privacy";
 "ios_privacy_body" = "Moodist does not collect listening history or personal data. Your mixes and preferences are stored on this device and may be included in your device backups. Preference files are shared only when you export them. Notifications are optional and used for timers. You can delete your local data in Settings. External websites and apps you share with have their own privacy policies.";
+
+"ios_current_mix" = "Current mix";
+"ios_selected_sounds" = "Selected sounds";

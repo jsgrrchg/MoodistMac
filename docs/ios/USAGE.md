@@ -4,7 +4,7 @@
 
 **Mixes** contains curated combinations. Selecting a mix applies its tracks and volumes. **Library** contains custom mixes, ordered favorites and separate recent lists. Use Edit/reorder actions for favorites. A custom mix can be saved from the player, edited via its menu or created by adding a sound from its context menu.
 
-The glass mini-player stays above the tab bar. Tap its title to open the player; play/pause preserves the selection. The player exposes global and individual track volume, shuffle, next mix, track removal, save-as-mix and AirPlay output selection. The app's global volume is separate from the phone's system volume. Drag or scroll the player to reach additional controls; accessibility text sizes request a large sheet.
+The glass mini-player stays above the tab bar. Tap its title to open the expanded player; play/pause preserves the selection. Selected sounds appear immediately below the playback controls, each with its own volume slider and remove action. They remain visible while paused. The player exposes global and individual track volume, shuffle, next mix, track removal, save-as-mix and AirPlay output selection. The app's global volume is separate from the phone's system volume. Drag or scroll the player to reach additional controls; accessibility text sizes request a large sheet.
 
 ## Timers and background audio
 

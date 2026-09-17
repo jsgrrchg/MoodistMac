@@ -46,6 +46,28 @@ final class MoodistFlowTests: XCTestCase {
         XCTAssertEqual(pause.label, "Play")
         capture("player-paused", app)
     }
+    func testCurrentMixShowsSelectedSoundsWhilePausedAndAfterRemoval() {
+        let app = launch()
+        app.buttons["sound-river"].tap()
+        app.buttons["sound-campfire"].tap()
+        app.buttons["open-player"].tap()
+        let river = app.staticTexts["player-sound-river"]
+        let campfire = app.staticTexts["player-sound-campfire"]
+        XCTAssertTrue(river.waitForExistence(timeout: 5))
+        XCTAssertTrue(river.isHittable)
+        XCTAssertTrue(campfire.isHittable)
+        capture("player-selected-sounds", app)
+        app.buttons["player-toggle"].tap()
+        XCTAssertEqual(app.buttons["player-toggle"].label, "Play")
+        XCTAssertTrue(river.exists)
+        XCTAssertTrue(campfire.exists)
+        app.buttons["remove-sound-river"].tap()
+        XCTAssertFalse(river.exists)
+        XCTAssertTrue(campfire.exists)
+        app.buttons["remove-sound-campfire"].tap()
+        XCTAssertFalse(campfire.exists)
+        XCTAssertFalse(app.buttons["player-toggle"].isEnabled)
+    }
     func testSettingsAndTimerNavigation() {
         let app = launch()
         app.buttons["open-settings"].tap()

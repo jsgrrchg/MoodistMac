@@ -4,6 +4,7 @@ import MoodistKit
 struct RootView: View {
     @EnvironmentObject private var store: SoundStore
     @EnvironmentObject private var model: IOSAppModel
+    @State private var playerDetent: PresentationDetent = .large
     @Environment(\.dynamicTypeSize) private var typeSize
     @AppStorage(PersistenceService.appLanguageKey) private var language = "system"
 
@@ -22,11 +23,11 @@ struct RootView: View {
         }
         .id(language)
         }
-        .sheet(item: $model.presentedSheet) { destination in
+        .sheet(item: $model.presentedSheet, onDismiss: { playerDetent = .large }) { destination in
             switch destination {
             case .player:
                 NavigationStack { PlayerView() }
-                    .presentationDetents(typeSize.isAccessibilitySize ? [.large] : [.medium, .large])
+                    .presentationDetents(typeSize.isAccessibilitySize ? [.large] : [.medium, .large], selection: $playerDetent)
                     .presentationDragIndicator(.visible)
             case .settings:
                 NavigationStack { SettingsView() }
