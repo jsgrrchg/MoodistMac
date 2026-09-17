@@ -12,6 +12,7 @@
 		163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
 		45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */; };
 		4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
+		60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
 		6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA40054351B4B42C0AEC73BC /* CatalogTests.swift */; };
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
@@ -61,6 +62,7 @@
 		B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000046 /* AppMenuBarCoordinator.swift */; };
 		B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000047 /* AppTimerCoordinator.swift */; };
 		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
+		BCF5442A8BE0EB763D0A3899 /* AudioRoutePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */; };
 		C6532473DD2647F032AC22C7 /* AudioInterruptionObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */; };
 		D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */; };
 		E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */; };
@@ -83,10 +85,12 @@
 		0D83F535D744EF2735742912 /* MoodistMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioInterruptionObserver.swift; path = MoodistIOS/Platform/AudioInterruptionObserver.swift; sourceTree = "<group>"; };
 		29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResourceTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/ResourceTests.swift; sourceTree = "<group>"; };
+		4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NowPlayingController.swift; path = MoodistIOS/Platform/NowPlayingController.swift; sourceTree = "<group>"; };
 		483E1E1FC2202F428ED131D6 /* MoodistIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DEDCC51785EADFC16815432 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/StoreTests.swift; sourceTree = "<group>"; };
 		4E3D258DE9D86424EFF659E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesCodec.swift; path = Moodist/Services/PreferencesCodec.swift; sourceTree = "<group>"; };
+		6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioRoutePicker.swift; path = MoodistIOS/Platform/AudioRoutePicker.swift; sourceTree = "<group>"; };
 		64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioSessionTests.swift; path = MoodistIOSTests/AudioSessionTests.swift; sourceTree = "<group>"; };
 		90C86C051A3713055BCAC087 /* IOSAppModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAppModel.swift; path = MoodistIOS/App/IOSAppModel.swift; sourceTree = "<group>"; };
 		973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlatformIntegrationTests.swift; path = MoodistMacTests/PlatformIntegrationTests.swift; sourceTree = "<group>"; };
@@ -251,6 +255,8 @@
 				FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */,
 				64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */,
 				241C872F2F9D9731511B4EC9 /* AudioInterruptionObserver.swift */,
+				4636A4EA2767E80BB43EFF18 /* NowPlayingController.swift */,
+				6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -565,6 +571,8 @@
 				AD32FA639FB8DDFB23E36BC9 /* IOSAppModel.swift in Sources */,
 				7F075296D7F2601154B705EB /* IOSAudioSessionController.swift in Sources */,
 				C6532473DD2647F032AC22C7 /* AudioInterruptionObserver.swift in Sources */,
+				60F0A0AFAA0C40F5F0684593 /* NowPlayingController.swift in Sources */,
+				BCF5442A8BE0EB763D0A3899 /* AudioRoutePicker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
