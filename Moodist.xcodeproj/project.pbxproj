@@ -7,11 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		04E9DB81250D2A82098248A7 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 86EC0C1CD9E2A1B81C19B50B /* MoodistKit */; };
 		0E6755547A6C1FDC30F37142 /* PlatformIntegrationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */; };
 		163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
 		45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */; };
+		4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
+		6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA40054351B4B42C0AEC73BC /* CatalogTests.swift */; };
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
+		8CD3A726852262FE4DADCC9C /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 042A3F51971C835C3956BEF8 /* MoodistKit */; };
+		A7C61F445439798261F410DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
 		B175D2182F310AB600907398 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000002 /* ContentView.swift */; };
@@ -53,14 +58,32 @@
 		B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000046 /* AppMenuBarCoordinator.swift */; };
 		B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000047 /* AppTimerCoordinator.swift */; };
 		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
+		D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */; };
+		E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */; };
+		FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DEDCC51785EADFC16815432 /* StoreTests.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		96118B366C0672BA5A96C735 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A90000000000000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68A87AED7542DB7CC5B99D82;
+			remoteInfo = MoodistIOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		01492C0D51934629A2D23700 /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = MoodistMacTests/CatalogTests.swift; sourceTree = "<group>"; };
 		0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MacSoundStore.swift; path = Moodist/App/MacSoundStore.swift; sourceTree = "<group>"; };
 		0D83F535D744EF2735742912 /* MoodistMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResourceTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/ResourceTests.swift; sourceTree = "<group>"; };
+		483E1E1FC2202F428ED131D6 /* MoodistIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4DEDCC51785EADFC16815432 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/StoreTests.swift; sourceTree = "<group>"; };
+		4E3D258DE9D86424EFF659E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesCodec.swift; path = Moodist/Services/PreferencesCodec.swift; sourceTree = "<group>"; };
 		973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlatformIntegrationTests.swift; path = MoodistMacTests/PlatformIntegrationTests.swift; sourceTree = "<group>"; };
+		9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoodistIOSApp.swift; path = MoodistIOS/App/MoodistIOSApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000001 /* MoodistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A20000000000000100000003 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
@@ -130,11 +153,22 @@
 		C10000000000000100000002 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000003 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000005 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		CA40054351B4B42C0AEC73BC /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/CatalogTests.swift; sourceTree = "<group>"; };
 		CC90F2AE61A13F28AEA37605 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = MoodistMacTests/StoreTests.swift; sourceTree = "<group>"; };
+		D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6559F2DC5AEBCA767A042BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		80BD5CA24AC34728ED4A9491 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7C61F445439798261F410DB /* Foundation.framework in Frameworks */,
+				04E9DB81250D2A82098248A7 /* MoodistKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		81EE41A30F52EEE8F9E09DB1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -153,6 +187,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		E3C6CFE15D602AEC78D549A1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4ED5268C6B8AA23B992C4232 /* Foundation.framework in Frameworks */,
+				8CD3A726852262FE4DADCC9C /* MoodistKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -164,10 +207,19 @@
 			name = "OS X";
 			sourceTree = "<group>";
 		};
+		23F7DA1146180D7A80AB8CF7 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				4E3D258DE9D86424EFF659E7 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
 		3E871DC2193D54A6141251C6 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				1CB7D13CD71B5D0062830276 /* OS X */,
+				23F7DA1146180D7A80AB8CF7 /* iOS */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -183,6 +235,10 @@
 				5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */,
 				CC90F2AE61A13F28AEA37605 /* StoreTests.swift */,
 				973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */,
+				9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */,
+				29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */,
+				CA40054351B4B42C0AEC73BC /* CatalogTests.swift */,
+				4DEDCC51785EADFC16815432 /* StoreTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -210,6 +266,8 @@
 			children = (
 				B175D22B2F310AB600907398 /* MoodistMac.app */,
 				0D83F535D744EF2735742912 /* MoodistMacTests.xctest */,
+				483E1E1FC2202F428ED131D6 /* MoodistIOS.app */,
+				D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -335,6 +393,47 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3A8242ECD55A1909CA0BD04C /* MoodistIOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BDC1CE8E793AE545DF6E5266 /* Build configuration list for PBXNativeTarget "MoodistIOSTests" */;
+			buildPhases = (
+				F6A127979B51EAA2600E5C81 /* Sources */,
+				E3C6CFE15D602AEC78D549A1 /* Frameworks */,
+				ED78FF4EB2E5C7B44447EC2D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0C150052F0C8CE8AC7894F00 /* PBXTargetDependency */,
+			);
+			name = MoodistIOSTests;
+			packageProductDependencies = (
+				042A3F51971C835C3956BEF8 /* MoodistKit */,
+			);
+			productName = MoodistIOSTests;
+			productReference = D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		68A87AED7542DB7CC5B99D82 /* MoodistIOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F9A9206788A37FD96D98C94F /* Build configuration list for PBXNativeTarget "MoodistIOS" */;
+			buildPhases = (
+				3D014AE2D1F1441FF135B405 /* Sources */,
+				80BD5CA24AC34728ED4A9491 /* Frameworks */,
+				93AF3FA14EB3D503A8D884BB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MoodistIOS;
+			packageProductDependencies = (
+				86EC0C1CD9E2A1B81C19B50B /* MoodistKit */,
+			);
+			productName = MoodistIOS;
+			productReference = 483E1E1FC2202F428ED131D6 /* MoodistIOS.app */;
+			productType = "com.apple.product-type.application";
+		};
 		A60000000000000100000002 /* MoodistMac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A80000000000000100000003 /* Build configuration list for PBXNativeTarget "MoodistMac" */;
@@ -407,12 +506,21 @@
 			targets = (
 				A60000000000000100000002 /* MoodistMac */,
 				EC950EE44EC6F33EB3CD8022 /* MoodistMacTests */,
+				68A87AED7542DB7CC5B99D82 /* MoodistIOS */,
+				3A8242ECD55A1909CA0BD04C /* MoodistIOSTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		1C93E532DEB517E149A24507 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		93AF3FA14EB3D503A8D884BB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -427,9 +535,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		ED78FF4EB2E5C7B44447EC2D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		3D014AE2D1F1441FF135B405 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A70000000000000100000003 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -485,7 +608,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F6A127979B51EAA2600E5C81 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */,
+				6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */,
+				FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0C150052F0C8CE8AC7894F00 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = MoodistIOS;
+			target = 68A87AED7542DB7CC5B99D82 /* MoodistIOS */;
+			targetProxy = 96118B366C0672BA5A96C735 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C10000000000000100000004 /* Localizable.strings */ = {
@@ -501,6 +643,70 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0B711F6D378E72BF42C076CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MoodistIOS/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOS;
+				PRODUCT_MODULE_NAME = MoodistIOS;
+				PRODUCT_NAME = MoodistIOS;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		44540F892850DC59EEFD443E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSTests;
+				PRODUCT_MODULE_NAME = MoodistIOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoodistIOS.app/MoodistIOS";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4BB1EC5A4F4D677FF383058E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOSTests;
+				PRODUCT_MODULE_NAME = MoodistIOSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MoodistIOS.app/MoodistIOS";
+			};
+			name = Debug;
+		};
 		6A59977E299BD20A5A8F98EB /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -716,6 +922,36 @@
 			};
 			name = Debug;
 		};
+		EFFE1B20C7CDCF2FE23952DE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MoodistIOS/Resources/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistIOS;
+				PRODUCT_MODULE_NAME = MoodistIOS;
+				PRODUCT_NAME = MoodistIOS;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -746,6 +982,24 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		BDC1CE8E793AE545DF6E5266 /* Build configuration list for PBXNativeTarget "MoodistIOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44540F892850DC59EEFD443E /* Release */,
+				4BB1EC5A4F4D677FF383058E /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F9A9206788A37FD96D98C94F /* Build configuration list for PBXNativeTarget "MoodistIOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EFFE1B20C7CDCF2FE23952DE /* Release */,
+				0B711F6D378E72BF42C076CD /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
@@ -767,7 +1021,17 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		042A3F51971C835C3956BEF8 /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
 		1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
+		86EC0C1CD9E2A1B81C19B50B /* MoodistKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
 			productName = MoodistKit;
