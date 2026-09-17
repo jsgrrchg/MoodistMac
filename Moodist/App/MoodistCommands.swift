@@ -1,3 +1,4 @@
+import MoodistKit
 import Sparkle
 import SwiftUI
 

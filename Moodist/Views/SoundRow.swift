@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  SoundRow.swift
 //  MoodistMac

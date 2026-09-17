@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  UpdateWindowView.swift
 //  MoodistMac

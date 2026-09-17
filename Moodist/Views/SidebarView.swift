@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  SidebarView.swift
 //  MoodistMac

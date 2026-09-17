@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  Color+Hex.swift
 //  MoodistMac

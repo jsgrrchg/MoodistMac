@@ -9,36 +9,22 @@
 /* Begin PBXBuildFile section */
 		0921104FDED78DB3FC3E628D /* StoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC90F2AE61A13F28AEA37605 /* StoreTests.swift */; };
 		0CE5803D5D3826F49CC2968F /* SoundStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004C /* SoundStore+Persistence.swift */; };
-		14925AE3F477EA1B051CAF45 /* PreferencesCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */; };
 		163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
 		17D19EE3E4010D3310DDEC85 /* SoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000B /* SoundStore.swift */; };
 		20930FE69DBF11B0CB8C6710 /* EngineAudioBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004F /* EngineAudioBackend.swift */; };
-		3154E5BE18078A4AA6768511 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000005 /* Sound.swift */; };
-		326C196DCDF3564C071040A5 /* SoundIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000019 /* SoundIcons.swift */; };
-		38401AF3B0B876C2B93E7DED /* TimerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001E /* TimerItem.swift */; };
-		48E638698DAE2D7E07287BCE /* SoundsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000008 /* SoundsData.swift */; };
+		45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */; };
 		5B6E6C72EFD4A80CE293A613 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000009 /* AudioService.swift */; };
 		63BAC95FC311705BE321908B /* SoundStore+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004A /* SoundStore+Presets.swift */; };
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
-		67107FE4D75FC51DEC046D7F /* SoundStateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000007 /* SoundStateItem.swift */; };
-		68D13EDB92C5487CB577F230 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000A /* PersistenceService.swift */; };
-		69B1F47C34E9A7144B65605D /* Mix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001A /* Mix.swift */; };
+		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
 		7F30B879BB7E06DC1B25CE7A /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000011 /* L10n.swift */; };
-		8203A35446670C8930498389 /* SoundCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000006 /* SoundCategory.swift */; };
 		82EF4997F259222DBF5E6A4C /* SoundStore+RecentsFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */; };
-		90D270CC13B5C986C050C7C5 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000016 /* Preset.swift */; };
-		A730934765860D155616F3B0 /* MixesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001B /* MixesData.swift */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
 		B175D2182F310AB600907398 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000002 /* ContentView.swift */; };
 		B175D2192F310AB600907398 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000003 /* CategoryView.swift */; };
 		B175D21A2F310AB600907398 /* SoundRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000004 /* SoundRow.swift */; };
-		B175D21B2F310AB600907398 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000005 /* Sound.swift */; };
-		B175D21C2F310AB600907398 /* SoundCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000006 /* SoundCategory.swift */; };
-		B175D21D2F310AB600907398 /* SoundStateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000007 /* SoundStateItem.swift */; };
-		B175D21E2F310AB600907398 /* SoundsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000008 /* SoundsData.swift */; };
 		B175D21F2F310AB600907398 /* AudioService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000009 /* AudioService.swift */; };
-		B175D2202F310AB600907398 /* PersistenceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000A /* PersistenceService.swift */; };
 		B175D2212F310AB600907398 /* SoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000B /* SoundStore.swift */; };
 		B175D2222F310AB600907398 /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000C /* PlatformColor.swift */; };
 		B175D2232F310AB600907398 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000D /* Assets.xcassets */; };
@@ -48,19 +34,13 @@
 		B175D2272F310AB600907398 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000011 /* L10n.swift */; };
 		B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000012 /* VisualEffectBackground.swift */; };
 		B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000013 /* MediaKeyHandler.swift */; };
-		B175D22D2F310AB600907398 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000016 /* Preset.swift */; };
 		B175D22E2F310AB600907398 /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000017 /* SidebarView.swift */; };
-		B175D2302F310AB600907398 /* SoundIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000019 /* SoundIcons.swift */; };
-		B175D2312F310AB600907398 /* Mix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001A /* Mix.swift */; };
-		B175D2322F310AB600907398 /* MixesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001B /* MixesData.swift */; };
 		B175D2332F310AB600907398 /* MixCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001C /* MixCategoryView.swift */; };
 		B175D2342F310AB600907398 /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001D /* Color+Hex.swift */; };
-		B175D2352F310AB600907398 /* TimerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001E /* TimerItem.swift */; };
 		B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001F /* TimerNotificationManager.swift */; };
 		B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000020 /* FloatingPlayerPanelView.swift */; };
 		B175D2382F310AB600907398 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000021 /* LanguageManager.swift */; };
 		B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000022 /* AccentColorChoice.swift */; };
-		B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000023 /* ExportedPreferences.swift */; };
 		B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000024 /* PreferencesExportService.swift */; };
 		B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000025 /* PreferencesImportService.swift */; };
 		B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000033 /* MarqueeTextView.swift */; };
@@ -94,14 +74,11 @@
 		B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004F /* EngineAudioBackend.swift */; };
 		B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000050 /* AudioSpatialTypes.swift */; };
 		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
-		B2803875CAAF2DDD4DE30066 /* ExportedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000023 /* ExportedPreferences.swift */; };
-		B4F0C5A869A16635A0FC61D0 /* PreferencesCodec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */; };
 		C10000000000000100000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000004 /* Localizable.strings */; };
 		C110EA289E829A22D297531F /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000021 /* LanguageManager.swift */; };
 		C2D24C9A1B033C84AA50AE48 /* LegacyAudioPlayerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */; };
 		C90A96F6F53A2F43EFD5DF44 /* AudioPlaybackBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004D /* AudioPlaybackBackend.swift */; };
 		D48B9EFB34878ED37A4BA64C /* SoundStore+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000049 /* SoundStore+Timer.swift */; };
-		E09C0A791DD63426CB415DD5 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01492C0D51934629A2D23700 /* CatalogTests.swift */; };
 		F187B14F643BF7F210CB58CA /* SoundStore+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000048 /* SoundStore+Playback.swift */; };
 		FC774A4A5D508CFACE618AEC /* AudioSpatialTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000050 /* AudioSpatialTypes.swift */; };
 /* End PBXBuildFile section */
@@ -190,6 +167,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */,
+				6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,6 +176,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B20000000000000100000003 /* Sparkle in Frameworks */,
+				45C0E897CAB9F18418A32AF8 /* MoodistKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +376,7 @@
 			name = MoodistMac;
 			packageProductDependencies = (
 				B20000000000000100000002 /* Sparkle */,
+				1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */,
 			);
 			productName = MoodistMac;
 			productReference = B175D22B2F310AB600907398 /* MoodistMac.app */;
@@ -415,6 +395,9 @@
 			dependencies = (
 			);
 			name = MoodistMacTests;
+			packageProductDependencies = (
+				8BAA6BEF23F0AD094A671FE0 /* MoodistKit */,
+			);
 			productName = MoodistMacTests;
 			productReference = 0D83F535D744EF2735742912 /* MoodistMacTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -442,6 +425,7 @@
 			mainGroup = A50000000000000100000001;
 			packageReferences = (
 				B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */,
+				E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */,
 			);
 			productRefGroup = A50000000000000100000003 /* Products */;
 			projectDirPath = "";
@@ -482,12 +466,7 @@
 				B175D2182F310AB600907398 /* ContentView.swift in Sources */,
 				B175D2192F310AB600907398 /* CategoryView.swift in Sources */,
 				B175D21A2F310AB600907398 /* SoundRow.swift in Sources */,
-				B175D21B2F310AB600907398 /* Sound.swift in Sources */,
-				B175D21C2F310AB600907398 /* SoundCategory.swift in Sources */,
-				B175D21D2F310AB600907398 /* SoundStateItem.swift in Sources */,
-				B175D21E2F310AB600907398 /* SoundsData.swift in Sources */,
 				B175D21F2F310AB600907398 /* AudioService.swift in Sources */,
-				B175D2202F310AB600907398 /* PersistenceService.swift in Sources */,
 				B175D2212F310AB600907398 /* SoundStore.swift in Sources */,
 				B175D2222F310AB600907398 /* PlatformColor.swift in Sources */,
 				B175D2252F310AB600907398 /* OptionsView.swift in Sources */,
@@ -495,20 +474,14 @@
 				B175D2272F310AB600907398 /* L10n.swift in Sources */,
 				B175D2282F310AB600907398 /* VisualEffectBackground.swift in Sources */,
 				B175D2292F310AB600907398 /* MediaKeyHandler.swift in Sources */,
-				B175D22D2F310AB600907398 /* Preset.swift in Sources */,
 				B175D22E2F310AB600907398 /* SidebarView.swift in Sources */,
-				B175D2302F310AB600907398 /* SoundIcons.swift in Sources */,
-				B175D2312F310AB600907398 /* Mix.swift in Sources */,
-				B175D2322F310AB600907398 /* MixesData.swift in Sources */,
 				B175D2332F310AB600907398 /* MixCategoryView.swift in Sources */,
 				B175D2342F310AB600907398 /* Color+Hex.swift in Sources */,
-				B175D2352F310AB600907398 /* TimerItem.swift in Sources */,
 				B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */,
 				B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */,
 				B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */,
 				B175D2382F310AB600907398 /* LanguageManager.swift in Sources */,
 				B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */,
-				B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */,
 				B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */,
 				B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */,
 				B175D2412F310AB600907398 /* UpdateWindowPresenter.swift in Sources */,
@@ -541,7 +514,6 @@
 				B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */,
 				B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */,
 				640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */,
-				B4F0C5A869A16635A0FC61D0 /* PreferencesCodec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,17 +521,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E09C0A791DD63426CB415DD5 /* CatalogTests.swift in Sources */,
-				38401AF3B0B876C2B93E7DED /* TimerItem.swift in Sources */,
-				90D270CC13B5C986C050C7C5 /* Preset.swift in Sources */,
-				69B1F47C34E9A7144B65605D /* Mix.swift in Sources */,
-				B2803875CAAF2DDD4DE30066 /* ExportedPreferences.swift in Sources */,
-				3154E5BE18078A4AA6768511 /* Sound.swift in Sources */,
-				8203A35446670C8930498389 /* SoundCategory.swift in Sources */,
-				67107FE4D75FC51DEC046D7F /* SoundStateItem.swift in Sources */,
-				326C196DCDF3564C071040A5 /* SoundIcons.swift in Sources */,
-				48E638698DAE2D7E07287BCE /* SoundsData.swift in Sources */,
-				A730934765860D155616F3B0 /* MixesData.swift in Sources */,
 				0921104FDED78DB3FC3E628D /* StoreTests.swift in Sources */,
 				D48B9EFB34878ED37A4BA64C /* SoundStore+Timer.swift in Sources */,
 				63BAC95FC311705BE321908B /* SoundStore+Presets.swift in Sources */,
@@ -572,8 +533,6 @@
 				20930FE69DBF11B0CB8C6710 /* EngineAudioBackend.swift in Sources */,
 				C90A96F6F53A2F43EFD5DF44 /* AudioPlaybackBackend.swift in Sources */,
 				5B6E6C72EFD4A80CE293A613 /* AudioService.swift in Sources */,
-				68D13EDB92C5487CB577F230 /* PersistenceService.swift in Sources */,
-				14925AE3F477EA1B051CAF45 /* PreferencesCodec.swift in Sources */,
 				7F30B879BB7E06DC1B25CE7A /* L10n.swift in Sources */,
 				C110EA289E829A22D297531F /* LanguageManager.swift in Sources */,
 				163EDC2A9CF0F5FBDDC42769 /* AppNotifications.swift in Sources */,
@@ -755,7 +714,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.3.0;
 				NSPrincipalClass = NSApplication;
-				ONLY_ACTIVE_ARCH = NO;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
 				PRODUCT_NAME = MoodistMac;
 				SDKROOT = macosx;
@@ -843,6 +802,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MoodistKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -855,6 +821,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		1BEBDDE7D7B0503B8B9C25EE /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
+		8BAA6BEF23F0AD094A671FE0 /* MoodistKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C5EEBDE854504746C5BA9A /* XCLocalSwiftPackageReference "MoodistKit" */;
+			productName = MoodistKit;
+		};
 		B20000000000000100000002 /* Sparkle */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B20000000000000100000001 /* XCRemoteSwiftPackageReference "Sparkle" */;

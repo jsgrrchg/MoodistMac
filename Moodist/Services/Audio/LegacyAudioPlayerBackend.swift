@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  LegacyAudioPlayerBackend.swift
 //  MoodistMac

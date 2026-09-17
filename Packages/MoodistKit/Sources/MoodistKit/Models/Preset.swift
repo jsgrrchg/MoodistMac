@@ -7,16 +7,16 @@
 
 import Foundation
 
-struct Preset: Identifiable, Codable, Equatable {
-    let id: String
-    var name: String
-    var iconName: String
+public struct Preset: Identifiable, Codable, Equatable {
+    public let id: String
+    public var name: String
+    public var iconName: String
     /// Ordered sound IDs.
-    var soundIds: [String]
+    public var soundIds: [String]
     /// Volume by soundId. Missing values default to 0.5.
-    var volumes: [String: Double]
+    public var volumes: [String: Double]
 
-    init(
+    public init(
         id: String = UUID().uuidString, name: String, iconName: String = "sparkles",
         soundIds: [String], volumes: [String: Double] = [:]
     ) {
@@ -35,7 +35,7 @@ struct Preset: Identifiable, Codable, Equatable {
         case volumes
     }
     // Custom coding preserves default values and compatibility with older versions.
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         name = try container.decode(String.self, forKey: .name)
@@ -44,7 +44,7 @@ struct Preset: Identifiable, Codable, Equatable {
         volumes = (try? container.decodeIfPresent([String: Double].self, forKey: .volumes)) ?? [:]
     }
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(name, forKey: .name)
@@ -53,12 +53,12 @@ struct Preset: Identifiable, Codable, Equatable {
         try container.encode(volumes, forKey: .volumes)
     }
 
-    func volume(for soundId: String) -> Double {
+    public func volume(for soundId: String) -> Double {
         volumes[soundId] ?? 0.5
     }
 
     /// Converts the preset to a Mix for display in the Custom section of Mixes.
-    func toMix() -> Mix {
+    public func toMix() -> Mix {
         Mix(id: id, name: name, iconName: iconName, soundIds: soundIds, volumes: volumes)
     }
 }

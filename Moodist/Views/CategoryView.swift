@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  CategoryView.swift
 //  MoodistMac

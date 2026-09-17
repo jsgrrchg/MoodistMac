@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  AudioService.swift
 //  MoodistMac

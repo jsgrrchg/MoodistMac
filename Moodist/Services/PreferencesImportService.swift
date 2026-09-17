@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  PreferencesImportService.swift
 //  MoodistMac

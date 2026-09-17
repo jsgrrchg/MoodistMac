@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  LanguageManager.swift
 //  MoodistMac

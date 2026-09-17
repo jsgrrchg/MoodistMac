@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  FloatingPlayerPanelView.swift
 //  MoodistMac

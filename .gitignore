@@ -35,3 +35,7 @@ xcuserdata/
 .PERSONAL/
 CLAUDE.md
 AGENTS.md
+
+# Swift package build products
+.build/
+.swiftpm/

@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct Sound: Identifiable, Hashable {
-    let id: String
-    let label: String
+public struct Sound: Identifiable, Hashable {
+    public let id: String
+    public let label: String
     /// File name, for example "river.mp3".
-    let fileName: String
+    public let fileName: String
     /// Bundle subfolder, for example "nature".
-    let categoryFolder: String
+    public let categoryFolder: String
     /// SF Symbol name for the icon.
-    let iconName: String
+    public let iconName: String
 
-    init(id: String, label: String, fileName: String, categoryFolder: String, iconName: String) {
+    public init(id: String, label: String, fileName: String, categoryFolder: String, iconName: String) {
         self.id = id
         self.label = label
         self.fileName = fileName

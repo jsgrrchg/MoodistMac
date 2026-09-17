@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  UpdateWindowPresenter.swift
 //  MoodistMac

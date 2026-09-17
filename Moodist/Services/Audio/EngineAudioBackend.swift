@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  EngineAudioBackend.swift
 //  MoodistMac

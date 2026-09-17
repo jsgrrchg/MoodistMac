@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  MoodistApp.swift
 //  MoodistMac

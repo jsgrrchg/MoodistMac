@@ -7,8 +7,8 @@
 
 import Foundation
 
-enum SoundsData {
-    static let categories: [SoundCategory] = [
+public enum SoundsData {
+    public static let categories: [SoundCategory] = [
         nature,
         rain,
         animals,
@@ -22,10 +22,10 @@ enum SoundsData {
     ]
 
     /// Static dictionary for O(1) sound lookup by ID, avoiding duplication in views.
-    static let allSoundsById: [String: Sound] = Dictionary(uniqueKeysWithValues: categories.flatMap(\.sounds).map { ($0.id, $0) })
+    public static let allSoundsById: [String: Sound] = Dictionary(uniqueKeysWithValues: categories.flatMap(\.sounds).map { ($0.id, $0) })
 
     // MARK: - Nature
-    static let nature = SoundCategory(
+    public static let nature = SoundCategory(
         id: "nature",
         title: "Nature",
         iconName: SoundIcons.leafFill,
@@ -50,7 +50,7 @@ enum SoundsData {
     )
 
     // MARK: - Rain
-    static let rain = SoundCategory(
+    public static let rain = SoundCategory(
         id: "rain",
         title: "Rain",
         iconName: SoundIcons.cloudRainFill,
@@ -67,7 +67,7 @@ enum SoundsData {
     )
 
     // MARK: - Animals
-    static let animals = SoundCategory(
+    public static let animals = SoundCategory(
         id: "animals",
         title: "Animals",
         iconName: SoundIcons.pawprintFill,
@@ -103,7 +103,7 @@ enum SoundsData {
     )
 
     // MARK: - Urban
-    static let urban = SoundCategory(
+    public static let urban = SoundCategory(
         id: "urban",
         title: "Urban",
         iconName: SoundIcons.building2Fill,
@@ -119,7 +119,7 @@ enum SoundsData {
     )
 
     // MARK: - Military
-    static let military = SoundCategory(
+    public static let military = SoundCategory(
         id: "military",
         title: "Military",
         iconName: SoundIcons.shieldFill,
@@ -138,7 +138,7 @@ enum SoundsData {
     )
 
     // MARK: - Places
-    static let places = SoundCategory(
+    public static let places = SoundCategory(
         id: "places",
         title: "Places",
         iconName: SoundIcons.mappinCircleFill,
@@ -167,7 +167,7 @@ enum SoundsData {
     )
 
     // MARK: - Transport
-    static let transport = SoundCategory(
+    public static let transport = SoundCategory(
         id: "transport",
         title: "Transport",
         iconName: SoundIcons.carFill,
@@ -186,7 +186,7 @@ enum SoundsData {
     )
 
     // MARK: - Things
-    static let things = SoundCategory(
+    public static let things = SoundCategory(
         id: "things",
         title: "Things",
         iconName: SoundIcons.cubeFill,
@@ -218,7 +218,7 @@ enum SoundsData {
     )
 
     // MARK: - Noise
-    static let noise = SoundCategory(
+    public static let noise = SoundCategory(
         id: "noise",
         title: "Noise",
         iconName: SoundIcons.waveform,
@@ -232,7 +232,7 @@ enum SoundsData {
     )
 
     // MARK: - Binaural (waveform.circle distinguishes it from noise)
-    static let binaural = SoundCategory(
+    public static let binaural = SoundCategory(
         id: "binaural",
         title: "Binaural",
         iconName: SoundIcons.waveformCircleFill,

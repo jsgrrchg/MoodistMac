@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  ContentView.swift
 //  MoodistMac

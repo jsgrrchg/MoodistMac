@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  OptionsView.swift
 //  MoodistMac

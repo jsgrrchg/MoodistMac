@@ -9,8 +9,8 @@ import Foundation
 
 private func v(_ pct: Int) -> Double { Double(pct) / 100 }
 
-enum MixesData {
-    static let categories: [MixCategory] = [
+public enum MixesData {
+    public static let categories: [MixCategory] = [
         custom,
         natureRelaxation,
         walking,
@@ -24,10 +24,10 @@ enum MixesData {
         military
     ]
 
-    static let allMixesById: [String: Mix] = Dictionary(uniqueKeysWithValues: categories.flatMap(\.mixes).map { ($0.id, $0) })
+    public static let allMixesById: [String: Mix] = Dictionary(uniqueKeysWithValues: categories.flatMap(\.mixes).map { ($0.id, $0) })
 
     // MARK: - Custom
-    static let custom = MixCategory(
+    public static let custom = MixCategory(
         id: "custom",
         title: "Custom Mixes",
         iconName: "square.and.pencil",
@@ -35,7 +35,7 @@ enum MixesData {
     )
 
     // MARK: - Nature & Relaxation
-    static let natureRelaxation = MixCategory(
+    public static let natureRelaxation = MixCategory(
         id: "nature-relaxation",
         title: "Nature & Relaxation",
         iconName: "leaf.fill",
@@ -58,7 +58,7 @@ enum MixesData {
     )
 
     // MARK: - Walking
-    static let walking = MixCategory(
+    public static let walking = MixCategory(
         id: "walking",
         title: "Walking",
         iconName: "figure.walk",
@@ -71,7 +71,7 @@ enum MixesData {
     )
 
     // MARK: - Sea & Coast
-    static let seaCoast = MixCategory(
+    public static let seaCoast = MixCategory(
         id: "sea-coast",
         title: "Sea & Coast",
         iconName: "sun.max.fill",
@@ -91,7 +91,7 @@ enum MixesData {
     )
 
     // MARK: - Forest, Fire & Night
-    static let forestFireNight = MixCategory(
+    public static let forestFireNight = MixCategory(
         id: "forest-fire-night",
         title: "Forest, Fire & Night",
         iconName: "flame.fill",
@@ -112,7 +112,7 @@ enum MixesData {
     )
 
     // MARK: - Rain & Storm
-    static let rainStorm = MixCategory(
+    public static let rainStorm = MixCategory(
         id: "rain-storm",
         title: "Rain & Storm",
         iconName: "cloud.rain.fill",
@@ -133,7 +133,7 @@ enum MixesData {
     )
 
     // MARK: - Focus & Study
-    static let focusStudy = MixCategory(
+    public static let focusStudy = MixCategory(
         id: "focus-study",
         title: "Focus & Study",
         iconName: "book.fill",
@@ -152,7 +152,7 @@ enum MixesData {
     )
 
     // MARK: - Travel & Motion
-    static let travelMotion = MixCategory(
+    public static let travelMotion = MixCategory(
         id: "travel-motion",
         title: "Travel & Motion",
         iconName: "tram.fill",
@@ -186,7 +186,7 @@ enum MixesData {
     )
 
     // MARK: - Sleep & Noise
-    static let sleepNoise = MixCategory(
+    public static let sleepNoise = MixCategory(
         id: "sleep-noise",
         title: "Sleep & Noise",
         iconName: "moon.zzz.fill",
@@ -205,7 +205,7 @@ enum MixesData {
     )
 
     // MARK: - Places & Ambience
-    static let placesAmbience = MixCategory(
+    public static let placesAmbience = MixCategory(
         id: "places-ambience",
         title: "Places & Ambience",
         iconName: "mappin.circle.fill",
@@ -225,7 +225,7 @@ enum MixesData {
     )
 
     // MARK: - Military
-    static let military = MixCategory(
+    public static let military = MixCategory(
         id: "military",
         title: "Military",
         iconName: "shield.fill",

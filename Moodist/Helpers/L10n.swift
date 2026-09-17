@@ -1,3 +1,4 @@
+import MoodistKit
 //
 //  L10n.swift
 //  MoodistMac

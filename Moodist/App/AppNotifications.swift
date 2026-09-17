@@ -1,3 +1,4 @@
+import MoodistKit
 import Foundation
 
 extension Notification.Name {

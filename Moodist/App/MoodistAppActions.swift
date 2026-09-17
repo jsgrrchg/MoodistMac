@@ -1,3 +1,4 @@
+import MoodistKit
 import AppKit
 
 enum MoodistAppActions {
