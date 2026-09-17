@@ -35,6 +35,8 @@ struct PlayerView: View {
                     Label(L10n.timer, systemImage: "moon.zzz")
                 }
                 if store.hasActiveTimer { TimerStatusView() }
+                NavigationLink { AutoMixView() } label: { Label(T("auto_mix", "Automatic mixes"), systemImage: "shuffle") }
+                if store.hasActiveAutoMixTimer { AutoMixStatusView() }
             }
             Section(L10n.currentlyPlaying) {
                 if !store.hasSelection {

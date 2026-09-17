@@ -26,6 +26,7 @@
 		A69849D902734385C33E4E48 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */; };
 		A7C61F445439798261F410DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
+		A98064D6018143941D690D8D /* AutoMixView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640A927C531949DFBF37F0E8 /* AutoMixView.swift */; };
 		ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */; };
 		AD32FA639FB8DDFB23E36BC9 /* IOSAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C86C051A3713055BCAC087 /* IOSAppModel.swift */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
@@ -105,6 +106,7 @@
 		5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesCodec.swift; path = Moodist/Services/PreferencesCodec.swift; sourceTree = "<group>"; };
 		6051A4E796C4E1D39BABCF4D /* AudioRoutePicker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioRoutePicker.swift; path = MoodistIOS/Platform/AudioRoutePicker.swift; sourceTree = "<group>"; };
 		63C4095EE31C5A2F91E2DF0D /* PlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlayerView.swift; path = MoodistIOS/Views/PlayerView.swift; sourceTree = "<group>"; };
+		640A927C531949DFBF37F0E8 /* AutoMixView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AutoMixView.swift; path = MoodistIOS/Views/AutoMixView.swift; sourceTree = "<group>"; };
 		64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioSessionTests.swift; path = MoodistIOSTests/AudioSessionTests.swift; sourceTree = "<group>"; };
 		90C86C051A3713055BCAC087 /* IOSAppModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAppModel.swift; path = MoodistIOS/App/IOSAppModel.swift; sourceTree = "<group>"; };
 		94387A343E4D5901D1C1E1E5 /* SleepNotificationController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SleepNotificationController.swift; path = MoodistIOS/Platform/SleepNotificationController.swift; sourceTree = "<group>"; };
@@ -284,6 +286,7 @@
 				D3239C3ECBF061F70D3FCEB3 /* LibraryView.swift */,
 				45CABBE434A9A1DC785D91BE /* CustomMixEditor.swift */,
 				203330A592D4C63A8F14A402 /* SleepTimerView.swift */,
+				640A927C531949DFBF37F0E8 /* AutoMixView.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -608,6 +611,7 @@
 				D5B0E12BEA33A67CA75FB642 /* LibraryView.swift in Sources */,
 				8E79279326B2DCA374AB2549 /* CustomMixEditor.swift in Sources */,
 				257CEDB556E8CED5195BD0F7 /* SleepTimerView.swift in Sources */,
+				A98064D6018143941D690D8D /* AutoMixView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
