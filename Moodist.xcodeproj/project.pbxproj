@@ -7,6 +7,16 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3154E5BE18078A4AA6768511 /* Sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000005 /* Sound.swift */; };
+		326C196DCDF3564C071040A5 /* SoundIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000019 /* SoundIcons.swift */; };
+		38401AF3B0B876C2B93E7DED /* TimerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001E /* TimerItem.swift */; };
+		48E638698DAE2D7E07287BCE /* SoundsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000008 /* SoundsData.swift */; };
+		67107FE4D75FC51DEC046D7F /* SoundStateItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000007 /* SoundStateItem.swift */; };
+		69B1F47C34E9A7144B65605D /* Mix.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001A /* Mix.swift */; };
+		8203A35446670C8930498389 /* SoundCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000006 /* SoundCategory.swift */; };
+		90D270CC13B5C986C050C7C5 /* Preset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000016 /* Preset.swift */; };
+		A730934765860D155616F3B0 /* MixesData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001B /* MixesData.swift */; };
+		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
 		B175D2182F310AB600907398 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000002 /* ContentView.swift */; };
 		B175D2192F310AB600907398 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000003 /* CategoryView.swift */; };
@@ -21,7 +31,6 @@
 		B175D2222F310AB600907398 /* PlatformColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000C /* PlatformColor.swift */; };
 		B175D2232F310AB600907398 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000D /* Assets.xcassets */; };
 		B175D2242F310AB600907398 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000E /* sounds */; };
-		C10000000000000100000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000004 /* Localizable.strings */; };
 		B175D2252F310AB600907398 /* OptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000000F /* OptionsView.swift */; };
 		B175D2262F310AB600907398 /* MoodistTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000010 /* MoodistTheme.swift */; };
 		B175D2272F310AB600907398 /* L10n.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000011 /* L10n.swift */; };
@@ -37,12 +46,12 @@
 		B175D2352F310AB600907398 /* TimerItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001E /* TimerItem.swift */; };
 		B175D2362F310AB600907398 /* TimerNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000001F /* TimerNotificationManager.swift */; };
 		B175D2372F310AB600907398 /* FloatingPlayerPanelView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000020 /* FloatingPlayerPanelView.swift */; };
-		B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000033 /* MarqueeTextView.swift */; };
 		B175D2382F310AB600907398 /* LanguageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000021 /* LanguageManager.swift */; };
 		B175D2392F310AB600907398 /* AccentColorChoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000022 /* AccentColorChoice.swift */; };
 		B175D23A2F310AB600907398 /* ExportedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000023 /* ExportedPreferences.swift */; };
 		B175D23B2F310AB600907398 /* PreferencesExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000024 /* PreferencesExportService.swift */; };
 		B175D23C2F310AB600907398 /* PreferencesImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000025 /* PreferencesImportService.swift */; };
+		B175D2402F310AB600907398 /* MarqueeTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000033 /* MarqueeTextView.swift */; };
 		B175D2412F310AB600907398 /* UpdateWindowPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000034 /* UpdateWindowPresenter.swift */; };
 		B175D2422F310AB600907398 /* UpdateWindowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000035 /* UpdateWindowView.swift */; };
 		B175D2432F310AB600907398 /* TimerSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000036 /* TimerSetupView.swift */; };
@@ -50,32 +59,37 @@
 		B175D2452F310AB600907398 /* ContentSections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000038 /* ContentSections.swift */; };
 		B175D2462F310AB600907398 /* ToolbarBridges.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000039 /* ToolbarBridges.swift */; };
 		B175D2472F310AB600907398 /* ContentToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003A /* ContentToolbar.swift */; };
-			B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003B /* ScrollStateStore.swift */; };
-			B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003C /* SidebarLayout.swift */; };
-			B175D24A2F310AB600907398 /* MixIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003D /* MixIcon.swift */; };
-			B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003E /* MoodistCommands.swift */; };
-			B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003F /* MoodistAppActions.swift */; };
-			B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000040 /* SwiftUI+AppAccent.swift */; };
-			B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000041 /* SparkleIntegration.swift */; };
-			B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
-			B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000043 /* MacOSAppDelegate.swift */; };
-			B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000044 /* AppWindowCoordinator.swift */; };
-			B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000045 /* AppDockCoordinator.swift */; };
-			B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000046 /* AppMenuBarCoordinator.swift */; };
-			B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000047 /* AppTimerCoordinator.swift */; };
-			B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000048 /* SoundStore+Playback.swift */; };
-			B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000049 /* SoundStore+Timer.swift */; };
-			B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004A /* SoundStore+Presets.swift */; };
+		B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003B /* ScrollStateStore.swift */; };
+		B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003C /* SidebarLayout.swift */; };
+		B175D24A2F310AB600907398 /* MixIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003D /* MixIcon.swift */; };
+		B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003E /* MoodistCommands.swift */; };
+		B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000003F /* MoodistAppActions.swift */; };
+		B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000040 /* SwiftUI+AppAccent.swift */; };
+		B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000041 /* SparkleIntegration.swift */; };
+		B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000042 /* AppNotifications.swift */; };
+		B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000043 /* MacOSAppDelegate.swift */; };
+		B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000044 /* AppWindowCoordinator.swift */; };
+		B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000045 /* AppDockCoordinator.swift */; };
+		B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000046 /* AppMenuBarCoordinator.swift */; };
+		B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000047 /* AppTimerCoordinator.swift */; };
+		B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000048 /* SoundStore+Playback.swift */; };
+		B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000049 /* SoundStore+Timer.swift */; };
+		B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004A /* SoundStore+Presets.swift */; };
 		B175D2582F310AB600907398 /* SoundStore+RecentsFavorites.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */; };
 		B175D2592F310AB600907398 /* SoundStore+Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004C /* SoundStore+Persistence.swift */; };
 		B175D2602F310AB600907398 /* AudioPlaybackBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004D /* AudioPlaybackBackend.swift */; };
 		B175D2612F310AB600907398 /* LegacyAudioPlayerBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */; };
 		B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2000000000000010000004F /* EngineAudioBackend.swift */; };
 		B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000050 /* AudioSpatialTypes.swift */; };
-			B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
+		B20000000000000100000003 /* Sparkle in Frameworks */ = {isa = PBXBuildFile; productRef = B20000000000000100000002 /* Sparkle */; };
+		B2803875CAAF2DDD4DE30066 /* ExportedPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000023 /* ExportedPreferences.swift */; };
+		C10000000000000100000001 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C10000000000000100000004 /* Localizable.strings */; };
+		E09C0A791DD63426CB415DD5 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01492C0D51934629A2D23700 /* CatalogTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01492C0D51934629A2D23700 /* CatalogTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CatalogTests.swift; path = MoodistMacTests/CatalogTests.swift; sourceTree = "<group>"; };
+		0D83F535D744EF2735742912 /* MoodistMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A20000000000000100000001 /* MoodistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		A20000000000000100000003 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
@@ -105,12 +119,13 @@
 		A2000000000000010000001E /* TimerItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerItem.swift; sourceTree = "<group>"; };
 		A2000000000000010000001F /* TimerNotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerNotificationManager.swift; sourceTree = "<group>"; };
 		A20000000000000100000020 /* FloatingPlayerPanelView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPlayerPanelView.swift; sourceTree = "<group>"; };
-		A20000000000000100000033 /* MarqueeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeTextView.swift; sourceTree = "<group>"; };
 		A20000000000000100000021 /* LanguageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageManager.swift; sourceTree = "<group>"; };
 		A20000000000000100000022 /* AccentColorChoice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccentColorChoice.swift; sourceTree = "<group>"; };
 		A20000000000000100000023 /* ExportedPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportedPreferences.swift; sourceTree = "<group>"; };
 		A20000000000000100000024 /* PreferencesExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesExportService.swift; sourceTree = "<group>"; };
 		A20000000000000100000025 /* PreferencesImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesImportService.swift; sourceTree = "<group>"; };
+		A20000000000000100000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A20000000000000100000033 /* MarqueeTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarqueeTextView.swift; sourceTree = "<group>"; };
 		A20000000000000100000034 /* UpdateWindowPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWindowPresenter.swift; sourceTree = "<group>"; };
 		A20000000000000100000035 /* UpdateWindowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateWindowView.swift; sourceTree = "<group>"; };
 		A20000000000000100000036 /* TimerSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerSetupView.swift; sourceTree = "<group>"; };
@@ -118,36 +133,44 @@
 		A20000000000000100000038 /* ContentSections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Content/ContentSections.swift; sourceTree = "<group>"; };
 		A20000000000000100000039 /* ToolbarBridges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar/ToolbarBridges.swift; sourceTree = "<group>"; };
 		A2000000000000010000003A /* ContentToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar/ContentToolbar.swift; sourceTree = "<group>"; };
-			A2000000000000010000003B /* ScrollStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollStateStore.swift; sourceTree = "<group>"; };
-			A2000000000000010000003C /* SidebarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLayout.swift; sourceTree = "<group>"; };
-			A2000000000000010000003D /* MixIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixIcon.swift; sourceTree = "<group>"; };
-			A2000000000000010000003E /* MoodistCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistCommands.swift; sourceTree = "<group>"; };
-			A2000000000000010000003F /* MoodistAppActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistAppActions.swift; sourceTree = "<group>"; };
-			A20000000000000100000040 /* SwiftUI+AppAccent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI+AppAccent.swift"; sourceTree = "<group>"; };
-			A20000000000000100000041 /* SparkleIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleIntegration.swift; sourceTree = "<group>"; };
-			A20000000000000100000042 /* AppNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotifications.swift; sourceTree = "<group>"; };
-			A20000000000000100000043 /* MacOSAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSAppDelegate.swift; sourceTree = "<group>"; };
-			A20000000000000100000044 /* AppWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWindowCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000045 /* AppDockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDockCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000046 /* AppMenuBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenuBarCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000047 /* AppTimerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTimerCoordinator.swift; sourceTree = "<group>"; };
-			A20000000000000100000048 /* SoundStore+Playback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Playback.swift"; sourceTree = "<group>"; };
-			A20000000000000100000049 /* SoundStore+Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Timer.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004A /* SoundStore+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Presets.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+RecentsFavorites.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004C /* SoundStore+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Persistence.swift"; sourceTree = "<group>"; };
-			A2000000000000010000004D /* AudioPlaybackBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioPlaybackBackend.swift; sourceTree = "<group>"; };
-			A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/LegacyAudioPlayerBackend.swift; sourceTree = "<group>"; };
+		A2000000000000010000003B /* ScrollStateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollStateStore.swift; sourceTree = "<group>"; };
+		A2000000000000010000003C /* SidebarLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarLayout.swift; sourceTree = "<group>"; };
+		A2000000000000010000003D /* MixIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MixIcon.swift; sourceTree = "<group>"; };
+		A2000000000000010000003E /* MoodistCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistCommands.swift; sourceTree = "<group>"; };
+		A2000000000000010000003F /* MoodistAppActions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistAppActions.swift; sourceTree = "<group>"; };
+		A20000000000000100000040 /* SwiftUI+AppAccent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SwiftUI+AppAccent.swift"; sourceTree = "<group>"; };
+		A20000000000000100000041 /* SparkleIntegration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SparkleIntegration.swift; sourceTree = "<group>"; };
+		A20000000000000100000042 /* AppNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppNotifications.swift; sourceTree = "<group>"; };
+		A20000000000000100000043 /* MacOSAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MacOSAppDelegate.swift; sourceTree = "<group>"; };
+		A20000000000000100000044 /* AppWindowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppWindowCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000045 /* AppDockCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDockCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000046 /* AppMenuBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppMenuBarCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000047 /* AppTimerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTimerCoordinator.swift; sourceTree = "<group>"; };
+		A20000000000000100000048 /* SoundStore+Playback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Playback.swift"; sourceTree = "<group>"; };
+		A20000000000000100000049 /* SoundStore+Timer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Timer.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004A /* SoundStore+Presets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Presets.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+RecentsFavorites.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004C /* SoundStore+Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SoundStore+Persistence.swift"; sourceTree = "<group>"; };
+		A2000000000000010000004D /* AudioPlaybackBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioPlaybackBackend.swift; sourceTree = "<group>"; };
+		A2000000000000010000004E /* LegacyAudioPlayerBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/LegacyAudioPlayerBackend.swift; sourceTree = "<group>"; };
 		A2000000000000010000004F /* EngineAudioBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/EngineAudioBackend.swift; sourceTree = "<group>"; };
 		A20000000000000100000050 /* AudioSpatialTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Audio/AudioSpatialTypes.swift; sourceTree = "<group>"; };
-		A20000000000000100000026 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C10000000000000100000002 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000003 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C10000000000000100000005 /* pt-BR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "pt-BR"; path = "pt-BR.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		B175D22B2F310AB600907398 /* MoodistMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MoodistMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F6559F2DC5AEBCA767A042BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		81EE41A30F52EEE8F9E09DB1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A40000000000000100000002 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -159,23 +182,41 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1CB7D13CD71B5D0062830276 /* OS X */ = {
+			isa = PBXGroup;
+			children = (
+				F6559F2DC5AEBCA767A042BC /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		3E871DC2193D54A6141251C6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1CB7D13CD71B5D0062830276 /* OS X */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A50000000000000100000001 = {
 			isa = PBXGroup;
 			children = (
 				A50000000000000100000002 /* Moodist */,
 				A50000000000000100000003 /* Products */,
+				3E871DC2193D54A6141251C6 /* Frameworks */,
+				01492C0D51934629A2D23700 /* CatalogTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
-			A50000000000000100000002 /* Moodist */ = {
-				isa = PBXGroup;
-				children = (
-					A20000000000000100000001 /* MoodistApp.swift */,
-					A5000000000000010000000A /* App */,
-					A50000000000000100000004 /* Views */,
-					A50000000000000100000005 /* Models */,
-					A50000000000000100000006 /* Data */,
-					A50000000000000100000007 /* Services */,
+		A50000000000000100000002 /* Moodist */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000100000001 /* MoodistApp.swift */,
+				A5000000000000010000000A /* App */,
+				A50000000000000100000004 /* Views */,
+				A50000000000000100000005 /* Models */,
+				A50000000000000100000006 /* Data */,
+				A50000000000000100000007 /* Services */,
 				A50000000000000100000008 /* Store */,
 				A50000000000000100000009 /* Helpers */,
 				C10000000000000100000004 /* Localizable.strings */,
@@ -190,6 +231,7 @@
 			isa = PBXGroup;
 			children = (
 				B175D22B2F310AB600907398 /* MoodistMac.app */,
+				0D83F535D744EF2735742912 /* MoodistMacTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -257,24 +299,24 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-			A50000000000000100000008 /* Store */ = {
-				isa = PBXGroup;
-				children = (
-					A2000000000000010000000B /* SoundStore.swift */,
-					A2000000000000010000003B /* ScrollStateStore.swift */,
-					A20000000000000100000048 /* SoundStore+Playback.swift */,
-					A20000000000000100000049 /* SoundStore+Timer.swift */,
-					A2000000000000010000004A /* SoundStore+Presets.swift */,
-					A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */,
-					A2000000000000010000004C /* SoundStore+Persistence.swift */,
-				);
-				path = Store;
-				sourceTree = "<group>";
-			};
-			A50000000000000100000009 /* Helpers */ = {
-				isa = PBXGroup;
-				children = (
-					A2000000000000010000000C /* PlatformColor.swift */,
+		A50000000000000100000008 /* Store */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000010000000B /* SoundStore.swift */,
+				A2000000000000010000003B /* ScrollStateStore.swift */,
+				A20000000000000100000048 /* SoundStore+Playback.swift */,
+				A20000000000000100000049 /* SoundStore+Timer.swift */,
+				A2000000000000010000004A /* SoundStore+Presets.swift */,
+				A2000000000000010000004B /* SoundStore+RecentsFavorites.swift */,
+				A2000000000000010000004C /* SoundStore+Persistence.swift */,
+			);
+			path = Store;
+			sourceTree = "<group>";
+		};
+		A50000000000000100000009 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000010000000C /* PlatformColor.swift */,
 				A20000000000000100000010 /* MoodistTheme.swift */,
 				A20000000000000100000011 /* L10n.swift */,
 				A20000000000000100000012 /* VisualEffectBackground.swift */,
@@ -284,34 +326,34 @@
 				A20000000000000100000022 /* AccentColorChoice.swift */,
 				A20000000000000100000021 /* LanguageManager.swift */,
 			);
-				path = Helpers;
-				sourceTree = "<group>";
-			};
-			A5000000000000010000000A /* App */ = {
-				isa = PBXGroup;
-				children = (
-					A2000000000000010000003E /* MoodistCommands.swift */,
-					A2000000000000010000003F /* MoodistAppActions.swift */,
-					A20000000000000100000040 /* SwiftUI+AppAccent.swift */,
-					A20000000000000100000041 /* SparkleIntegration.swift */,
-					A20000000000000100000042 /* AppNotifications.swift */,
-					A20000000000000100000043 /* MacOSAppDelegate.swift */,
-					A5000000000000010000000B /* Coordinators */,
-				);
-				path = App;
-				sourceTree = "<group>";
-			};
-			A5000000000000010000000B /* Coordinators */ = {
-				isa = PBXGroup;
-				children = (
-					A20000000000000100000044 /* AppWindowCoordinator.swift */,
-					A20000000000000100000045 /* AppDockCoordinator.swift */,
-					A20000000000000100000046 /* AppMenuBarCoordinator.swift */,
-					A20000000000000100000047 /* AppTimerCoordinator.swift */,
-				);
-				path = Coordinators;
-				sourceTree = "<group>";
-			};
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A5000000000000010000000A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A2000000000000010000003E /* MoodistCommands.swift */,
+				A2000000000000010000003F /* MoodistAppActions.swift */,
+				A20000000000000100000040 /* SwiftUI+AppAccent.swift */,
+				A20000000000000100000041 /* SparkleIntegration.swift */,
+				A20000000000000100000042 /* AppNotifications.swift */,
+				A20000000000000100000043 /* MacOSAppDelegate.swift */,
+				A5000000000000010000000B /* Coordinators */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A5000000000000010000000B /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				A20000000000000100000044 /* AppWindowCoordinator.swift */,
+				A20000000000000100000045 /* AppDockCoordinator.swift */,
+				A20000000000000100000046 /* AppMenuBarCoordinator.swift */,
+				A20000000000000100000047 /* AppTimerCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -335,6 +377,23 @@
 			productReference = B175D22B2F310AB600907398 /* MoodistMac.app */;
 			productType = "com.apple.product-type.application";
 		};
+		EC950EE44EC6F33EB3CD8022 /* MoodistMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E4867B92259100B2038B80F /* Build configuration list for PBXNativeTarget "MoodistMacTests" */;
+			buildPhases = (
+				F18A88837E7276C7BC27E9F3 /* Sources */,
+				81EE41A30F52EEE8F9E09DB1 /* Frameworks */,
+				1C93E532DEB517E149A24507 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MoodistMacTests;
+			productName = MoodistMacTests;
+			productReference = 0D83F535D744EF2735742912 /* MoodistMacTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -345,7 +404,7 @@
 				LastSwiftUpdateCheck = 1500;
 				LastUpgradeCheck = 2620;
 			};
-			buildConfigurationList = A80000000000000100000001 /* Build configuration list for PBXProject "MoodistMac" */;
+			buildConfigurationList = A80000000000000100000001 /* Build configuration list for PBXProject "Moodist" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -364,11 +423,19 @@
 			projectRoot = "";
 			targets = (
 				A60000000000000100000002 /* MoodistMac */,
+				EC950EE44EC6F33EB3CD8022 /* MoodistMacTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		1C93E532DEB517E149A24507 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A70000000000000100000004 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -380,19 +447,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		C10000000000000100000004 /* Localizable.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C10000000000000100000002 /* en */,
-				C10000000000000100000003 /* es */,
-				C10000000000000100000005 /* pt-BR */,
-			);
-			name = Localizable.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A70000000000000100000003 /* Sources */ = {
@@ -439,34 +493,78 @@
 				B175D2452F310AB600907398 /* ContentSections.swift in Sources */,
 				B175D2462F310AB600907398 /* ToolbarBridges.swift in Sources */,
 				B175D2472F310AB600907398 /* ContentToolbar.swift in Sources */,
-					B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */,
-					B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */,
-					B175D24A2F310AB600907398 /* MixIcon.swift in Sources */,
-					B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */,
-					B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */,
-					B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */,
-					B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */,
-					B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */,
-					B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */,
-					B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */,
-					B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */,
-					B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */,
-					B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */,
-					B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */,
-					B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */,
-					B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */,
-					B175D2582F310AB600907398 /* SoundStore+RecentsFavorites.swift in Sources */,
-					B175D2592F310AB600907398 /* SoundStore+Persistence.swift in Sources */,
-					B175D2602F310AB600907398 /* AudioPlaybackBackend.swift in Sources */,
-					B175D2612F310AB600907398 /* LegacyAudioPlayerBackend.swift in Sources */,
-					B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */,
-					B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */,
-				);
-				runOnlyForDeploymentPostprocessing = 0;
-			};
+				B175D2482F310AB600907398 /* ScrollStateStore.swift in Sources */,
+				B175D2492F310AB600907398 /* SidebarLayout.swift in Sources */,
+				B175D24A2F310AB600907398 /* MixIcon.swift in Sources */,
+				B175D24B2F310AB600907398 /* MoodistCommands.swift in Sources */,
+				B175D24C2F310AB600907398 /* MoodistAppActions.swift in Sources */,
+				B175D24D2F310AB600907398 /* SwiftUI+AppAccent.swift in Sources */,
+				B175D24E2F310AB600907398 /* SparkleIntegration.swift in Sources */,
+				B175D24F2F310AB600907398 /* AppNotifications.swift in Sources */,
+				B175D2502F310AB600907398 /* MacOSAppDelegate.swift in Sources */,
+				B175D2512F310AB600907398 /* AppWindowCoordinator.swift in Sources */,
+				B175D2522F310AB600907398 /* AppDockCoordinator.swift in Sources */,
+				B175D2532F310AB600907398 /* AppMenuBarCoordinator.swift in Sources */,
+				B175D2542F310AB600907398 /* AppTimerCoordinator.swift in Sources */,
+				B175D2552F310AB600907398 /* SoundStore+Playback.swift in Sources */,
+				B175D2562F310AB600907398 /* SoundStore+Timer.swift in Sources */,
+				B175D2572F310AB600907398 /* SoundStore+Presets.swift in Sources */,
+				B175D2582F310AB600907398 /* SoundStore+RecentsFavorites.swift in Sources */,
+				B175D2592F310AB600907398 /* SoundStore+Persistence.swift in Sources */,
+				B175D2602F310AB600907398 /* AudioPlaybackBackend.swift in Sources */,
+				B175D2612F310AB600907398 /* LegacyAudioPlayerBackend.swift in Sources */,
+				B175D2622F310AB600907398 /* EngineAudioBackend.swift in Sources */,
+				B175D2632F310AB600907398 /* AudioSpatialTypes.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F18A88837E7276C7BC27E9F3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E09C0A791DD63426CB415DD5 /* CatalogTests.swift in Sources */,
+				38401AF3B0B876C2B93E7DED /* TimerItem.swift in Sources */,
+				90D270CC13B5C986C050C7C5 /* Preset.swift in Sources */,
+				69B1F47C34E9A7144B65605D /* Mix.swift in Sources */,
+				B2803875CAAF2DDD4DE30066 /* ExportedPreferences.swift in Sources */,
+				3154E5BE18078A4AA6768511 /* Sound.swift in Sources */,
+				8203A35446670C8930498389 /* SoundCategory.swift in Sources */,
+				67107FE4D75FC51DEC046D7F /* SoundStateItem.swift in Sources */,
+				326C196DCDF3564C071040A5 /* SoundIcons.swift in Sources */,
+				48E638698DAE2D7E07287BCE /* SoundsData.swift in Sources */,
+				A730934765860D155616F3B0 /* MixesData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXVariantGroup section */
+		C10000000000000100000004 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				C10000000000000100000002 /* en */,
+				C10000000000000100000003 /* es */,
+				C10000000000000100000005 /* pt-BR */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
+		6A59977E299BD20A5A8F98EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMacTests;
+				PRODUCT_MODULE_NAME = MoodistMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		AA0000000000000100000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -588,30 +686,30 @@
 			};
 			name = Release;
 		};
-			AA0000000000000100000005 /* Debug */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					ARCHS = "$(ARCHS_STANDARD)";
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
-					CODE_SIGN_STYLE = Automatic;
+		AA0000000000000100000005 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 14;
-			DEAD_CODE_STRIPPING = YES;
-			DEVELOPMENT_TEAM = 9WD82WQ56W;
-			DEVELOPMENT_ASSET_PATHS = "";
-			ENABLE_HARDENED_RUNTIME = YES;
-			ENABLE_PREVIEWS = YES;
-			GENERATE_INFOPLIST_FILE = YES;
-			INFOPLIST_FILE = Moodist/Info.plist;
-			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-			LD_RUNPATH_SEARCH_PATHS = (
-				"$(inherited)",
-				"@executable_path/../Frameworks",
-			);
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Moodist/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.3.0";
+				MARKETING_VERSION = 1.3.0;
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
@@ -619,33 +717,33 @@
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
 		};
-		name = Debug;
-		};
-			AA0000000000000100000006 /* Release */ = {
-				isa = XCBuildConfiguration;
-				buildSettings = {
-					ARCHS = "$(ARCHS_STANDARD)";
-					ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-					ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-					CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
-					CODE_SIGN_STYLE = Automatic;
+		AA0000000000000100000006 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Moodist/MoodistMac.entitlements;
+				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 14;
-			DEAD_CODE_STRIPPING = YES;
-			DEVELOPMENT_TEAM = 9WD82WQ56W;
-			DEVELOPMENT_ASSET_PATHS = "";
-			ENABLE_HARDENED_RUNTIME = YES;
-			ENABLE_PREVIEWS = YES;
-			GENERATE_INFOPLIST_FILE = YES;
-			INFOPLIST_FILE = Moodist/Info.plist;
-			INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
-			LD_RUNPATH_SEARCH_PATHS = (
-				"$(inherited)",
-				"@executable_path/../Frameworks",
-			);
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "";
+				DEVELOPMENT_TEAM = 9WD82WQ56W;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Moodist/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.music";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
-						MARKETING_VERSION = "1.3.0";
+				MARKETING_VERSION = 1.3.0;
 				NSPrincipalClass = NSApplication;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMac;
@@ -653,13 +751,35 @@
 				SDKROOT = macosx;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
 		};
-		name = Release;
+		C6D117844F838856F4EED3A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.josegurruchaga.MoodistMacTests;
+				PRODUCT_MODULE_NAME = MoodistMacTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A80000000000000100000001 /* Build configuration list for PBXProject "MoodistMac" */ = {
+		9E4867B92259100B2038B80F /* Build configuration list for PBXNativeTarget "MoodistMacTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6A59977E299BD20A5A8F98EB /* Release */,
+				C6D117844F838856F4EED3A6 /* Debug */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A80000000000000100000001 /* Build configuration list for PBXProject "Moodist" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AA0000000000000100000001 /* Debug */,

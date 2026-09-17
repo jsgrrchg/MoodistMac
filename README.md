@@ -31,11 +31,11 @@ Inspired by the original Moodist web app [remvze/moodist](https://github.com/rem
 
 ### Sounds and mixes
 - **131 sounds** in 10 categories: Nature, Rain, Animals, Urban, Places, Transport, Things, Noise, Binaural, and Military
-- **126 curated mixes** in 11 categories: Nature & Relaxation, Walking, Sea & Coast, Forest Fire & Night, Rain & Storm, Focus & Study, Travel & Motion, Sleep & Noise, Places & Ambience, Military, and Custom Mixes
+- **123 curated mixes** in 11 categories: Nature & Relaxation, Walking, Sea & Coast, Forest Fire & Night, Rain & Storm, Focus & Study, Travel & Motion, Sleep & Noise, Places & Ambience, Military, and Custom Mixes
 - **Collapse / Expand all** — one-tap button to collapse or expand all sound or mix categories in the list
 - **Custom mixes and presets** — create combinations, save them as presets (with icon selector), and recall them anytime
 - **Favorites** — star sounds and mixes for quick access from the sidebar and menu; reorder favorites by drag and drop
-- **Recent** — sidebar shows recent mixes and recent sounds (each configurable between 10 and 15)
+- **Recent** — sidebar shows recent mixes and recent sounds (each configurable between 5 and 15)
 
 ### Playback and control
 - **Global and per-sound volume** — master volume plus individual sliders for each active sound
