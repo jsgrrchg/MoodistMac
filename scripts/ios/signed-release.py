@@ -20,19 +20,20 @@ def main():
     if os.environ.get('GITHUB_ACTIONS') != 'true':
         raise SystemExit('Signing script is limited to the dedicated GitHub Actions release job')
     names = ['IOS_DISTRIBUTION_P12_BASE64', 'IOS_P12_PASSWORD', 'IOS_PROVISION_PROFILE_BASE64',
-             'ASC_KEY_ID', 'ASC_ISSUER_ID', 'ASC_PRIVATE_KEY_BASE64', 'IOS_TEAM_ID', 'ASC_APP_ID']
+             'APPLE_API_KEY_ID', 'APPLE_API_ISSUER_ID', 'APPLE_API_KEY_BASE64', 'APPLE_TEAM_ID', 'ASC_APP_ID']
     if any(not os.environ.get(k) for k in names):
         raise SystemExit('Missing signing or App Store Connect configuration (see RELEASE.md)')
+    run('ruby', 'scripts/ios/check-apple-access.rb')
     run('python3', 'scripts/ios/check-asset-rights.py', '--release')
     meta = json.loads(subprocess.check_output(['python3', 'scripts/ios/release-metadata.py']))
     archive = ROOT / '.derived/MoodistIOS.xcarchive'
     with tempfile.TemporaryDirectory(prefix='moodist-signing-', dir=os.environ['RUNNER_TEMP']) as temp:
         folder = Path(temp)
         p12, profile, key = [folder / name for name in ['distribution.p12', 'profile.mobileprovision', 'AuthKey.p8']]
-        for path, env in [(p12, names[0]), (profile, names[2]), (key, 'ASC_PRIVATE_KEY_BASE64')]:
-            path.write_bytes(base64.b64decode(os.environ[env], validate=True)); path.chmod(0o600)
+        for path, env in [(p12, names[0]), (profile, names[2]), (key, 'APPLE_API_KEY_BASE64')]:
+            path.write_bytes(base64.b64decode(''.join(os.environ[env].split()), validate=True)); path.chmod(0o600)
         profile_info = plistlib.loads(subprocess.check_output(['security', 'cms', '-D', '-i', str(profile)]))
-        team = os.environ['IOS_TEAM_ID']
+        team = os.environ['APPLE_TEAM_ID']
         entitlement = profile_info['Entitlements']
         if (team not in profile_info['TeamIdentifier'] or
             entitlement.get('application-identifier') != team + '.' + meta['bundle_id'] or
@@ -71,9 +72,9 @@ def main():
                 'manageAppVersionAndBuildNumber': False, 'uploadSymbols': True}))
             run('xcodebuild', '-exportArchive', '-archivePath', str(archive), '-exportPath', str(ROOT / '.derived/export'),
                 '-exportOptionsPlist', str(options), '-authenticationKeyPath', str(key),
-                '-authenticationKeyID', os.environ['ASC_KEY_ID'], '-authenticationKeyIssuerID', os.environ['ASC_ISSUER_ID'])
-            run('ruby', 'scripts/ios/wait-for-processing.rb', str(key), os.environ['ASC_KEY_ID'],
-                os.environ['ASC_ISSUER_ID'], os.environ['ASC_APP_ID'], meta['version'], meta['build'])
+                '-authenticationKeyID', os.environ['APPLE_API_KEY_ID'], '-authenticationKeyIssuerID', os.environ['APPLE_API_ISSUER_ID'])
+            run('ruby', 'scripts/ios/wait-for-processing.rb', str(key), os.environ['APPLE_API_KEY_ID'],
+                os.environ['APPLE_API_ISSUER_ID'], os.environ['ASC_APP_ID'], meta['version'], meta['build'])
         finally:
             run('security', 'list-keychains', '-d', 'user', '-s', *prior)
             subprocess.run(['security', 'delete-keychain', str(keychain)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

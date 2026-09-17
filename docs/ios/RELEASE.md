@@ -25,19 +25,36 @@ The unsigned Release archive succeeded locally. Its minimum OS, resource bundle,
 
 ## GitHub configuration
 
-Create the `ios-release` environment. Configure secrets outside the repository:
+Use the `ios-release` environment. The iOS workflow reuses the repository secrets already used by macOS; no duplicate `ASC_*` API secrets or `IOS_TEAM_ID` variable are required. Configure only the additional iOS signing secrets outside the repository:
 
 | Secret | Value |
 | --- | --- |
 | `IOS_DISTRIBUTION_P12_BASE64` | Base64 Apple Distribution certificate plus private key, exported as P12 |
 | `IOS_P12_PASSWORD` | Password of that P12 |
 | `IOS_PROVISION_PROFILE_BASE64` | Base64 App Store distribution profile for this bundle/team |
-| `ASC_KEY_ID` / `ASC_ISSUER_ID` | App Store Connect API key identifiers |
-| `ASC_PRIVATE_KEY_BASE64` | Base64 P8 private key with access to this app |
+| `APPLE_API_KEY_ID` / `APPLE_API_ISSUER_ID` | Existing shared App Store Connect team API key identifiers |
+| `APPLE_API_KEY_BASE64` | Existing shared Base64 P8 private key |
+| `APPLE_TEAM_ID` | Existing shared Apple team identifier |
 
-Environment variables: `IOS_TEAM_ID` (Apple team), `ASC_APP_ID` (numeric App Store Connect app ID), and `IOS_RELEASE_READY=true` **only after the above evidence is complete**. This variable records release readiness; it does not substitute for the asset audit, tests or Apple validation.
+Environment variables: `ASC_APP_ID` (numeric App Store Connect app ID), and `IOS_RELEASE_READY=true` **only after the above evidence is complete**. This variable records release readiness; it does not substitute for the asset audit, tests or Apple validation.
 
-The workflow reads credentials only in its signing step, installs a temporary keychain/profile, restores the prior search list/profile and removes temporary credentials even on command failure. Logs never format command arguments on signing errors. No credentials have been configured or consumed during implementation.
+The release workflow reads the shared Apple credentials in its access check and signing step, installs a temporary keychain/profile, restores the prior search list/profile and removes temporary credentials even on command failure. Logs never format command arguments on signing errors. The access check uses existing GitHub secrets in Actions; it does not retrieve or print their values, create keys, change permissions or upload an app.
+
+## Checking the existing Apple key
+
+`Apple API access check` is a separate read-only workflow. It runs on branch pushes that change its workflow, the iOS release workflow or its check/client/tests, and can also be dispatched manually after the workflow is registered on the default branch. It does not run for pull-request events or tags and has no signing certificate access. Repository/environment protection rules still apply.
+
+The check validates the existing `APPLE_API_*` secrets, requests the app matching `com.josegurruchaga.MoodistIOS`, and requests that app's build list. If `ASC_APP_ID` is configured, it must match; otherwise a successful lookup reports the ID to configure. An empty build list is valid for an app that has never been uploaded.
+
+- Missing secrets or malformed key/team configuration fail before contacting Apple.
+- HTTP 401 means authentication failed; HTTP 403 means the API refused the requested access.
+- Authentication can succeed while the iOS app record is still absent. That fails the check with a separate message; it is not reported as invalid credentials.
+- A successful app/build query proves those **read permissions only**. It cannot prove upload authorization, agreements, certificate/profile validity or TestFlight acceptance. Confirm an upload-capable role (Developer, App Manager or Admin as appropriate) in App Store Connect; the actual upload remains the final verification.
+- The team identifier is checked for presence/format here. The signed-release profile check later verifies it matches the app's distribution profile.
+
+The same check runs before expensive release tests on upload requests and again at the signing entry point. Unsigned rehearsals and regular PR tests do not require secrets. Tests for HTTP errors, missing apps, wrong app IDs and JWT signing run offline using generated test keys and fake responses.
+
+See [Apple API keys and roles](https://developer.apple.com/documentation/appstoreconnectapi/creating-api-keys-for-app-store-connect-api) and [upload build roles](https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds).
 
 ## Trigger and expected result
 

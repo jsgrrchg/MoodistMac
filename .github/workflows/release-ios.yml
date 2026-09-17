@@ -44,6 +44,15 @@ jobs:
           python3 scripts/ios/catalog-inventory.py --check
           python3 scripts/ios/check-localizations.py
           python3 scripts/ios/test-release.py
+      - name: Check existing Apple API credentials and iOS app access
+        if: env.UPLOAD == 'true'
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+          APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_APP_ID: ${{ vars.ASC_APP_ID }}
+        run: ruby scripts/ios/check-apple-access.rb
       - name: Shared and iOS tests
         run: |
           swift test --package-path Packages/MoodistKit
@@ -67,10 +76,10 @@ jobs:
           IOS_DISTRIBUTION_P12_BASE64: ${{ secrets.IOS_DISTRIBUTION_P12_BASE64 }}
           IOS_P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
           IOS_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_PROVISION_PROFILE_BASE64 }}
-          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-          ASC_PRIVATE_KEY_BASE64: ${{ secrets.ASC_PRIVATE_KEY_BASE64 }}
-          IOS_TEAM_ID: ${{ vars.IOS_TEAM_ID }}
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+          APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           ASC_APP_ID: ${{ vars.ASC_APP_ID }}
         run: python3 scripts/ios/signed-release.py
       - name: Preserve archive and test evidence

@@ -1,0 +1,32 @@
+name: Apple API access check
+on:
+  workflow_dispatch:
+  push:
+    branches: ['**']
+    paths:
+      - '.github/workflows/apple-api-access.yml'
+      - '.github/workflows/release-ios.yml'
+      - 'scripts/ios/app-store-connect.rb'
+      - 'scripts/ios/check-apple-access.rb'
+      - 'scripts/ios/test-apple-access.rb'
+permissions:
+  contents: read
+jobs:
+  check-access:
+    runs-on: macos-26
+    timeout-minutes: 5
+    environment: ios-release
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test access-check behavior without credentials
+        run: ruby scripts/ios/test-apple-access.rb
+      - name: Verify existing Apple credentials with read-only API calls
+        env:
+          APPLE_API_KEY_ID: ${{ secrets.APPLE_API_KEY_ID }}
+          APPLE_API_ISSUER_ID: ${{ secrets.APPLE_API_ISSUER_ID }}
+          APPLE_API_KEY_BASE64: ${{ secrets.APPLE_API_KEY_BASE64 }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_APP_ID: ${{ vars.ASC_APP_ID }}
+        run: ruby scripts/ios/check-apple-access.rb
