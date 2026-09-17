@@ -3,7 +3,8 @@ import MoodistKit
 
 @main
 struct MoodistIOSApp: App {
-    @StateObject private var store = SoundStore(audioService: AudioService())
+    @StateObject private var model = IOSAppModel()
+    private var store: SoundStore { model.store }
     var body: some Scene {
         WindowGroup {
             NavigationStack {

@@ -15,9 +15,12 @@
 		640209A90DB6833434BE73E1 /* MacSoundStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D83C93C24B6F441FF3B866F /* MacSoundStore.swift */; };
 		6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA40054351B4B42C0AEC73BC /* CatalogTests.swift */; };
 		6C3F61CB27E91B18A4DF9AF0 /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BAA6BEF23F0AD094A671FE0 /* MoodistKit */; };
+		7F075296D7F2601154B705EB /* IOSAudioSessionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */; };
 		8CD3A726852262FE4DADCC9C /* MoodistKit in Frameworks */ = {isa = PBXBuildFile; productRef = 042A3F51971C835C3956BEF8 /* MoodistKit */; };
 		A7C61F445439798261F410DB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4E3D258DE9D86424EFF659E7 /* Foundation.framework */; };
 		A7F458500B28E0260F6C575A /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6559F2DC5AEBCA767A042BC /* Cocoa.framework */; };
+		ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */; };
+		AD32FA639FB8DDFB23E36BC9 /* IOSAppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90C86C051A3713055BCAC087 /* IOSAppModel.swift */; };
 		B175D2172F310AB600907398 /* MoodistApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000001 /* MoodistApp.swift */; };
 		B175D2182F310AB600907398 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000002 /* ContentView.swift */; };
 		B175D2192F310AB600907398 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000100000003 /* CategoryView.swift */; };
@@ -82,6 +85,8 @@
 		4DEDCC51785EADFC16815432 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = Packages/MoodistKit/Tests/MoodistKitTests/StoreTests.swift; sourceTree = "<group>"; };
 		4E3D258DE9D86424EFF659E7 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS18.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		5C02036F4CE4EC7121FCC710 /* PreferencesCodec.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PreferencesCodec.swift; path = Moodist/Services/PreferencesCodec.swift; sourceTree = "<group>"; };
+		64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AudioSessionTests.swift; path = MoodistIOSTests/AudioSessionTests.swift; sourceTree = "<group>"; };
+		90C86C051A3713055BCAC087 /* IOSAppModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAppModel.swift; path = MoodistIOS/App/IOSAppModel.swift; sourceTree = "<group>"; };
 		973B60F847FB5D631A7692C0 /* PlatformIntegrationTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = PlatformIntegrationTests.swift; path = MoodistMacTests/PlatformIntegrationTests.swift; sourceTree = "<group>"; };
 		9FAE1EFA31CC22C14BE5072A /* MoodistIOSApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MoodistIOSApp.swift; path = MoodistIOS/App/MoodistIOSApp.swift; sourceTree = "<group>"; };
 		A20000000000000100000001 /* MoodistApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoodistApp.swift; sourceTree = "<group>"; };
@@ -157,6 +162,7 @@
 		CC90F2AE61A13F28AEA37605 /* StoreTests.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = StoreTests.swift; path = MoodistMacTests/StoreTests.swift; sourceTree = "<group>"; };
 		D6359CA70EB43A84CAE2A0BD /* MoodistIOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MoodistIOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6559F2DC5AEBCA767A042BC /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = IOSAudioSessionController.swift; path = MoodistIOS/Platform/IOSAudioSessionController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -239,6 +245,9 @@
 				29AA8D0EF3428F0EE85FC74F /* ResourceTests.swift */,
 				CA40054351B4B42C0AEC73BC /* CatalogTests.swift */,
 				4DEDCC51785EADFC16815432 /* StoreTests.swift */,
+				90C86C051A3713055BCAC087 /* IOSAppModel.swift */,
+				FD575E8FA1CEE28CA2A30574 /* IOSAudioSessionController.swift */,
+				64C90016D46ED7CA12F26B0E /* AudioSessionTests.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -550,6 +559,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D0AA467653313913BB9FF8D9 /* MoodistIOSApp.swift in Sources */,
+				AD32FA639FB8DDFB23E36BC9 /* IOSAppModel.swift in Sources */,
+				7F075296D7F2601154B705EB /* IOSAudioSessionController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +626,7 @@
 				E42959321C4688D312AD9939 /* ResourceTests.swift in Sources */,
 				6ABD1A0A1AA864608BC46D22 /* CatalogTests.swift in Sources */,
 				FE89BA4DC6601F5B97C7D052 /* StoreTests.swift in Sources */,
+				ABB004E150F33DF4F1F99B10 /* AudioSessionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
