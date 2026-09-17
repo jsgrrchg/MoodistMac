@@ -100,6 +100,7 @@ struct SoundCell: View {
                 Image(systemName: store.sounds[sound.id]?.isFavorite == true ? "star.fill" : "star")
                     .frame(width: 44, height: 44)
             }.buttonStyle(.borderless).accessibilityLabel("\(L10n.favorites): \(L10n.soundLabel(sound.id))")
+                .accessibilityValue(store.sounds[sound.id]?.isFavorite == true ? L10n.stateSelected : L10n.stateNotSelected)
         }
         .contextMenu {
             Menu(L10n.addToMix) {
@@ -182,6 +183,7 @@ struct MixCell: View {
             Button { store.toggleFavoriteMix(id: mix.id) } label: {
                 Image(systemName: store.favoriteMixIds.contains(mix.id) ? "star.fill" : "star").frame(width: 44, height: 44)
             }.buttonStyle(.borderless).accessibilityLabel("\(L10n.favorites): \(name)")
+                .accessibilityValue(store.favoriteMixIds.contains(mix.id) ? L10n.stateSelected : L10n.stateNotSelected)
         }
         .contextMenu {
             if store.presetsById[mix.id] != nil {

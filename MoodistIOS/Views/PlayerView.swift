@@ -19,7 +19,7 @@ struct PlayerView: View {
                                 .font(.title).disabled(!store.hasSelection).accessibilityIdentifier("player-toggle")
                             Button(L10n.nextMix, systemImage: "forward.end.fill") { store.playNextRandomMix() }
                         }
-                        .labelStyle(.iconOnly).buttonStyle(.glass).controlSize(.large)
+                        .labelStyle(.iconOnly).modifier(PlaybackControlsStyle())
                     }
                     VolumeControl(label: L10n.globalVolume, value: Binding(get: { store.globalVolume }, set: { store.setGlobalVolume($0) }))
                     AudioRoutePicker().frame(width: 44, height: 44).accessibilityLabel(T("audio_output", "Audio output"))

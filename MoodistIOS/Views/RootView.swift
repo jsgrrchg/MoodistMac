@@ -35,7 +35,13 @@ struct RootView: View {
     }
     @ToolbarContentBuilder private var settingsButton: some ToolbarContent {
         ToolbarItem(placement: .topBarTrailing) {
-            Button(L10n.options, systemImage: "gearshape") { settingsPresented = true }
+            Menu(L10n.playbackMenu, systemImage: "ellipsis.circle") {
+                Button(L10n.shuffle, systemImage: "shuffle") { store.shuffle() }.keyboardShortcut("s")
+                Button(L10n.unselectAll, systemImage: "xmark.circle") { store.unselectAll() }.keyboardShortcut("u")
+            }
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            Button(L10n.options, systemImage: "gearshape") { settingsPresented = true }.keyboardShortcut(",")
         }
     }
 }
@@ -58,10 +64,10 @@ struct MiniPlayer: View {
             }
             .buttonStyle(.plain)
             Button(store.isPlaying ? L10n.pause : L10n.play, systemImage: store.isPlaying ? "pause.fill" : "play.fill") { store.togglePlay() }
-                .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44).disabled(!store.hasSelection)
+                .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44).disabled(!store.hasSelection).keyboardShortcut("r")
             if placement != .inline {
                 Button(L10n.nextMix, systemImage: "forward.end.fill") { store.playNextRandomMix() }
-                    .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44)
+                    .labelStyle(.iconOnly).frame(minWidth: 44, minHeight: 44).keyboardShortcut("n")
             }
         }
         .padding(.horizontal)

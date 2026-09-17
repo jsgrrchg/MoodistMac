@@ -5,14 +5,14 @@ func T(_ key: String, _ fallback: String) -> String {
     MoodistResources.localizedString("ios_" + key, fallback: fallback)
 }
 
-struct GlassControlSurface: ViewModifier {
+struct PlaybackControlsStyle: ViewModifier {
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @AppStorage(PersistenceService.transparencyEnabledKey) private var transparency = true
     func body(content: Content) -> some View {
         if reduceTransparency || !transparency {
-            content.padding().background(.background, in: .rect(cornerRadius: 24))
+            content.buttonStyle(.bordered).controlSize(.large)
         } else {
-            content.padding().glassEffect(.regular, in: .rect(cornerRadius: 24))
+            content.buttonStyle(.glass).controlSize(.large)
         }
     }
 }
