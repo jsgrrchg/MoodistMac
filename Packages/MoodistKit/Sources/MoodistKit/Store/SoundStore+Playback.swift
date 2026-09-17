@@ -137,6 +137,8 @@ public extension SoundStore {
 
     // Resets only selection and favorites without clearing presets or global preferences.
     func resetSelectionAndFavorites() {
+        cancelAutoMixTimer()
+        cancelSleepTimer()
         currentMixId = nil
         currentMixIconName = nil
         isPlaying = false

@@ -27,3 +27,33 @@ struct SoundSymbol: View {
         }
     }
 }
+
+enum IOSAccent {
+    static let choices = ["system", "blue", "purple", "pink", "red", "orange", "yellow", "green", "graphite"]
+    static func color(_ raw: String) -> Color? {
+        switch raw {
+        case "system": return nil
+        case "blue": return .blue
+        case "purple": return .purple
+        case "pink": return .pink
+        case "red": return .red
+        case "orange": return .orange
+        case "yellow": return .yellow
+        case "green": return .green
+        default: return .gray
+        }
+    }
+    static func label(_ raw: String) -> String {
+        switch raw {
+        case "system": return L10n.accentColorSystem
+        case "blue": return L10n.accentColorBlue
+        case "purple": return L10n.accentColorPurple
+        case "pink": return L10n.accentColorPink
+        case "red": return L10n.accentColorRed
+        case "orange": return L10n.accentColorOrange
+        case "yellow": return L10n.accentColorYellow
+        case "green": return L10n.accentColorGreen
+        default: return L10n.accentColorGraphite
+        }
+    }
+}

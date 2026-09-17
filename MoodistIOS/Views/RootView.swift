@@ -3,6 +3,7 @@ import MoodistKit
 
 struct RootView: View {
     @EnvironmentObject private var store: SoundStore
+    @AppStorage(PersistenceService.appLanguageKey) private var language = "system"
     @State private var playerPresented = false
     @State private var settingsPresented = false
 
@@ -18,6 +19,7 @@ struct RootView: View {
                 NavigationStack { LibraryView().toolbar { settingsButton } }
             }
         }
+        .id(language)
         .tabViewBottomAccessory { MiniPlayer { playerPresented = true } }
         .sheet(isPresented: $playerPresented) {
             NavigationStack { PlayerView() }
@@ -25,7 +27,7 @@ struct RootView: View {
                 .presentationDragIndicator(.visible)
         }
         .sheet(isPresented: $settingsPresented) {
-            NavigationStack { Text(L10n.options).navigationTitle(L10n.options) }
+            NavigationStack { SettingsView() }
         }
         .alert(T("playback_error", "Unable to play audio"), isPresented: Binding(get: { store.playbackError != nil }, set: { if !$0 { store.playbackError = nil } })) {
             Button(L10n.close) { store.playbackError = nil }

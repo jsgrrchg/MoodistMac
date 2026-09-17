@@ -2,6 +2,16 @@ import Combine
 import Foundation
 
 public extension SoundStore {
+    func flushPersistence() {
+        preferences.saveSounds(sounds)
+        preferences.saveGlobalVolume(globalVolume)
+        preferences.savePresets(presets)
+        preferences.saveRecentMixIds(recentMixIds)
+        preferences.saveRecentSoundIds(recentSoundIds)
+        preferences.saveFavoriteMixIds(favoriteMixIds)
+        preferences.saveFavoriteSoundIds(favoriteSoundIds)
+    }
+
     // Initializes in-memory state from defaults and persisted values.
     func bootstrapState() {
         SoundsData.categories.flatMap(\.sounds).forEach { sounds[$0.id] = .default }
